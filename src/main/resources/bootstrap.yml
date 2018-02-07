@@ -1,0 +1,6 @@
+# we're not reading configurations yet from Config Server
+# will need to be changed later
+spring:
+  cloud:
+    config:
+      enabled: false
