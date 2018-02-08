@@ -1,0 +1,3243 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "REST API for rertrieving details of various order types.",
+    "version": "1",
+    "title": "Order Details Service REST API",
+    "contact": {
+      "name": "EComm Orders Team",
+      "url": "https://confluence.ca.bestbuy.com/display/OR/Orders",
+      "email": "eCommCAOrders@bestbuy.com"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/orderdetails",
+  "tags": [
+    {
+      "name": "order-details-controller",
+      "description": "Operations for retrieving datils of FS Order"
+    }
+  ],
+  "paths": {
+    "/v1/categories": {
+      "get": {
+        "tags": [
+          "order-details-controller"
+        ],
+        "summary": "View list of valid categories that can be used to filter details of an FS Order. ",
+        "operationId": "listFSOrderDetailsCategoriesUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "ordertype",
+            "in": "query",
+            "description": "Type of order for which categories will be retrieved.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "FSORDER"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorDetail"
+            }
+          }
+        }
+      }
+    },
+    "/v1/fsorders/{fsOrderId}": {
+      "get": {
+        "tags": [
+          "order-details-controller"
+        ],
+        "summary": "View details of a specific FS Order by Id. ",
+        "operationId": "readFSOrderDetailsUsingGET",
+        "produces": [
+          "application/json;charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "fsOrderId",
+            "in": "path",
+            "description": "FS Order Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "categories",
+            "in": "query",
+            "description": "Comma seperated list of sub elements of the order detail to retrieve. Elements can be specified by path of the element in object graph starting from root using dot notation",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FSOrder"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ErrorDetail"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorDetail"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ActualCarrier": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "levelOfService": {
+          "$ref": "#/definitions/LevelOfService"
+        },
+        "shipmentType": {
+          "type": "string",
+          "xml": {
+            "name": "shipmentType",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "trackingHttpMethod": {
+          "type": "string",
+          "xml": {
+            "name": "trackingHttpMethod",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "trackingNumbers": {
+          "$ref": "#/definitions/TrackingNumbers"
+        },
+        "trackingParameter": {
+          "type": "string",
+          "xml": {
+            "name": "trackingParameter",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "trackingURL": {
+          "type": "string",
+          "xml": {
+            "name": "trackingURL",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "ActualCarrier",
+      "xml": {
+        "name": "ActualCarrier",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Addr1": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Addr1",
+      "xml": {
+        "name": "Addr1",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Addr2": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Addr2",
+      "xml": {
+        "name": "Addr2",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Addr3": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Addr3",
+      "xml": {
+        "name": "Addr3",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "AddressInfoType": {
+      "type": "object",
+      "properties": {
+        "addr1": {
+          "type": "string",
+          "xml": {
+            "name": "addr1",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "addr2": {
+          "type": "string"
+        },
+        "addr3": {
+          "type": "string"
+        },
+        "aptNumber": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string",
+          "xml": {
+            "name": "city",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "country": {
+          "type": "string",
+          "xml": {
+            "name": "country",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "email": {
+          "type": "string",
+          "xml": {
+            "name": "email",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "faxNumber": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string",
+          "xml": {
+            "name": "firstName",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "lastName": {
+          "type": "string",
+          "xml": {
+            "name": "lastName",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "otherPhone": {
+          "type": "string"
+        },
+        "otherPhoneExt": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string",
+          "xml": {
+            "name": "phone",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "phoneExt": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string",
+          "xml": {
+            "name": "postcode",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "province": {
+          "type": "string",
+          "xml": {
+            "name": "province",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "uscounty": {
+          "type": "string"
+        }
+      },
+      "title": "AddressInfoType",
+      "xml": {
+        "name": "AddressInfoType",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "AptNumber": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "AptNumber",
+      "xml": {
+        "name": "AptNumber",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Authorization": {
+      "type": "object",
+      "properties": {
+        "authAmount": {
+          "type": "string",
+          "xml": {
+            "name": "AuthAmount",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "authCode": {
+          "type": "string",
+          "xml": {
+            "name": "AuthCode",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "paymentServiceErrorCode": {
+          "type": "string",
+          "xml": {
+            "name": "PaymentServiceErrorCode",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "paymentServiceErrorSubCode": {
+          "type": "string",
+          "xml": {
+            "name": "PaymentServiceErrorSubCode",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "responseCode": {
+          "type": "string",
+          "xml": {
+            "name": "ResponseCode",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "responseMessage": {
+          "type": "string",
+          "xml": {
+            "name": "ResponseMessage",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "Authorization",
+      "xml": {
+        "name": "Authorization",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Bundle": {
+      "type": "object",
+      "properties": {
+        "bundleID": {
+          "type": "string",
+          "xml": {
+            "name": "bundleID",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "seqNum": {
+          "type": "string",
+          "xml": {
+            "name": "seqNum",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "Bundle",
+      "xml": {
+        "name": "Bundle",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "City": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "City",
+      "xml": {
+        "name": "City",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Country": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Country",
+      "xml": {
+        "name": "Country",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "homeAddrInfo": {
+          "xml": {
+            "name": "homeAddrInfo",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/HomeAddrInfo"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "Customer",
+      "xml": {
+        "name": "Customer",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "DeliveryDate": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "DeliveryDate",
+      "xml": {
+        "name": "DeliveryDate",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Discount": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "quantity": {
+          "type": "string",
+          "xml": {
+            "name": "quantity",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "ruleName": {
+          "type": "string",
+          "xml": {
+            "name": "ruleName",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "type": {
+          "type": "string"
+        },
+        "unitValue": {
+          "type": "string",
+          "xml": {
+            "name": "unitValue",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "uom": {
+          "type": "string",
+          "xml": {
+            "name": "UOM",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "Discount",
+      "xml": {
+        "name": "Discount",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "EffectiveDateRange": {
+      "type": "object",
+      "properties": {
+        "endDate": {
+          "type": "string",
+          "xml": {
+            "name": "endDate",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "startDate": {
+          "type": "string",
+          "xml": {
+            "name": "startDate",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "EffectiveDateRange",
+      "xml": {
+        "name": "EffectiveDateRange",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Email": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Email",
+      "xml": {
+        "name": "Email",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ErrorDetail": {
+      "type": "object",
+      "required": [
+        "errorCode",
+        "errorMessage",
+        "path",
+        "status",
+        "timeStamp"
+      ],
+      "properties": {
+        "detailedMessage": {
+          "type": "string",
+          "description": "Message to provide more context to app developer about the error condition",
+          "allowEmptyValue": false
+        },
+        "errorCode": {
+          "type": "string",
+          "description": "Error Code to indicate error message category",
+          "allowEmptyValue": false
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "User friendly error message",
+          "allowEmptyValue": false
+        },
+        "path": {
+          "type": "string",
+          "description": "The request URI that resulted in error",
+          "allowEmptyValue": false
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP Status Code",
+          "allowEmptyValue": false
+        },
+        "timeStamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Time when the error occured.",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "ErrorDetail"
+    },
+    "FSOrder": {
+      "type": "object",
+      "properties": {
+        "affiliateID": {
+          "type": "string"
+        },
+        "bundle": {
+          "type": "array",
+          "xml": {
+            "name": "Bundle",
+            "attribute": false,
+            "wrapped": false
+          },
+          "items": {
+            "$ref": "#/definitions/Bundle"
+          }
+        },
+        "clientOrderDate": {
+          "type": "string",
+          "xml": {
+            "name": "clientOrderDate",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "clientOrderNumber": {
+          "type": "string",
+          "xml": {
+            "name": "clientOrderNumber",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "cspindicator": {
+          "type": "string"
+        },
+        "customer": {
+          "xml": {
+            "name": "customer",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Customer"
+        },
+        "fsoStatus": {
+          "xml": {
+            "name": "fsoStatus",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/FsoStatus"
+        },
+        "fsorderID": {
+          "type": "string"
+        },
+        "fsorderLine": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FSOrderLine"
+          }
+        },
+        "ipaddress": {
+          "type": "string"
+        },
+        "kioskID": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string",
+          "xml": {
+            "name": "language",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "paymentMethodList": {
+          "xml": {
+            "name": "PaymentMethodList",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/PaymentMethodList"
+        },
+        "purchaseOrder": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PurchaseOrder"
+          }
+        },
+        "rewardZone": {
+          "xml": {
+            "name": "RewardZone",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/RewardZone"
+        },
+        "salesFirstName": {
+          "type": "string"
+        },
+        "salesID": {
+          "type": "string"
+        },
+        "salesLogin": {
+          "type": "string"
+        },
+        "shippingModel": {
+          "xml": {
+            "name": "shippingModel",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ShippingModel"
+        },
+        "shippingOrder": {
+          "type": "array",
+          "xml": {
+            "name": "shippingOrder",
+            "attribute": false,
+            "wrapped": false
+          },
+          "items": {
+            "$ref": "#/definitions/ShippingOrder"
+          }
+        },
+        "storeOrderedFromID": {
+          "type": "string"
+        }
+      },
+      "title": "FSOrder",
+      "xml": {
+        "name": "FSOrder",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "FSOrderLine": {
+      "type": "object",
+      "properties": {
+        "bundle": {
+          "xml": {
+            "name": "Bundle",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Bundle"
+        },
+        "configureToOrderID": {
+          "type": "string",
+          "xml": {
+            "name": "ConfigureToOrderID",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "etaDate": {
+          "type": "string"
+        },
+        "fsolStatus": {
+          "xml": {
+            "name": "fsolStatus",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/FsolStatus"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "itemCharge": {
+          "xml": {
+            "name": "itemCharge",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ItemCharge"
+        },
+        "linenum": {
+          "type": "string"
+        },
+        "product": {
+          "xml": {
+            "name": "product",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Product"
+        },
+        "pspcoveredFSOrderlineID": {
+          "type": "string"
+        },
+        "qtyCancelled": {
+          "type": "string",
+          "xml": {
+            "name": "qtyCancelled",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "qtyOnSpecialOrder": {
+          "type": "string",
+          "xml": {
+            "name": "qtyOnSpecialOrder",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "qtyOrdered": {
+          "type": "string",
+          "xml": {
+            "name": "qtyOrdered",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "releaseDate": {
+          "type": "string"
+        },
+        "uom": {
+          "type": "string",
+          "xml": {
+            "name": "UOM",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "FSOrderLine",
+      "xml": {
+        "name": "FSOrderLine",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "FaxNumber": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "FaxNumber",
+      "xml": {
+        "name": "FaxNumber",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "FfpCarrierCode": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "FfpCarrierCode",
+      "xml": {
+        "name": "FfpCarrierCode",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "FirstName": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "FirstName",
+      "xml": {
+        "name": "FirstName",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "FsoStatus": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "xml": {
+            "name": "date",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "FsoStatus",
+      "xml": {
+        "name": "FsoStatus",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "FsolStatus": {
+      "type": "object",
+      "properties": {
+        "cancelReason": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "xml": {
+            "name": "date",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "description": {
+          "type": "string",
+          "xml": {
+            "name": "description",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "FsolStatus",
+      "xml": {
+        "name": "FsolStatus",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "FulfillmentLocationIdentifier": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "xml": {
+            "name": "Address",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/AddressInfoType"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "FulfillmentLocationIdentifier",
+      "xml": {
+        "name": "FulfillmentLocationIdentifier",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "FulfillmentPartnerProductType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "rmsSKU": {
+          "type": "string"
+        },
+        "vpn": {
+          "type": "string",
+          "xml": {
+            "name": "vpn",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "FulfillmentPartnerProductType",
+      "xml": {
+        "name": "FulfillmentPartnerProductType",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "FulfillmentPartnerType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "type": {
+          "type": "string",
+          "xml": {
+            "name": "type",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "FulfillmentPartnerType",
+      "xml": {
+        "name": "FulfillmentPartnerType",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Gst": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Gst",
+      "xml": {
+        "name": "Gst",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "HomeAddrInfo": {
+      "type": "object",
+      "properties": {
+        "addr1": {
+          "xml": {
+            "name": "addr1",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Addr1"
+        },
+        "addr2": {
+          "$ref": "#/definitions/Addr2"
+        },
+        "addr3": {
+          "$ref": "#/definitions/Addr3"
+        },
+        "aptNumber": {
+          "$ref": "#/definitions/AptNumber"
+        },
+        "city": {
+          "xml": {
+            "name": "city",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/City"
+        },
+        "country": {
+          "xml": {
+            "name": "country",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Country"
+        },
+        "email": {
+          "xml": {
+            "name": "email",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Email"
+        },
+        "faxNumber": {
+          "$ref": "#/definitions/FaxNumber"
+        },
+        "firstName": {
+          "xml": {
+            "name": "firstName",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/FirstName"
+        },
+        "lastName": {
+          "xml": {
+            "name": "lastName",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/LastName"
+        },
+        "otherPhone": {
+          "$ref": "#/definitions/OtherPhone"
+        },
+        "otherPhoneExt": {
+          "$ref": "#/definitions/OtherPhoneExt"
+        },
+        "phone": {
+          "xml": {
+            "name": "phone",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Phone"
+        },
+        "phoneExt": {
+          "$ref": "#/definitions/PhoneExt"
+        },
+        "postcode": {
+          "xml": {
+            "name": "postcode",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Postcode"
+        },
+        "province": {
+          "xml": {
+            "name": "province",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Province"
+        },
+        "uscounty": {
+          "$ref": "#/definitions/UScounty"
+        }
+      },
+      "title": "HomeAddrInfo",
+      "xml": {
+        "name": "HomeAddrInfo",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ItemCharge": {
+      "type": "object",
+      "properties": {
+        "discount": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ItemChargeDiscountType"
+          }
+        },
+        "discountedUnitPrice": {
+          "type": "string"
+        },
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "tax": {
+          "xml": {
+            "name": "tax",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Tax"
+        },
+        "unitPrice": {
+          "xml": {
+            "name": "unitPrice",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/UnitPrice"
+        }
+      },
+      "title": "ItemCharge",
+      "xml": {
+        "name": "ItemCharge",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ItemChargeDiscountType": {
+      "type": "object",
+      "properties": {
+        "authID": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "quantity": {
+          "xml": {
+            "name": "quantity",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Quantity"
+        },
+        "ruleName": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "unitValue": {
+          "xml": {
+            "name": "unitValue",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/UnitValue"
+        },
+        "uom": {
+          "type": "string",
+          "xml": {
+            "name": "UOM",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "ItemChargeDiscountType",
+      "xml": {
+        "name": "ItemChargeDiscountType",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "LastName": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "LastName",
+      "xml": {
+        "name": "LastName",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "LevelOfService": {
+      "type": "object",
+      "properties": {
+        "deliveryDate": {
+          "xml": {
+            "name": "deliveryDate",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/DeliveryDate"
+        },
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "ffpCarrierCode": {
+          "xml": {
+            "name": "ffpCarrierCode",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/FfpCarrierCode"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "name": {
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Name"
+        },
+        "requiresInsurance": {
+          "xml": {
+            "name": "requiresInsurance",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/RequiresInsurance"
+        },
+        "requiresSignature": {
+          "xml": {
+            "name": "requiresSignature",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/RequiresSignature"
+        },
+        "sameDayDelivery": {
+          "xml": {
+            "name": "sameDayDelivery",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/SameDayDelivery"
+        }
+      },
+      "title": "LevelOfService",
+      "xml": {
+        "name": "LevelOfService",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Name": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Name",
+      "xml": {
+        "name": "Name",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "OtherPhone": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "OtherPhone",
+      "xml": {
+        "name": "OtherPhone",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "OtherPhoneExt": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "OtherPhoneExt",
+      "xml": {
+        "name": "OtherPhoneExt",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "PSP": {
+      "type": "object",
+      "properties": {
+        "effectiveDateRange": {
+          "$ref": "#/definitions/EffectiveDateRange"
+        },
+        "pspcoveredSerialNumber": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "term": {
+          "xml": {
+            "name": "Term",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Term"
+        }
+      },
+      "title": "PSP",
+      "xml": {
+        "name": "PSP",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "PaymentInfo": {
+      "type": "object",
+      "properties": {
+        "authorization": {
+          "xml": {
+            "name": "Authorization",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Authorization"
+        },
+        "paymentID": {
+          "type": "string",
+          "xml": {
+            "name": "paymentID",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "paymentStatus": {
+          "xml": {
+            "name": "paymentStatus",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/PaymentStatus"
+        }
+      },
+      "title": "PaymentInfo",
+      "xml": {
+        "name": "PaymentInfo",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "PaymentMethodList": {
+      "type": "object",
+      "properties": {
+        "creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "PaymentMethodList",
+      "xml": {
+        "name": "PaymentMethodList",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "PaymentStatus": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "xml": {
+            "name": "date",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "PaymentStatus",
+      "xml": {
+        "name": "PaymentStatus",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Phone": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Phone",
+      "xml": {
+        "name": "Phone",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "PhoneExt": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "PhoneExt",
+      "xml": {
+        "name": "PhoneExt",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "PoSendStatus": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "xml": {
+            "name": "date",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "PoSendStatus",
+      "xml": {
+        "name": "PoSendStatus",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Postcode": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Postcode",
+      "xml": {
+        "name": "Postcode",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "mfr": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "psp": {
+          "xml": {
+            "name": "PSP",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/PSP"
+        },
+        "serialNumber": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sku": {
+          "type": "string",
+          "xml": {
+            "name": "SKU",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "Product",
+      "xml": {
+        "name": "Product",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Province": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Province",
+      "xml": {
+        "name": "Province",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Pst": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Pst",
+      "xml": {
+        "name": "Pst",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "PurchaseOrder": {
+      "type": "object",
+      "properties": {
+        "comments": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string"
+        },
+        "ffpId": {
+          "type": "string",
+          "xml": {
+            "name": "ffp_id",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "ffpPoNo": {
+          "xml": {
+            "name": "ffp_poNo",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/StringEditableType"
+        },
+        "fulfillmentPartner": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FulfillmentPartnerType"
+          }
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "orderDate": {
+          "type": "string"
+        },
+        "poSendStatus": {
+          "$ref": "#/definitions/PoSendStatus"
+        },
+        "purchaseOrderLine": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PurchaseOrderLine"
+          }
+        },
+        "shippingOrderID": {
+          "type": "string",
+          "xml": {
+            "name": "shippingOrderID",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "PurchaseOrder",
+      "xml": {
+        "name": "PurchaseOrder",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "PurchaseOrderLine": {
+      "type": "object",
+      "properties": {
+        "availability": {
+          "type": "string"
+        },
+        "comments": {
+          "type": "string"
+        },
+        "deliveryDate": {
+          "$ref": "#/definitions/XMLGregorianCalendar"
+        },
+        "eta": {
+          "$ref": "#/definitions/XMLGregorianCalendar"
+        },
+        "ffpPOlineNo": {
+          "xml": {
+            "name": "ffp_POlineNo",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/StringEditableType"
+        },
+        "ffpProduct": {
+          "xml": {
+            "name": "ffp_Product",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/FulfillmentPartnerProductType"
+        },
+        "fsoLineID": {
+          "type": "string"
+        },
+        "fulfillmentLocationIdentifier": {
+          "$ref": "#/definitions/FulfillmentLocationIdentifier"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "qtyAllocated": {
+          "xml": {
+            "name": "qtyAllocated",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/StringEditableType"
+        },
+        "qtyBackOrder": {
+          "xml": {
+            "name": "qtyBackOrder",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/StringEditableType"
+        },
+        "qtyOrdered": {
+          "type": "string"
+        },
+        "releaseDate": {
+          "$ref": "#/definitions/XMLGregorianCalendar"
+        },
+        "shippingOrderLineID": {
+          "type": "string"
+        }
+      },
+      "title": "PurchaseOrderLine",
+      "xml": {
+        "name": "PurchaseOrderLine",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "QName": {
+      "type": "object",
+      "properties": {
+        "localPart": {
+          "type": "string"
+        },
+        "namespaceURI": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        }
+      },
+      "title": "QName"
+    },
+    "Quantity": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Quantity",
+      "xml": {
+        "name": "Quantity",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "RequestedCarrier": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "levelOfService": {
+          "xml": {
+            "name": "levelOfService",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/LevelOfService"
+        },
+        "name": {
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Name"
+        }
+      },
+      "title": "RequestedCarrier",
+      "xml": {
+        "name": "RequestedCarrier",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "RequestedDeliveryDate": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "RequestedDeliveryDate",
+      "xml": {
+        "name": "RequestedDeliveryDate",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "RequiresInsurance": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "RequiresInsurance",
+      "xml": {
+        "name": "RequiresInsurance",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "RequiresSignature": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "RequiresSignature",
+      "xml": {
+        "name": "RequiresSignature",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "RewardZone": {
+      "type": "object",
+      "properties": {
+        "rewardZoneCard": {
+          "xml": {
+            "name": "RewardZoneCard",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/RewardZoneCard"
+        }
+      },
+      "title": "RewardZone",
+      "xml": {
+        "name": "RewardZone",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "RewardZoneCard": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "rewardZoneID": {
+          "xml": {
+            "name": "RewardZoneID",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/RewardZoneID"
+        }
+      },
+      "title": "RewardZoneCard",
+      "xml": {
+        "name": "RewardZoneCard",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "RewardZoneID": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "RewardZoneID",
+      "xml": {
+        "name": "RewardZoneID",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "SameDayDelivery": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "SameDayDelivery",
+      "xml": {
+        "name": "SameDayDelivery",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ShipAddrInfo": {
+      "type": "object",
+      "properties": {
+        "addr1": {
+          "xml": {
+            "name": "addr1",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Addr1"
+        },
+        "addr2": {
+          "$ref": "#/definitions/Addr2"
+        },
+        "addr3": {
+          "$ref": "#/definitions/Addr3"
+        },
+        "aptNumber": {
+          "$ref": "#/definitions/AptNumber"
+        },
+        "city": {
+          "xml": {
+            "name": "city",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/City"
+        },
+        "country": {
+          "xml": {
+            "name": "country",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Country"
+        },
+        "email": {
+          "xml": {
+            "name": "email",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Email"
+        },
+        "faxNumber": {
+          "$ref": "#/definitions/FaxNumber"
+        },
+        "firstName": {
+          "xml": {
+            "name": "firstName",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/FirstName"
+        },
+        "lastName": {
+          "xml": {
+            "name": "lastName",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/LastName"
+        },
+        "otherPhone": {
+          "$ref": "#/definitions/OtherPhone"
+        },
+        "otherPhoneExt": {
+          "$ref": "#/definitions/OtherPhoneExt"
+        },
+        "phone": {
+          "xml": {
+            "name": "phone",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Phone"
+        },
+        "phoneExt": {
+          "$ref": "#/definitions/PhoneExt"
+        },
+        "postcode": {
+          "xml": {
+            "name": "postcode",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Postcode"
+        },
+        "province": {
+          "xml": {
+            "name": "province",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Province"
+        },
+        "uscounty": {
+          "$ref": "#/definitions/UScounty"
+        }
+      },
+      "title": "ShipAddrInfo",
+      "xml": {
+        "name": "ShipAddrInfo",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ShipFromAddrInfo": {
+      "type": "object",
+      "properties": {
+        "addr1": {
+          "type": "string",
+          "xml": {
+            "name": "addr1",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "addr2": {
+          "type": "string"
+        },
+        "addr3": {
+          "type": "string"
+        },
+        "aptNumber": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string",
+          "xml": {
+            "name": "city",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "country": {
+          "type": "string",
+          "xml": {
+            "name": "country",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "email": {
+          "type": "string",
+          "xml": {
+            "name": "email",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "faxNumber": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string",
+          "xml": {
+            "name": "firstName",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "lastName": {
+          "type": "string",
+          "xml": {
+            "name": "lastName",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "locationId": {
+          "type": "string",
+          "xml": {
+            "name": "locationId",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "otherPhone": {
+          "type": "string"
+        },
+        "otherPhoneExt": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string",
+          "xml": {
+            "name": "phone",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "phoneExt": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string",
+          "xml": {
+            "name": "postcode",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "province": {
+          "type": "string",
+          "xml": {
+            "name": "province",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "uscounty": {
+          "type": "string"
+        }
+      },
+      "title": "ShipFromAddrInfo",
+      "xml": {
+        "name": "ShipFromAddrInfo",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ShippingCharge": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "discount": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ShippingChargeDiscountType"
+          }
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "sku": {
+          "xml": {
+            "name": "sku",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Sku"
+        },
+        "tax": {
+          "xml": {
+            "name": "tax",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Tax"
+        },
+        "type": {
+          "type": "string",
+          "xml": {
+            "name": "type",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "unitPrice": {
+          "xml": {
+            "name": "unitPrice",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/UnitPrice"
+        }
+      },
+      "title": "ShippingCharge",
+      "xml": {
+        "name": "ShippingCharge",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ShippingChargeDiscountType": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "quantity": {
+          "xml": {
+            "name": "quantity",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Quantity"
+        },
+        "ruleName": {
+          "type": "string",
+          "xml": {
+            "name": "ruleName",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "type": {
+          "type": "string"
+        },
+        "unitValue": {
+          "xml": {
+            "name": "unitValue",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/UnitValue"
+        },
+        "uom": {
+          "type": "string",
+          "xml": {
+            "name": "UOM",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "ShippingChargeDiscountType",
+      "xml": {
+        "name": "ShippingChargeDiscountType",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ShippingModel": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "xml": {
+            "name": "description",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "name": {
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ShippingModelNameType"
+        }
+      },
+      "title": "ShippingModel",
+      "xml": {
+        "name": "ShippingModel",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ShippingModelNameType": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "DEFAULT",
+            "DUAL_SHIPMENT",
+            "SHIP_AS_AVAILABLE",
+            "SHIP_COMPLETE"
+          ]
+        }
+      },
+      "title": "ShippingModelNameType",
+      "xml": {
+        "name": "shippingModelNameType",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ShippingOrder": {
+      "type": "object",
+      "properties": {
+        "actualCarrier": {
+          "$ref": "#/definitions/ActualCarrier"
+        },
+        "createdBy": {
+          "type": "string",
+          "xml": {
+            "name": "createdBy",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "fulfillmentMethod": {
+          "type": "string",
+          "xml": {
+            "name": "fulfillmentMethod",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "fulfillmentPartner": {
+          "type": "string",
+          "xml": {
+            "name": "fulfillmentPartner",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "globalContractId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "isCustomerInvoiceAvailable": {
+          "type": "string",
+          "xml": {
+            "name": "isCustomerInvoiceAvailable",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "paymentInfo": {
+          "$ref": "#/definitions/PaymentInfo"
+        },
+        "requestedCarrier": {
+          "xml": {
+            "name": "requestedCarrier",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/RequestedCarrier"
+        },
+        "requestedDeliveryDate": {
+          "$ref": "#/definitions/RequestedDeliveryDate"
+        },
+        "shipAddrInfo": {
+          "xml": {
+            "name": "shipAddrInfo",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ShipAddrInfo"
+        },
+        "shipFromAddrInfo": {
+          "xml": {
+            "name": "shipFromAddrInfo",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ShipFromAddrInfo"
+        },
+        "shipmentDate": {
+          "type": "string"
+        },
+        "shippingCharge": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ShippingCharge"
+          }
+        },
+        "shippingOrderLine": {
+          "type": "array",
+          "xml": {
+            "name": "shippingOrderLine",
+            "attribute": false,
+            "wrapped": false
+          },
+          "items": {
+            "$ref": "#/definitions/ShippingOrderLine"
+          }
+        },
+        "shippingStatus": {
+          "xml": {
+            "name": "shippingStatus",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ShippingStatus"
+        },
+        "storeToFulfillFrom": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "xml": {
+            "name": "type",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "ShippingOrder",
+      "xml": {
+        "name": "ShippingOrder",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ShippingOrderLine": {
+      "type": "object",
+      "properties": {
+        "availability": {
+          "type": "string",
+          "xml": {
+            "name": "availability",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "cancellable": {
+          "type": "string",
+          "xml": {
+            "name": "cancellable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "etaDate": {
+          "type": "string"
+        },
+        "fsoLineID": {
+          "type": "string",
+          "xml": {
+            "name": "fsoLineID",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "inventoryReservationId": {
+          "xml": {
+            "name": "inventoryReservationId",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/StringEditableType"
+        },
+        "qtyCancelled": {
+          "type": "string",
+          "xml": {
+            "name": "qtyCancelled",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "qtyOrdered": {
+          "type": "string",
+          "xml": {
+            "name": "qtyOrdered",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "qtyShipped": {
+          "type": "string"
+        },
+        "shippingCharge": {
+          "type": "array",
+          "xml": {
+            "name": "shippingCharge",
+            "attribute": false,
+            "wrapped": false
+          },
+          "items": {
+            "$ref": "#/definitions/ShippingCharge"
+          }
+        },
+        "shippingStatus": {
+          "xml": {
+            "name": "shippingStatus",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ShippingStatus"
+        },
+        "surcharge": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Surcharge"
+          }
+        },
+        "unitPrice": {
+          "type": "string"
+        }
+      },
+      "title": "ShippingOrderLine",
+      "xml": {
+        "name": "ShippingOrderLine",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ShippingStatus": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "xml": {
+            "name": "date",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "ShippingStatus",
+      "xml": {
+        "name": "ShippingStatus",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Sku": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Sku",
+      "xml": {
+        "name": "Sku",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "StringEditableType": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "StringEditableType",
+      "xml": {
+        "name": "StringEditableType",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Surcharge": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "discount": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Discount"
+          }
+        },
+        "endDate": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "quantity": {
+          "xml": {
+            "name": "quantity",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/StringEditableType"
+        },
+        "separateLine": {
+          "type": "string",
+          "xml": {
+            "name": "separateLine",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "sku": {
+          "xml": {
+            "name": "SKU",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/StringEditableType"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "tax": {
+          "$ref": "#/definitions/Tax"
+        },
+        "totalValue": {
+          "xml": {
+            "name": "totalValue",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/TotalValue"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "title": "Surcharge",
+      "xml": {
+        "name": "Surcharge",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Tax": {
+      "type": "object",
+      "properties": {
+        "gst": {
+          "xml": {
+            "name": "gst",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/StringEditableType"
+        },
+        "miscTax": {
+          "type": "string"
+        },
+        "pst": {
+          "xml": {
+            "name": "pst",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/StringEditableType"
+        },
+        "salesTax": {
+          "type": "string"
+        },
+        "valueAddTax": {
+          "type": "string"
+        }
+      },
+      "title": "Tax",
+      "xml": {
+        "name": "Tax",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Term": {
+      "type": "object",
+      "properties": {
+        "lengthOfTerm": {
+          "type": "integer",
+          "xml": {
+            "name": "lengthOfTerm",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "unitOfTerm": {
+          "type": "string"
+        }
+      },
+      "title": "Term",
+      "xml": {
+        "name": "Term",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "TotalValue": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "TotalValue",
+      "xml": {
+        "name": "TotalValue",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "TrackingNumbers": {
+      "type": "object",
+      "properties": {
+        "trackingNumber": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "TrackingNumbers",
+      "xml": {
+        "name": "TrackingNumbers",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "UScounty": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "UScounty",
+      "xml": {
+        "name": "UScounty",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "UnitPrice": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "UnitPrice",
+      "xml": {
+        "name": "UnitPrice",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "UnitValue": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "UnitValue",
+      "xml": {
+        "name": "UnitValue",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "XMLGregorianCalendar": {
+      "type": "object",
+      "properties": {
+        "day": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "eon": {
+          "type": "integer"
+        },
+        "eonAndYear": {
+          "type": "integer"
+        },
+        "fractionalSecond": {
+          "type": "number"
+        },
+        "hour": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "millisecond": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minute": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "second": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "timezone": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "valid": {
+          "type": "boolean"
+        },
+        "xmlschemaType": {
+          "$ref": "#/definitions/QName"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "XMLGregorianCalendar"
+    }
+  }
+}
