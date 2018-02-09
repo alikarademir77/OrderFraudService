@@ -142,7 +142,7 @@
                             <generateApis>false</generateApis>
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <generateModelDocumentation>false</generateModelDocumentation>
-                            <modelPackage>com.bbyc.orders.model.client.orderdetailsservice.generated</modelPackage>
+                            <modelPackage>com.bbyc.orders.model.client.orderdetailsservice</modelPackage>
 
                             <output>.</output>
 

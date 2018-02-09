@@ -114,6 +114,62 @@
     }
   },
   "definitions": {
+    "AVSStatus": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "xml": {
+            "name": "date",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "AVSStatus",
+      "xml": {
+        "name": "AVSStatus",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "ActiveStatus": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "DISABLED"
+          ]
+        }
+      },
+      "title": "ActiveStatus",
+      "xml": {
+        "name": "ActiveStatus",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
     "ActualCarrier": {
       "type": "object",
       "properties": {
@@ -425,6 +481,113 @@
         "wrapped": false
       }
     },
+    "BillAddrInfo": {
+      "type": "object",
+      "properties": {
+        "addr1": {
+          "xml": {
+            "name": "addr1",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Addr1"
+        },
+        "addr2": {
+          "$ref": "#/definitions/Addr2"
+        },
+        "addr3": {
+          "$ref": "#/definitions/Addr3"
+        },
+        "aptNumber": {
+          "$ref": "#/definitions/AptNumber"
+        },
+        "city": {
+          "xml": {
+            "name": "city",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/City"
+        },
+        "country": {
+          "xml": {
+            "name": "country",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Country"
+        },
+        "email": {
+          "xml": {
+            "name": "email",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Email"
+        },
+        "faxNumber": {
+          "$ref": "#/definitions/FaxNumber"
+        },
+        "firstName": {
+          "xml": {
+            "name": "firstName",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/FirstName"
+        },
+        "lastName": {
+          "xml": {
+            "name": "lastName",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/LastName"
+        },
+        "otherPhone": {
+          "$ref": "#/definitions/OtherPhone"
+        },
+        "otherPhoneExt": {
+          "$ref": "#/definitions/OtherPhoneExt"
+        },
+        "phone": {
+          "xml": {
+            "name": "phone",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Phone"
+        },
+        "phoneExt": {
+          "$ref": "#/definitions/PhoneExt"
+        },
+        "postcode": {
+          "xml": {
+            "name": "postcode",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Postcode"
+        },
+        "province": {
+          "xml": {
+            "name": "province",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Province"
+        },
+        "uscounty": {
+          "$ref": "#/definitions/UScounty"
+        }
+      },
+      "title": "BillAddrInfo",
+      "xml": {
+        "name": "BillAddrInfo",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
     "Bundle": {
       "type": "object",
       "properties": {
@@ -448,6 +611,28 @@
       "title": "Bundle",
       "xml": {
         "name": "Bundle",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "CardholderName": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "CardholderName",
+      "xml": {
+        "name": "CardholderName",
         "attribute": false,
         "wrapped": false
       }
@@ -492,6 +677,92 @@
       "title": "Country",
       "xml": {
         "name": "Country",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "CreditCard": {
+      "type": "object",
+      "properties": {
+        "cardholderName": {
+          "$ref": "#/definitions/CardholderName"
+        },
+        "ccnumber": {
+          "type": "integer"
+        },
+        "cctype": {
+          "type": "string"
+        },
+        "expiryDate": {
+          "xml": {
+            "name": "expiryDate",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ExpiryDate"
+        }
+      },
+      "title": "CreditCard",
+      "xml": {
+        "name": "CreditCard",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "CreditCardPaymentMethod": {
+      "type": "object",
+      "properties": {
+        "activeStatus": {
+          "xml": {
+            "name": "activeStatus",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ActiveStatus"
+        },
+        "avsstatus": {
+          "$ref": "#/definitions/AVSStatus"
+        },
+        "billAddrInfo": {
+          "xml": {
+            "name": "billAddrInfo",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/BillAddrInfo"
+        },
+        "creditCard": {
+          "xml": {
+            "name": "CreditCard",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/CreditCard"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "invoicedAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "priority": {
+          "xml": {
+            "name": "priority",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Priority"
+        }
+      },
+      "title": "CreditCardPaymentMethod",
+      "xml": {
+        "name": "CreditCardPaymentMethod",
         "attribute": false,
         "wrapped": false
       }
@@ -706,6 +977,28 @@
         }
       },
       "title": "ErrorDetail"
+    },
+    "ExpiryDate": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "ExpiryDate",
+      "xml": {
+        "name": "ExpiryDate",
+        "attribute": false,
+        "wrapped": false
+      }
     },
     "FSOrder": {
       "type": "object",
@@ -1170,6 +1463,83 @@
         "wrapped": false
       }
     },
+    "GiftCard": {
+      "type": "object",
+      "properties": {
+        "giftCardNumber": {
+          "type": "integer",
+          "xml": {
+            "name": "giftCardNumber",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "giftCardType": {
+          "type": "string",
+          "xml": {
+            "name": "giftCardType",
+            "attribute": false,
+            "wrapped": false
+          }
+        },
+        "secureCode": {
+          "type": "string"
+        }
+      },
+      "title": "GiftCard",
+      "xml": {
+        "name": "GiftCard",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "GiftCardPaymentMethod": {
+      "type": "object",
+      "properties": {
+        "activeStatus": {
+          "xml": {
+            "name": "activeStatus",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ActiveStatus"
+        },
+        "giftCard": {
+          "xml": {
+            "name": "giftCard",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/GiftCard"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "invoicedAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "priority": {
+          "xml": {
+            "name": "priority",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Priority"
+        }
+      },
+      "title": "GiftCardPaymentMethod",
+      "xml": {
+        "name": "GiftCardPaymentMethod",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
     "Gst": {
       "type": "object",
       "properties": {
@@ -1567,6 +1937,41 @@
         "wrapped": false
       }
     },
+    "POSPaymentMethod": {
+      "type": "object",
+      "properties": {
+        "activeStatus": {
+          "xml": {
+            "name": "activeStatus",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ActiveStatus"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "priority": {
+          "xml": {
+            "name": "priority",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Priority"
+        }
+      },
+      "title": "POSPaymentMethod",
+      "xml": {
+        "name": "POSPaymentMethod",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
     "PSP": {
       "type": "object",
       "properties": {
@@ -1591,6 +1996,56 @@
       "title": "PSP",
       "xml": {
         "name": "PSP",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "PayPalPaymentMethod": {
+      "type": "object",
+      "properties": {
+        "activeStatus": {
+          "xml": {
+            "name": "activeStatus",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/ActiveStatus"
+        },
+        "avsstatus": {
+          "$ref": "#/definitions/AVSStatus"
+        },
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "invoicedAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "paypal": {
+          "xml": {
+            "name": "paypal",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Paypal"
+        },
+        "priority": {
+          "xml": {
+            "name": "priority",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Priority"
+        }
+      },
+      "title": "PayPalPaymentMethod",
+      "xml": {
+        "name": "PayPalPaymentMethod",
         "attribute": false,
         "wrapped": false
       }
@@ -1633,10 +2088,10 @@
     "PaymentMethodList": {
       "type": "object",
       "properties": {
-        "creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod": {
+        "creditCardPaymentMethods": {
           "type": "array",
           "items": {
-            "type": "object"
+            "$ref": "#/definitions/CreditCardPaymentMethod"
           }
         },
         "editable": {
@@ -1646,14 +2101,27 @@
             "attribute": true,
             "wrapped": false
           }
+        },
+        "giftCardPaymentMethods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GiftCardPaymentMethod"
+          }
+        },
+        "payPalPaymentMethods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PayPalPaymentMethod"
+          }
+        },
+        "posPaymentMethods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/POSPaymentMethod"
+          }
         }
       },
-      "title": "PaymentMethodList",
-      "xml": {
-        "name": "PaymentMethodList",
-        "attribute": false,
-        "wrapped": false
-      }
+      "title": "PaymentMethodList"
     },
     "PaymentStatus": {
       "type": "object",
@@ -1681,6 +2149,25 @@
       "title": "PaymentStatus",
       "xml": {
         "name": "PaymentStatus",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Paypal": {
+      "type": "object",
+      "properties": {
+        "paymentRefId": {
+          "type": "string",
+          "xml": {
+            "name": "paymentRefId",
+            "attribute": false,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "Paypal",
+      "xml": {
+        "name": "Paypal",
         "attribute": false,
         "wrapped": false
       }
@@ -1777,6 +2264,28 @@
       "title": "Postcode",
       "xml": {
         "name": "Postcode",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "Priority": {
+      "type": "object",
+      "properties": {
+        "editable": {
+          "type": "string",
+          "xml": {
+            "name": "editable",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Priority",
+      "xml": {
+        "name": "Priority",
         "attribute": false,
         "wrapped": false
       }

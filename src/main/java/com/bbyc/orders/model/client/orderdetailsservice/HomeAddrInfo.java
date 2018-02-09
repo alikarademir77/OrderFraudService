@@ -14,15 +14,33 @@
 package com.bbyc.orders.model.client.orderdetailsservice;
 
 import java.util.Objects;
-
+import com.bbyc.orders.model.client.orderdetailsservice.Addr1;
+import com.bbyc.orders.model.client.orderdetailsservice.Addr2;
+import com.bbyc.orders.model.client.orderdetailsservice.Addr3;
+import com.bbyc.orders.model.client.orderdetailsservice.AptNumber;
+import com.bbyc.orders.model.client.orderdetailsservice.City;
+import com.bbyc.orders.model.client.orderdetailsservice.Country;
+import com.bbyc.orders.model.client.orderdetailsservice.Email;
+import com.bbyc.orders.model.client.orderdetailsservice.FaxNumber;
+import com.bbyc.orders.model.client.orderdetailsservice.FirstName;
+import com.bbyc.orders.model.client.orderdetailsservice.LastName;
+import com.bbyc.orders.model.client.orderdetailsservice.OtherPhone;
+import com.bbyc.orders.model.client.orderdetailsservice.OtherPhoneExt;
+import com.bbyc.orders.model.client.orderdetailsservice.Phone;
+import com.bbyc.orders.model.client.orderdetailsservice.PhoneExt;
+import com.bbyc.orders.model.client.orderdetailsservice.Postcode;
+import com.bbyc.orders.model.client.orderdetailsservice.Province;
+import com.bbyc.orders.model.client.orderdetailsservice.UScounty;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * HomeAddrInfo
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-08T10:16:57.900-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-08T17:40:22.226-08:00")
 public class HomeAddrInfo {
   @JsonProperty("addr1")
   private Addr1 addr1 = null;

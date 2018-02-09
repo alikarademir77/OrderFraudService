@@ -14,9 +14,13 @@
 package com.bbyc.orders.model.client.orderdetailsservice;
 
 import java.util.Objects;
-
+import com.bbyc.orders.model.client.orderdetailsservice.ItemChargeDiscountType;
+import com.bbyc.orders.model.client.orderdetailsservice.Tax;
+import com.bbyc.orders.model.client.orderdetailsservice.UnitPrice;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +28,7 @@ import java.util.List;
 /**
  * ItemCharge
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-08T10:16:57.900-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-08T17:40:22.226-08:00")
 public class ItemCharge {
   @JsonProperty("discount")
   private List<ItemChargeDiscountType> discount = null;

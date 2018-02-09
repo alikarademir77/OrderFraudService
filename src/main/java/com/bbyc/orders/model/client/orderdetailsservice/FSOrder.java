@@ -14,9 +14,19 @@
 package com.bbyc.orders.model.client.orderdetailsservice;
 
 import java.util.Objects;
-
+import com.bbyc.orders.model.client.orderdetailsservice.Bundle;
+import com.bbyc.orders.model.client.orderdetailsservice.Customer;
+import com.bbyc.orders.model.client.orderdetailsservice.FSOrderLine;
+import com.bbyc.orders.model.client.orderdetailsservice.FsoStatus;
+import com.bbyc.orders.model.client.orderdetailsservice.PaymentMethodList;
+import com.bbyc.orders.model.client.orderdetailsservice.PurchaseOrder;
+import com.bbyc.orders.model.client.orderdetailsservice.RewardZone;
+import com.bbyc.orders.model.client.orderdetailsservice.ShippingModel;
+import com.bbyc.orders.model.client.orderdetailsservice.ShippingOrder;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +34,7 @@ import java.util.List;
 /**
  * FSOrder
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-08T10:16:57.900-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-08T17:40:22.226-08:00")
 public class FSOrder {
   @JsonProperty("affiliateID")
   private String affiliateID = null;

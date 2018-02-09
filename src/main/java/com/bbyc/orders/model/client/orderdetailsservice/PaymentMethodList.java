@@ -14,8 +14,14 @@
 package com.bbyc.orders.model.client.orderdetailsservice;
 
 import java.util.Objects;
+import com.bbyc.orders.model.client.orderdetailsservice.CreditCardPaymentMethod;
+import com.bbyc.orders.model.client.orderdetailsservice.GiftCardPaymentMethod;
+import com.bbyc.orders.model.client.orderdetailsservice.POSPaymentMethod;
+import com.bbyc.orders.model.client.orderdetailsservice.PayPalPaymentMethod;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,38 +29,47 @@ import java.util.List;
 /**
  * PaymentMethodList
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-08T10:16:57.900-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-08T17:40:22.226-08:00")
 public class PaymentMethodList {
-  @JsonProperty("creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod")
-  private List<Object> creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod = null;
+  @JsonProperty("creditCardPaymentMethods")
+  private List<CreditCardPaymentMethod> creditCardPaymentMethods = null;
 
   @JsonProperty("editable")
   private String editable = null;
 
-  public PaymentMethodList creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod(List<Object> creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod) {
-    this.creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod = creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod;
+  @JsonProperty("giftCardPaymentMethods")
+  private List<GiftCardPaymentMethod> giftCardPaymentMethods = null;
+
+  @JsonProperty("payPalPaymentMethods")
+  private List<PayPalPaymentMethod> payPalPaymentMethods = null;
+
+  @JsonProperty("posPaymentMethods")
+  private List<POSPaymentMethod> posPaymentMethods = null;
+
+  public PaymentMethodList creditCardPaymentMethods(List<CreditCardPaymentMethod> creditCardPaymentMethods) {
+    this.creditCardPaymentMethods = creditCardPaymentMethods;
     return this;
   }
 
-  public PaymentMethodList addCreditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethodItem(Object creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethodItem) {
-    if (this.creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod == null) {
-      this.creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod = new ArrayList<Object>();
+  public PaymentMethodList addCreditCardPaymentMethodsItem(CreditCardPaymentMethod creditCardPaymentMethodsItem) {
+    if (this.creditCardPaymentMethods == null) {
+      this.creditCardPaymentMethods = new ArrayList<CreditCardPaymentMethod>();
     }
-    this.creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod.add(creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethodItem);
+    this.creditCardPaymentMethods.add(creditCardPaymentMethodsItem);
     return this;
   }
 
    /**
-   * Get creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod
-   * @return creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod
+   * Get creditCardPaymentMethods
+   * @return creditCardPaymentMethods
   **/
   @ApiModelProperty(value = "")
-  public List<Object> getCreditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod() {
-    return creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod;
+  public List<CreditCardPaymentMethod> getCreditCardPaymentMethods() {
+    return creditCardPaymentMethods;
   }
 
-  public void setCreditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod(List<Object> creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod) {
-    this.creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod = creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod;
+  public void setCreditCardPaymentMethods(List<CreditCardPaymentMethod> creditCardPaymentMethods) {
+    this.creditCardPaymentMethods = creditCardPaymentMethods;
   }
 
   public PaymentMethodList editable(String editable) {
@@ -75,6 +90,84 @@ public class PaymentMethodList {
     this.editable = editable;
   }
 
+  public PaymentMethodList giftCardPaymentMethods(List<GiftCardPaymentMethod> giftCardPaymentMethods) {
+    this.giftCardPaymentMethods = giftCardPaymentMethods;
+    return this;
+  }
+
+  public PaymentMethodList addGiftCardPaymentMethodsItem(GiftCardPaymentMethod giftCardPaymentMethodsItem) {
+    if (this.giftCardPaymentMethods == null) {
+      this.giftCardPaymentMethods = new ArrayList<GiftCardPaymentMethod>();
+    }
+    this.giftCardPaymentMethods.add(giftCardPaymentMethodsItem);
+    return this;
+  }
+
+   /**
+   * Get giftCardPaymentMethods
+   * @return giftCardPaymentMethods
+  **/
+  @ApiModelProperty(value = "")
+  public List<GiftCardPaymentMethod> getGiftCardPaymentMethods() {
+    return giftCardPaymentMethods;
+  }
+
+  public void setGiftCardPaymentMethods(List<GiftCardPaymentMethod> giftCardPaymentMethods) {
+    this.giftCardPaymentMethods = giftCardPaymentMethods;
+  }
+
+  public PaymentMethodList payPalPaymentMethods(List<PayPalPaymentMethod> payPalPaymentMethods) {
+    this.payPalPaymentMethods = payPalPaymentMethods;
+    return this;
+  }
+
+  public PaymentMethodList addPayPalPaymentMethodsItem(PayPalPaymentMethod payPalPaymentMethodsItem) {
+    if (this.payPalPaymentMethods == null) {
+      this.payPalPaymentMethods = new ArrayList<PayPalPaymentMethod>();
+    }
+    this.payPalPaymentMethods.add(payPalPaymentMethodsItem);
+    return this;
+  }
+
+   /**
+   * Get payPalPaymentMethods
+   * @return payPalPaymentMethods
+  **/
+  @ApiModelProperty(value = "")
+  public List<PayPalPaymentMethod> getPayPalPaymentMethods() {
+    return payPalPaymentMethods;
+  }
+
+  public void setPayPalPaymentMethods(List<PayPalPaymentMethod> payPalPaymentMethods) {
+    this.payPalPaymentMethods = payPalPaymentMethods;
+  }
+
+  public PaymentMethodList posPaymentMethods(List<POSPaymentMethod> posPaymentMethods) {
+    this.posPaymentMethods = posPaymentMethods;
+    return this;
+  }
+
+  public PaymentMethodList addPosPaymentMethodsItem(POSPaymentMethod posPaymentMethodsItem) {
+    if (this.posPaymentMethods == null) {
+      this.posPaymentMethods = new ArrayList<POSPaymentMethod>();
+    }
+    this.posPaymentMethods.add(posPaymentMethodsItem);
+    return this;
+  }
+
+   /**
+   * Get posPaymentMethods
+   * @return posPaymentMethods
+  **/
+  @ApiModelProperty(value = "")
+  public List<POSPaymentMethod> getPosPaymentMethods() {
+    return posPaymentMethods;
+  }
+
+  public void setPosPaymentMethods(List<POSPaymentMethod> posPaymentMethods) {
+    this.posPaymentMethods = posPaymentMethods;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -85,13 +178,16 @@ public class PaymentMethodList {
       return false;
     }
     PaymentMethodList paymentMethodList = (PaymentMethodList) o;
-    return Objects.equals(this.creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod, paymentMethodList.creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod) &&
-        Objects.equals(this.editable, paymentMethodList.editable);
+    return Objects.equals(this.creditCardPaymentMethods, paymentMethodList.creditCardPaymentMethods) &&
+        Objects.equals(this.editable, paymentMethodList.editable) &&
+        Objects.equals(this.giftCardPaymentMethods, paymentMethodList.giftCardPaymentMethods) &&
+        Objects.equals(this.payPalPaymentMethods, paymentMethodList.payPalPaymentMethods) &&
+        Objects.equals(this.posPaymentMethods, paymentMethodList.posPaymentMethods);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod, editable);
+    return Objects.hash(creditCardPaymentMethods, editable, giftCardPaymentMethods, payPalPaymentMethods, posPaymentMethods);
   }
 
 
@@ -100,8 +196,11 @@ public class PaymentMethodList {
     StringBuilder sb = new StringBuilder();
     sb.append("class PaymentMethodList {\n");
     
-    sb.append("    creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod: ").append(toIndentedString(creditCardPaymentMethodAndGiftCardPaymentMethodAndPayPalPaymentMethod)).append("\n");
+    sb.append("    creditCardPaymentMethods: ").append(toIndentedString(creditCardPaymentMethods)).append("\n");
     sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
+    sb.append("    giftCardPaymentMethods: ").append(toIndentedString(giftCardPaymentMethods)).append("\n");
+    sb.append("    payPalPaymentMethods: ").append(toIndentedString(payPalPaymentMethods)).append("\n");
+    sb.append("    posPaymentMethods: ").append(toIndentedString(posPaymentMethods)).append("\n");
     sb.append("}");
     return sb.toString();
   }
