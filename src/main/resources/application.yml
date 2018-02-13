@@ -1,3 +1,25 @@
 server:
     port: 8080
     contextPath: /orderfraud
+    
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: orders
+ 
+  cloud:
+    stream:
+      bindings:
+        fraudInbound:
+          destination:  fraudInbound
+          group:  fraudInboundConsumersGroup
+          consumer:
+              concurrency: 3  
+        fraudOutbound:
+          destination: fraudOutbound
+      default: 
+        contentType:  application/json
+        
