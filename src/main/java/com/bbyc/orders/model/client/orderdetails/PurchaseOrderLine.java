@@ -21,13 +21,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.OffsetDateTime;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 /**
  * PurchaseOrderLine
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class PurchaseOrderLine {
   @JsonProperty("id")
   private String id = null;
@@ -63,7 +63,7 @@ public class PurchaseOrderLine {
   private String qtyOrdered = null;
 
   @JsonProperty("releaseDate")
-  private OffsetDateTime releaseDate = null;
+  private DateTime releaseDate = null;
 
   @JsonProperty("shippingOrderLineRefId")
   private String shippingOrderLineRefId = null;
@@ -266,7 +266,7 @@ public class PurchaseOrderLine {
     this.qtyOrdered = qtyOrdered;
   }
 
-  public PurchaseOrderLine releaseDate(OffsetDateTime releaseDate) {
+  public PurchaseOrderLine releaseDate(DateTime releaseDate) {
     this.releaseDate = releaseDate;
     return this;
   }
@@ -276,11 +276,11 @@ public class PurchaseOrderLine {
    * @return releaseDate
   **/
   @ApiModelProperty(value = "")
-  public OffsetDateTime getReleaseDate() {
+  public DateTime getReleaseDate() {
     return releaseDate;
   }
 
-  public void setReleaseDate(OffsetDateTime releaseDate) {
+  public void setReleaseDate(DateTime releaseDate) {
     this.releaseDate = releaseDate;
   }
 
@@ -365,6 +365,6 @@ public class PurchaseOrderLine {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

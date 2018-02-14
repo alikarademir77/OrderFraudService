@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * GiftCardInfo
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class GiftCardInfo {
   @JsonProperty("active")
   private Boolean active = null;
@@ -50,7 +50,7 @@ public class GiftCardInfo {
    * @return active
   **/
   @ApiModelProperty(value = "")
-  public Boolean isActive() {
+  public Boolean getActive() {
     return active;
   }
 
@@ -177,6 +177,6 @@ public class GiftCardInfo {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

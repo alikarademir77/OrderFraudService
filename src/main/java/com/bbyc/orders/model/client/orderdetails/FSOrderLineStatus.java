@@ -19,12 +19,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.threeten.bp.OffsetDateTime;
+import org.joda.time.DateTime;
 
 /**
  * FSOrderLineStatus
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class FSOrderLineStatus {
   @JsonProperty("name")
   private String name = null;
@@ -33,7 +33,7 @@ public class FSOrderLineStatus {
   private String description = null;
 
   @JsonProperty("date")
-  private OffsetDateTime date = null;
+  private DateTime date = null;
 
   @JsonProperty("cancelReason")
   private String cancelReason = null;
@@ -74,7 +74,7 @@ public class FSOrderLineStatus {
     this.description = description;
   }
 
-  public FSOrderLineStatus date(OffsetDateTime date) {
+  public FSOrderLineStatus date(DateTime date) {
     this.date = date;
     return this;
   }
@@ -84,11 +84,11 @@ public class FSOrderLineStatus {
    * @return date
   **/
   @ApiModelProperty(value = "")
-  public OffsetDateTime getDate() {
+  public DateTime getDate() {
     return date;
   }
 
-  public void setDate(OffsetDateTime date) {
+  public void setDate(DateTime date) {
     this.date = date;
   }
 
@@ -155,6 +155,6 @@ public class FSOrderLineStatus {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

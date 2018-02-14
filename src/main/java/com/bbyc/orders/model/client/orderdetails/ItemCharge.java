@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * ItemCharge
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class ItemCharge {
   @JsonProperty("discounts")
   private List<ItemChargeDiscount> discounts = null;
@@ -166,6 +166,6 @@ public class ItemCharge {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

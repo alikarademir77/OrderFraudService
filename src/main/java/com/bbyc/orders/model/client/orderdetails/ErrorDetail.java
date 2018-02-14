@@ -19,18 +19,18 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.threeten.bp.OffsetDateTime;
+import org.joda.time.DateTime;
 
 /**
  * ErrorDetail
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class ErrorDetail {
   @JsonProperty("status")
   private Integer status = null;
 
   @JsonProperty("timestamp")
-  private OffsetDateTime timestamp = null;
+  private DateTime timestamp = null;
 
   @JsonProperty("message")
   private String message = null;
@@ -62,7 +62,7 @@ public class ErrorDetail {
     this.status = status;
   }
 
-  public ErrorDetail timestamp(OffsetDateTime timestamp) {
+  public ErrorDetail timestamp(DateTime timestamp) {
     this.timestamp = timestamp;
     return this;
   }
@@ -72,11 +72,11 @@ public class ErrorDetail {
    * @return timestamp
   **/
   @ApiModelProperty(value = "Time when the error occurred")
-  public OffsetDateTime getTimestamp() {
+  public DateTime getTimestamp() {
     return timestamp;
   }
 
-  public void setTimestamp(OffsetDateTime timestamp) {
+  public void setTimestamp(DateTime timestamp) {
     this.timestamp = timestamp;
   }
 
@@ -201,6 +201,6 @@ public class ErrorDetail {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

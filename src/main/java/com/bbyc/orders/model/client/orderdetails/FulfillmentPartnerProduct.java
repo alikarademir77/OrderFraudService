@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * FulfillmentPartnerProduct
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class FulfillmentPartnerProduct {
   @JsonProperty("name")
   private String name = null;
@@ -131,6 +131,6 @@ public class FulfillmentPartnerProduct {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

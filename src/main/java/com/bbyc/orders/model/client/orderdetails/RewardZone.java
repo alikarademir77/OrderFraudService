@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * RewardZone
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class RewardZone {
   @JsonProperty("rewardZoneId")
   private String rewardZoneId = null;
@@ -85,6 +85,6 @@ public class RewardZone {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

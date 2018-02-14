@@ -19,12 +19,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.threeten.bp.OffsetDateTime;
+import org.joda.time.DateTime;
 
 /**
  * Status
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class Status {
   @JsonProperty("name")
   private String name = null;
@@ -33,7 +33,7 @@ public class Status {
   private String description = null;
 
   @JsonProperty("date")
-  private OffsetDateTime date = null;
+  private DateTime date = null;
 
   public Status name(String name) {
     this.name = name;
@@ -71,7 +71,7 @@ public class Status {
     this.description = description;
   }
 
-  public Status date(OffsetDateTime date) {
+  public Status date(DateTime date) {
     this.date = date;
     return this;
   }
@@ -81,11 +81,11 @@ public class Status {
    * @return date
   **/
   @ApiModelProperty(value = "")
-  public OffsetDateTime getDate() {
+  public DateTime getDate() {
     return date;
   }
 
-  public void setDate(OffsetDateTime date) {
+  public void setDate(DateTime date) {
     this.date = date;
   }
 
@@ -132,6 +132,6 @@ public class Status {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

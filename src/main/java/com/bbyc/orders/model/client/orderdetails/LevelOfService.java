@@ -19,12 +19,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.threeten.bp.LocalDate;
+import org.joda.time.LocalDate;
 
 /**
  * LevelOfService
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class LevelOfService {
   @JsonProperty("carrierCode")
   private String carrierCode = null;
@@ -129,7 +129,7 @@ public class LevelOfService {
    * @return requiresInsurance
   **/
   @ApiModelProperty(value = "")
-  public Boolean isRequiresInsurance() {
+  public Boolean getRequiresInsurance() {
     return requiresInsurance;
   }
 
@@ -147,7 +147,7 @@ public class LevelOfService {
    * @return requiresSignature
   **/
   @ApiModelProperty(value = "")
-  public Boolean isRequiresSignature() {
+  public Boolean getRequiresSignature() {
     return requiresSignature;
   }
 
@@ -165,7 +165,7 @@ public class LevelOfService {
    * @return sameDayDelivery
   **/
   @ApiModelProperty(value = "")
-  public Boolean isSameDayDelivery() {
+  public Boolean getSameDayDelivery() {
     return sameDayDelivery;
   }
 
@@ -224,6 +224,6 @@ public class LevelOfService {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

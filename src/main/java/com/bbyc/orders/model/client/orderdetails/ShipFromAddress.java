@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * ShipFromAddress
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class ShipFromAddress {
   @JsonProperty("address1")
   private String address1 = null;
@@ -453,6 +453,6 @@ public class ShipFromAddress {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

@@ -159,7 +159,7 @@ public class ShippingOrder {
     /**
      * Shipping detail representation
      */
-    static class ShippingDetails {
+    public static class ShippingDetails {
 
         /**
          * Shipping method
@@ -192,7 +192,7 @@ public class ShippingOrder {
     /**
      * Chargeback representation
      */
-    static class Chargeback {
+    public static class Chargeback {
 
         /**
          * Chargeback amount
@@ -215,7 +215,7 @@ public class ShippingOrder {
     /**
      * Shipping order line representation
      */
-    static class OrderLine {
+    public static class OrderLine {
 
         /**
          * Shipping order line number

@@ -1,6 +1,6 @@
 package com.bbyc.orders.model.internal;
 
-public abstract class Address {
+public class Address {
 
     /**
      * First name

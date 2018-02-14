@@ -24,18 +24,18 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import org.threeten.bp.OffsetDateTime;
+import org.joda.time.DateTime;
 
 /**
  * PurchaseOrder
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class PurchaseOrder {
   @JsonProperty("id")
   private String id = null;
 
   @JsonProperty("creationDate")
-  private OffsetDateTime creationDate = null;
+  private DateTime creationDate = null;
 
   @JsonProperty("fulfillmentPartner")
   private FulfillmentPartner fulfillmentPartner = null;
@@ -67,7 +67,7 @@ public class PurchaseOrder {
     this.id = id;
   }
 
-  public PurchaseOrder creationDate(OffsetDateTime creationDate) {
+  public PurchaseOrder creationDate(DateTime creationDate) {
     this.creationDate = creationDate;
     return this;
   }
@@ -77,11 +77,11 @@ public class PurchaseOrder {
    * @return creationDate
   **/
   @ApiModelProperty(value = "")
-  public OffsetDateTime getCreationDate() {
+  public DateTime getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(OffsetDateTime creationDate) {
+  public void setCreationDate(DateTime creationDate) {
     this.creationDate = creationDate;
   }
 
@@ -214,6 +214,6 @@ public class PurchaseOrder {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

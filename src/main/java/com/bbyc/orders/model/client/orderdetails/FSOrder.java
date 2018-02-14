@@ -30,12 +30,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import org.threeten.bp.OffsetDateTime;
+import org.joda.time.DateTime;
 
 /**
  * FSOrder
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class FSOrder {
   @JsonProperty("id")
   private String id = null;
@@ -74,7 +74,7 @@ public class FSOrder {
   private String webOrderRefId = null;
 
   @JsonProperty("webOrderCreationDate")
-  private OffsetDateTime webOrderCreationDate = null;
+  private DateTime webOrderCreationDate = null;
 
   public FSOrder id(String id) {
     this.id = id;
@@ -324,7 +324,7 @@ public class FSOrder {
     this.webOrderRefId = webOrderRefId;
   }
 
-  public FSOrder webOrderCreationDate(OffsetDateTime webOrderCreationDate) {
+  public FSOrder webOrderCreationDate(DateTime webOrderCreationDate) {
     this.webOrderCreationDate = webOrderCreationDate;
     return this;
   }
@@ -334,11 +334,11 @@ public class FSOrder {
    * @return webOrderCreationDate
   **/
   @ApiModelProperty(value = "")
-  public OffsetDateTime getWebOrderCreationDate() {
+  public DateTime getWebOrderCreationDate() {
     return webOrderCreationDate;
   }
 
-  public void setWebOrderCreationDate(OffsetDateTime webOrderCreationDate) {
+  public void setWebOrderCreationDate(DateTime webOrderCreationDate) {
     this.webOrderCreationDate = webOrderCreationDate;
   }
 
@@ -405,6 +405,6 @@ public class FSOrder {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 

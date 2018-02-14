@@ -51,9 +51,9 @@ public class PaymentDetails {
     /**
      * Credit card representation
      */
-    static class CreditCard {
+    public static class CreditCard {
 
-        public BillingAddress billingAddress;
+        public Address billingAddress;
 
         public String creditCardType;
 
@@ -61,9 +61,8 @@ public class PaymentDetails {
 
         public double totalAuthorizedAmount;
 
-        public String expiryMonth;
-
-        public String expiryYear;
+        //todo: split this into month and year when we send
+        public String creditCardExpiryDate;
 
         public String avsResponse;
 
@@ -77,7 +76,7 @@ public class PaymentDetails {
     /**
      * Gift card representation
      */
-    static class GiftCard {
+    public static class GiftCard {
 
         public String giftCardNumber;
 
@@ -87,7 +86,7 @@ public class PaymentDetails {
     /**
      * PayPal representation
      */
-    static class PayPal {
+    public static class PayPal {
 
         public String requestID;
 

@@ -1,0 +1,434 @@
+{
+  "id": "string",
+  "bundles": [
+    {
+      "id": "string",
+      "seqNum": "string"
+    }
+  ],
+  "customer": {
+    "id": "string",
+    "homeAddress": {
+      "address1": "string",
+      "address2": "string",
+      "address3": "string",
+      "apartmentNumber": "string",
+      "city": "string",
+      "country": "string",
+      "email": "string",
+      "faxNumber": "string",
+      "firstName": "string",
+      "lastName": "string",
+      "phone": "string",
+      "phoneExt": "string",
+      "phone2": "string",
+      "phone2Ext": "string",
+      "postalCode": "string",
+      "province": "string"
+    }
+  },
+  "fsOrderLines": [
+    {
+      "id": "string",
+      "bundle": {
+        "id": "string",
+        "seqNum": "string"
+      },
+      "etaDate": "2018-02-14",
+      "itemCharge": {
+        "discounts": [
+          {
+            "authId": "string",
+            "code": "string",
+            "description": "string",
+            "id": "string",
+            "name": "string",
+            "quantity": "string",
+            "ruleName": "string",
+            "type": "string",
+            "unitValue": "string",
+            "uom": "string"
+          }
+        ],
+        "discountedUnitPrice": "string",
+        "tax": {
+          "gst": "string",
+          "pst": "string"
+        },
+        "unitPrice": "string"
+      },
+      "lineNumber": "string",
+      "product": {
+        "mfr": "string",
+        "name": "string",
+        "productServicePlan": {
+          "effectiveDateRange": {
+            "endDate": "2018-02-14",
+            "startDate": "2018-02-14"
+          },
+          "pspCoveredSerialNumbers": [
+            "string"
+          ],
+          "term": {
+            "length": 0,
+            "unitOfTerm": "string"
+          }
+        },
+        "serialNumbers": [
+          "string"
+        ],
+        "sku": "string"
+      },
+      "qtyCancelled": "string",
+      "qtyOnSpecialOrder": "string",
+      "qtyOrdered": "string",
+      "releaseDate": "2018-02-14",
+      "status": {
+        "name": "string",
+        "description": "string",
+        "date": "2018-02-14T01:10:02.013Z",
+        "cancelReason": "string"
+      },
+      "uom": "string"
+    }
+  ],
+  "ipAddress": "string",
+  "paymentMethodInfo": {
+    "creditCards": [
+      {
+        "active": true,
+        "avsStatus": {
+          "name": "string",
+          "description": "string",
+          "date": "2018-02-14T01:10:02.013Z"
+        },
+        "billingAddress": {
+          "address1": "string",
+          "address2": "string",
+          "address3": "string",
+          "apartmentNumber": "string",
+          "city": "string",
+          "country": "string",
+          "email": "string",
+          "faxNumber": "string",
+          "firstName": "string",
+          "lastName": "string",
+          "phone": "string",
+          "phoneExt": "string",
+          "phone2": "string",
+          "phone2Ext": "string",
+          "postalCode": "string",
+          "province": "string"
+        },
+        "creditCardNumber": "string",
+        "creditCardType": "string",
+        "creditCardExpiryDate": "2018-02-14",
+        "creditCardHolderName": "string",
+        "invoicedAmount": 0,
+        "priority": "string"
+      }
+    ],
+    "giftCards": [
+      {
+        "active": true,
+        "giftCardNumber": "string",
+        "giftCardType": "string",
+        "giftCardSecureCode": "string",
+        "invoicedAmount": 0
+      }
+    ],
+    "payPal": [
+      {
+        "active": true,
+        "avsStatus": {
+          "name": "string",
+          "description": "string",
+          "date": "2018-02-14T01:10:02.013Z"
+        },
+        "invoicedAmount": 0,
+        "payPalInternalRefId": "string",
+        "priority": "string"
+      }
+    ],
+    "posPayments": [
+      {
+        "active": true,
+        "id": "string",
+        "priority": "string"
+      }
+    ]
+  },
+  "purchaseOrders": [
+    {
+      "id": "string",
+      "creationDate": "2018-02-14T01:10:02.013Z",
+      "fulfillmentPartner": {
+        "id": "string",
+        "name": "string",
+        "type": "string",
+        "ffpPORefId": "string"
+      },
+      "poSendStatus": {
+        "name": "string",
+        "description": "string",
+        "date": "2018-02-14T01:10:02.013Z"
+      },
+      "purchaseOrderLines": [
+        {
+          "id": "string",
+          "availability": "string",
+          "deliveryDate": "2018-02-14",
+          "etaDate": "2018-02-14",
+          "fulfillmentPartnerPOLineRefId": "string",
+          "fulfillmentPartnerProduct": {
+            "name": "string",
+            "rmsSKU": "string",
+            "vpn": "string"
+          },
+          "fulfillmentLocationIdentifier": {
+            "id": "string",
+            "address": {
+              "address1": "string",
+              "address2": "string",
+              "address3": "string",
+              "apartmentNumber": "string",
+              "city": "string",
+              "country": "string",
+              "email": "string",
+              "faxNumber": "string",
+              "firstName": "string",
+              "lastName": "string",
+              "phone": "string",
+              "phoneExt": "string",
+              "phone2": "string",
+              "phone2Ext": "string",
+              "postalCode": "string",
+              "province": "string"
+            }
+          },
+          "fsoLineRefId": "string",
+          "qtyAllocated": "string",
+          "qtyBackordered": "string",
+          "qtyOrdered": "string",
+          "releaseDate": "2018-02-14T01:10:02.013Z",
+          "shippingOrderLineRefId": "string"
+        }
+      ],
+      "shippingOrderRefId": "string"
+    }
+  ],
+  "rewardZone": {
+    "rewardZoneId": "string"
+  },
+  "shippingModel": {
+    "name": "string",
+    "description": "string"
+  },
+  "shippingOrders": [
+    {
+      "id": "string",
+      "actualCarrier": {
+        "id": "string",
+        "levelOfService": {
+          "carrierCode": "string",
+          "deliveryDate": "2018-02-14",
+          "id": "string",
+          "name": "string",
+          "requiresInsurance": true,
+          "requiresSignature": true,
+          "sameDayDelivery": true
+        },
+        "shipmentType": "string",
+        "tracking": {
+          "trackingHttpMethod": "string",
+          "trackingNumbers": [
+            "string"
+          ],
+          "trackingParameter": "string",
+          "trackingURL": "string"
+        }
+      },
+      "globalContractRefId": "string",
+      "fulfillmentMethod": "string",
+      "fulfillmentPartner": "string",
+      "isCustomerInvoiceAvailable": true,
+      "paymentInfo": {
+        "authorization": {
+          "authAmount": "string",
+          "authCode": "string"
+        },
+        "paymentId": "string",
+        "status": {
+          "name": "string",
+          "description": "string",
+          "date": "2018-02-14T01:10:02.013Z"
+        }
+      },
+      "requestedCarrier": {
+        "id": "string",
+        "levelOfService": {
+          "carrierCode": "string",
+          "deliveryDate": "2018-02-14",
+          "id": "string",
+          "name": "string",
+          "requiresInsurance": true,
+          "requiresSignature": true,
+          "sameDayDelivery": true
+        },
+        "name": "string"
+      },
+      "requestedDeliveryDate": "2018-02-14",
+      "shipFromAddress": {
+        "address1": "string",
+        "address2": "string",
+        "address3": "string",
+        "apartmentNumber": "string",
+        "city": "string",
+        "country": "string",
+        "email": "string",
+        "faxNumber": "string",
+        "firstName": "string",
+        "lastName": "string",
+        "locationId": "string",
+        "phone": "string",
+        "phoneExt": "string",
+        "phone2": "string",
+        "phone2Ext": "string",
+        "postalCode": "string",
+        "province": "string"
+      },
+      "shipToAddress": {
+        "address1": "string",
+        "address2": "string",
+        "address3": "string",
+        "apartmentNumber": "string",
+        "city": "string",
+        "country": "string",
+        "email": "string",
+        "faxNumber": "string",
+        "firstName": "string",
+        "lastName": "string",
+        "phone": "string",
+        "phoneExt": "string",
+        "phone2": "string",
+        "phone2Ext": "string",
+        "postalCode": "string",
+        "province": "string"
+      },
+      "shipmentDate": "2018-02-14",
+      "shippingCharges": [
+        {
+          "description": "string",
+          "discounts": [
+            {
+              "id": "string",
+              "code": "string",
+              "description": "string",
+              "name": "string",
+              "quantity": "string",
+              "ruleName": "string",
+              "type": "string",
+              "unitValue": "string",
+              "uom": "string"
+            }
+          ],
+          "sku": "string",
+          "tax": {
+            "gst": "string",
+            "pst": "string"
+          },
+          "type": "string",
+          "unitPrice": "string"
+        }
+      ],
+      "shippingOrderLines": [
+        {
+          "id": "string",
+          "availability": "string",
+          "cancellable": true,
+          "etaDate": "2018-02-14",
+          "fsoLineRefId": "string",
+          "inventoryReservationRefId": "string",
+          "qtyCancelled": "string",
+          "qtyOrdered": "string",
+          "qtyShipped": "string",
+          "shippingCharges": [
+            {
+              "description": "string",
+              "discounts": [
+                {
+                  "id": "string",
+                  "code": "string",
+                  "description": "string",
+                  "name": "string",
+                  "quantity": "string",
+                  "ruleName": "string",
+                  "type": "string",
+                  "unitValue": "string",
+                  "uom": "string"
+                }
+              ],
+              "sku": "string",
+              "tax": {
+                "gst": "string",
+                "pst": "string"
+              },
+              "type": "string",
+              "unitPrice": "string"
+            }
+          ],
+          "status": {
+            "name": "string",
+            "description": "string",
+            "date": "2018-02-14T01:10:02.013Z"
+          },
+          "surcharges": [
+            {
+              "description": "string",
+              "discounts": [
+                {
+                  "id": "string",
+                  "code": "string",
+                  "description": "string",
+                  "name": "string",
+                  "quantity": "string",
+                  "ruleName": "string",
+                  "type": "string",
+                  "unitValue": "string",
+                  "uom": "string"
+                }
+              ],
+              "endDate": "2018-02-14",
+              "id": "string",
+              "quantity": "string",
+              "separateLine": "string",
+              "sku": "string",
+              "startDate": "2018-02-14",
+              "tax": {
+                "gst": "string",
+                "pst": "string"
+              },
+              "totalValue": "string",
+              "type": "string"
+            }
+          ],
+          "unitPrice": "string"
+        }
+      ],
+      "status": {
+        "name": "string",
+        "description": "string",
+        "date": "2018-02-14T01:10:02.013Z"
+      },
+      "storeToFulfillFrom": "string",
+      "type": "string"
+    }
+  ],
+  "status": {
+    "name": "string",
+    "description": "string",
+    "date": "2018-02-14T01:10:02.013Z"
+  },
+  "webOrderRefId": "string",
+  "webOrderCreationDate": "2018-02-14T01:10:02.013Z"
+}

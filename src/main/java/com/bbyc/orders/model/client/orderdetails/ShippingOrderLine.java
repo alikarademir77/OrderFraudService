@@ -24,12 +24,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import org.threeten.bp.LocalDate;
+import org.joda.time.LocalDate;
 
 /**
  * ShippingOrderLine
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T11:58:37.070-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
 public class ShippingOrderLine {
   @JsonProperty("id")
   private String id = null;
@@ -116,7 +116,7 @@ public class ShippingOrderLine {
    * @return cancellable
   **/
   @ApiModelProperty(value = "")
-  public Boolean isCancellable() {
+  public Boolean getCancellable() {
     return cancellable;
   }
 
@@ -383,6 +383,6 @@ public class ShippingOrderLine {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
 }
 
