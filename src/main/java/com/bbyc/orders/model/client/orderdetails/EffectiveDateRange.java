@@ -19,20 +19,20 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 /**
  * EffectiveDateRange
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
 public class EffectiveDateRange {
   @JsonProperty("endDate")
-  private LocalDate endDate = null;
+  private DateTime endDate = null;
 
   @JsonProperty("startDate")
-  private LocalDate startDate = null;
+  private DateTime startDate = null;
 
-  public EffectiveDateRange endDate(LocalDate endDate) {
+  public EffectiveDateRange endDate(DateTime endDate) {
     this.endDate = endDate;
     return this;
   }
@@ -42,15 +42,15 @@ public class EffectiveDateRange {
    * @return endDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getEndDate() {
+  public DateTime getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(LocalDate endDate) {
+  public void setEndDate(DateTime endDate) {
     this.endDate = endDate;
   }
 
-  public EffectiveDateRange startDate(LocalDate startDate) {
+  public EffectiveDateRange startDate(DateTime startDate) {
     this.startDate = startDate;
     return this;
   }
@@ -60,11 +60,11 @@ public class EffectiveDateRange {
    * @return startDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getStartDate() {
+  public DateTime getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(LocalDate startDate) {
+  public void setStartDate(DateTime startDate) {
     this.startDate = startDate;
   }
 

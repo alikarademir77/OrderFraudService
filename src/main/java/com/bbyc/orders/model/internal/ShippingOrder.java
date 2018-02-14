@@ -184,7 +184,7 @@ public class ShippingOrder {
         /**
          * Shipping address
          */
-        public ShippingAddress shippingAddress;
+        public Address shippingAddress;
 
     }
 

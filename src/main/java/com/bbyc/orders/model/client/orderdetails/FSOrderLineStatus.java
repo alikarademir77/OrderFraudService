@@ -24,7 +24,7 @@ import org.joda.time.DateTime;
 /**
  * FSOrderLineStatus
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
 public class FSOrderLineStatus {
   @JsonProperty("name")
   private String name = null;

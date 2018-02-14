@@ -27,19 +27,19 @@ import java.util.List;
 /**
  * ItemCharge
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
 public class ItemCharge {
   @JsonProperty("discounts")
   private List<ItemChargeDiscount> discounts = null;
 
   @JsonProperty("discountedUnitPrice")
-  private String discountedUnitPrice = null;
+  private Float discountedUnitPrice = null;
 
   @JsonProperty("tax")
   private Tax tax = null;
 
   @JsonProperty("unitPrice")
-  private String unitPrice = null;
+  private Float unitPrice = null;
 
   public ItemCharge discounts(List<ItemChargeDiscount> discounts) {
     this.discounts = discounts;
@@ -67,7 +67,7 @@ public class ItemCharge {
     this.discounts = discounts;
   }
 
-  public ItemCharge discountedUnitPrice(String discountedUnitPrice) {
+  public ItemCharge discountedUnitPrice(Float discountedUnitPrice) {
     this.discountedUnitPrice = discountedUnitPrice;
     return this;
   }
@@ -77,11 +77,11 @@ public class ItemCharge {
    * @return discountedUnitPrice
   **/
   @ApiModelProperty(value = "")
-  public String getDiscountedUnitPrice() {
+  public Float getDiscountedUnitPrice() {
     return discountedUnitPrice;
   }
 
-  public void setDiscountedUnitPrice(String discountedUnitPrice) {
+  public void setDiscountedUnitPrice(Float discountedUnitPrice) {
     this.discountedUnitPrice = discountedUnitPrice;
   }
 
@@ -103,7 +103,7 @@ public class ItemCharge {
     this.tax = tax;
   }
 
-  public ItemCharge unitPrice(String unitPrice) {
+  public ItemCharge unitPrice(Float unitPrice) {
     this.unitPrice = unitPrice;
     return this;
   }
@@ -113,11 +113,11 @@ public class ItemCharge {
    * @return unitPrice
   **/
   @ApiModelProperty(value = "")
-  public String getUnitPrice() {
+  public Float getUnitPrice() {
     return unitPrice;
   }
 
-  public void setUnitPrice(String unitPrice) {
+  public void setUnitPrice(Float unitPrice) {
     this.unitPrice = unitPrice;
   }
 

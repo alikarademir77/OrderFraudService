@@ -50,7 +50,7 @@ public class Order {
     /**
      * List of historical shipping addresses
      */
-    private List<ShippingAddress> shippingAddresses;
+    private List<Address> shippingAddresses;
 
     /**
      * Payment details
@@ -122,11 +122,11 @@ public class Order {
         this.shippingOrders = shippingOrders;
     }
 
-    public List<ShippingAddress> getShippingAddresses() {
+    public List<Address> getShippingAddresses() {
         return shippingAddresses;
     }
 
-    public void setShippingAddresses(List<ShippingAddress> shippingAddresses) {
+    public void setShippingAddresses(List<Address> shippingAddresses) {
         this.shippingAddresses = shippingAddresses;
     }
 

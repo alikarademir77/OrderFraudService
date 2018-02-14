@@ -24,12 +24,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 /**
  * ShippingOrderLine
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
 public class ShippingOrderLine {
   @JsonProperty("id")
   private String id = null;
@@ -41,7 +41,7 @@ public class ShippingOrderLine {
   private Boolean cancellable = null;
 
   @JsonProperty("etaDate")
-  private LocalDate etaDate = null;
+  private DateTime etaDate = null;
 
   @JsonProperty("fsoLineRefId")
   private String fsoLineRefId = null;
@@ -50,13 +50,13 @@ public class ShippingOrderLine {
   private String inventoryReservationRefId = null;
 
   @JsonProperty("qtyCancelled")
-  private String qtyCancelled = null;
+  private Integer qtyCancelled = null;
 
   @JsonProperty("qtyOrdered")
-  private String qtyOrdered = null;
+  private Integer qtyOrdered = null;
 
   @JsonProperty("qtyShipped")
-  private String qtyShipped = null;
+  private Integer qtyShipped = null;
 
   @JsonProperty("shippingCharges")
   private List<ShippingCharge> shippingCharges = null;
@@ -68,7 +68,7 @@ public class ShippingOrderLine {
   private List<Surcharge> surcharges = null;
 
   @JsonProperty("unitPrice")
-  private String unitPrice = null;
+  private Float unitPrice = null;
 
   public ShippingOrderLine id(String id) {
     this.id = id;
@@ -124,7 +124,7 @@ public class ShippingOrderLine {
     this.cancellable = cancellable;
   }
 
-  public ShippingOrderLine etaDate(LocalDate etaDate) {
+  public ShippingOrderLine etaDate(DateTime etaDate) {
     this.etaDate = etaDate;
     return this;
   }
@@ -134,11 +134,11 @@ public class ShippingOrderLine {
    * @return etaDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getEtaDate() {
+  public DateTime getEtaDate() {
     return etaDate;
   }
 
-  public void setEtaDate(LocalDate etaDate) {
+  public void setEtaDate(DateTime etaDate) {
     this.etaDate = etaDate;
   }
 
@@ -178,7 +178,7 @@ public class ShippingOrderLine {
     this.inventoryReservationRefId = inventoryReservationRefId;
   }
 
-  public ShippingOrderLine qtyCancelled(String qtyCancelled) {
+  public ShippingOrderLine qtyCancelled(Integer qtyCancelled) {
     this.qtyCancelled = qtyCancelled;
     return this;
   }
@@ -188,15 +188,15 @@ public class ShippingOrderLine {
    * @return qtyCancelled
   **/
   @ApiModelProperty(value = "")
-  public String getQtyCancelled() {
+  public Integer getQtyCancelled() {
     return qtyCancelled;
   }
 
-  public void setQtyCancelled(String qtyCancelled) {
+  public void setQtyCancelled(Integer qtyCancelled) {
     this.qtyCancelled = qtyCancelled;
   }
 
-  public ShippingOrderLine qtyOrdered(String qtyOrdered) {
+  public ShippingOrderLine qtyOrdered(Integer qtyOrdered) {
     this.qtyOrdered = qtyOrdered;
     return this;
   }
@@ -206,15 +206,15 @@ public class ShippingOrderLine {
    * @return qtyOrdered
   **/
   @ApiModelProperty(value = "")
-  public String getQtyOrdered() {
+  public Integer getQtyOrdered() {
     return qtyOrdered;
   }
 
-  public void setQtyOrdered(String qtyOrdered) {
+  public void setQtyOrdered(Integer qtyOrdered) {
     this.qtyOrdered = qtyOrdered;
   }
 
-  public ShippingOrderLine qtyShipped(String qtyShipped) {
+  public ShippingOrderLine qtyShipped(Integer qtyShipped) {
     this.qtyShipped = qtyShipped;
     return this;
   }
@@ -224,11 +224,11 @@ public class ShippingOrderLine {
    * @return qtyShipped
   **/
   @ApiModelProperty(value = "")
-  public String getQtyShipped() {
+  public Integer getQtyShipped() {
     return qtyShipped;
   }
 
-  public void setQtyShipped(String qtyShipped) {
+  public void setQtyShipped(Integer qtyShipped) {
     this.qtyShipped = qtyShipped;
   }
 
@@ -302,7 +302,7 @@ public class ShippingOrderLine {
     this.surcharges = surcharges;
   }
 
-  public ShippingOrderLine unitPrice(String unitPrice) {
+  public ShippingOrderLine unitPrice(Float unitPrice) {
     this.unitPrice = unitPrice;
     return this;
   }
@@ -312,11 +312,11 @@ public class ShippingOrderLine {
    * @return unitPrice
   **/
   @ApiModelProperty(value = "")
-  public String getUnitPrice() {
+  public Float getUnitPrice() {
     return unitPrice;
   }
 
-  public void setUnitPrice(String unitPrice) {
+  public void setUnitPrice(Float unitPrice) {
     this.unitPrice = unitPrice;
   }
 

@@ -19,18 +19,18 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 /**
  * LevelOfService
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
 public class LevelOfService {
   @JsonProperty("carrierCode")
   private String carrierCode = null;
 
   @JsonProperty("deliveryDate")
-  private LocalDate deliveryDate = null;
+  private DateTime deliveryDate = null;
 
   @JsonProperty("id")
   private String id = null;
@@ -65,7 +65,7 @@ public class LevelOfService {
     this.carrierCode = carrierCode;
   }
 
-  public LevelOfService deliveryDate(LocalDate deliveryDate) {
+  public LevelOfService deliveryDate(DateTime deliveryDate) {
     this.deliveryDate = deliveryDate;
     return this;
   }
@@ -75,11 +75,11 @@ public class LevelOfService {
    * @return deliveryDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getDeliveryDate() {
+  public DateTime getDeliveryDate() {
     return deliveryDate;
   }
 
-  public void setDeliveryDate(LocalDate deliveryDate) {
+  public void setDeliveryDate(DateTime deliveryDate) {
     this.deliveryDate = deliveryDate;
   }
 

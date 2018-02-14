@@ -29,12 +29,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 /**
  * ShippingOrder
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
 public class ShippingOrder {
   @JsonProperty("id")
   private String id = null;
@@ -61,7 +61,7 @@ public class ShippingOrder {
   private RequestedCarrier requestedCarrier = null;
 
   @JsonProperty("requestedDeliveryDate")
-  private LocalDate requestedDeliveryDate = null;
+  private DateTime requestedDeliveryDate = null;
 
   @JsonProperty("shipFromAddress")
   private ShipFromAddress shipFromAddress = null;
@@ -70,7 +70,7 @@ public class ShippingOrder {
   private Address shipToAddress = null;
 
   @JsonProperty("shipmentDate")
-  private LocalDate shipmentDate = null;
+  private DateTime shipmentDate = null;
 
   @JsonProperty("shippingCharges")
   private List<ShippingCharge> shippingCharges = null;
@@ -231,7 +231,7 @@ public class ShippingOrder {
     this.requestedCarrier = requestedCarrier;
   }
 
-  public ShippingOrder requestedDeliveryDate(LocalDate requestedDeliveryDate) {
+  public ShippingOrder requestedDeliveryDate(DateTime requestedDeliveryDate) {
     this.requestedDeliveryDate = requestedDeliveryDate;
     return this;
   }
@@ -241,11 +241,11 @@ public class ShippingOrder {
    * @return requestedDeliveryDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getRequestedDeliveryDate() {
+  public DateTime getRequestedDeliveryDate() {
     return requestedDeliveryDate;
   }
 
-  public void setRequestedDeliveryDate(LocalDate requestedDeliveryDate) {
+  public void setRequestedDeliveryDate(DateTime requestedDeliveryDate) {
     this.requestedDeliveryDate = requestedDeliveryDate;
   }
 
@@ -285,7 +285,7 @@ public class ShippingOrder {
     this.shipToAddress = shipToAddress;
   }
 
-  public ShippingOrder shipmentDate(LocalDate shipmentDate) {
+  public ShippingOrder shipmentDate(DateTime shipmentDate) {
     this.shipmentDate = shipmentDate;
     return this;
   }
@@ -295,11 +295,11 @@ public class ShippingOrder {
    * @return shipmentDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getShipmentDate() {
+  public DateTime getShipmentDate() {
     return shipmentDate;
   }
 
-  public void setShipmentDate(LocalDate shipmentDate) {
+  public void setShipmentDate(DateTime shipmentDate) {
     this.shipmentDate = shipmentDate;
   }
 

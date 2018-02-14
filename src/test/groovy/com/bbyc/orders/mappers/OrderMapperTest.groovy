@@ -1,23 +1,18 @@
 package com.bbyc.orders.mappers
 
-import com.bbyc.orders.model.client.orderdetails.ActualCarrier
-import com.bbyc.orders.model.client.orderdetails.CreditCardInfo
-import com.bbyc.orders.model.client.orderdetails.FSOrder
-import com.bbyc.orders.model.client.orderdetails.GiftCardInfo
-import com.bbyc.orders.model.client.orderdetails.LevelOfService
-import com.bbyc.orders.model.client.orderdetails.PaymentMethodInfo
-import com.bbyc.orders.model.client.orderdetails.RewardZone
-import com.bbyc.orders.model.client.orderdetails.ShippingOrder
-import com.bbyc.orders.model.client.orderdetails.ShippingOrderLine
-import com.bbyc.orders.model.client.orderdetails.Status
+import com.bbyc.orders.model.client.orderdetails.*
 import com.bbyc.orders.model.internal.Order
 import com.bbyc.orders.model.internal.PaymentDetails
+import com.bbyc.orders.model.internal.PaymentDetails.CreditCard
+import com.bbyc.orders.model.internal.ShippingOrder.OrderLine
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.joda.JodaModule
+import org.joda.time.DateTime
 import org.mapstruct.factory.Mappers
 import spock.lang.Shared
 import spock.lang.Specification
 
+import java.time.LocalDateTime
 
 class OrderMapperTest extends Specification {
 
@@ -28,172 +23,208 @@ class OrderMapperTest extends Specification {
     @Shared
     Order mappedOrder
 
+
     def setupSpec(){
 
         OrderMapper orderDetailsMapper = Mappers.getMapper(OrderMapper.class);
-
-//        Status status = new Status()
-//        status.setName("status")
-//        RewardZone rewardZone = new RewardZone();
-//        rewardZone.setRewardZoneId("rewardZoneId")
-//        orderToMap = new FSOrder();
-//        orderToMap.setId("id");
-//        orderToMap.setIpAddress("ipAddress")
-//        orderToMap.setRewardZone(rewardZone)
-//        orderToMap.setWebOrderRefId("webOrderRefId")
-//        orderToMap.setStatus(status)
-//        orderToMap.setBundles()
-//        orderToMap.set
-//
-//
-//        CreditCardInfo creditCard1 = new CreditCardInfo()
-//        creditCard1.setCreditCardNumber("creditcardnumber")
-//        creditCard1.setCreditCardExpiryDate("expiryDate")
-//        creditCard1.setCreditCardType("type")
-//
-//
-//        GiftCardInfo giftCard1 = new GiftCardInfo()
-//        giftCard1.setGiftCardNumber("giftCardNumber")
-//
-//
-//        PaymentMethodInfo paymentMethodInfo = new PaymentMethodInfo();
-//        paymentMethodInfo.setCreditCards(Arrays.asList(creditCard1))
-//        paymentMethodInfo.setGiftCards(Arrays.asList(giftCard1))
-//
-//        ShippingOrderLine shippingOrderLine1 = new ShippingOrderLine();
-//        shippingOrderLine1.setId("id")
-//        shippingOrderLine1.setQtyOrdered("2")
-//        shippingOrderLine1.setStatus(status)
-//        shippingOrderLine1.setUnitPrice("1.23")
-//
-//
-//        ShippingOrder shippingOrder1 = new ShippingOrder();
-//        shippingOrder1.setShippingOrderLines(Arrays.asList(shippingOrderLine1))
-//        shippingOrder1.setId("id")
-//        shippingOrder1.setStatus(status)
-//        shippingOrder1.setFulfillmentPartner("fulfillment partner")
-//
-//
-//        ActualCarrier carrier = new ActualCarrier()
-//        carrier.setId("id")
-//        carrier.setShipmentType("shipment type")
-//
-//        LevelOfService levelOfService = new LevelOfService()
-//        levelOfService.setId("id")
-//        levelOfService.setCarrierCode("carrier code")
-//        levelOfService.setName("name")
-//        carrier.setLevelOfService(levelOfService)
-//
-//        shippingOrder1.setActualCarrier(carrier)
-//
-//        orderToMap.setPaymentMethodInfo(paymentMethodInfo)
-//        orderToMap.setShippingOrders(Arrays.asList(shippingOrder1))
-//
-//        mappedOrder = orderDetailsMapper.mapOrder(orderToMap);
 
         String orderDetailsResponse = new File('src/test/resources/order-details-response.json').text
 
         ObjectMapper objectMapper = new ObjectMapper()
         objectMapper.registerModule(new JodaModule())
-        FSOrder orderToMap = objectMapper.readValue(orderDetailsResponse, FSOrder.class)
+        orderToMap = objectMapper.readValue(orderDetailsResponse, FSOrder.class)
 
         mappedOrder = orderDetailsMapper.mapOrder(orderToMap);
 
     }
 
 
+    def "Test mapping for Order.fsOrderNumber"() {
 
+        given: "A valid FS Order response from Order details"
 
-    def "order mapper test"(){
+        and: "mapper is invoked to map the response to the respective internal domain object"
 
-        given: "a valid order object mapped from the order object from order details"
+        expect: "Order.fsOrderNumber should be mapped correctly"
 
-        expect:
-        mappedOrder.getFsOrderNumber() == orderToMap.getId();
-        mappedOrder.getIpAddress() == orderToMap.getIpAddress();
-        mappedOrder.getRewardZoneID() == orderToMap.getRewardZone().getRewardZoneId();
-        mappedOrder.getWebOrderNumber() == orderToMap.getWebOrderRefId();
+        mappedOrder.getFsOrderNumber() == orderToMap.getId()
     }
 
 
-    def "test credit card"(){
+    def "Test mapping for Order.ipAddress"() {
 
-        expect:
-        mappedOrder.getPaymentDetails().getCreditCards().size() == orderToMap.getPaymentMethodInfo().getCreditCards().size();
-        for(int i = 0; i < orderToMap.getPaymentMethodInfo().getCreditCards().size() ; i++){
+        given: "A valid FS Order response from Order details"
 
-            CreditCardInfo creditCardToMap = orderToMap.getPaymentMethodInfo().getCreditCards().get(i)
-            PaymentDetails.CreditCard mappedCreditCard = mappedOrder.getPaymentDetails().getCreditCards().get(i)
+        and: "mapper is invoked to map the response to the respective internal domain object"
 
-            mappedCreditCard.creditCardNumber == creditCardToMap.getCreditCardNumber()
-            mappedCreditCard.creditCardExpiryDate == creditCardToMap.getCreditCardExpiryDate()
-            mappedCreditCard.creditCardType == creditCardToMap.getCreditCardType()
-            //todo: check address stuff
+        expect: "Order.ipAddress should be mapped correctly"
+
+        mappedOrder.getIpAddress() == orderToMap.getIpAddress()
+    }
 
 
+    def "Test mapping for Order.rewardZoneID"(){
+
+        given: "A valid FS Order response from Order details"
+
+        and: "mapper is invoked to map the response to the respective internal domain object"
+
+        expect: "Order.rewardZoneID should be mapped correctly"
+
+        mappedOrder.getRewardZoneID() == orderToMap.getRewardZone().getRewardZoneId()
+    }
+
+
+    def "Test mapping for Order.webOrderNumber"(){
+
+        given: "A valid FS Order response from Order details"
+
+        and: "mapper is invoked to map the response to the respective internal domain object"
+
+        expect: "Order.webOrderNumber should be mapped correctly"
+
+        mappedOrder.getWebOrderNumber() == orderToMap.getWebOrderRefId()
+    }
+
+
+    def "Test mapping for Order.orderCreationTime"(){
+
+        given: "A valid FS Order response from Order details"
+
+        and: "mapper is invoked to map the response to the respective internal domain object"
+
+        expect: "Order.orderCreationTime should be mapped correctly"
+
+        // TODO
+    }
+
+
+    def "Test mapping for Order.paymentDetails"(){
+
+        given: "A valid FS Order response from Order details"
+
+        and: "mapper is invoked to map the response to the respective internal domain object"
+
+        expect: "Order.paymentDetails should be mapped correctly"
+
+        PaymentDetails mappedPaymentDetails = mappedOrder.getPaymentDetails()
+        mappedPaymentDetails != null
+        // Credit cards
+        mappedPaymentDetails.creditCards.size() == orderToMap.getPaymentMethodInfo().getCreditCards().size()
+        for(int i = 0; i < orderToMap.getPaymentMethodInfo().getCreditCards().size(); i++) {
+            assertMappedCreditCard(mappedPaymentDetails.creditCards.get(i), orderToMap.getPaymentMethodInfo().getCreditCards().get(i))
         }
 
+        // Gift cards
+        mappedPaymentDetails.giftCards.size() == orderToMap.getPaymentMethodInfo().getGiftCards().size()
+        for(int i = 0; i < orderToMap.getPaymentMethodInfo().getGiftCards().size(); i++) {
 
-    }
+            String mappedGiftCardNumber = mappedPaymentDetails.getGiftCards().get(i).giftCardNumber
+            String giftCardNumberToMap = orderToMap.getPaymentMethodInfo().getGiftCards().get(i).getGiftCardNumber()
 
-    def "test gift card"(){
-        expect:
-        mappedOrder.getPaymentDetails().getGiftCards().size() == orderToMap.getPaymentMethodInfo().getGiftCards().size();
-        for(int i = 0; i < orderToMap.getPaymentMethodInfo().getGiftCards().size() ; i++){
-
-            GiftCardInfo giftCardToMap = orderToMap.getPaymentMethodInfo().getGiftCards().get(i)
-            PaymentDetails.GiftCard mappedGiftCard = mappedOrder.getPaymentDetails().getGiftCards().get(i)
-
-            mappedGiftCard.giftCardNumber == giftCardToMap.getGiftCardNumber()
-
+            assert mappedGiftCardNumber == giftCardNumberToMap
         }
 
-
+        // TODO Paypal mapping
     }
 
 
-    def "test pay pal"(){
+    def "Test mapping for Order.shippingOrders"(){
 
-    }
+        given: "A valid FS Order response from Order details"
 
+        and: "mapper is invoked to map the response to the respective internal domain object"
 
-    def "test shipping order and order lines"(){
+        expect: "Order.shippingOrders should be mapped correctly"
 
-        expect:
-        mappedOrder.getShippingOrders().size() == orderToMap.getShippingOrders().size()
+        mappedOrder.shippingOrders.size() == orderToMap.getShippingOrders().size()
+        for(int i = 0; i < orderToMap.getShippingOrders().size(); i++) {
 
-        for(int i = 0; i < orderToMap.getShippingOrders().size(); i++){
-
+            com.bbyc.orders.model.internal.ShippingOrder mappedShippingOrder = mappedOrder.shippingOrders.get(i)
             ShippingOrder shippingOrderToMap = orderToMap.getShippingOrders().get(i)
-            com.bbyc.orders.model.internal.ShippingOrder mappedShippingOrder =  mappedOrder.getShippingOrders().get(i)
 
-            mappedShippingOrder.getFulfillmentPartner() == shippingOrderToMap.getFulfillmentPartner()
-            mappedShippingOrder.getGlobalContractID() == shippingOrderToMap.getGlobalContractRefId()
-            mappedShippingOrder.getShippingOrderID() == shippingOrderToMap.getId()
-            mappedShippingOrder.getShippingOrderStatus() == shippingOrderToMap.getStatus().getName()
+            mappedShippingOrder.shippingOrderID == shippingOrderToMap.getId()
+            mappedShippingOrder.globalContractID == shippingOrderToMap.getGlobalContractRefId()
+            mappedShippingOrder.fulfillmentPartner == shippingOrderToMap.getFulfillmentPartner()
+            mappedShippingOrder.shippingOrderStatus == shippingOrderToMap.getStatus().getName()
+            mappedShippingOrder.shippingDetails != null
+            mappedShippingOrder.shippingDetails.carrierCode == shippingOrderToMap.getActualCarrier().getLevelOfService().getCarrierCode()
+            mappedShippingOrder.shippingDetails.serviceLevel == shippingOrderToMap.getActualCarrier().getLevelOfService().getName()
+            assertMappedAddress(mappedShippingOrder.shippingDetails.shippingAddress, shippingOrderToMap.getShipToAddress())
 
-            for(int j = 0; j < shippingOrderToMap.getShippingOrderLines().size() ; j++){
+            mappedShippingOrder.shippingOrderLines.size() == shippingOrderToMap.getShippingOrderLines().size()
+            for(int j = 0; j < shippingOrderToMap.getShippingOrderLines().size(); j++) {
 
+                OrderLine mappedShippingOrderLine = mappedShippingOrder.shippingOrderLines.get(j)
                 ShippingOrderLine shippingOrderLineToMap = shippingOrderToMap.getShippingOrderLines().get(j)
-                com.bbyc.orders.model.internal.ShippingOrder.OrderLine mappedShippingOrderLine = mappedShippingOrder.getShippingOrderLines().get(j)
 
-                mappedShippingOrderLine.lineNumber == shippingOrderLineToMap.getId()
-                mappedShippingOrderLine.price == shippingOrderLineToMap.getUnitPrice().toDouble()
-                mappedShippingOrderLine.quantity == shippingOrderLineToMap.getQtyOrdered().toInteger()
-                mappedShippingOrderLine.status == shippingOrderLineToMap.getStatus().getName()
-
+                assertMappedShippingOrderLine(mappedShippingOrderLine, shippingOrderLineToMap)
             }
 
+            // TODO map purchaseOrderID, purchaseOrderStatus, shippingCharge, shippingChargeTax, shippingDetails.shippingMethod, shippingDetails.deadline, chargebacks, shippingDetails.deadline
 
         }
-    }
-
-
-    def "test Actual Carrier"(){
-
 
 
     }
 
+
+    void assertMappedCreditCard(CreditCard mappedCreditCard, CreditCardInfo creditCardToMap) {
+
+        if(creditCardToMap != null) {
+            assert mappedCreditCard != null
+        }
+
+        assert mappedCreditCard.creditCardNumber == creditCardToMap.getCreditCardNumber()
+        assert mappedCreditCard.creditCardType == creditCardToMap.getCreditCardType()
+        assertMappedAddress(mappedCreditCard.billingAddress, creditCardToMap.getBillingAddress())
+        assert mappedCreditCard.creditCardExpiryDate == creditCardToMap.getCreditCardExpiryDate()
+
+        // TODO Map avs response, cvv response, total authorized amount, 3d secure value
+    }
+
+
+    void assertMappedShippingOrderLine(OrderLine mappedShippingOrderLine, ShippingOrderLine shippingOrderLineToMap) {
+
+        if(shippingOrderLineToMap != null) {
+            assert mappedShippingOrderLine != null
+        }
+
+        assert mappedShippingOrderLine.lineNumber == shippingOrderLineToMap.getId()
+        assert mappedShippingOrderLine.status == shippingOrderLineToMap.getStatus().getName()
+        assert mappedShippingOrderLine.price == shippingOrderLineToMap.getUnitPrice()
+        assert mappedShippingOrderLine.quantity == shippingOrderLineToMap.getQtyOrdered()
+
+        // TODO map description, staffDiscount, postCaptureDiscount, salesTax, itemTax, productSalesTax, shippingChargeTax, environmentHandlingFeeTax
+
+    }
+
+
+    void assertMappedAddress(com.bbyc.orders.model.internal.Address mappedAddress, Address addressToMap) {
+
+        if(addressToMap != null) {
+            assert mappedAddress != null
+        }
+
+        assert mappedAddress.address1 == addressToMap.getAddress1()
+        assert mappedAddress.address2 == addressToMap.getAddress2()
+        assert mappedAddress.city == addressToMap.getCity()
+        assert mappedAddress.country == addressToMap.getCountry()
+        assert mappedAddress.email == addressToMap.getEmail()
+        assert mappedAddress.firstName == addressToMap.getFirstName()
+        assert mappedAddress.lastName == addressToMap.getLastName()
+        assert mappedAddress.phoneNumber == addressToMap.getPhone()
+        assert mappedAddress.postalCode == addressToMap.getPostalCode()
+        assert mappedAddress.province == addressToMap.getProvince()
+        assert mappedAddress.secondaryPhoneNumber == addressToMap.getPhone2()
+    }
+
+
+    DateTime convertLocalDateTimeToJodaDateTime(LocalDateTime localDateTime) {
+
+        // TODO
+
+        return null
+    }
 
 }

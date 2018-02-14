@@ -23,12 +23,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 /**
  * Surcharge
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
 public class Surcharge {
   @JsonProperty("description")
   private String description = null;
@@ -37,13 +37,13 @@ public class Surcharge {
   private List<Discount> discounts = null;
 
   @JsonProperty("endDate")
-  private LocalDate endDate = null;
+  private DateTime endDate = null;
 
   @JsonProperty("id")
   private String id = null;
 
   @JsonProperty("quantity")
-  private String quantity = null;
+  private Integer quantity = null;
 
   @JsonProperty("separateLine")
   private String separateLine = null;
@@ -52,7 +52,7 @@ public class Surcharge {
   private String sku = null;
 
   @JsonProperty("startDate")
-  private LocalDate startDate = null;
+  private DateTime startDate = null;
 
   @JsonProperty("tax")
   private Tax tax = null;
@@ -107,7 +107,7 @@ public class Surcharge {
     this.discounts = discounts;
   }
 
-  public Surcharge endDate(LocalDate endDate) {
+  public Surcharge endDate(DateTime endDate) {
     this.endDate = endDate;
     return this;
   }
@@ -117,11 +117,11 @@ public class Surcharge {
    * @return endDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getEndDate() {
+  public DateTime getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(LocalDate endDate) {
+  public void setEndDate(DateTime endDate) {
     this.endDate = endDate;
   }
 
@@ -143,7 +143,7 @@ public class Surcharge {
     this.id = id;
   }
 
-  public Surcharge quantity(String quantity) {
+  public Surcharge quantity(Integer quantity) {
     this.quantity = quantity;
     return this;
   }
@@ -153,11 +153,11 @@ public class Surcharge {
    * @return quantity
   **/
   @ApiModelProperty(value = "")
-  public String getQuantity() {
+  public Integer getQuantity() {
     return quantity;
   }
 
-  public void setQuantity(String quantity) {
+  public void setQuantity(Integer quantity) {
     this.quantity = quantity;
   }
 
@@ -197,7 +197,7 @@ public class Surcharge {
     this.sku = sku;
   }
 
-  public Surcharge startDate(LocalDate startDate) {
+  public Surcharge startDate(DateTime startDate) {
     this.startDate = startDate;
     return this;
   }
@@ -207,11 +207,11 @@ public class Surcharge {
    * @return startDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getStartDate() {
+  public DateTime getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(LocalDate startDate) {
+  public void setStartDate(DateTime startDate) {
     this.startDate = startDate;
   }
 

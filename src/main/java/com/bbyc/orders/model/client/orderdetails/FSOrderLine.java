@@ -23,12 +23,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 /**
  * FSOrderLine
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
 public class FSOrderLine {
   @JsonProperty("id")
   private String id = null;
@@ -37,7 +37,7 @@ public class FSOrderLine {
   private Bundle bundle = null;
 
   @JsonProperty("etaDate")
-  private LocalDate etaDate = null;
+  private DateTime etaDate = null;
 
   @JsonProperty("itemCharge")
   private ItemCharge itemCharge = null;
@@ -49,16 +49,16 @@ public class FSOrderLine {
   private Product product = null;
 
   @JsonProperty("qtyCancelled")
-  private String qtyCancelled = null;
+  private Integer qtyCancelled = null;
 
   @JsonProperty("qtyOnSpecialOrder")
-  private String qtyOnSpecialOrder = null;
+  private Integer qtyOnSpecialOrder = null;
 
   @JsonProperty("qtyOrdered")
-  private String qtyOrdered = null;
+  private Integer qtyOrdered = null;
 
   @JsonProperty("releaseDate")
-  private LocalDate releaseDate = null;
+  private DateTime releaseDate = null;
 
   @JsonProperty("status")
   private FSOrderLineStatus status = null;
@@ -102,7 +102,7 @@ public class FSOrderLine {
     this.bundle = bundle;
   }
 
-  public FSOrderLine etaDate(LocalDate etaDate) {
+  public FSOrderLine etaDate(DateTime etaDate) {
     this.etaDate = etaDate;
     return this;
   }
@@ -112,11 +112,11 @@ public class FSOrderLine {
    * @return etaDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getEtaDate() {
+  public DateTime getEtaDate() {
     return etaDate;
   }
 
-  public void setEtaDate(LocalDate etaDate) {
+  public void setEtaDate(DateTime etaDate) {
     this.etaDate = etaDate;
   }
 
@@ -174,7 +174,7 @@ public class FSOrderLine {
     this.product = product;
   }
 
-  public FSOrderLine qtyCancelled(String qtyCancelled) {
+  public FSOrderLine qtyCancelled(Integer qtyCancelled) {
     this.qtyCancelled = qtyCancelled;
     return this;
   }
@@ -184,15 +184,15 @@ public class FSOrderLine {
    * @return qtyCancelled
   **/
   @ApiModelProperty(value = "")
-  public String getQtyCancelled() {
+  public Integer getQtyCancelled() {
     return qtyCancelled;
   }
 
-  public void setQtyCancelled(String qtyCancelled) {
+  public void setQtyCancelled(Integer qtyCancelled) {
     this.qtyCancelled = qtyCancelled;
   }
 
-  public FSOrderLine qtyOnSpecialOrder(String qtyOnSpecialOrder) {
+  public FSOrderLine qtyOnSpecialOrder(Integer qtyOnSpecialOrder) {
     this.qtyOnSpecialOrder = qtyOnSpecialOrder;
     return this;
   }
@@ -202,15 +202,15 @@ public class FSOrderLine {
    * @return qtyOnSpecialOrder
   **/
   @ApiModelProperty(value = "")
-  public String getQtyOnSpecialOrder() {
+  public Integer getQtyOnSpecialOrder() {
     return qtyOnSpecialOrder;
   }
 
-  public void setQtyOnSpecialOrder(String qtyOnSpecialOrder) {
+  public void setQtyOnSpecialOrder(Integer qtyOnSpecialOrder) {
     this.qtyOnSpecialOrder = qtyOnSpecialOrder;
   }
 
-  public FSOrderLine qtyOrdered(String qtyOrdered) {
+  public FSOrderLine qtyOrdered(Integer qtyOrdered) {
     this.qtyOrdered = qtyOrdered;
     return this;
   }
@@ -220,15 +220,15 @@ public class FSOrderLine {
    * @return qtyOrdered
   **/
   @ApiModelProperty(value = "")
-  public String getQtyOrdered() {
+  public Integer getQtyOrdered() {
     return qtyOrdered;
   }
 
-  public void setQtyOrdered(String qtyOrdered) {
+  public void setQtyOrdered(Integer qtyOrdered) {
     this.qtyOrdered = qtyOrdered;
   }
 
-  public FSOrderLine releaseDate(LocalDate releaseDate) {
+  public FSOrderLine releaseDate(DateTime releaseDate) {
     this.releaseDate = releaseDate;
     return this;
   }
@@ -238,11 +238,11 @@ public class FSOrderLine {
    * @return releaseDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getReleaseDate() {
+  public DateTime getReleaseDate() {
     return releaseDate;
   }
 
-  public void setReleaseDate(LocalDate releaseDate) {
+  public void setReleaseDate(DateTime releaseDate) {
     this.releaseDate = releaseDate;
   }
 

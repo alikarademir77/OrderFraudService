@@ -22,12 +22,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 /**
  * PurchaseOrderLine
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
 public class PurchaseOrderLine {
   @JsonProperty("id")
   private String id = null;
@@ -36,10 +35,10 @@ public class PurchaseOrderLine {
   private String availability = null;
 
   @JsonProperty("deliveryDate")
-  private LocalDate deliveryDate = null;
+  private DateTime deliveryDate = null;
 
   @JsonProperty("etaDate")
-  private LocalDate etaDate = null;
+  private DateTime etaDate = null;
 
   @JsonProperty("fulfillmentPartnerPOLineRefId")
   private String fulfillmentPartnerPOLineRefId = null;
@@ -54,13 +53,13 @@ public class PurchaseOrderLine {
   private String fsoLineRefId = null;
 
   @JsonProperty("qtyAllocated")
-  private String qtyAllocated = null;
+  private Integer qtyAllocated = null;
 
   @JsonProperty("qtyBackordered")
-  private String qtyBackordered = null;
+  private Integer qtyBackordered = null;
 
   @JsonProperty("qtyOrdered")
-  private String qtyOrdered = null;
+  private Integer qtyOrdered = null;
 
   @JsonProperty("releaseDate")
   private DateTime releaseDate = null;
@@ -104,7 +103,7 @@ public class PurchaseOrderLine {
     this.availability = availability;
   }
 
-  public PurchaseOrderLine deliveryDate(LocalDate deliveryDate) {
+  public PurchaseOrderLine deliveryDate(DateTime deliveryDate) {
     this.deliveryDate = deliveryDate;
     return this;
   }
@@ -114,15 +113,15 @@ public class PurchaseOrderLine {
    * @return deliveryDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getDeliveryDate() {
+  public DateTime getDeliveryDate() {
     return deliveryDate;
   }
 
-  public void setDeliveryDate(LocalDate deliveryDate) {
+  public void setDeliveryDate(DateTime deliveryDate) {
     this.deliveryDate = deliveryDate;
   }
 
-  public PurchaseOrderLine etaDate(LocalDate etaDate) {
+  public PurchaseOrderLine etaDate(DateTime etaDate) {
     this.etaDate = etaDate;
     return this;
   }
@@ -132,11 +131,11 @@ public class PurchaseOrderLine {
    * @return etaDate
   **/
   @ApiModelProperty(value = "")
-  public LocalDate getEtaDate() {
+  public DateTime getEtaDate() {
     return etaDate;
   }
 
-  public void setEtaDate(LocalDate etaDate) {
+  public void setEtaDate(DateTime etaDate) {
     this.etaDate = etaDate;
   }
 
@@ -212,7 +211,7 @@ public class PurchaseOrderLine {
     this.fsoLineRefId = fsoLineRefId;
   }
 
-  public PurchaseOrderLine qtyAllocated(String qtyAllocated) {
+  public PurchaseOrderLine qtyAllocated(Integer qtyAllocated) {
     this.qtyAllocated = qtyAllocated;
     return this;
   }
@@ -222,15 +221,15 @@ public class PurchaseOrderLine {
    * @return qtyAllocated
   **/
   @ApiModelProperty(value = "")
-  public String getQtyAllocated() {
+  public Integer getQtyAllocated() {
     return qtyAllocated;
   }
 
-  public void setQtyAllocated(String qtyAllocated) {
+  public void setQtyAllocated(Integer qtyAllocated) {
     this.qtyAllocated = qtyAllocated;
   }
 
-  public PurchaseOrderLine qtyBackordered(String qtyBackordered) {
+  public PurchaseOrderLine qtyBackordered(Integer qtyBackordered) {
     this.qtyBackordered = qtyBackordered;
     return this;
   }
@@ -240,15 +239,15 @@ public class PurchaseOrderLine {
    * @return qtyBackordered
   **/
   @ApiModelProperty(value = "")
-  public String getQtyBackordered() {
+  public Integer getQtyBackordered() {
     return qtyBackordered;
   }
 
-  public void setQtyBackordered(String qtyBackordered) {
+  public void setQtyBackordered(Integer qtyBackordered) {
     this.qtyBackordered = qtyBackordered;
   }
 
-  public PurchaseOrderLine qtyOrdered(String qtyOrdered) {
+  public PurchaseOrderLine qtyOrdered(Integer qtyOrdered) {
     this.qtyOrdered = qtyOrdered;
     return this;
   }
@@ -258,11 +257,11 @@ public class PurchaseOrderLine {
    * @return qtyOrdered
   **/
   @ApiModelProperty(value = "")
-  public String getQtyOrdered() {
+  public Integer getQtyOrdered() {
     return qtyOrdered;
   }
 
-  public void setQtyOrdered(String qtyOrdered) {
+  public void setQtyOrdered(Integer qtyOrdered) {
     this.qtyOrdered = qtyOrdered;
   }
 

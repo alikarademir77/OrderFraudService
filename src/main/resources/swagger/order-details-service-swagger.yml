@@ -188,7 +188,7 @@ definitions:
       name:
         type: "string"
       quantity:
-        type: "string"
+        type: "integer"
       ruleName:
         type: "string"
       type:
@@ -202,10 +202,10 @@ definitions:
     properties:
       endDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       startDate:
         type: "string"
-        format: "date"
+        format: "date-time"
   ErrorDetail:
     type: "object"
     properties:
@@ -276,7 +276,7 @@ definitions:
         $ref: "#/definitions/Bundle"
       etaDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       itemCharge:
         $ref: "#/definitions/ItemCharge"
       lineNumber:
@@ -284,14 +284,14 @@ definitions:
       product:
         $ref: "#/definitions/Product"
       qtyCancelled:
-        type: "string"
+        type: "integer"
       qtyOnSpecialOrder:
-        type: "string"
+        type: "integer"
       qtyOrdered:
-        type: "string"
+        type: "integer"
       releaseDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       status:
         $ref: "#/definitions/FSOrderLineStatus"
       uom:
@@ -360,11 +360,13 @@ definitions:
         items:
           $ref: "#/definitions/ItemChargeDiscount"
       discountedUnitPrice:
-        type: "string"
+        type: "number"
+        format: "float"
       tax:
         $ref: "#/definitions/Tax"
       unitPrice:
-        type: "string"
+        type: "number"
+        format: "float"
   ItemChargeDiscount:
     type: "object"
     properties:
@@ -379,7 +381,7 @@ definitions:
       name:
         type: "string"
       quantity:
-        type: "string"
+        type: "integer"
       ruleName:
         type: "string"
       type:
@@ -395,7 +397,7 @@ definitions:
         type: "string"
       deliveryDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       id:
         type: "string"
       name:
@@ -510,10 +512,10 @@ definitions:
         type: 'string'
       deliveryDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       etaDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       fulfillmentPartnerPOLineRefId:
         type: "string"
       fulfillmentPartnerProduct:
@@ -523,11 +525,11 @@ definitions:
       fsoLineRefId:
         type: "string"
       qtyAllocated:
-        type: "string"
+        type: "integer"
       qtyBackordered:
-        type: "string"
+        type: "integer"
       qtyOrdered:
-        type: "string"
+        type: "integer"
       releaseDate:
         type: "string"
         format: "date-time"
@@ -600,7 +602,8 @@ definitions:
       type:
         type: "string"
       unitPrice:
-        type: "string"
+        type: "number"
+        format: "float"
   ShippingModel:
     type: "object"
     properties:
@@ -629,14 +632,14 @@ definitions:
         $ref: "#/definitions/RequestedCarrier"
       requestedDeliveryDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       shipFromAddress:
         $ref: '#/definitions/ShipFromAddress'
       shipToAddress:
         $ref: '#/definitions/Address'
       shipmentDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       shippingCharges:
         type: "array"
         items:
@@ -662,17 +665,17 @@ definitions:
         type: "boolean"
       etaDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       fsoLineRefId:
         type: "string"
       inventoryReservationRefId:
         type: "string"
       qtyCancelled:
-        type: "string"
+        type: "integer"
       qtyOrdered:
-        type: "string"
+        type: "integer"
       qtyShipped:
-        type: "string"
+        type: "integer"
       shippingCharges:
         type: "array"
         items:
@@ -684,7 +687,8 @@ definitions:
         items:
           $ref: "#/definitions/Surcharge"
       unitPrice:
-        type: "string"
+        type: "number"
+        format: "float"
   Status:
     type: "object"
     properties:
@@ -706,18 +710,18 @@ definitions:
           $ref: "#/definitions/Discount"
       endDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       id:
         type: "string"
       quantity:
-        type: "string"
+        type: "integer"
       separateLine:
         type: "string"
       sku:
         type: "string"
       startDate:
         type: "string"
-        format: "date"
+        format: "date-time"
       tax:
         $ref: "#/definitions/Tax"
       totalValue:

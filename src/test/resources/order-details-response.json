@@ -34,7 +34,7 @@
         "id": "string",
         "seqNum": "string"
       },
-      "etaDate": "2018-02-14",
+      "etaDate": "2018-02-14T19:33:50.981Z",
       "itemCharge": {
         "discounts": [
           {
@@ -43,19 +43,19 @@
             "description": "string",
             "id": "string",
             "name": "string",
-            "quantity": "string",
+            "quantity": 0,
             "ruleName": "string",
             "type": "string",
             "unitValue": "string",
             "uom": "string"
           }
         ],
-        "discountedUnitPrice": "string",
+        "discountedUnitPrice": 0,
         "tax": {
           "gst": "string",
           "pst": "string"
         },
-        "unitPrice": "string"
+        "unitPrice": 0
       },
       "lineNumber": "string",
       "product": {
@@ -63,8 +63,8 @@
         "name": "string",
         "productServicePlan": {
           "effectiveDateRange": {
-            "endDate": "2018-02-14",
-            "startDate": "2018-02-14"
+            "endDate": "2018-02-14T19:33:50.982Z",
+            "startDate": "2018-02-14T19:33:50.982Z"
           },
           "pspCoveredSerialNumbers": [
             "string"
@@ -79,14 +79,14 @@
         ],
         "sku": "string"
       },
-      "qtyCancelled": "string",
-      "qtyOnSpecialOrder": "string",
-      "qtyOrdered": "string",
-      "releaseDate": "2018-02-14",
+      "qtyCancelled": 0,
+      "qtyOnSpecialOrder": 0,
+      "qtyOrdered": 0,
+      "releaseDate": "2018-02-14T19:33:50.982Z",
       "status": {
         "name": "string",
         "description": "string",
-        "date": "2018-02-14T01:10:02.013Z",
+        "date": "2018-02-14T19:33:50.982Z",
         "cancelReason": "string"
       },
       "uom": "string"
@@ -100,7 +100,7 @@
         "avsStatus": {
           "name": "string",
           "description": "string",
-          "date": "2018-02-14T01:10:02.013Z"
+          "date": "2018-02-14T19:33:50.982Z"
         },
         "billingAddress": {
           "address1": "string",
@@ -122,7 +122,7 @@
         },
         "creditCardNumber": "string",
         "creditCardType": "string",
-        "creditCardExpiryDate": "2018-02-14",
+        "creditCardExpiryDate": "string",
         "creditCardHolderName": "string",
         "invoicedAmount": 0,
         "priority": "string"
@@ -143,7 +143,7 @@
         "avsStatus": {
           "name": "string",
           "description": "string",
-          "date": "2018-02-14T01:10:02.013Z"
+          "date": "2018-02-14T19:33:50.982Z"
         },
         "invoicedAmount": 0,
         "payPalInternalRefId": "string",
@@ -161,7 +161,7 @@
   "purchaseOrders": [
     {
       "id": "string",
-      "creationDate": "2018-02-14T01:10:02.013Z",
+      "creationDate": "2018-02-14T19:33:50.982Z",
       "fulfillmentPartner": {
         "id": "string",
         "name": "string",
@@ -171,14 +171,14 @@
       "poSendStatus": {
         "name": "string",
         "description": "string",
-        "date": "2018-02-14T01:10:02.013Z"
+        "date": "2018-02-14T19:33:50.982Z"
       },
       "purchaseOrderLines": [
         {
           "id": "string",
           "availability": "string",
-          "deliveryDate": "2018-02-14",
-          "etaDate": "2018-02-14",
+          "deliveryDate": "2018-02-14T19:33:50.982Z",
+          "etaDate": "2018-02-14T19:33:50.982Z",
           "fulfillmentPartnerPOLineRefId": "string",
           "fulfillmentPartnerProduct": {
             "name": "string",
@@ -207,10 +207,10 @@
             }
           },
           "fsoLineRefId": "string",
-          "qtyAllocated": "string",
-          "qtyBackordered": "string",
-          "qtyOrdered": "string",
-          "releaseDate": "2018-02-14T01:10:02.013Z",
+          "qtyAllocated": 0,
+          "qtyBackordered": 0,
+          "qtyOrdered": 0,
+          "releaseDate": "2018-02-14T19:33:50.982Z",
           "shippingOrderLineRefId": "string"
         }
       ],
@@ -231,7 +231,7 @@
         "id": "string",
         "levelOfService": {
           "carrierCode": "string",
-          "deliveryDate": "2018-02-14",
+          "deliveryDate": "2018-02-14T19:33:50.982Z",
           "id": "string",
           "name": "string",
           "requiresInsurance": true,
@@ -261,14 +261,14 @@
         "status": {
           "name": "string",
           "description": "string",
-          "date": "2018-02-14T01:10:02.013Z"
+          "date": "2018-02-14T19:33:50.982Z"
         }
       },
       "requestedCarrier": {
         "id": "string",
         "levelOfService": {
           "carrierCode": "string",
-          "deliveryDate": "2018-02-14",
+          "deliveryDate": "2018-02-14T19:33:50.982Z",
           "id": "string",
           "name": "string",
           "requiresInsurance": true,
@@ -277,7 +277,7 @@
         },
         "name": "string"
       },
-      "requestedDeliveryDate": "2018-02-14",
+      "requestedDeliveryDate": "2018-02-14T19:33:50.982Z",
       "shipFromAddress": {
         "address1": "string",
         "address2": "string",
@@ -315,7 +315,7 @@
         "postalCode": "string",
         "province": "string"
       },
-      "shipmentDate": "2018-02-14",
+      "shipmentDate": "2018-02-14T19:33:50.982Z",
       "shippingCharges": [
         {
           "description": "string",
@@ -325,7 +325,7 @@
               "code": "string",
               "description": "string",
               "name": "string",
-              "quantity": "string",
+              "quantity": 0,
               "ruleName": "string",
               "type": "string",
               "unitValue": "string",
@@ -338,7 +338,7 @@
             "pst": "string"
           },
           "type": "string",
-          "unitPrice": "string"
+          "unitPrice": 0
         }
       ],
       "shippingOrderLines": [
@@ -346,12 +346,12 @@
           "id": "string",
           "availability": "string",
           "cancellable": true,
-          "etaDate": "2018-02-14",
+          "etaDate": "2018-02-14T19:33:50.982Z",
           "fsoLineRefId": "string",
           "inventoryReservationRefId": "string",
-          "qtyCancelled": "string",
-          "qtyOrdered": "string",
-          "qtyShipped": "string",
+          "qtyCancelled": 0,
+          "qtyOrdered": 0,
+          "qtyShipped": 0,
           "shippingCharges": [
             {
               "description": "string",
@@ -361,7 +361,7 @@
                   "code": "string",
                   "description": "string",
                   "name": "string",
-                  "quantity": "string",
+                  "quantity": 0,
                   "ruleName": "string",
                   "type": "string",
                   "unitValue": "string",
@@ -374,13 +374,13 @@
                 "pst": "string"
               },
               "type": "string",
-              "unitPrice": "string"
+              "unitPrice": 0
             }
           ],
           "status": {
             "name": "string",
             "description": "string",
-            "date": "2018-02-14T01:10:02.013Z"
+            "date": "2018-02-14T19:33:50.982Z"
           },
           "surcharges": [
             {
@@ -391,19 +391,19 @@
                   "code": "string",
                   "description": "string",
                   "name": "string",
-                  "quantity": "string",
+                  "quantity": 0,
                   "ruleName": "string",
                   "type": "string",
                   "unitValue": "string",
                   "uom": "string"
                 }
               ],
-              "endDate": "2018-02-14",
+              "endDate": "2018-02-14T19:33:50.982Z",
               "id": "string",
-              "quantity": "string",
+              "quantity": 0,
               "separateLine": "string",
               "sku": "string",
-              "startDate": "2018-02-14",
+              "startDate": "2018-02-14T19:33:50.982Z",
               "tax": {
                 "gst": "string",
                 "pst": "string"
@@ -412,13 +412,13 @@
               "type": "string"
             }
           ],
-          "unitPrice": "string"
+          "unitPrice": 0
         }
       ],
       "status": {
         "name": "string",
         "description": "string",
-        "date": "2018-02-14T01:10:02.013Z"
+        "date": "2018-02-14T19:33:50.982Z"
       },
       "storeToFulfillFrom": "string",
       "type": "string"
@@ -427,8 +427,8 @@
   "status": {
     "name": "string",
     "description": "string",
-    "date": "2018-02-14T01:10:02.013Z"
+    "date": "2018-02-14T19:33:50.982Z"
   },
   "webOrderRefId": "string",
-  "webOrderCreationDate": "2018-02-14T01:10:02.013Z"
+  "webOrderCreationDate": "2018-02-14T19:33:50.982Z"
 }

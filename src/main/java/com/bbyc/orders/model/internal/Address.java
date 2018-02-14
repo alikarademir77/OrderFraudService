@@ -58,6 +58,12 @@ public class Address {
     private String secondaryPhoneNumber;
 
 
+    /**
+     * Indicator if address is active or not
+     */
+    private boolean isActive;
+
+
     public String getFirstName() {
         return firstName;
     }
@@ -144,5 +150,13 @@ public class Address {
 
     public void setSecondaryPhoneNumber(String secondaryPhoneNumber) {
         this.secondaryPhoneNumber = secondaryPhoneNumber;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

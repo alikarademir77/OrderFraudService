@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * ShippingCharge
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-13T17:36:04.633-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
 public class ShippingCharge {
   @JsonProperty("description")
   private String description = null;
@@ -45,7 +45,7 @@ public class ShippingCharge {
   private String type = null;
 
   @JsonProperty("unitPrice")
-  private String unitPrice = null;
+  private Float unitPrice = null;
 
   public ShippingCharge description(String description) {
     this.description = description;
@@ -145,7 +145,7 @@ public class ShippingCharge {
     this.type = type;
   }
 
-  public ShippingCharge unitPrice(String unitPrice) {
+  public ShippingCharge unitPrice(Float unitPrice) {
     this.unitPrice = unitPrice;
     return this;
   }
@@ -155,11 +155,11 @@ public class ShippingCharge {
    * @return unitPrice
   **/
   @ApiModelProperty(value = "")
-  public String getUnitPrice() {
+  public Float getUnitPrice() {
     return unitPrice;
   }
 
-  public void setUnitPrice(String unitPrice) {
+  public void setUnitPrice(Float unitPrice) {
     this.unitPrice = unitPrice;
   }
 
