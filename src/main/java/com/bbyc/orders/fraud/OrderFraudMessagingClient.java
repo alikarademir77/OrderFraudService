@@ -39,7 +39,7 @@ public class OrderFraudMessagingClient {
 	public void receiveEvent(MessagingEvent event, @Header(name = "x-death", required = false) Map<?,?> death) {
 		if (death != null && death.get("count").equals(errorRetryCount)) {
             // giving up - don't send to DLX
-			System.out.println("Reached retry limit...");
+			System.out.println("Reached retry limit for event (" + event + ")..");
 			return;
         }
 

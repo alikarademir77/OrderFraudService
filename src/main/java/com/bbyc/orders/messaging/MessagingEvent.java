@@ -49,7 +49,7 @@ public class MessagingEvent {
 	public String toString() {
 		return "MessagingEvent [type=" + type + ", orderNumer=" + orderNumer + ", purchaseOrderNumer="
 				+ purchaseOrderNumer + ", requestVersion=" + requestVersion + ", messageCreationDate="
-				+ messageCreationDate + "]";
+				+ messageCreationDate.getTime() + "]";
 	}
 	
 }
