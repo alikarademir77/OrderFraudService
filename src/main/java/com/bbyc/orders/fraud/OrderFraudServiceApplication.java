@@ -20,4 +20,5 @@ public class OrderFraudServiceApplication {
 		SpringApplication.run(OrderFraudServiceApplication.class, args);
 
 	}
+	
 }
