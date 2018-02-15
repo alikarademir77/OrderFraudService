@@ -17,6 +17,7 @@ spring:
           destination: fraudInbound
           group: fraudInboundConsumersGroup
           consumer:
+            concurrency:  20
             maxAttempts: 1
         fraudOutbound:
           destination: fraudOutbound
