@@ -148,8 +148,6 @@ class OrderMapperTest extends Specification {
             mappedShippingOrder.fulfillmentPartner == shippingOrderToMap.getFulfillmentPartner()
             mappedShippingOrder.shippingOrderStatus == shippingOrderToMap.getStatus().getName()
             mappedShippingOrder.shippingDetails != null
-            mappedShippingOrder.shippingDetails.carrierCode == shippingOrderToMap.getActualCarrier().getLevelOfService().getCarrierCode()
-            mappedShippingOrder.shippingDetails.serviceLevel == shippingOrderToMap.getActualCarrier().getLevelOfService().getName()
             assertMappedAddress(mappedShippingOrder.shippingDetails.shippingAddress, shippingOrderToMap.getShipToAddress())
 
             mappedShippingOrder.shippingOrderLines.size() == shippingOrderToMap.getShippingOrderLines().size()
@@ -161,7 +159,7 @@ class OrderMapperTest extends Specification {
                 assertMappedShippingOrderLine(mappedShippingOrderLine, shippingOrderLineToMap)
             }
 
-            // TODO map purchaseOrderID, purchaseOrderStatus, shippingCharge, shippingChargeTax, shippingDetails.shippingMethod, shippingDetails.deadline, chargebacks, shippingDetails.deadline
+            // TODO map purchaseOrderID, purchaseOrderStatus, shippingCharge, shippingDetails.shippingMethod, shippingDetails.deadline, chargebacks, shippingDetails.deadline
 
         }
 
@@ -195,7 +193,7 @@ class OrderMapperTest extends Specification {
         assert mappedShippingOrderLine.price == shippingOrderLineToMap.getUnitPrice()
         assert mappedShippingOrderLine.quantity == shippingOrderLineToMap.getQtyOrdered()
 
-        // TODO map description, staffDiscount, postCaptureDiscount, salesTax, itemTax, productSalesTax, shippingChargeTax, environmentHandlingFeeTax
+        // TODO map description, staffDiscount, postCaptureDiscount, totalTax, category
 
     }
 

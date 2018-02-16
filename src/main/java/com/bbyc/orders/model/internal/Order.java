@@ -34,7 +34,13 @@ public class Order {
 
     /**
      * Total amount billed to customer
+     * This is the Unit Price + EHF surcharge + Shipping Charges + Taxes minus any precapture discounts made on the unit price, shipping charge and EHF
      */
+
+    //todo: calculation is the following:
+    //(UnitPrice – Discount(Except Post Capture Discount)) + (EHF – Any Discount on EHF) + (Shipping Charge  – Discount(Except POST Capture discount) ) + Product TAX+EHF Tax+Shipping Charge Tax
+
+
     private double totalAmount;
 
     /**

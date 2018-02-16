@@ -22,7 +22,7 @@ public interface OrderMapper {
             @Mapping(target = "fsOrderNumber", source = "id"),
             @Mapping(target = "csrSalesRepID", ignore = true),
             @Mapping(target = "ipAddress", source = "ipAddress"),
-            @Mapping(target = "orderCreationTime", source = "webOrderCreationDate"),
+            @Mapping(target = "orderCreationTime", ignore = true),
             @Mapping(target = "totalAmount", ignore = true),
             @Mapping(target = "rewardZoneID", source = "rewardZone.rewardZoneId"),
             @Mapping(target = "shippingOrders", source = "shippingOrders"),
@@ -33,62 +33,56 @@ public interface OrderMapper {
 
 
     @Mappings({
-        @Mapping(target = "purchaseOrderID", ignore = true),
-        @Mapping(target = "shippingOrderID", source = "id"),
-        @Mapping(target = "globalContractID", source = "globalContractRefId"),
-        @Mapping(target = "shippingOrderStatus", source = "status.name"),
-        @Mapping(target = "purchaseOrderStatus", ignore = true),
-        @Mapping(target = "shippingCharge", ignore = true),
-        @Mapping(target = "shippingChargeTax", ignore = true),
-        @Mapping(target = "fulfillmentPartner", source = "fulfillmentPartner"),
-        @Mapping(target = "shippingDetails.shippingMethod", ignore = true),
-        @Mapping(target = "shippingDetails.carrierCode", source = "requestedCarrier.levelOfService.carrierCode"),
-        @Mapping(target = "shippingDetails.serviceLevel", ignore = true),
-        @Mapping(target = "shippingDetails.deadline", source = "requestedCarrier.levelOfService.deliveryDate"),
-        @Mapping(target = "shippingDetails.shippingAddress", source = "shipToAddress"),
-        @Mapping(target = "shippingOrderLines", source = "shippingOrderLines"),
-        @Mapping(target = "chargebacks", ignore = true)
+            @Mapping(target = "purchaseOrderID", ignore = true),
+            @Mapping(target = "shippingOrderID", source = "id"),
+            @Mapping(target = "globalContractID", source = "globalContractRefId"),
+            @Mapping(target = "shippingOrderStatus", source = "status.name"),
+            @Mapping(target = "purchaseOrderStatus", ignore = true),
+            @Mapping(target = "shippingCharge", ignore = true),
+            @Mapping(target = "fulfillmentPartner", source = "fulfillmentPartner"),
+            @Mapping(target = "shippingDetails.shippingMethod", ignore = true),
+            @Mapping(target = "shippingDetails.deadline", ignore = true),
+            @Mapping(target = "shippingDetails.shippingAddress", source = "shipToAddress"),
+            @Mapping(target = "shippingOrderLines", source = "shippingOrderLines"),
+            @Mapping(target = "chargebacks", ignore = true)
     })
     ShippingOrder mapShippingOrder(com.bbyc.orders.model.client.orderdetails.ShippingOrder shippingOrderToMap);
 
 
     @Mappings({
-        @Mapping(target = "lineNumber", source = "id"),
-        @Mapping(target = "description", ignore = true),
-        @Mapping(target = "status", source = "status.name"),
-        @Mapping(target = "price", source = "unitPrice"),
-        @Mapping(target = "quantity", source = "qtyOrdered"),
-        @Mapping(target = "staffDiscount", ignore = true),
-        @Mapping(target = "postCaptureDiscount", ignore = true),
-        @Mapping(target = "salesTax", ignore = true),
-        @Mapping(target = "itemTax", ignore = true),
-        @Mapping(target = "productSalesTax", ignore = true),
-        @Mapping(target = "shippingChargeTax", ignore = true),
-        @Mapping(target = "environmentHandlingFeeTax", ignore = true)
+            @Mapping(target = "lineNumber", source = "id"),
+            @Mapping(target = "description", ignore = true),
+            @Mapping(target = "category", ignore = true),
+            @Mapping(target = "status", source = "status.name"),
+            @Mapping(target = "price", source = "unitPrice"),
+            @Mapping(target = "quantity", source = "qtyOrdered"),
+            @Mapping(target = "staffDiscount", ignore = true),
+            @Mapping(target = "postCaptureDiscount", ignore = true),
+            @Mapping(target = "totalTax", ignore = true)
     })
     ShippingOrder.OrderLine mapShippingOrderLine(ShippingOrderLine shippingOrderLineToMap);
 
 
     @Mappings({
-        @Mapping(target = "creditCards", source = "creditCards"),
-        @Mapping(target = "giftCards", source = "giftCards"),
-        @Mapping(target = "payPal", ignore = true)
+            @Mapping(target = "creditCards", source = "creditCards"),
+            @Mapping(target = "giftCards", source = "giftCards"),
+            @Mapping(target = "payPal", ignore = true)
     })
     PaymentDetails mapPaymentDetails(PaymentMethodInfo paymentDetailsToMap);
 
 
     @Mappings({
-        @Mapping(target = "totalAuthorizedAmount", ignore = true),
-        @Mapping(target = "avsResponse", ignore = true),
-        @Mapping(target = "cvvResponse", ignore = true),
-        @Mapping(target = "secureValue3D", ignore = true)
+            @Mapping(target = "totalAuthorizedAmount", ignore = true),
+            @Mapping(target = "avsResponse", ignore = true),
+            @Mapping(target = "cvvResponse", ignore = true),
+            @Mapping(target = "secureValue3D", ignore = true)
     })
     PaymentDetails.CreditCard mapCreditCard(CreditCardInfo creditCardToMap);
 
 
     @Mappings({
-        @Mapping(target = "phoneNumber", source = "phone"),
-        @Mapping(target = "secondaryPhoneNumber", source = "phone2")
+            @Mapping(target = "phoneNumber", source = "phone"),
+            @Mapping(target = "secondaryPhoneNumber", source = "phone2")
     })
     Address mapAddress(com.bbyc.orders.model.client.orderdetails.Address addressToMap);
 

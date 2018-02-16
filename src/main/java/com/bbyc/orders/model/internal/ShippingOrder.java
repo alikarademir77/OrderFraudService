@@ -25,6 +25,10 @@ public class ShippingOrder {
 
     /**
      * Shipping order status
+     * Possible statuses:
+     * Open: If sorder is not shipped or not cancled
+     * Canceled: if Sorder is cancelled
+     * Completed: If Sorder is shipped.
      */
     private String shippingOrderStatus;
 
@@ -37,11 +41,6 @@ public class ShippingOrder {
      * Shipping charge
      */
     private double shippingCharge;
-
-    /**
-     * Shipping charge tax
-     */
-    private double shippingChargeTax;
 
     /**
      * Fulfillment partner
@@ -115,14 +114,6 @@ public class ShippingOrder {
         this.shippingCharge = shippingCharge;
     }
 
-    public double getShippingChargeTax() {
-        return shippingChargeTax;
-    }
-
-    public void setShippingChargeTax(double shippingChargeTax) {
-        this.shippingChargeTax = shippingChargeTax;
-    }
-
     public String getFulfillmentPartner() {
         return fulfillmentPartner;
     }
@@ -156,6 +147,8 @@ public class ShippingOrder {
     }
 
 
+
+
     /**
      * Shipping detail representation
      */
@@ -163,18 +156,11 @@ public class ShippingOrder {
 
         /**
          * Shipping method
+         * The format will be {Carrier Code}-{Service Level}
+         * e.g. CPCL-GROUND
          */
         public String shippingMethod;
 
-        /**
-         * Carrier code
-         */
-        public String carrierCode;
-
-        /**
-         * Carrier service level
-         */
-        public String serviceLevel;
 
         /**
          * Shipping deadline
@@ -229,14 +215,29 @@ public class ShippingOrder {
 
 
         /**
+         * Item Category
+         * Format is Department_Class_Subclass
+         */
+        public String category;
+
+
+        /**
          * Shipping order line status
+         * Possible statuses:
+         * Backorder: If line is backorder
+         * Open: If line is not yet shipped or backorder or canceled
+         * Cancel: If like is cancelled
+         * Completed: If line is shipped.
          */
         public String status;
 
 
         /**
          * Item price
+         * This will be the unit price of the item minus any precapture discounts on the item price
          */
+
+        //todo: (Unit Price – Discount(Except POST Capture Discount))
         public double price;
 
         /**
@@ -252,29 +253,12 @@ public class ShippingOrder {
          */
         public double postCaptureDiscount;
 
-
-        // all taxes in detail level
-        public double salesTax;
-
-
-        // ? - no use
-        public double itemTax;
-
-
         /**
-         * Tax on the product
+         * Total of all taxes, which include the product sales tax, ehf tax and shipping charge tax
          */
-        public double productSalesTax;
 
-        /**
-         * Shipping charge tax
-         */
-        public double shippingChargeTax;
-
-        /**
-         * Environment handling fee (EHF) tax
-         */
-        public double environmentHandlingFeeTax;
+        //todo: calculate using (Product TAX+EHF Tax+Shipping Charge Tax)
+        public double totalTax;
 
     }
 
