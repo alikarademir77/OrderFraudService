@@ -1,3 +1,18 @@
 server:
-    port: 8081
-    contextPath: /orderfraud
+  port: 8081
+  contextPath: /orderfraud
+
+client:
+  order-details:
+    connection:
+      url: http://localhost:8080/orderdetails
+      getOrderDetailsEndpoint: /v1/fsorders
+      keystore-path: ~
+      keystore-password: ~
+      keystore-type: ~
+      key-alias: ~
+      key-password: ~
+      truststore-path: ~
+      truststore-password: ~
+      truststore-type: JKS
+      tls-enabled: false
