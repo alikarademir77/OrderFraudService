@@ -6,15 +6,15 @@ import java.util.List;
 public class Order {
 
     /**
-     * Customer order number
+     * Web order reference ID
      */
-    private String webOrderNumber;
+    private String webOrderRefID;
 
 
     /**
      * OMS FS order ID
      */
-    private String fsOrderNumber;
+    private String fsOrderID;
 
 
     /**
@@ -22,41 +22,42 @@ public class Order {
      */
     private String csrSalesRepID;
 
+
     /**
      * IP address of customer submitting order
      */
     private String ipAddress;
+
 
     /**
      * Time order was created on the website
      */
     private LocalDateTime orderCreationTime;
 
-    /**
-     * Total amount billed to customer
-     * This is the Unit Price + EHF surcharge + Shipping Charges + Taxes minus any precapture discounts made on the unit price, shipping charge and EHF
-     */
-
-    //todo: calculation is the following:
-    //(UnitPrice – Discount(Except Post Capture Discount)) + (EHF – Any Discount on EHF) + (Shipping Charge  – Discount(Except POST Capture discount) ) + Product TAX+EHF Tax+Shipping Charge Tax
-
-
-    private double totalAmount;
 
     /**
      * Reward zone ID
      */
     private String rewardZoneID;
 
+
     /**
-     * Shipping orders
+     * List of items that are part of the order
+     */
+    private List<Item> items;
+
+
+    /**
+     * List of purchase orders
+     */
+    private List<PurchaseOrder> purchaseOrders;
+
+
+    /**
+     * List of shipping orders
      */
     private List<ShippingOrder> shippingOrders;
 
-    /**
-     * List of historical shipping addresses
-     */
-    private List<Address> shippingAddresses;
 
     /**
      * Payment details
@@ -64,20 +65,20 @@ public class Order {
     private PaymentDetails paymentDetails;
 
 
-    public String getWebOrderNumber() {
-        return webOrderNumber;
+    public String getWebOrderRefID() {
+        return webOrderRefID;
     }
 
-    public void setWebOrderNumber(String webOrderNumber) {
-        this.webOrderNumber = webOrderNumber;
+    public void setWebOrderRefID(String webOrderRefID) {
+        this.webOrderRefID = webOrderRefID;
     }
 
-    public String getFsOrderNumber() {
-        return fsOrderNumber;
+    public String getFsOrderID() {
+        return fsOrderID;
     }
 
-    public void setFsOrderNumber(String fsOrderNumber) {
-        this.fsOrderNumber = fsOrderNumber;
+    public void setFsOrderID(String fsOrderID) {
+        this.fsOrderID = fsOrderID;
     }
 
     public String getCsrSalesRepID() {
@@ -104,14 +105,6 @@ public class Order {
         this.orderCreationTime = orderCreationTime;
     }
 
-    public double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
     public String getRewardZoneID() {
         return rewardZoneID;
     }
@@ -120,20 +113,28 @@ public class Order {
         this.rewardZoneID = rewardZoneID;
     }
 
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public List<PurchaseOrder> getPurchaseOrders() {
+        return purchaseOrders;
+    }
+
+    public void setPurchaseOrders(List<PurchaseOrder> purchaseOrders) {
+        this.purchaseOrders = purchaseOrders;
+    }
+
     public List<ShippingOrder> getShippingOrders() {
         return shippingOrders;
     }
 
     public void setShippingOrders(List<ShippingOrder> shippingOrders) {
         this.shippingOrders = shippingOrders;
-    }
-
-    public List<Address> getShippingAddresses() {
-        return shippingAddresses;
-    }
-
-    public void setShippingAddresses(List<Address> shippingAddresses) {
-        this.shippingAddresses = shippingAddresses;
     }
 
     public PaymentDetails getPaymentDetails() {

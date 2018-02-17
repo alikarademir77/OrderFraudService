@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * CreditCardInfo
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-16T18:06:09.605-08:00")
 public class CreditCardInfo {
   @JsonProperty("active")
   private Boolean active = null;

@@ -61,7 +61,6 @@ public class PaymentDetails {
 
         public double totalAuthorizedAmount;
 
-        //todo: split this into month and year when we send
         public String creditCardExpiryDate;
 
         public String avsResponse;

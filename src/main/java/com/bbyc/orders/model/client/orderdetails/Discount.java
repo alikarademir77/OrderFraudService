@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Discount
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-16T18:06:09.605-08:00")
 public class Discount {
   @JsonProperty("id")
   private String id = null;
@@ -47,7 +47,7 @@ public class Discount {
   private String type = null;
 
   @JsonProperty("unitValue")
-  private String unitValue = null;
+  private Float unitValue = null;
 
   @JsonProperty("uom")
   private String uom = null;
@@ -178,7 +178,7 @@ public class Discount {
     this.type = type;
   }
 
-  public Discount unitValue(String unitValue) {
+  public Discount unitValue(Float unitValue) {
     this.unitValue = unitValue;
     return this;
   }
@@ -188,11 +188,11 @@ public class Discount {
    * @return unitValue
   **/
   @ApiModelProperty(value = "")
-  public String getUnitValue() {
+  public Float getUnitValue() {
     return unitValue;
   }
 
-  public void setUnitValue(String unitValue) {
+  public void setUnitValue(Float unitValue) {
     this.unitValue = unitValue;
   }
 

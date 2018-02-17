@@ -194,7 +194,8 @@ definitions:
       type:
         type: "string"
       unitValue:
-        type: "string"
+        type: "number"
+        format: "float"
       uom:
         type: "string"
   EffectiveDateRange:
@@ -387,7 +388,8 @@ definitions:
       type:
         type: "string"
       unitValue:
-        type: 'string'
+        type: 'number'
+        format: "float"
       uom:
         type: 'string'
   LevelOfService:
@@ -732,9 +734,11 @@ definitions:
     type: "object"
     properties:
       gst:
-        type: "string"
+        type: "number"
+        format: "float"
       pst:
-        type: "string"
+        type: "number"
+        format: "float"
   Term:
     type: "object"
     properties:

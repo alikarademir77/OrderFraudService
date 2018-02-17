@@ -23,15 +23,15 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Tax
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-14T15:03:30.736-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-16T18:06:09.605-08:00")
 public class Tax {
   @JsonProperty("gst")
-  private String gst = null;
+  private Float gst = null;
 
   @JsonProperty("pst")
-  private String pst = null;
+  private Float pst = null;
 
-  public Tax gst(String gst) {
+  public Tax gst(Float gst) {
     this.gst = gst;
     return this;
   }
@@ -41,15 +41,15 @@ public class Tax {
    * @return gst
   **/
   @ApiModelProperty(value = "")
-  public String getGst() {
+  public Float getGst() {
     return gst;
   }
 
-  public void setGst(String gst) {
+  public void setGst(Float gst) {
     this.gst = gst;
   }
 
-  public Tax pst(String pst) {
+  public Tax pst(Float pst) {
     this.pst = pst;
     return this;
   }
@@ -59,11 +59,11 @@ public class Tax {
    * @return pst
   **/
   @ApiModelProperty(value = "")
-  public String getPst() {
+  public Float getPst() {
     return pst;
   }
 
-  public void setPst(String pst) {
+  public void setPst(Float pst) {
     this.pst = pst;
   }
 

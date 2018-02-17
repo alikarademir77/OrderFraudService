@@ -1,10 +1,10 @@
 package com.bbyc.orders.mappers
 
 import com.bbyc.orders.model.client.orderdetails.*
+import com.bbyc.orders.model.internal.Item
 import com.bbyc.orders.model.internal.Order
 import com.bbyc.orders.model.internal.PaymentDetails
 import com.bbyc.orders.model.internal.PaymentDetails.CreditCard
-import com.bbyc.orders.model.internal.ShippingOrder.OrderLine
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import org.joda.time.DateTime
@@ -47,7 +47,7 @@ class OrderMapperTest extends Specification {
 
         expect: "Order.fsOrderNumber should be mapped correctly"
 
-        mappedOrder.getFsOrderNumber() == orderToMap.getId()
+        mappedOrder.getFsOrderID() == orderToMap.getId()
     }
 
 
@@ -60,6 +60,18 @@ class OrderMapperTest extends Specification {
         expect: "Order.ipAddress should be mapped correctly"
 
         mappedOrder.getIpAddress() == orderToMap.getIpAddress()
+    }
+
+
+    def "Test mapping for Order.csrSalesRepID"() {
+
+        given: "A valid FS Order response from Order details"
+
+        and: "mapper is invoked to map the response to the respective internal domain object"
+
+        expect: "Order.csrSalesRepID should be mapped correctly"
+
+        // TODO map csrSalesRepID
     }
 
 
@@ -83,7 +95,7 @@ class OrderMapperTest extends Specification {
 
         expect: "Order.webOrderNumber should be mapped correctly"
 
-        mappedOrder.getWebOrderNumber() == orderToMap.getWebOrderRefId()
+        mappedOrder.getWebOrderRefID() == orderToMap.getWebOrderRefId()
     }
 
 
@@ -95,8 +107,57 @@ class OrderMapperTest extends Specification {
 
         expect: "Order.orderCreationTime should be mapped correctly"
 
-        // TODO
+        // TODO map orderCreationTime
     }
+
+
+    def "Test mapping for Order.items"() {
+
+        given: "A valid FS Order response from Order details"
+
+        and: "mapper is invoked to map the response to the respective internal domain object"
+
+        expect: "Order.items should be mapped correctly"
+
+        mappedOrder.getItems().size() == orderToMap.getFsOrderLines().size()
+
+        for(int i = 0; i < orderToMap.getFsOrderLines().size(); i++) {
+
+            Item mappedItem = mappedOrder.getItems().get(i)
+            FSOrderLine fsOrderLineToMap = orderToMap.getFsOrderLines().get(i)
+
+            mappedItem.getName() == fsOrderLineToMap.getProduct().getName()
+            mappedItem.getItemPrice() == fsOrderLineToMap.getItemCharge().getUnitPrice()
+            mappedItem.getItemTax() == (fsOrderLineToMap.getItemCharge().getTax().getGst() + fsOrderLineToMap.getItemCharge().getTax().getPst()).toDouble()
+
+            // TODO map itemDiscounts, category
+        }
+
+    }
+
+
+    def "Test mapping for Order.purchaseOrders"() {
+
+        given: "A valid FS Order response from Order details"
+
+        and: "mapper is invoked to map the response to the respective internal domain object"
+
+        expect: "Order.purchaseOrders should be mapped correctly"
+
+        mappedOrder.getPurchaseOrders().size() == orderToMap.getPurchaseOrders().size()
+
+        for(int i = 0; i < orderToMap.getPurchaseOrders().size(); i++) {
+
+            com.bbyc.orders.model.internal.PurchaseOrder mappedPurchaseOrder = mappedOrder.getPurchaseOrders().get(i)
+            PurchaseOrder purchaseOrderToMap = orderToMap.getPurchaseOrders().get(i)
+
+            mappedPurchaseOrder.getPurchaseOrderID() == purchaseOrderToMap.getId()
+            mappedPurchaseOrder.getStatus() == purchaseOrderToMap.getPoSendStatus().getName()
+            mappedPurchaseOrder.getShippingOrderRefID() == purchaseOrderToMap.getShippingOrderRefId()
+        }
+
+    }
+
 
 
     def "Test mapping for Order.paymentDetails"(){
@@ -137,29 +198,29 @@ class OrderMapperTest extends Specification {
 
         expect: "Order.shippingOrders should be mapped correctly"
 
-        mappedOrder.shippingOrders.size() == orderToMap.getShippingOrders().size()
+        mappedOrder.getShippingOrders().size() == orderToMap.getShippingOrders().size()
         for(int i = 0; i < orderToMap.getShippingOrders().size(); i++) {
 
-            com.bbyc.orders.model.internal.ShippingOrder mappedShippingOrder = mappedOrder.shippingOrders.get(i)
+            com.bbyc.orders.model.internal.ShippingOrder mappedShippingOrder = mappedOrder.getShippingOrders().get(i)
             ShippingOrder shippingOrderToMap = orderToMap.getShippingOrders().get(i)
 
-            mappedShippingOrder.shippingOrderID == shippingOrderToMap.getId()
-            mappedShippingOrder.globalContractID == shippingOrderToMap.getGlobalContractRefId()
-            mappedShippingOrder.fulfillmentPartner == shippingOrderToMap.getFulfillmentPartner()
-            mappedShippingOrder.shippingOrderStatus == shippingOrderToMap.getStatus().getName()
-            mappedShippingOrder.shippingDetails != null
-            assertMappedAddress(mappedShippingOrder.shippingDetails.shippingAddress, shippingOrderToMap.getShipToAddress())
+            mappedShippingOrder.getShippingOrderID() == shippingOrderToMap.getId()
+            mappedShippingOrder.getGlobalContractID() == shippingOrderToMap.getGlobalContractRefId()
+            mappedShippingOrder.getFulfillmentPartner() == shippingOrderToMap.getFulfillmentPartner()
+            mappedShippingOrder.getStatus() == shippingOrderToMap.getStatus().getName()
+            mappedShippingOrder.getShippingMethod() == shippingOrderToMap.getRequestedCarrier().getName()
+            assertMappedAddress(mappedShippingOrder.getShippingAddress(), shippingOrderToMap.getShipToAddress())
 
-            mappedShippingOrder.shippingOrderLines.size() == shippingOrderToMap.getShippingOrderLines().size()
+            mappedShippingOrder.getShippingOrderLines().size() == shippingOrderToMap.getShippingOrderLines().size()
             for(int j = 0; j < shippingOrderToMap.getShippingOrderLines().size(); j++) {
 
-                OrderLine mappedShippingOrderLine = mappedShippingOrder.shippingOrderLines.get(j)
+                com.bbyc.orders.model.internal.ShippingOrderLine mappedShippingOrderLine = mappedShippingOrder.getShippingOrderLines().get(j)
                 ShippingOrderLine shippingOrderLineToMap = shippingOrderToMap.getShippingOrderLines().get(j)
 
                 assertMappedShippingOrderLine(mappedShippingOrderLine, shippingOrderLineToMap)
             }
 
-            // TODO map purchaseOrderID, purchaseOrderStatus, shippingCharge, shippingDetails.shippingMethod, shippingDetails.deadline, chargebacks, shippingDetails.deadline
+            // TODO map shippingCharge, deliveryDate, chargebacks
 
         }
 
@@ -178,22 +239,21 @@ class OrderMapperTest extends Specification {
         assertMappedAddress(mappedCreditCard.billingAddress, creditCardToMap.getBillingAddress())
         assert mappedCreditCard.creditCardExpiryDate == creditCardToMap.getCreditCardExpiryDate()
 
-        // TODO Map avs response, cvv response, total authorized amount, 3d secure value
+        // TODO Map avsResponse, cvvResponse, totalAuthorizedAmount, secureValue3D
     }
 
 
-    void assertMappedShippingOrderLine(OrderLine mappedShippingOrderLine, ShippingOrderLine shippingOrderLineToMap) {
+    void assertMappedShippingOrderLine(com.bbyc.orders.model.internal.ShippingOrderLine mappedShippingOrderLine, ShippingOrderLine shippingOrderLineToMap) {
 
         if(shippingOrderLineToMap != null) {
             assert mappedShippingOrderLine != null
         }
 
-        assert mappedShippingOrderLine.lineNumber == shippingOrderLineToMap.getId()
-        assert mappedShippingOrderLine.status == shippingOrderLineToMap.getStatus().getName()
-        assert mappedShippingOrderLine.price == shippingOrderLineToMap.getUnitPrice()
-        assert mappedShippingOrderLine.quantity == shippingOrderLineToMap.getQtyOrdered()
+        assert mappedShippingOrderLine.getShippingOrderLineID() == shippingOrderLineToMap.getId()
+        assert mappedShippingOrderLine.getStatus() == shippingOrderLineToMap.getStatus().getName()
+        assert mappedShippingOrderLine.getQuantity() == shippingOrderLineToMap.getQtyOrdered()
 
-        // TODO map description, staffDiscount, postCaptureDiscount, totalTax, category
+        // TODO map shippingCharge, shippingTax, shippingDiscount, ehf, ehfTax
 
     }
 

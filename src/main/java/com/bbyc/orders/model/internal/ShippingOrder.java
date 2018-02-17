@@ -9,11 +9,6 @@ import java.util.List;
 public class ShippingOrder {
 
     /**
-     * Purchase order ID (PO #) associated with this shipping order
-     */
-    private String purchaseOrderID;
-
-    /**
      * Shipping order ID
      */
     private String shippingOrderID;
@@ -26,16 +21,12 @@ public class ShippingOrder {
     /**
      * Shipping order status
      * Possible statuses:
-     * Open: If sorder is not shipped or not cancled
+     * Open: If sorder is not shipped or not cancelled
      * Canceled: if Sorder is cancelled
      * Completed: If Sorder is shipped.
      */
-    private String shippingOrderStatus;
+    private String status;
 
-    /**
-     * Purchase order status
-     */
-    private String purchaseOrderStatus;
 
     /**
      * Shipping charge
@@ -49,15 +40,29 @@ public class ShippingOrder {
 
 
     /**
-     * Shipping details
+     * Shipping method
+     * The format will be {Carrier Code}-{Service Level}
+     * e.g. CPCL-GROUND
      */
-    private ShippingDetails shippingDetails;
+    private String shippingMethod;
+
+
+    /**
+     * Shipping deliveryDate
+     */
+    private LocalDateTime deliveryDate;
+
+
+    /**
+     * Shipping address
+     */
+    private Address shippingAddress;
 
 
     /**
      * List of shipping order lines
      */
-    private List<OrderLine> shippingOrderLines;
+    private List<ShippingOrderLine> shippingOrderLines;
 
 
     /**
@@ -66,13 +71,6 @@ public class ShippingOrder {
     private List<Chargeback> chargebacks;
 
 
-    public String getPurchaseOrderID() {
-        return purchaseOrderID;
-    }
-
-    public void setPurchaseOrderID(String purchaseOrderID) {
-        this.purchaseOrderID = purchaseOrderID;
-    }
 
     public String getShippingOrderID() {
         return shippingOrderID;
@@ -88,22 +86,6 @@ public class ShippingOrder {
 
     public void setGlobalContractID(String globalContractID) {
         this.globalContractID = globalContractID;
-    }
-
-    public String getShippingOrderStatus() {
-        return shippingOrderStatus;
-    }
-
-    public void setShippingOrderStatus(String shippingOrderStatus) {
-        this.shippingOrderStatus = shippingOrderStatus;
-    }
-
-    public String getPurchaseOrderStatus() {
-        return purchaseOrderStatus;
-    }
-
-    public void setPurchaseOrderStatus(String purchaseOrderStatus) {
-        this.purchaseOrderStatus = purchaseOrderStatus;
     }
 
     public double getShippingCharge() {
@@ -122,19 +104,12 @@ public class ShippingOrder {
         this.fulfillmentPartner = fulfillmentPartner;
     }
 
-    public ShippingDetails getShippingDetails() {
-        return shippingDetails;
-    }
 
-    public void setShippingDetails(ShippingDetails shippingDetails) {
-        this.shippingDetails = shippingDetails;
-    }
-
-    public List<OrderLine> getShippingOrderLines() {
+    public List<ShippingOrderLine> getShippingOrderLines() {
         return shippingOrderLines;
     }
 
-    public void setShippingOrderLines(List<OrderLine> shippingOrderLines) {
+    public void setShippingOrderLines(List<ShippingOrderLine> shippingOrderLines) {
         this.shippingOrderLines = shippingOrderLines;
     }
 
@@ -146,121 +121,38 @@ public class ShippingOrder {
         this.chargebacks = chargebacks;
     }
 
-
-
-
-    /**
-     * Shipping detail representation
-     */
-    public static class ShippingDetails {
-
-        /**
-         * Shipping method
-         * The format will be {Carrier Code}-{Service Level}
-         * e.g. CPCL-GROUND
-         */
-        public String shippingMethod;
-
-
-        /**
-         * Shipping deadline
-         */
-        public LocalDateTime deadline;
-
-        /**
-         * Shipping address
-         */
-        public Address shippingAddress;
-
+    public String getStatus() {
+        return status;
     }
 
-
-    /**
-     * Chargeback representation
-     */
-    public static class Chargeback {
-
-        /**
-         * Chargeback amount
-         */
-        public double amount;
-
-        /**
-         * Chargeback reason code
-         */
-        public String reasonCode;
-
-        /**
-         * Chargeback receive date
-         */
-        public LocalDateTime receiveDate;
-
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-
-    /**
-     * Shipping order line representation
-     */
-    public static class OrderLine {
-
-        /**
-         * Shipping order line number
-         */
-        public String lineNumber;
-
-        /**
-         * Description
-         */
-        public String description;
-
-
-        /**
-         * Item Category
-         * Format is Department_Class_Subclass
-         */
-        public String category;
-
-
-        /**
-         * Shipping order line status
-         * Possible statuses:
-         * Backorder: If line is backorder
-         * Open: If line is not yet shipped or backorder or canceled
-         * Cancel: If like is cancelled
-         * Completed: If line is shipped.
-         */
-        public String status;
-
-
-        /**
-         * Item price
-         * This will be the unit price of the item minus any precapture discounts on the item price
-         */
-
-        //todo: (Unit Price – Discount(Except POST Capture Discount))
-        public double price;
-
-        /**
-         * Item quantity
-         */
-        public int quantity;
-
-        // ? - no use
-        public double staffDiscount;
-
-        /**
-         * Post capture discount
-         */
-        public double postCaptureDiscount;
-
-        /**
-         * Total of all taxes, which include the product sales tax, ehf tax and shipping charge tax
-         */
-
-        //todo: calculate using (Product TAX+EHF Tax+Shipping Charge Tax)
-        public double totalTax;
-
+    public String getShippingMethod() {
+        return shippingMethod;
     }
+
+    public void setShippingMethod(String shippingMethod) {
+        this.shippingMethod = shippingMethod;
+    }
+
+    public LocalDateTime getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(LocalDateTime deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public Address getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(Address shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
 
 
 }
