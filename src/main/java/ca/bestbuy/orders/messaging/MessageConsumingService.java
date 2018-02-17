@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.bbyc.orders.messaging;
+package ca.bestbuy.orders.messaging;
 
 /**
  * @author akaradem

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.bbyc.orders.fraud;
+package ca.bestbuy.orders.fraud;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -22,9 +22,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.bbyc.orders.messaging.EventTypes;
-import com.bbyc.orders.messaging.MessageConsumingService;
-import com.bbyc.orders.messaging.MessagingEvent;
+import ca.bestbuy.orders.fraud.OrderFraudChannels;
+import ca.bestbuy.orders.fraud.OrderFraudServiceApplication;
+import ca.bestbuy.orders.messaging.EventTypes;
+import ca.bestbuy.orders.messaging.MessageConsumingService;
+import ca.bestbuy.orders.messaging.MessagingEvent;
 
 /**
  * @author akaradem
@@ -36,7 +38,7 @@ import com.bbyc.orders.messaging.MessagingEvent;
 	    "messaging.errorRetryCount=3",
 	})
 @DirtiesContext
-public class OrderFraudMessagingClientTest {
+public class OrderFraudServiceMessageConsumptionTest {
 
 	@Autowired 
 	private OrderFraudChannels channels;
