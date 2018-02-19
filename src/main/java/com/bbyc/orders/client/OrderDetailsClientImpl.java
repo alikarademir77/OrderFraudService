@@ -17,7 +17,6 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -36,40 +35,9 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 @Component
 public class OrderDetailsClientImpl implements OrderDetailsClient {
 
-    @Value("${client.order-details.connection.url}")
-    private String orderDetailsServiceUrl;
-
-    @Value("${client.order-details.connection.getOrderDetailsEndpoint}")
-    private String getOrderDetailsEndpoint;
-
-    @Value("${client.order-details.connection.keystore-path}")
-    private String keystorePath;
-
-    @Value("${client.order-details.connection.keystore-type}")
-    private String keystoreType;
-
-    @Value("${client.order-details.connection.key-alias}")
-    private String keyAlias;
-
-    @Value("${client.order-details.connection.keystore-password}")
-    private String keystorePassword;
-
-    @Value("${client.order-details.connection.key-password}")
-    private String keyPassword;
-
-    @Value("${client.order-details.connection.truststore-path}")
-    private String truststorePath;
-
-    @Value("${client.order-details.connection.truststore-type}")
-    private String truststoreType;
-
-    @Value("${client.order-details.connection.truststore-password}")
-    private String truststorePassword;
-
-    @Value("${client.order-details.connection.tls-enabled}")
-    private Boolean tlsEnabled;
-
+    private OrderDetailsClientConfig config;
     private OrderMapper orderMapper;
+
     private RestTemplate restTemplate;
 
     private final static String FILE_RESOURCE_PREFIX = "file://";
@@ -78,8 +46,9 @@ public class OrderDetailsClientImpl implements OrderDetailsClient {
 
 
     @Autowired
-    public OrderDetailsClientImpl(OrderMapper orderMapper) {
+    public OrderDetailsClientImpl(OrderMapper orderMapper, OrderDetailsClientConfig config) {
         this.orderMapper = orderMapper;
+        this.config = config;
         this.restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(getHttpClient()));
     }
 
@@ -87,7 +56,16 @@ public class OrderDetailsClientImpl implements OrderDetailsClient {
     @Override
     public Order getOrderDetails(String fsOrderId) {
 
-        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/orderdetails/v1/fsorders/" + fsOrderId, String.class);
+        String orderDetailsServiceUrl = config.getOrderDetailsServiceUrl();
+        String getOrderDetailsEndpoint = config.getGetOrderDetailsEndpoint();
+
+        if(orderDetailsServiceUrl == null || orderDetailsServiceUrl.isEmpty() || getOrderDetailsEndpoint == null || getOrderDetailsEndpoint.isEmpty()) {
+            throw new IllegalStateException("The URL or endpoint for Order Details Service is null or empty. Please double check the following properties in the configuration - 'client.order-details.connection.url' and 'client.order-details.getOrderDetailsEndpoint'");
+        }
+
+        String url = orderDetailsServiceUrl + getOrderDetailsEndpoint + "/";
+
+        ResponseEntity<String> response = restTemplate.getForEntity(url + fsOrderId, String.class);
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JodaModule());
@@ -96,7 +74,6 @@ public class OrderDetailsClientImpl implements OrderDetailsClient {
         try {
             orderToMap = mapper.readValue(response.getBody(), FSOrder.class);
             mappedOrder = orderMapper.mapOrder(orderToMap);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,6 +83,17 @@ public class OrderDetailsClientImpl implements OrderDetailsClient {
 
 
     protected HttpClient getHttpClient() {
+
+        boolean tlsEnabled = config.getTlsEnabled();
+        String keystorePath = config.getKeystorePath();
+        String keystorePassword = config.getKeystorePassword();
+        String keyAlias = config.getKeyAlias();
+        String keyPassword = config.getKeyPassword();
+        String keystoreType = config.getKeystoreType();
+        String truststorePath = config.getTruststorePath();
+        String truststorePassword = config.getTruststorePassword();
+        String truststoreType = config.getTruststoreType();
+
 
         if(tlsEnabled) {
 

@@ -248,15 +248,19 @@ public abstract class OrderMapper {
 
     protected LocalDateTime mapDateTime(DateTime dateTime) {
 
-        Instant instant = Instant.ofEpochMilli(dateTime.getMillis());
+        if(dateTime != null) {
+            Instant instant = Instant.ofEpochMilli(dateTime.getMillis());
 
-        ZonedDateTime ldtZoned = instant.atZone(ZoneId.systemDefault());
+            ZonedDateTime ldtZoned = instant.atZone(ZoneId.systemDefault());
 
-        ZonedDateTime utcZoned = ldtZoned.withZoneSameInstant(ZoneId.of("UTC"));
+            ZonedDateTime utcZoned = ldtZoned.withZoneSameInstant(ZoneId.of("UTC"));
 
-        LocalDateTime localDateTime = utcZoned.toLocalDateTime();
+            LocalDateTime localDateTime = utcZoned.toLocalDateTime();
 
-        return localDateTime;
+            return localDateTime;
+        }
+
+        return null;
     }
 
 
