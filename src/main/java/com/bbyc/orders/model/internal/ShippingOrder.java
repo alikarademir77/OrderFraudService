@@ -36,6 +36,13 @@ public class ShippingOrder {
      */
     private float shippingCharge;
 
+
+    /**
+     * Tax on shipping charge
+     */
+    private float shippingTax;
+
+
     /**
      * Fulfillment partner
      */
@@ -99,6 +106,14 @@ public class ShippingOrder {
 
     public void setShippingCharge(float shippingCharge) {
         this.shippingCharge = shippingCharge;
+    }
+
+    public float getShippingTax() {
+        return shippingTax;
+    }
+
+    public void setShippingTax(float shippingTax) {
+        this.shippingTax = shippingTax;
     }
 
     public String getFulfillmentPartner() {

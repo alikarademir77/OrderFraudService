@@ -16,6 +16,8 @@ import java.time.LocalDateTime
 
 class OrderMapperTest extends Specification {
 
+    // TODO - Rewrite tests to only test methods from OrderMapper
+
 
     @Shared
     FSOrder orderToMap
@@ -228,6 +230,27 @@ class OrderMapperTest extends Specification {
 
 
     }
+
+
+    def "Test mapping for Order.shippingOrder charges"() {
+
+        given: "A valid FS Order response from Order details"
+
+        FSOrder fsOrder = new FSOrder()
+
+        ShippingOrder shippingOrder = new ShippingOrder()
+        shippingOrder.setId("1")
+
+
+        shippingOrder.setShippingCharges()
+
+
+
+
+
+
+    }
+
 
 
     void assertMappedCreditCard(CreditCard mappedCreditCard, CreditCardInfo creditCardToMap) {

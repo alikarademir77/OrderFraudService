@@ -727,7 +727,8 @@ definitions:
       tax:
         $ref: "#/definitions/Tax"
       totalValue:
-        type: "string"
+        type: "number"
+        format: "float"
       type:
         type: "string"
   Tax:

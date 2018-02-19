@@ -4,19 +4,27 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import org.joda.time.DateTime;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 
 import com.bbyc.orders.model.client.orderdetails.CreditCardInfo;
+import com.bbyc.orders.model.client.orderdetails.Discount;
 import com.bbyc.orders.model.client.orderdetails.FSOrder;
 import com.bbyc.orders.model.client.orderdetails.FSOrderLine;
 import com.bbyc.orders.model.client.orderdetails.GiftCardInfo;
+import com.bbyc.orders.model.client.orderdetails.ItemCharge;
 import com.bbyc.orders.model.client.orderdetails.PaymentMethodInfo;
 import com.bbyc.orders.model.client.orderdetails.PurchaseOrder;
+import com.bbyc.orders.model.client.orderdetails.ShippingCharge;
 import com.bbyc.orders.model.client.orderdetails.ShippingOrderLine;
+import com.bbyc.orders.model.client.orderdetails.Surcharge;
+import com.bbyc.orders.model.client.orderdetails.Tax;
 import com.bbyc.orders.model.internal.Address;
 import com.bbyc.orders.model.internal.Item;
 import com.bbyc.orders.model.internal.Order;
@@ -30,7 +38,7 @@ public abstract class OrderMapper {
     @Mappings({
         @Mapping(target = "webOrderRefID", source = "webOrderRefId"),
         @Mapping(target = "fsOrderID", source = "id"),
-        @Mapping(target = "csrSalesRepID", ignore = true),
+        @Mapping(target = "csrSalesRepID", ignore = true), // TODO - Figure out how to get value
         @Mapping(target = "ipAddress", source = "ipAddress"),
         @Mapping(target = "webOrderCreationDate", source = "webOrderCreationDate"),
         @Mapping(target = "rewardZoneID", source = "rewardZone.rewardZoneId"),
@@ -45,13 +53,26 @@ public abstract class OrderMapper {
     @Mappings({
         @Mapping(target = "fsoLineID", source = "id"),
         @Mapping(target = "name", source = "product.name"),
-        @Mapping(target = "category", ignore = true),
+        @Mapping(target = "category", ignore = true), // TODO - Figure out how to get value
         @Mapping(target = "itemUnitPrice", source = "itemCharge.unitPrice"),
         @Mapping(target = "itemQuantity", source = "qtyOrdered"),
-        @Mapping(target = "itemTax", expression = "java(fsOrderLineToMap.getItemCharge().getTax().getGst() + fsOrderLineToMap.getItemCharge().getTax().getPst())"),
-        @Mapping(target = "itemDiscounts", source = "itemCharge.discounts")
+        @Mapping(target = "itemTax", ignore = true), // Handled by custom mapping - mapItem_ItemTax()
+        @Mapping(target = "itemDiscounts", source = "itemCharge.discounts") // TODO - Write custom mapping
     })
     protected abstract Item mapItem(FSOrderLine fsOrderLineToMap);
+
+
+    @AfterMapping
+    protected void mapItem_ItemTax(FSOrderLine fsOrderLineToMap, @MappingTarget Item mappedItem) {
+        ItemCharge itemChargeToMap = fsOrderLineToMap.getItemCharge();
+        if(itemChargeToMap != null) {
+            Tax taxToMap = itemChargeToMap.getTax();
+            if(taxToMap != null) {
+                float totalTax = taxToMap.getGst() + taxToMap.getPst();
+                mappedItem.setItemTax(totalTax);
+            }
+        }
+    }
 
 
     @Mappings({
@@ -66,15 +87,48 @@ public abstract class OrderMapper {
         @Mapping(target = "shippingOrderID", source = "id"),
         @Mapping(target = "globalContractID", source = "globalContractRefId"),
         @Mapping(target = "shippingOrderStatus", source = "status.name"),
-        @Mapping(target = "shippingCharge", ignore = true),
+        @Mapping(target = "shippingCharge", ignore = true), // Handled by custom mapping - mapShippingOrder_ShippingChargesAndTax()
+        @Mapping(target = "shippingTax", ignore = true), // Handled by custom mapping - mapShippingOrder_ShippingChargesAndTax()
         @Mapping(target = "fulfillmentPartner", source = "fulfillmentPartner"),
         @Mapping(target = "shippingMethod", source = "requestedCarrier.levelOfService.id"),
         @Mapping(target = "deliveryDate", source = "requestedCarrier.levelOfService.deliveryDate"),
         @Mapping(target = "shippingAddress", source = "shipToAddress"),
         @Mapping(target = "shippingOrderLines", source = "shippingOrderLines"),
-        @Mapping(target = "chargebacks", ignore = true)
+        @Mapping(target = "chargebacks", ignore = true) // TODO - Figure out how to get value
     })
     protected abstract ShippingOrder mapShippingOrder(com.bbyc.orders.model.client.orderdetails.ShippingOrder shippingOrderToMap);
+
+
+    @AfterMapping
+    protected void mapShippingOrder_ShippingChargesAndTax(com.bbyc.orders.model.client.orderdetails.ShippingOrder shippingOrderToMap, @MappingTarget ShippingOrder mappedShippingOrder) {
+
+        float totalShippingCharge = 0.0f;
+        float totalShippingChargeTax = 0.0f;
+        float totalShippingDiscount = 0.0f;
+
+        for(ShippingCharge shippingChargeToMap : shippingOrderToMap.getShippingCharges()) {
+
+            // Add shipping charge to total shipping charge
+            totalShippingCharge += shippingChargeToMap.getUnitPrice();
+
+            // Add shipping charge tax to total shipping charge tax
+            Tax shippingChargeTaxToMap = shippingChargeToMap.getTax();
+            if(shippingChargeTaxToMap != null) {
+                totalShippingChargeTax += shippingChargeTaxToMap.getGst();
+                totalShippingChargeTax += shippingChargeTaxToMap.getPst();
+            }
+
+            // Add shipping charge discounts to total shipping charge discounts
+            List<Discount> shippingDiscounts = shippingChargeToMap.getDiscounts();
+            for(Discount shippingDiscount : shippingDiscounts) {
+                totalShippingDiscount += (shippingDiscount.getUnitValue() * shippingDiscount.getQuantity());
+            }
+
+        }
+
+        mappedShippingOrder.setShippingCharge(totalShippingCharge);
+        mappedShippingOrder.setShippingTax(totalShippingChargeTax);
+    }
 
 
     @Mappings({
@@ -82,19 +136,77 @@ public abstract class OrderMapper {
         @Mapping(target = "shippingOrderLineStatus", source = "status.name"),
         @Mapping(target = "fsoLineRefID", source = "fsoLineRefId"),
         @Mapping(target = "quantity", source = "qtyOrdered"),
-        @Mapping(target = "shippingCharge", ignore = true),
-        @Mapping(target = "shippingTax", ignore = true),
-        @Mapping(target = "shippingDiscount", ignore = true),
-        @Mapping(target = "ehf", ignore = true),
-        @Mapping(target = "ehfTax", ignore = true)
+        @Mapping(target = "shippingCharge", ignore = true), // Handled by custom mapping - mapShippingOrderLine_ShippingChargesAndTax()
+        @Mapping(target = "shippingTax", ignore = true), // Handled by custom mapping - mapShippingOrderLine_ShippingChargesAndTax()
+        @Mapping(target = "shippingDiscount", ignore = true), // Handled by custom mapping - mapShippingOrderLine_ShippingChargesAndTax()
+        @Mapping(target = "ehf", ignore = true), // Handled by custom mapping - mapShippingOrderLine_Surcharges()
+        @Mapping(target = "ehfTax", ignore = true) // Handled by custom mapping - mapShippingOrderLine_Surcharges()
     })
     protected abstract com.bbyc.orders.model.internal.ShippingOrderLine mapShippingOrderLine(ShippingOrderLine shippingOrderLineToMap);
+
+
+    @AfterMapping
+    protected void mapShippingOrderLine_ShippingChargesAndTax(ShippingOrderLine shippingOrderLineToMap, @MappingTarget com.bbyc.orders.model.internal.ShippingOrderLine mappedShippingOrderLine) {
+
+        float totalShippingCharge = 0.0f;
+        float totalShippingChargeTax = 0.0f;
+        float totalShippingDiscount = 0.0f;
+
+        for(ShippingCharge shippingLineChargeToMap : shippingOrderLineToMap.getShippingCharges()) {
+
+            // Add shipping charge to total shipping charge
+            totalShippingCharge += shippingLineChargeToMap.getUnitPrice();
+
+            // Add shipping charge tax to total shipping charge tax
+            Tax shippingChargeTaxToMap = shippingLineChargeToMap.getTax();
+            if(shippingChargeTaxToMap != null) {
+                totalShippingChargeTax += shippingChargeTaxToMap.getGst();
+                totalShippingChargeTax += shippingChargeTaxToMap.getPst();
+            }
+
+            // Add shipping charge discounts to total shipping charge discounts
+            List<Discount> shippingDiscounts = shippingLineChargeToMap.getDiscounts();
+            for(Discount shippingLineDiscount : shippingDiscounts) {
+                totalShippingDiscount += (shippingLineDiscount.getUnitValue() * shippingLineDiscount.getQuantity());
+            }
+
+        }
+
+        mappedShippingOrderLine.setShippingCharge(totalShippingCharge);
+        mappedShippingOrderLine.setShippingTax(totalShippingChargeTax);
+        mappedShippingOrderLine.setShippingDiscount(totalShippingDiscount);
+    }
+
+
+    @AfterMapping
+    protected void mapShippingOrderLine_Surcharges(ShippingOrderLine shippingOrderLineToMap, @MappingTarget com.bbyc.orders.model.internal.ShippingOrderLine mappedShippingOrderLine) {
+
+        float totalEhf = 0.0f;
+        float totalEhfTax = 0.0f;
+
+        for(Surcharge shippingLineSurchargeToMap : shippingOrderLineToMap.getSurcharges()) {
+
+            // Add surcharge to total ehf
+            totalEhf += shippingLineSurchargeToMap.getTotalValue();
+
+            // Add ehf tax to total ehf tax
+            Tax surchargeTaxToMap = shippingLineSurchargeToMap.getTax();
+            if(surchargeTaxToMap != null) {
+                totalEhfTax += surchargeTaxToMap.getGst();
+                totalEhfTax += surchargeTaxToMap.getPst();
+            }
+
+        }
+
+        mappedShippingOrderLine.setEhf(totalEhf);
+        mappedShippingOrderLine.setEhfTax(totalEhfTax);
+    }
 
 
     @Mappings({
         @Mapping(target = "creditCards", source = "creditCards"),
         @Mapping(target = "giftCards", source = "giftCards"),
-        @Mapping(target = "payPal", ignore = true)
+        @Mapping(target = "payPal", ignore = true) // TODO - Figure out how to get value
     })
     protected abstract PaymentDetails mapPaymentDetails(PaymentMethodInfo paymentDetailsToMap);
 
@@ -104,10 +216,10 @@ public abstract class OrderMapper {
         @Mapping(target = "creditCardNumber", source = "creditCardNumber"),
         @Mapping(target = "creditCardType", source = "creditCardType"),
         @Mapping(target = "creditCardExpiryDate", source = "creditCardExpiryDate"),
-        @Mapping(target = "creditCardAvsResponse", ignore = true),
-        @Mapping(target = "creditCardCvvResponse", ignore = true),
-        @Mapping(target = "creditCard3dSecureValue", ignore = true),
-        @Mapping(target = "totalAuthorizedAmount", ignore = true)
+        @Mapping(target = "creditCardAvsResponse", ignore = true), // TODO - Figure out how to get value
+        @Mapping(target = "creditCardCvvResponse", ignore = true), // TODO - Figure out how to get value
+        @Mapping(target = "creditCard3dSecureValue", ignore = true), // TODO - Figure out how to get value
+        @Mapping(target = "totalAuthorizedAmount", ignore = true) // TODO - Figure out how to get value
     })
     protected abstract PaymentDetails.CreditCard mapCreditCard(CreditCardInfo creditCardToMap);
 
