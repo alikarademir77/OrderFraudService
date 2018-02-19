@@ -59,15 +59,15 @@ public class PaymentDetails {
 
         public String creditCardNumber;
 
-        public float totalAuthorizedAmount;
-
         public String creditCardExpiryDate;
 
-        public String avsResponse;
+        public String creditCardAvsResponse;
 
-        public String cvvResponse;
+        public String creditCardCvvResponse;
 
-        public String secureValue3D;
+        public String creditCard3dSecureValue;
+
+        public float totalAuthorizedAmount;
 
     }
 

@@ -10,7 +10,7 @@ public class PurchaseOrder {
     /**
      * Purchase order status
      */
-    private String status;
+    private String purchaseOrderStatus;
 
     /**
      * Associated shipping order ID
@@ -26,12 +26,12 @@ public class PurchaseOrder {
         this.purchaseOrderID = purchaseOrderID;
     }
 
-    public String getStatus() {
-        return status;
+    public String getPurchaseOrderStatus() {
+        return purchaseOrderStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setPurchaseOrderStatus(String purchaseOrderStatus) {
+        this.purchaseOrderStatus = purchaseOrderStatus;
     }
 
     public String getShippingOrderRefID() {

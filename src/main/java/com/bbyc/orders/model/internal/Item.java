@@ -5,6 +5,11 @@ import java.util.List;
 public class Item {
 
     /**
+     * FS order line ID associated with item
+     */
+    private String fsoLineID;
+
+    /**
      * Name of item
      */
     private String name;
@@ -30,6 +35,14 @@ public class Item {
      */
     private List<Discount> itemDiscounts;
 
+
+    public String getFsoLineID() {
+        return fsoLineID;
+    }
+
+    public void setFsoLineID(String fsoLineID) {
+        this.fsoLineID = fsoLineID;
+    }
 
     public String getName() {
         return name;

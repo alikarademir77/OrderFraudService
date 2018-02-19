@@ -13,20 +13,23 @@ public class ShippingOrder {
      */
     private String shippingOrderID;
 
+
+    /**
+     * Shipping order status<br/>
+     * <br/>
+     * Possible statuses:
+     * <ul>
+     *     <li>Open: If the shipping order is not shipped or not cancelled</li>
+     *     <li>Cancelled: If the shipping order is cancelled</li>
+     *     <li>Completed: If the shipping order is shipped</li>
+     * </ul>
+     */
+    private String shippingOrderStatus;
+
     /**
      * Global contract ID
      */
     private String globalContractID;
-
-    /**
-     * Shipping order status
-     * Possible statuses:
-     * Open: If sorder is not shipped or not cancelled
-     * Canceled: if Sorder is cancelled
-     * Completed: If Sorder is shipped.
-     */
-    private String status;
-
 
     /**
      * Shipping charge
@@ -38,38 +41,32 @@ public class ShippingOrder {
      */
     private String fulfillmentPartner;
 
-
     /**
-     * Shipping method
-     * The format will be {Carrier Code}-{Service Level}
+     * The shipping method with the following format: {Carrier Code}-{Service Level}
+     * <br/><br/>
      * e.g. CPCL-GROUND
      */
     private String shippingMethod;
-
 
     /**
      * Shipping deliveryDate
      */
     private LocalDateTime deliveryDate;
 
-
     /**
      * Shipping address
      */
     private Address shippingAddress;
-
 
     /**
      * List of shipping order lines
      */
     private List<ShippingOrderLine> shippingOrderLines;
 
-
     /**
      * List of chargebacks
      */
     private List<Chargeback> chargebacks;
-
 
 
     public String getShippingOrderID() {
@@ -78,6 +75,14 @@ public class ShippingOrder {
 
     public void setShippingOrderID(String shippingOrderID) {
         this.shippingOrderID = shippingOrderID;
+    }
+
+    public String getShippingOrderStatus() {
+        return shippingOrderStatus;
+    }
+
+    public void setShippingOrderStatus(String shippingOrderStatus) {
+        this.shippingOrderStatus = shippingOrderStatus;
     }
 
     public String getGlobalContractID() {
@@ -104,31 +109,6 @@ public class ShippingOrder {
         this.fulfillmentPartner = fulfillmentPartner;
     }
 
-
-    public List<ShippingOrderLine> getShippingOrderLines() {
-        return shippingOrderLines;
-    }
-
-    public void setShippingOrderLines(List<ShippingOrderLine> shippingOrderLines) {
-        this.shippingOrderLines = shippingOrderLines;
-    }
-
-    public List<Chargeback> getChargebacks() {
-        return chargebacks;
-    }
-
-    public void setChargebacks(List<Chargeback> chargebacks) {
-        this.chargebacks = chargebacks;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getShippingMethod() {
         return shippingMethod;
     }
@@ -153,6 +133,20 @@ public class ShippingOrder {
         this.shippingAddress = shippingAddress;
     }
 
+    public List<ShippingOrderLine> getShippingOrderLines() {
+        return shippingOrderLines;
+    }
 
+    public void setShippingOrderLines(List<ShippingOrderLine> shippingOrderLines) {
+        this.shippingOrderLines = shippingOrderLines;
+    }
+
+    public List<Chargeback> getChargebacks() {
+        return chargebacks;
+    }
+
+    public void setChargebacks(List<Chargeback> chargebacks) {
+        this.chargebacks = chargebacks;
+    }
 
 }

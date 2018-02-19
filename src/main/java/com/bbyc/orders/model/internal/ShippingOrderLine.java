@@ -7,10 +7,17 @@ public class ShippingOrderLine {
      */
     private String shippingOrderLineID;
 
+
+    /**
+     * FS order line reference ID
+     */
+    private String fsoLineRefID;
+
+
     /**
      * Shipping order line status
      */
-    private String status;
+    private String shippingOrderLineStatus;
 
 
     /**
@@ -53,12 +60,20 @@ public class ShippingOrderLine {
         this.shippingOrderLineID = shippingOrderLineID;
     }
 
-    public String getStatus() {
-        return status;
+    public String getFsoLineRefID() {
+        return fsoLineRefID;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setFsoLineRefID(String fsoLineRefID) {
+        this.fsoLineRefID = fsoLineRefID;
+    }
+
+    public String getShippingOrderLineStatus() {
+        return shippingOrderLineStatus;
+    }
+
+    public void setShippingOrderLineStatus(String shippingOrderLineStatus) {
+        this.shippingOrderLineStatus = shippingOrderLineStatus;
     }
 
     public Integer getQuantity() {

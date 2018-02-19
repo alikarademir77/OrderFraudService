@@ -26,7 +26,7 @@ class OrderMapperTest extends Specification {
 
     def setupSpec(){
 
-        OrderMapper orderDetailsMapper = Mappers.getMapper(OrderMapper.class);
+        OrderMapper orderDetailsMapper = Mappers.getMapper(OrderMapper.class)
 
         String orderDetailsResponse = new File('src/test/resources/order-details-response.json').text
 
@@ -126,6 +126,7 @@ class OrderMapperTest extends Specification {
             Item mappedItem = mappedOrder.getItems().get(i)
             FSOrderLine fsOrderLineToMap = orderToMap.getFsOrderLines().get(i)
 
+            mappedItem.getFsoLineID() == fsOrderLineToMap.getId()
             mappedItem.getName() == fsOrderLineToMap.getProduct().getName()
             mappedItem.getItemPrice() == fsOrderLineToMap.getItemCharge().getUnitPrice()
             mappedItem.getItemTax() == fsOrderLineToMap.getItemCharge().getTax().getGst() + fsOrderLineToMap.getItemCharge().getTax().getPst()
@@ -134,30 +135,6 @@ class OrderMapperTest extends Specification {
         }
 
     }
-
-
-    def "Test mapping for Order.purchaseOrders"() {
-
-        given: "A valid FS Order response from Order details"
-
-        and: "mapper is invoked to map the response to the respective internal domain object"
-
-        expect: "Order.purchaseOrders should be mapped correctly"
-
-        mappedOrder.getPurchaseOrders().size() == orderToMap.getPurchaseOrders().size()
-
-        for(int i = 0; i < orderToMap.getPurchaseOrders().size(); i++) {
-
-            com.bbyc.orders.model.internal.PurchaseOrder mappedPurchaseOrder = mappedOrder.getPurchaseOrders().get(i)
-            PurchaseOrder purchaseOrderToMap = orderToMap.getPurchaseOrders().get(i)
-
-            mappedPurchaseOrder.getPurchaseOrderID() == purchaseOrderToMap.getId()
-            mappedPurchaseOrder.getStatus() == purchaseOrderToMap.getPoSendStatus().getName()
-            mappedPurchaseOrder.getShippingOrderRefID() == purchaseOrderToMap.getShippingOrderRefId()
-        }
-
-    }
-
 
 
     def "Test mapping for Order.paymentDetails"(){
@@ -190,6 +167,28 @@ class OrderMapperTest extends Specification {
     }
 
 
+    def "Test mapping for Order.purchaseOrders"(){
+
+        given: "A valid FS Order response from Order details"
+
+        and: "mapper is invoked to map the response to the respective internal domain object"
+
+        expect: "Order.purchaseOrders should be mapped correctly"
+
+        mappedOrder.getPurchaseOrders().size() == orderToMap.getPurchaseOrders().size()
+        for(int i = 0; i < orderToMap.getPurchaseOrders().size(); i++) {
+
+            com.bbyc.orders.model.internal.PurchaseOrder mappedPurchaseOrder = mappedOrder.getPurchaseOrders().get(i)
+            PurchaseOrder purchaseOrderToMap = orderToMap.getPurchaseOrders().get(i)
+
+            mappedPurchaseOrder.getPurchaseOrderID() == purchaseOrderToMap.getId()
+            mappedPurchaseOrder.getPurchaseOrderStatus() == purchaseOrderToMap.getPoSendStatus().getName()
+            mappedPurchaseOrder.getShippingOrderRefID() == purchaseOrderToMap.getShippingOrderRefId()
+        }
+
+    }
+
+
     def "Test mapping for Order.shippingOrders"(){
 
         given: "A valid FS Order response from Order details"
@@ -207,7 +206,7 @@ class OrderMapperTest extends Specification {
             mappedShippingOrder.getShippingOrderID() == shippingOrderToMap.getId()
             mappedShippingOrder.getGlobalContractID() == shippingOrderToMap.getGlobalContractRefId()
             mappedShippingOrder.getFulfillmentPartner() == shippingOrderToMap.getFulfillmentPartner()
-            mappedShippingOrder.getStatus() == shippingOrderToMap.getStatus().getName()
+            mappedShippingOrder.getShippingOrderStatus() == shippingOrderToMap.getStatus().getName()
             mappedShippingOrder.getShippingMethod() == shippingOrderToMap.getRequestedCarrier().getName()
             assertMappedAddress(mappedShippingOrder.getShippingAddress(), shippingOrderToMap.getShipToAddress())
 
@@ -250,9 +249,9 @@ class OrderMapperTest extends Specification {
         }
 
         assert mappedShippingOrderLine.getShippingOrderLineID() == shippingOrderLineToMap.getId()
-        assert mappedShippingOrderLine.getStatus() == shippingOrderLineToMap.getStatus().getName()
+        assert mappedShippingOrderLine.getShippingOrderLineStatus() == shippingOrderLineToMap.getStatus().getName()
         assert mappedShippingOrderLine.getQuantity() == shippingOrderLineToMap.getQtyOrdered()
-
+        assert mappedShippingOrderLine.getFsoLineRefID() == shippingOrderLineToMap.getFsoLineRefId()
         // TODO map shippingCharge, shippingTax, shippingDiscount, ehf, ehfTax
 
     }
