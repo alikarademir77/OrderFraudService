@@ -99,15 +99,15 @@ class OrderMapperTest extends Specification {
     }
 
 
-    def "Test mapping for Order.orderCreationTime"(){
+    def "Test mapping for Order.webOrderCreationDate"(){
 
         given: "A valid FS Order response from Order details"
 
         and: "mapper is invoked to map the response to the respective internal domain object"
 
-        expect: "Order.orderCreationTime should be mapped correctly"
+        expect: "Order.webOrderCreationDate should be mapped correctly"
 
-        // TODO map orderCreationTime
+        assertDatesAreEqual(mappedOrder.getWebOrderCreationDate(), orderToMap.getWebOrderCreationDate())
     }
 
 
@@ -219,7 +219,9 @@ class OrderMapperTest extends Specification {
                 assertMappedShippingOrderLine(mappedShippingOrderLine, shippingOrderLineToMap)
             }
 
-            // TODO map shippingCharge, deliveryDate, chargebacks
+            assertDatesAreEqual(mappedShippingOrder.getDeliveryDate(), shippingOrderToMap.getRequestedCarrier().getLevelOfService().getDeliveryDate())
+
+            // TODO map shippingCharge, chargebacks
 
         }
 
@@ -277,11 +279,19 @@ class OrderMapperTest extends Specification {
     }
 
 
-    DateTime convertLocalDateTimeToJodaDateTime(LocalDateTime localDateTime) {
+    void assertDatesAreEqual(LocalDateTime mappedDate, DateTime dateToMap) {
 
-        // TODO
+        if(dateToMap != null) {
+            assert mappedDate != null
+        }
 
-        return null
+        assert mappedDate.getDayOfMonth() == dateToMap.dayOfMonth().get()
+        assert mappedDate.getMonth().getValue() == dateToMap.monthOfYear().get()
+        assert mappedDate.getYear() == dateToMap.year().get()
+        assert mappedDate.getHour() == dateToMap.hourOfDay().get()
+        assert mappedDate.getMinute() == dateToMap.minuteOfHour().get()
+        assert mappedDate.getSecond() == dateToMap.secondOfMinute().get()
+
     }
 
 }

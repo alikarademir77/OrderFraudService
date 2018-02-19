@@ -12,6 +12,12 @@ public class Order {
 
 
     /**
+     * Date-time order was created on the website
+     */
+    private LocalDateTime webOrderCreationDate;
+
+
+    /**
      * OMS FS order ID
      */
     private String fsOrderID;
@@ -27,12 +33,6 @@ public class Order {
      * IP address of customer submitting order
      */
     private String ipAddress;
-
-
-    /**
-     * Time order was created on the website
-     */
-    private LocalDateTime orderCreationTime;
 
 
     /**
@@ -97,12 +97,12 @@ public class Order {
         this.ipAddress = ipAddress;
     }
 
-    public LocalDateTime getOrderCreationTime() {
-        return orderCreationTime;
+    public LocalDateTime getWebOrderCreationDate() {
+        return webOrderCreationDate;
     }
 
-    public void setOrderCreationTime(LocalDateTime orderCreationTime) {
-        this.orderCreationTime = orderCreationTime;
+    public void setWebOrderCreationDate(LocalDateTime webOrderCreationDate) {
+        this.webOrderCreationDate = webOrderCreationDate;
     }
 
     public String getRewardZoneID() {

@@ -1,5 +1,11 @@
 package com.bbyc.orders.mappers;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
+import org.joda.time.DateTime;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -26,7 +32,7 @@ public abstract class OrderMapper {
         @Mapping(target = "fsOrderID", source = "id"),
         @Mapping(target = "csrSalesRepID", ignore = true),
         @Mapping(target = "ipAddress", source = "ipAddress"),
-        @Mapping(target = "orderCreationTime", ignore = true),
+        @Mapping(target = "webOrderCreationDate", source = "webOrderCreationDate"),
         @Mapping(target = "rewardZoneID", source = "rewardZone.rewardZoneId"),
         @Mapping(target = "items", source = "fsOrderLines"),
         @Mapping(target = "purchaseOrders", source = "purchaseOrders"),
@@ -62,7 +68,7 @@ public abstract class OrderMapper {
         @Mapping(target = "shippingCharge", ignore = true),
         @Mapping(target = "fulfillmentPartner", source = "fulfillmentPartner"),
         @Mapping(target = "shippingMethod", source = "requestedCarrier.levelOfService.id"),
-        @Mapping(target = "deliveryDate", ignore = true),
+        @Mapping(target = "deliveryDate", source = "requestedCarrier.levelOfService.deliveryDate"),
         @Mapping(target = "shippingAddress", source = "shipToAddress"),
         @Mapping(target = "shippingOrderLines", source = "shippingOrderLines"),
         @Mapping(target = "chargebacks", ignore = true)
@@ -125,6 +131,20 @@ public abstract class OrderMapper {
         @Mapping(target = "secondaryPhoneNumber", source = "phone2")
     })
     protected abstract Address mapAddress(com.bbyc.orders.model.client.orderdetails.Address addressToMap);
+
+
+    protected LocalDateTime mapDateTime(DateTime dateTime) {
+
+        Instant instant = Instant.ofEpochMilli(dateTime.getMillis());
+
+        ZonedDateTime ldtZoned = instant.atZone(ZoneId.systemDefault());
+
+        ZonedDateTime utcZoned = ldtZoned.withZoneSameInstant(ZoneId.of("UTC"));
+
+        LocalDateTime localDateTime = utcZoned.toLocalDateTime();
+
+        return localDateTime;
+    }
 
 
 }
