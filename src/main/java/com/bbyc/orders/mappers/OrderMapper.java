@@ -46,7 +46,8 @@ public abstract class OrderMapper {
         @Mapping(target = "fsoLineID", source = "id"),
         @Mapping(target = "name", source = "product.name"),
         @Mapping(target = "category", ignore = true),
-        @Mapping(target = "itemPrice", source = "itemCharge.unitPrice"),
+        @Mapping(target = "itemUnitPrice", source = "itemCharge.unitPrice"),
+        @Mapping(target = "itemQuantity", source = "qtyOrdered"),
         @Mapping(target = "itemTax", expression = "java(fsOrderLineToMap.getItemCharge().getTax().getGst() + fsOrderLineToMap.getItemCharge().getTax().getPst())"),
         @Mapping(target = "itemDiscounts", source = "itemCharge.discounts")
     })

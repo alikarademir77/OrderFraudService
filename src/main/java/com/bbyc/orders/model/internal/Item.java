@@ -20,9 +20,14 @@ public class Item {
     private String category;
 
     /**
-     * Item price
+     * Item unit price
      */
-    private float itemPrice;
+    private float itemUnitPrice;
+
+    /**
+     * Item quantity ordered
+     */
+    private int itemQuantity;
 
     /**
      * Tax on item
@@ -60,12 +65,20 @@ public class Item {
         this.category = category;
     }
 
-    public float getItemPrice() {
-        return itemPrice;
+    public float getItemUnitPrice() {
+        return itemUnitPrice;
     }
 
-    public void setItemPrice(float itemPrice) {
-        this.itemPrice = itemPrice;
+    public void setItemUnitPrice(float itemUnitPrice) {
+        this.itemUnitPrice = itemUnitPrice;
+    }
+
+    public int getItemQuantity() {
+        return itemQuantity;
+    }
+
+    public void setItemQuantity(int itemQuantity) {
+        this.itemQuantity = itemQuantity;
     }
 
     public float getItemTax() {

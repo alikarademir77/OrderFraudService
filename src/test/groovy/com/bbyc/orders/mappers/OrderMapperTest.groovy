@@ -128,7 +128,8 @@ class OrderMapperTest extends Specification {
 
             mappedItem.getFsoLineID() == fsOrderLineToMap.getId()
             mappedItem.getName() == fsOrderLineToMap.getProduct().getName()
-            mappedItem.getItemPrice() == fsOrderLineToMap.getItemCharge().getUnitPrice()
+            mappedItem.getItemUnitPrice() == fsOrderLineToMap.getItemCharge().getUnitPrice()
+            mappedItem.getItemQuantity() == fsOrderLineToMap.getQtyOrdered()
             mappedItem.getItemTax() == fsOrderLineToMap.getItemCharge().getTax().getGst() + fsOrderLineToMap.getItemCharge().getTax().getPst()
 
             // TODO map itemDiscounts, category
