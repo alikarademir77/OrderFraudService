@@ -7,7 +7,7 @@ public class Chargeback {
     /**
      * Chargeback amount
      */
-    private double amount;
+    private float amount;
 
     /**
      * Chargeback reason code
@@ -20,11 +20,11 @@ public class Chargeback {
     private LocalDateTime receiveDate;
 
 
-    public double getAmount() {
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 

@@ -59,7 +59,7 @@ public class PaymentDetails {
 
         public String creditCardNumber;
 
-        public double totalAuthorizedAmount;
+        public float totalAuthorizedAmount;
 
         public String creditCardExpiryDate;
 
@@ -93,7 +93,7 @@ public class PaymentDetails {
 
         public String verifiedStatus;
 
-        public double totalAuthorizedAmount;
+        public float totalAuthorizedAmount;
 
     }
 

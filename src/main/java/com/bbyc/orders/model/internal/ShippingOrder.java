@@ -31,7 +31,7 @@ public class ShippingOrder {
     /**
      * Shipping charge
      */
-    private double shippingCharge;
+    private float shippingCharge;
 
     /**
      * Fulfillment partner
@@ -88,11 +88,11 @@ public class ShippingOrder {
         this.globalContractID = globalContractID;
     }
 
-    public double getShippingCharge() {
+    public float getShippingCharge() {
         return shippingCharge;
     }
 
-    public void setShippingCharge(double shippingCharge) {
+    public void setShippingCharge(float shippingCharge) {
         this.shippingCharge = shippingCharge;
     }
 

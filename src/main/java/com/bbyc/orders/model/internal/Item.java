@@ -17,12 +17,12 @@ public class Item {
     /**
      * Item price
      */
-    private double itemPrice;
+    private float itemPrice;
 
     /**
      * Tax on item
      */
-    private double itemTax;
+    private float itemTax;
 
 
     /**
@@ -47,19 +47,19 @@ public class Item {
         this.category = category;
     }
 
-    public double getItemPrice() {
+    public float getItemPrice() {
         return itemPrice;
     }
 
-    public void setItemPrice(double itemPrice) {
+    public void setItemPrice(float itemPrice) {
         this.itemPrice = itemPrice;
     }
 
-    public double getItemTax() {
+    public float getItemTax() {
         return itemTax;
     }
 
-    public void setItemTax(double itemTax) {
+    public void setItemTax(float itemTax) {
         this.itemTax = itemTax;
     }
 
@@ -76,7 +76,7 @@ public class Item {
 
         public Boolean isStaffPurchase;
 
-        public double unitValue;
+        public float unitValue;
 
         public int quantity;
 

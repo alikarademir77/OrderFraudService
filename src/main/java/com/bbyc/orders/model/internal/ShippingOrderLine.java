@@ -22,27 +22,27 @@ public class ShippingOrderLine {
     /**
      * Shipping charge for shipping order line
      */
-    private double shippingCharge;
+    private float shippingCharge;
 
     /**
      * Tax on shipping charge
      */
-    private double shippingTax;
+    private float shippingTax;
 
     /**
      * Discount on shipping charge
      */
-    private double shippingDiscount;
+    private float shippingDiscount;
 
     /**
      * Environment handling fee on shipping order line
      */
-    private double ehf;
+    private float ehf;
 
     /**
      * Tax on environment handling fee
      */
-    private double ehfTax;
+    private float ehfTax;
 
 
     public String getShippingOrderLineID() {
@@ -69,43 +69,43 @@ public class ShippingOrderLine {
         this.quantity = quantity;
     }
 
-    public double getShippingCharge() {
+    public float getShippingCharge() {
         return shippingCharge;
     }
 
-    public void setShippingCharge(double shippingCharge) {
+    public void setShippingCharge(float shippingCharge) {
         this.shippingCharge = shippingCharge;
     }
 
-    public double getShippingTax() {
+    public float getShippingTax() {
         return shippingTax;
     }
 
-    public void setShippingTax(double shippingTax) {
+    public void setShippingTax(float shippingTax) {
         this.shippingTax = shippingTax;
     }
 
-    public double getShippingDiscount() {
+    public float getShippingDiscount() {
         return shippingDiscount;
     }
 
-    public void setShippingDiscount(double shippingDiscount) {
+    public void setShippingDiscount(float shippingDiscount) {
         this.shippingDiscount = shippingDiscount;
     }
 
-    public double getEhf() {
+    public float getEhf() {
         return ehf;
     }
 
-    public void setEhf(double ehf) {
+    public void setEhf(float ehf) {
         this.ehf = ehf;
     }
 
-    public double getEhfTax() {
+    public float getEhfTax() {
         return ehfTax;
     }
 
-    public void setEhfTax(double ehfTax) {
+    public void setEhfTax(float ehfTax) {
         this.ehfTax = ehfTax;
     }
 }
