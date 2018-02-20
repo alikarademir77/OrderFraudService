@@ -1,6 +1,4 @@
-package com.bbyc.orders.model.internal;
-
-import java.util.List;
+package ca.bestbuy.orders.fraud.model.internal;
 
 public class Item {
 

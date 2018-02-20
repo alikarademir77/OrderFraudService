@@ -11,7 +11,7 @@
  */
 
 
-package com.bbyc.orders.model.client.orderdetails;
+package ca.bestbuy.orders.fraud.model.client.orderdetails;
 
 import java.util.ArrayList;
 import java.util.List;

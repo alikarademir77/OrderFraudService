@@ -1,11 +1,10 @@
-package com.bbyc.orders.mappers;
+package ca.bestbuy.orders.fraud.mappers;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import com.bbyc.orders.model.client.orderdetails.ItemChargeDiscount;
 import org.joda.time.DateTime;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -13,23 +12,24 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 
-import com.bbyc.orders.model.client.orderdetails.CreditCardInfo;
-import com.bbyc.orders.model.client.orderdetails.Discount;
-import com.bbyc.orders.model.client.orderdetails.FSOrder;
-import com.bbyc.orders.model.client.orderdetails.FSOrderLine;
-import com.bbyc.orders.model.client.orderdetails.GiftCardInfo;
-import com.bbyc.orders.model.client.orderdetails.ItemCharge;
-import com.bbyc.orders.model.client.orderdetails.PaymentMethodInfo;
-import com.bbyc.orders.model.client.orderdetails.PurchaseOrder;
-import com.bbyc.orders.model.client.orderdetails.ShippingCharge;
-import com.bbyc.orders.model.client.orderdetails.ShippingOrderLine;
-import com.bbyc.orders.model.client.orderdetails.Surcharge;
-import com.bbyc.orders.model.client.orderdetails.Tax;
-import com.bbyc.orders.model.internal.Address;
-import com.bbyc.orders.model.internal.Item;
-import com.bbyc.orders.model.internal.Order;
-import com.bbyc.orders.model.internal.PaymentDetails;
-import com.bbyc.orders.model.internal.ShippingOrder;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.CreditCardInfo;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.Discount;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.FSOrder;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.FSOrderLine;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.GiftCardInfo;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.ItemCharge;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.ItemChargeDiscount;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.PaymentMethodInfo;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.PurchaseOrder;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingCharge;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingOrderLine;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.Surcharge;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.Tax;
+import ca.bestbuy.orders.fraud.model.internal.Address;
+import ca.bestbuy.orders.fraud.model.internal.Item;
+import ca.bestbuy.orders.fraud.model.internal.Order;
+import ca.bestbuy.orders.fraud.model.internal.PaymentDetails;
+import ca.bestbuy.orders.fraud.model.internal.ShippingOrder;
 
 @Mapper(componentModel = "spring")
 public abstract class OrderMapper {
@@ -105,7 +105,7 @@ public abstract class OrderMapper {
             @Mapping(target = "purchaseOrderStatus", source = "poSendStatus.name"),
             @Mapping(target = "shippingOrderRefID", source = "shippingOrderRefId")
     })
-    protected abstract com.bbyc.orders.model.internal.PurchaseOrder mapPurchaseOrder(PurchaseOrder purchaseOrderToMap);
+    protected abstract ca.bestbuy.orders.fraud.model.internal.PurchaseOrder mapPurchaseOrder(PurchaseOrder purchaseOrderToMap);
 
 
     @Mappings({
@@ -122,11 +122,11 @@ public abstract class OrderMapper {
             @Mapping(target = "shippingOrderLines", source = "shippingOrderLines"),
             @Mapping(target = "chargebacks", ignore = true) // TODO - Figure out how to get value
     })
-    protected abstract ShippingOrder mapShippingOrder(com.bbyc.orders.model.client.orderdetails.ShippingOrder shippingOrderToMap);
+    protected abstract ShippingOrder mapShippingOrder(ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingOrder shippingOrderToMap);
 
 
     @AfterMapping
-    protected void mapShippingOrder_ShippingChargesAndTax(com.bbyc.orders.model.client.orderdetails.ShippingOrder shippingOrderToMap, @MappingTarget ShippingOrder mappedShippingOrder) {
+    protected void mapShippingOrder_ShippingChargesAndTax(ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingOrder shippingOrderToMap, @MappingTarget ShippingOrder mappedShippingOrder) {
 
         float totalShippingCharge = 0.0f;
         float totalShippingChargeTax = 0.0f;
@@ -176,11 +176,11 @@ public abstract class OrderMapper {
             @Mapping(target = "ehf", ignore = true), // Handled by custom mapping - mapShippingOrderLine_Surcharges()
             @Mapping(target = "ehfTax", ignore = true) // Handled by custom mapping - mapShippingOrderLine_Surcharges()
     })
-    protected abstract com.bbyc.orders.model.internal.ShippingOrderLine mapShippingOrderLine(ShippingOrderLine shippingOrderLineToMap);
+    protected abstract ca.bestbuy.orders.fraud.model.internal.ShippingOrderLine mapShippingOrderLine(ShippingOrderLine shippingOrderLineToMap);
 
 
     @AfterMapping
-    protected void mapShippingOrderLine_ShippingChargesAndTax(ShippingOrderLine shippingOrderLineToMap, @MappingTarget com.bbyc.orders.model.internal.ShippingOrderLine mappedShippingOrderLine) {
+    protected void mapShippingOrderLine_ShippingChargesAndTax(ShippingOrderLine shippingOrderLineToMap, @MappingTarget ca.bestbuy.orders.fraud.model.internal.ShippingOrderLine mappedShippingOrderLine) {
 
         float totalShippingCharge = 0.0f;
         float totalShippingChargeTax = 0.0f;
@@ -217,7 +217,7 @@ public abstract class OrderMapper {
 
 
     @AfterMapping
-    protected void mapShippingOrderLine_Surcharges(ShippingOrderLine shippingOrderLineToMap, @MappingTarget com.bbyc.orders.model.internal.ShippingOrderLine mappedShippingOrderLine) {
+    protected void mapShippingOrderLine_Surcharges(ShippingOrderLine shippingOrderLineToMap, @MappingTarget ca.bestbuy.orders.fraud.model.internal.ShippingOrderLine mappedShippingOrderLine) {
 
         float totalEhf = 0.0f;
         float totalEhfTax = 0.0f;
@@ -285,7 +285,7 @@ public abstract class OrderMapper {
             @Mapping(target = "phoneNumber", source = "phone"),
             @Mapping(target = "secondaryPhoneNumber", source = "phone2")
     })
-    protected abstract Address mapAddress(com.bbyc.orders.model.client.orderdetails.Address addressToMap);
+    protected abstract Address mapAddress(ca.bestbuy.orders.fraud.model.client.orderdetails.Address addressToMap);
 
 
     protected ZonedDateTime mapDateTime(DateTime dateTime) {

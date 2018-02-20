@@ -53,7 +53,7 @@ public class OrderFraudServiceApplication {
 			}
 			if (count >= errorRetryCount) {
 	            // giving up - don't send to DLX
-				log.info("Reached retry limit for event (" + event + ")..");
+//				log.info("Reached retry limit for event (" + event + ")..");
 				return;
 	        }
 			throw ex;

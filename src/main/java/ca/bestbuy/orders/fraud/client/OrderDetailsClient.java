@@ -1,6 +1,6 @@
-package com.bbyc.orders.client;
+package ca.bestbuy.orders.fraud.client;
 
-import com.bbyc.orders.model.internal.Order;
+import ca.bestbuy.orders.fraud.model.internal.Order;
 
 public interface OrderDetailsClient {
 

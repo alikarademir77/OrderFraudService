@@ -23,10 +23,14 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 	@Override
 	public void consumeMessage(MessagingEvent event) {
 		
-		log.info("Received event:"+event);
+//		log.info("Received event:"+event);
 		
 		throw new RuntimeException("failed");
 
 	}
+
+
+
+
 
 }

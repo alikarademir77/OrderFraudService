@@ -1,10 +1,10 @@
-package com.bbyc.orders.mappers
+package ca.bestbuy.orders.fraud.mappers
 
-import com.bbyc.orders.model.client.orderdetails.*
-import com.bbyc.orders.model.internal.Item
-import com.bbyc.orders.model.internal.Order
-import com.bbyc.orders.model.internal.PaymentDetails
-import com.bbyc.orders.model.internal.PaymentDetails.CreditCard
+import ca.bestbuy.orders.fraud.model.client.orderdetails.*
+import ca.bestbuy.orders.fraud.model.internal.Item
+import ca.bestbuy.orders.fraud.model.internal.Order
+import ca.bestbuy.orders.fraud.model.internal.PaymentDetails
+import ca.bestbuy.orders.fraud.model.internal.PaymentDetails.CreditCard
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
@@ -238,7 +238,7 @@ class OrderMapperTest extends Specification {
 
         when: "OrderMapper.mapShippingOrderLine() is invoked on the FS Order ShippingOrderLine object"
 
-        com.bbyc.orders.model.internal.ShippingOrderLine mappedShippingOrderLine = orderDetailsMapper.mapShippingOrderLine(shippingOrderLineToMap)
+        ca.bestbuy.orders.fraud.model.internal.ShippingOrderLine mappedShippingOrderLine = orderDetailsMapper.mapShippingOrderLine(shippingOrderLineToMap)
 
         then: "ShippingOrderLine object returned should be mapped correctly"
 
@@ -289,7 +289,7 @@ class OrderMapperTest extends Specification {
         purchaseOrderToMap.setShippingOrderRefId("shippingOrderRefId")
 
         when: "the order mapper is called to map the Purchase Order to our internal object"
-        com.bbyc.orders.model.internal.PurchaseOrder mappedPurchaseOrder = orderDetailsMapper.mapPurchaseOrder(purchaseOrderToMap)
+        ca.bestbuy.orders.fraud.model.internal.PurchaseOrder mappedPurchaseOrder = orderDetailsMapper.mapPurchaseOrder(purchaseOrderToMap)
 
         then: "our internal domain Purchased Order object were correctly mapped to"
 
@@ -356,7 +356,7 @@ class OrderMapperTest extends Specification {
 
 
         when: "the order mapper is called to map the Shipping Order object to our internal domain object"
-        com.bbyc.orders.model.internal.ShippingOrder mappedShippingOrder = orderDetailsMapper.mapShippingOrder(shippingOrderToMap)
+        ca.bestbuy.orders.fraud.model.internal.ShippingOrder mappedShippingOrder = orderDetailsMapper.mapShippingOrder(shippingOrderToMap)
 
         for (int i = 0; i < shippingOrderToMap.getShippingCharges().size(); i++) {
             ShippingCharge shippingCharge = shippingOrderToMap.getShippingCharges().get(i)
@@ -483,7 +483,7 @@ class OrderMapperTest extends Specification {
 
         when: "OrderMapper.mapAddress() is invoked on the FS Order Address object"
 
-        com.bbyc.orders.model.internal.Address mappedAddress = orderDetailsMapper.mapAddress(addressToMap)
+        ca.bestbuy.orders.fraud.model.internal.Address mappedAddress = orderDetailsMapper.mapAddress(addressToMap)
 
         then: "Address object returned should be mapped correctly"
 
@@ -491,7 +491,7 @@ class OrderMapperTest extends Specification {
     }
 
 
-    void assertMappedAddress(com.bbyc.orders.model.internal.Address mappedAddress, Address addressToMap) {
+    void assertMappedAddress(ca.bestbuy.orders.fraud.model.internal.Address mappedAddress, Address addressToMap) {
 
         if(addressToMap != null) {
             assert mappedAddress != null

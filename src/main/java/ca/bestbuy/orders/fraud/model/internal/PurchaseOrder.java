@@ -1,4 +1,4 @@
-package com.bbyc.orders.model.internal;
+package ca.bestbuy.orders.fraud.model.internal;
 
 public class PurchaseOrder {
 

@@ -1,4 +1,4 @@
-package com.bbyc.orders.client;
+package ca.bestbuy.orders.fraud.client;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,11 +25,12 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.bbyc.orders.mappers.OrderMapper;
-import com.bbyc.orders.model.client.orderdetails.FSOrder;
-import com.bbyc.orders.model.internal.Order;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+
+import ca.bestbuy.orders.fraud.mappers.OrderMapper;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.FSOrder;
+import ca.bestbuy.orders.fraud.model.internal.Order;
 
 
 @Component

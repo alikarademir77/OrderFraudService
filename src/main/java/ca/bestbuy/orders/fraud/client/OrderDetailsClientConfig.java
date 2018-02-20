@@ -1,4 +1,4 @@
-package com.bbyc.orders.client;
+package ca.bestbuy.orders.fraud.client;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
