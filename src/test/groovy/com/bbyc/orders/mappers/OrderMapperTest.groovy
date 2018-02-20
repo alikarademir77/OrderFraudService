@@ -158,7 +158,7 @@ class OrderMapperTest extends Specification {
     }
 
 
-    def "Test mapShippingOrderLine()"() {
+    def "Test Shipping Order Line Mapper"() {
 
         given: "A valid FS Order ShippingOrderLine object"
 
@@ -255,7 +255,7 @@ class OrderMapperTest extends Specification {
     }
 
 
-    def "Test mapPaymentDetails()"() {
+    def "Test Payment Details Mapper"() {
 
         given: "A valid FS Order PaymentMethodInfo object"
 
@@ -299,7 +299,7 @@ class OrderMapperTest extends Specification {
 
     }
 
-    def "test Shipping Order Mapper"() {
+    def "Test Shipping Order Mapper"() {
 
         given: "a valid shipping order"
         float unitPrice1 = 1.00f
@@ -383,7 +383,7 @@ class OrderMapperTest extends Specification {
         mappedShippingOrder.getShippingOrderLines().size() == shippingOrderToMap.getShippingOrderLines().size()
     }
 
-    def "Test mapCreditCard()"() {
+    def "Test Credit Card Mapper"() {
 
         given: "A valid FS Order CreditCardInfo object"
 
@@ -437,7 +437,7 @@ class OrderMapperTest extends Specification {
     }
 
 
-    def "Test mapGiftCard()"() {
+    def "Test Gift Card Mapper"() {
 
         given: "A valid FS Order GiftCardInfo object"
 
@@ -459,7 +459,7 @@ class OrderMapperTest extends Specification {
     }
 
 
-    def "Test mapAddress()"() {
+    def "Test Address Mapper"() {
 
         given: "A valid FS Order Address object"
 
