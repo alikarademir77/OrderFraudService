@@ -12,7 +12,7 @@ import org.mapstruct.factory.Mappers
 import spock.lang.Shared
 import spock.lang.Specification
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 class OrderMapperTest extends Specification {
 
@@ -81,8 +81,7 @@ class OrderMapperTest extends Specification {
         mappedOrder.getWebOrderRefID() == fsOrderToMap.getWebOrderRefId()
         mappedOrder.getFsOrderID() == fsOrderToMap.getId()
         mappedOrder.getIpAddress() == fsOrderToMap.getIpAddress()
-        //todo: need to fix date
-   //     mappedOrder.getWebOrderCreationDate() == fsOrderToMap.getWebOrderCreationDate()
+        assertDatesAreEqual( mappedOrder.getWebOrderCreationDate(), fsOrderToMap.getWebOrderCreationDate())
         mappedOrder.getRewardZoneID() == fsOrderToMap.getRewardZone().getRewardZoneId()
         mappedOrder.getItems().size() == fsOrderToMap.getFsOrderLines().size()
         mappedOrder.getPurchaseOrders().size() == fsOrderToMap.getPurchaseOrders().size()
@@ -361,18 +360,16 @@ class OrderMapperTest extends Specification {
             }
         }
 
-        totalUnitPrice = totalUnitPrice - totalDiscounts
-
         then: "our internal domain Shipping Order object were correctly mapped to"
         mappedShippingOrder.getShippingOrderID() == shippingOrderToMap.getId()
         mappedShippingOrder.getGlobalContractID() == shippingOrderToMap.getGlobalContractRefId()
         mappedShippingOrder.getShippingOrderStatus() == shippingOrderToMap.getStatus().getName()
         mappedShippingOrder.getShippingCharge() == totalUnitPrice
         mappedShippingOrder.getShippingTax() == totalTax
+        mappedShippingOrder.getShippingDiscount() == totalDiscounts
         mappedShippingOrder.getFulfillmentPartner() == shippingOrderToMap.getFulfillmentPartner()
         mappedShippingOrder.getShippingMethod() == shippingOrderToMap.getRequestedCarrier().getLevelOfService().getId()
-        //todo: need to fix date
-        //assertDatesAreEqual(mappedShippingOrder.getDeliveryDate(),shippingOrderToMap.getRequestedCarrier().getLevelOfService().getDeliveryDate() )
+        assertDatesAreEqual(mappedShippingOrder.getDeliveryDate(),shippingOrderToMap.getRequestedCarrier().getLevelOfService().getDeliveryDate() )
         mappedShippingOrder.getShippingAddress() != null
         mappedShippingOrder.getShippingOrderLines().size() == shippingOrderToMap.getShippingOrderLines().size()
     }
@@ -505,7 +502,7 @@ class OrderMapperTest extends Specification {
     }
 
 
-    void assertDatesAreEqual(LocalDateTime mappedDate, DateTime dateToMap) {
+    void assertDatesAreEqual(ZonedDateTime mappedDate, DateTime dateToMap) {
 
         if (dateToMap != null) {
             assert mappedDate != null

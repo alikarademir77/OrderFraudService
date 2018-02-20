@@ -1,6 +1,6 @@
 package com.bbyc.orders.model.internal;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -42,6 +42,11 @@ public class ShippingOrder {
      */
     private float shippingTax;
 
+    /**
+     * Total Shipping Discount
+     */
+    private float shippingDiscount;
+
 
     /**
      * Fulfillment partner
@@ -58,7 +63,7 @@ public class ShippingOrder {
     /**
      * Shipping deliveryDate
      */
-    private LocalDateTime deliveryDate;
+    private ZonedDateTime deliveryDate;
 
     /**
      * Shipping address
@@ -116,6 +121,14 @@ public class ShippingOrder {
         this.shippingTax = shippingTax;
     }
 
+    public float getShippingDiscount() {
+        return shippingDiscount;
+    }
+
+    public void setShippingDiscount(float shippingDiscount) {
+        this.shippingDiscount = shippingDiscount;
+    }
+
     public String getFulfillmentPartner() {
         return fulfillmentPartner;
     }
@@ -132,11 +145,11 @@ public class ShippingOrder {
         this.shippingMethod = shippingMethod;
     }
 
-    public LocalDateTime getDeliveryDate() {
+    public ZonedDateTime getDeliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(LocalDateTime deliveryDate) {
+    public void setDeliveryDate(ZonedDateTime deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 

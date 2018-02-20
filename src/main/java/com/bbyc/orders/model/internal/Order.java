@@ -1,6 +1,6 @@
 package com.bbyc.orders.model.internal;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class Order {
@@ -14,7 +14,7 @@ public class Order {
     /**
      * Date-time order was created on the website
      */
-    private LocalDateTime webOrderCreationDate;
+    private ZonedDateTime webOrderCreationDate;
 
 
     /**
@@ -97,11 +97,11 @@ public class Order {
         this.ipAddress = ipAddress;
     }
 
-    public LocalDateTime getWebOrderCreationDate() {
+    public ZonedDateTime getWebOrderCreationDate() {
         return webOrderCreationDate;
     }
 
-    public void setWebOrderCreationDate(LocalDateTime webOrderCreationDate) {
+    public void setWebOrderCreationDate(ZonedDateTime webOrderCreationDate) {
         this.webOrderCreationDate = webOrderCreationDate;
     }
 

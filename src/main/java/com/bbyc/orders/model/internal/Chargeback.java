@@ -1,6 +1,6 @@
 package com.bbyc.orders.model.internal;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Chargeback {
 
@@ -17,7 +17,7 @@ public class Chargeback {
     /**
      * Chargeback receive date
      */
-    private LocalDateTime receiveDate;
+    private ZonedDateTime receiveDate;
 
 
     public float getAmount() {
@@ -36,11 +36,11 @@ public class Chargeback {
         this.reasonCode = reasonCode;
     }
 
-    public LocalDateTime getReceiveDate() {
+    public ZonedDateTime getReceiveDate() {
         return receiveDate;
     }
 
-    public void setReceiveDate(LocalDateTime receiveDate) {
+    public void setReceiveDate(ZonedDateTime receiveDate) {
         this.receiveDate = receiveDate;
     }
 }
