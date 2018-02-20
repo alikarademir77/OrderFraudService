@@ -106,6 +106,10 @@ public abstract class OrderMapper {
         float totalShippingChargeTax = 0.0f;
         float totalShippingDiscount = 0.0f;
 
+        if(shippingOrderToMap.getShippingCharges() == null){
+            return;
+        }
+
         for(ShippingCharge shippingChargeToMap : shippingOrderToMap.getShippingCharges()) {
 
             // Add shipping charge to total shipping charge
@@ -118,15 +122,21 @@ public abstract class OrderMapper {
                 totalShippingChargeTax += shippingChargeTaxToMap.getPst();
             }
 
-            // Add shipping charge discounts to total shipping charge discounts
-            List<Discount> shippingDiscounts = shippingChargeToMap.getDiscounts();
-            for(Discount shippingDiscount : shippingDiscounts) {
-                totalShippingDiscount += (shippingDiscount.getUnitValue() * shippingDiscount.getQuantity());
+
+
+            if(shippingChargeToMap.getDiscounts() != null) {
+                // Add shipping charge discounts to total shipping charge discounts
+                List<Discount> shippingDiscounts = shippingChargeToMap.getDiscounts();
+                for (Discount shippingDiscount : shippingDiscounts) {
+                    totalShippingDiscount += (shippingDiscount.getUnitValue() * shippingDiscount.getQuantity());
+                }
             }
 
         }
 
-        mappedShippingOrder.setShippingCharge(totalShippingCharge);
+
+
+        mappedShippingOrder.setShippingCharge(totalShippingCharge - totalShippingDiscount);
         mappedShippingOrder.setShippingTax(totalShippingChargeTax);
     }
 
@@ -151,6 +161,10 @@ public abstract class OrderMapper {
         float totalShippingCharge = 0.0f;
         float totalShippingChargeTax = 0.0f;
         float totalShippingDiscount = 0.0f;
+
+        if(shippingOrderLineToMap.getShippingCharges() == null){
+            return;
+        }
 
         for(ShippingCharge shippingLineChargeToMap : shippingOrderLineToMap.getShippingCharges()) {
 
@@ -183,6 +197,10 @@ public abstract class OrderMapper {
 
         float totalEhf = 0.0f;
         float totalEhfTax = 0.0f;
+
+        if(shippingOrderLineToMap.getSurcharges() == null){
+            return;
+        }
 
         for(Surcharge shippingLineSurchargeToMap : shippingOrderLineToMap.getSurcharges()) {
 
