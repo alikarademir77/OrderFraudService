@@ -98,6 +98,7 @@ class OrderMapperTest extends Specification {
         given: "a valid fsorderline"
         float totalDiscount = 0.00f
         float totalTaxes = 0.00f
+        float staffDiscount = 0.00f
         FSOrderLine fsOrderLineToMap = new FSOrderLine()
         fsOrderLineToMap.setId("fsoLineId")
 
@@ -113,6 +114,7 @@ class OrderMapperTest extends Specification {
         ItemChargeDiscount discount2 = new ItemChargeDiscount()
         discount2.setUnitValue(0.10f)
         discount2.setQuantity(5)
+        discount2.setCode("SP")
         discounts.add(discount1)
         discounts.add(discount2)
         itemCharge.setDiscounts(discounts)
@@ -135,6 +137,11 @@ class OrderMapperTest extends Specification {
         for(int i = 0; i < fsOrderLineToMap.getItemCharge().getDiscounts().size(); i++){
             ItemChargeDiscount discount = fsOrderLineToMap.getItemCharge().getDiscounts().get(i)
             totalDiscount += discount.getQuantity() * discount.getUnitValue()
+
+            if(discount.getCode() != null && discount.getCode().equals("SP")){
+                staffDiscount += discount.getQuantity() * discount.getUnitValue()
+            }
+
         }
 
         totalTaxes = fsOrderLineToMap.getItemCharge().getTax().getGst() + fsOrderLineToMap.getItemCharge().getTax().getPst()
@@ -146,6 +153,8 @@ class OrderMapperTest extends Specification {
         mappedItem.getItemUnitPrice() == fsOrderLineToMap.getItemCharge().getUnitPrice()
         mappedItem.getItemQuantity() == fsOrderLineToMap.getQtyOrdered()
         mappedItem.getItemTax() == totalTaxes
+        mappedItem.getItemTotalDiscount() == totalDiscount
+        mappedItem.getStaffDiscount() == staffDiscount
     }
 
 

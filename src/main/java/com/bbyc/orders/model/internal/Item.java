@@ -36,9 +36,16 @@ public class Item {
 
 
     /**
-     * Item discounts
+     * Total Item discounts including Staff Purchases
      */
-    private List<Discount> itemDiscounts;
+    private float itemTotalDiscount;
+
+    /**
+     * Staff Purchase Discount
+     *
+     */
+    private float staffDiscount;
+
 
 
     public String getFsoLineID() {
@@ -89,14 +96,21 @@ public class Item {
         this.itemTax = itemTax;
     }
 
-    public List<Discount> getItemDiscounts() {
-        return itemDiscounts;
+    public float getItemTotalDiscount() {
+        return itemTotalDiscount;
     }
 
-    public void setItemDiscounts(List<Discount> itemDiscounts) {
-        this.itemDiscounts = itemDiscounts;
+    public void setItemTotalDiscount(float itemTotalDiscount) {
+        this.itemTotalDiscount = itemTotalDiscount;
     }
 
+    public float getStaffDiscount() {
+        return staffDiscount;
+    }
+
+    public void setStaffDiscount(float staffDiscount) {
+        this.staffDiscount = staffDiscount;
+    }
 
     public static class Discount {
 

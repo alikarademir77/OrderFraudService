@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import com.bbyc.orders.model.client.orderdetails.ItemChargeDiscount;
 import org.joda.time.DateTime;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -56,7 +57,9 @@ public abstract class OrderMapper {
             @Mapping(target = "itemUnitPrice", source = "itemCharge.unitPrice"),
             @Mapping(target = "itemQuantity", source = "qtyOrdered"),
             @Mapping(target = "itemTax", ignore = true), // Handled by custom mapping - mapItem_ItemTax()
-            @Mapping(target = "itemDiscounts", source = "itemCharge.discounts") // TODO - Write custom mapping
+            @Mapping(target = "itemTotalDiscount", ignore = true), // Handled by custom mapping - mapItem_Discounts()
+            @Mapping(target = "staffDiscount", ignore = true) // Handled by custom mapping - mapItem_Discounts()
+
     })
     protected abstract Item mapItem(FSOrderLine fsOrderLineToMap);
 
@@ -73,6 +76,29 @@ public abstract class OrderMapper {
         }
     }
 
+    @AfterMapping
+    protected  void mapItem_Discounts(FSOrderLine fsOrderLineToMap, @MappingTarget Item mappedItem){
+        ItemCharge itemChargeToMap = fsOrderLineToMap.getItemCharge();
+        float totalDiscount = 0.00f;
+        float staffDiscount = 0.00f;
+        if(itemChargeToMap == null || itemChargeToMap.getDiscounts() == null){
+            return;
+        }
+
+        for(ItemChargeDiscount discount : itemChargeToMap.getDiscounts()){
+            totalDiscount += discount.getQuantity() * discount.getUnitValue();
+
+
+            if(discount.getCode() != null && discount.getCode().equals("SP")){
+                staffDiscount += discount.getQuantity() * discount.getUnitValue();
+            }
+        }
+
+        mappedItem.setStaffDiscount(staffDiscount);
+        mappedItem.setItemTotalDiscount(totalDiscount);
+
+
+    }
 
     @Mappings({
             @Mapping(target = "purchaseOrderID", source = "id"),
