@@ -1,3 +1,40 @@
 server:
-    port: 8080
+    port: 8090
     contextPath: /orderfraud
+    
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: orders
+ 
+  cloud:
+    stream:
+      bindings:
+        fraudInbound:
+          destination: fraudInbound
+          group: fraudInboundConsumersGroup
+          consumer:
+            concurrency:  20
+            maxAttempts: 1
+        fraudOutbound:
+          destination: fraudOutbound
+      rabbit:
+        bindings:
+          fraudInbound:
+            consumer:
+              autoBindDlq:  true
+              dlqTtl: 5000
+              republishToDlq: true
+              #Using default exchange so dlqDeadLetterExchange is assigned to empty string 
+              dlqDeadLetterExchange: 
+      default: 
+        contentType:  application/json 
+
+messaging:
+  errorRetryCount: 3
+ 
+ 
+ 

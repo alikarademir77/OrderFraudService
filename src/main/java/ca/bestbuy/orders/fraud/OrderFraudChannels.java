@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.bbyc.orders.fraud;
+package ca.bestbuy.orders.fraud;
 
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.Output;
