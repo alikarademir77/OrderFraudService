@@ -5,8 +5,6 @@ import com.bbyc.orders.model.internal.Item
 import com.bbyc.orders.model.internal.Order
 import com.bbyc.orders.model.internal.PaymentDetails
 import com.bbyc.orders.model.internal.PaymentDetails.CreditCard
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.joda.JodaModule
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
@@ -18,18 +16,8 @@ import java.time.LocalDateTime
 
 class OrderMapperTest extends Specification {
 
-    // TODO - Rewrite tests to only test methods from OrderMapper
-
-
-    @Shared
-    FSOrder orderToMap
-
-    @Shared
-    Order mappedOrder
-
     @Shared
     OrderMapper orderDetailsMapper
-
 
     def setupSpec(){
         orderDetailsMapper = Mappers.getMapper(OrderMapper.class)
@@ -162,6 +150,124 @@ class OrderMapperTest extends Specification {
     }
 
 
+    def "Test mapShippingOrderLine()"() {
+
+        given: "A valid FS Order ShippingOrderLine object"
+
+        ShippingOrderLine shippingOrderLineToMap = new ShippingOrderLine()
+
+        Status status = new Status()
+        status.setName("STATUS")
+        status.setDate(DateTime.now())
+        status.setDescription("DESCRIPTION")
+        shippingOrderLineToMap.setStatus(status)
+
+        shippingOrderLineToMap.setId("SHIPPINGORDERLINEID")
+        shippingOrderLineToMap.setFsoLineRefId("FSOLINEREFID")
+        shippingOrderLineToMap.setQtyOrdered(1)
+        shippingOrderLineToMap.setUnitPrice(1.09F)
+        shippingOrderLineToMap.setAvailability("AVAILABLE")
+        shippingOrderLineToMap.setQtyCancelled(3)
+        shippingOrderLineToMap.setQtyShipped(2)
+        shippingOrderLineToMap.setEtaDate(DateTime.now())
+        shippingOrderLineToMap.setInventoryReservationRefId("INVENTORYRESERVATIONREFID")
+        shippingOrderLineToMap.setCancellable(true)
+
+        // Shipping charge 1
+        ShippingCharge shippingCharge = new ShippingCharge()
+        shippingCharge.setUnitPrice(2.54F)
+
+        Tax tax = new Tax()
+        tax.setGst(1.23F)
+        tax.setPst(4.56F)
+        shippingCharge.setTax(tax)
+
+        Discount discount = new Discount()
+        discount.setUnitValue(15.99F)
+        discount.setQuantity(1)
+
+        Discount discount2 = new Discount()
+        discount2.setUnitValue(1.45F)
+        discount2.setQuantity(2)
+
+        Discount discount3 = new Discount()
+        discount3.setUnitValue(34.56F)
+        discount3.setQuantity(1)
+
+        shippingCharge.setDiscounts(Arrays.asList(discount, discount2))
+
+        // Shipping charge 2
+        ShippingCharge shippingCharge2 = new ShippingCharge()
+        shippingCharge2.setUnitPrice(34.56F)
+
+        Tax tax2 = new Tax()
+        tax2.setGst(1.12F)
+        tax2.setPst(2.12F)
+        shippingCharge2.setTax(tax2)
+
+        shippingCharge2.setDiscounts(Arrays.asList(discount3))
+
+        shippingOrderLineToMap.setShippingCharges(Arrays.asList(shippingCharge, shippingCharge2))
+
+
+        // Surcharge 1
+        Surcharge surcharge = new Surcharge()
+        surcharge.setTax(tax)
+        surcharge.setTotalValue(15.66F)
+
+        Surcharge surcharge2 = new Surcharge()
+        surcharge2.setTax(tax)
+        surcharge2.setTotalValue(14.67F)
+
+        shippingOrderLineToMap.setSurcharges(Arrays.asList(surcharge, surcharge, surcharge2))
+
+        float totalShippingCharge = shippingCharge.getUnitPrice() + shippingCharge2.getUnitPrice()
+        float totalShippingDiscount = (discount.getUnitValue() * discount.getQuantity()) + (discount2.getUnitValue() * discount2.getQuantity()) + (discount3.getUnitValue() * discount3.getQuantity())
+        float totalShippingTax = (tax.getPst() + tax.getGst()) + (tax2.getPst() + tax2.getGst())
+        float totalEhf = surcharge.getTotalValue() + surcharge.getTotalValue() + surcharge2.getTotalValue()
+        float totalEhfTax = (tax.getPst() + tax.getGst())*3
+
+
+        when: "OrderMapper.mapShippingOrderLine() is invoked on the FS Order ShippingOrderLine object"
+
+        com.bbyc.orders.model.internal.ShippingOrderLine mappedShippingOrderLine = orderDetailsMapper.mapShippingOrderLine(shippingOrderLineToMap)
+
+        then: "ShippingOrderLine object returned should be mapped correctly"
+
+        mappedShippingOrderLine.getFsoLineRefID() == shippingOrderLineToMap.getFsoLineRefId()
+        mappedShippingOrderLine.getShippingOrderLineID() == shippingOrderLineToMap.getId()
+        mappedShippingOrderLine.getShippingOrderLineStatus() == shippingOrderLineToMap.getStatus().getName()
+        mappedShippingOrderLine.getQuantity() == shippingOrderLineToMap.getQtyOrdered()
+        mappedShippingOrderLine.getShippingCharge() == totalShippingCharge
+        mappedShippingOrderLine.getShippingDiscount() == totalShippingDiscount
+        mappedShippingOrderLine.getShippingTax() == totalShippingTax
+        mappedShippingOrderLine.getEhf() == totalEhf
+        mappedShippingOrderLine.getEhfTax() == totalEhfTax
+
+    }
+
+
+    def "Test mapPaymentDetails()"() {
+
+        given: "A valid FS Order PaymentMethodInfo object"
+
+        PaymentMethodInfo paymentMethodInfoToMap = new PaymentMethodInfo()
+        paymentMethodInfoToMap.setCreditCards(Arrays.asList(new CreditCardInfo(), new CreditCardInfo()))
+        paymentMethodInfoToMap.setGiftCards(Arrays.asList(new GiftCardInfo()))
+
+        when: "OrderMapper.mapCreditCard() is invoked on the FS Order CreditCardInfo object"
+
+        PaymentDetails mappedPaymentDetails = orderDetailsMapper.mapPaymentDetails(paymentMethodInfoToMap)
+
+        then: "PaymentDetails object returned should be mapped correctly"
+
+        mappedPaymentDetails.getCreditCards().size() == paymentMethodInfoToMap.getCreditCards().size()
+        mappedPaymentDetails.getGiftCards().size() == paymentMethodInfoToMap.getGiftCards().size()
+
+        // TODO - Map payPal
+    }
+
+
     def "Test PurchaseOrder Mapper"(){
 
         given: "a valid purchase order object"
@@ -185,7 +291,7 @@ class OrderMapperTest extends Specification {
 
     }
 
-    def "test Shipping Order Mapper"(){
+    def "test Shipping Order Mapper"() {
 
         given: "a valid shipping order"
         float unitPrice1 = 1.00f
@@ -193,7 +299,7 @@ class OrderMapperTest extends Specification {
         float unitPrice3 = 3.00f
         float totalUnitPrice = 0
         float totalTax = 0
-        float totalDiscounts=0
+        float totalDiscounts = 0
 
         ShippingOrder shippingOrderToMap = new ShippingOrder()
         shippingOrderToMap.setId("shippingOrderId")
@@ -205,9 +311,9 @@ class OrderMapperTest extends Specification {
 
 
         List<ShippingCharge> shippingCharges = new ArrayList<>()
-        ShippingCharge shippingCharge1 = createAShippingCharge(0.07f,0.07f,unitPrice1)
-        ShippingCharge shippingCharge2 = createAShippingCharge(0.08f,0.08f,unitPrice2)
-        ShippingCharge shippingCharge3 = createAShippingCharge(0.09f,0.09f,unitPrice3)
+        ShippingCharge shippingCharge1 = createAShippingCharge(0.07f, 0.07f, unitPrice1)
+        ShippingCharge shippingCharge2 = createAShippingCharge(0.08f, 0.08f, unitPrice2)
+        ShippingCharge shippingCharge3 = createAShippingCharge(0.09f, 0.09f, unitPrice3)
 
         shippingCharges.add(shippingCharge1)
         shippingCharges.add(shippingCharge2)
@@ -244,13 +350,13 @@ class OrderMapperTest extends Specification {
         when: "the order mapper is called to map the Shipping Order object to our internal domain object"
         com.bbyc.orders.model.internal.ShippingOrder mappedShippingOrder = orderDetailsMapper.mapShippingOrder(shippingOrderToMap)
 
-        for(int i = 0; i < shippingOrderToMap.getShippingCharges().size(); i++){
+        for (int i = 0; i < shippingOrderToMap.getShippingCharges().size(); i++) {
             ShippingCharge shippingCharge = shippingOrderToMap.getShippingCharges().get(i)
             totalUnitPrice += shippingCharge.getUnitPrice()
             totalTax += shippingOrderToMap.getShippingCharges().get(i).getTax().getGst() + shippingOrderToMap.getShippingCharges().get(i).getTax().getPst()
-            for(int j = 0; j < shippingCharge.getDiscounts().size(); j++){
+            for (int j = 0; j < shippingCharge.getDiscounts().size(); j++) {
                 Discount discount = shippingCharge.getDiscounts().get(j)
-                totalDiscounts += discount.getQuantity()*discount.getUnitValue()
+                totalDiscounts += discount.getQuantity() * discount.getUnitValue()
 
             }
         }
@@ -269,11 +375,152 @@ class OrderMapperTest extends Specification {
         //assertDatesAreEqual(mappedShippingOrder.getDeliveryDate(),shippingOrderToMap.getRequestedCarrier().getLevelOfService().getDeliveryDate() )
         mappedShippingOrder.getShippingAddress() != null
         mappedShippingOrder.getShippingOrderLines().size() == shippingOrderToMap.getShippingOrderLines().size()
+    }
 
+    def "Test mapCreditCard()"() {
+
+        given: "A valid FS Order CreditCardInfo object"
+
+        CreditCardInfo creditCardToMap = new CreditCardInfo()
+        creditCardToMap.setActive(true)
+        creditCardToMap.setInvoicedAmount(125.99F)
+
+        Address billingAddress = new Address()
+        billingAddress.setFirstName("FIRSTNAME")
+        billingAddress.setLastName("LASTNAME")
+        billingAddress.setEmail("EMAIL")
+        billingAddress.setCity("CITY")
+        billingAddress.setProvince("PROVINCE")
+        billingAddress.setCountry("COUNTRY")
+        billingAddress.setPostalCode("POSTALCODE")
+        billingAddress.setPhone("PHONE")
+        billingAddress.setPhoneExt("PHONEEXT")
+        billingAddress.setPhone2("PHONE2")
+        billingAddress.setPhone2Ext("PHONE2EXT")
+        billingAddress.setApartmentNumber("APTNUMBER")
+        billingAddress.setAddress1("ADDRESS1")
+        billingAddress.setAddress2("ADDRESS2")
+        billingAddress.setAddress3("ADDRESS3")
+        billingAddress.setFaxNumber("FAX")
+        creditCardToMap.setBillingAddress(billingAddress)
+
+        creditCardToMap.setCreditCardExpiryDate("EXPIRYDATE")
+        creditCardToMap.setCreditCardHolderName("CREDITCARDHOLDERNAME")
+        creditCardToMap.setCreditCardNumber("CREDITCARDNUMBER")
+        creditCardToMap.setCreditCardType("CREDITCARDTYPE")
+
+        Status avsStatus = new Status()
+        avsStatus.setName("AVSSTATUSNAME")
+        creditCardToMap.setAvsStatus(avsStatus)
+
+        creditCardToMap.setPriority("1")
+
+
+        when: "OrderMapper.mapCreditCard() is invoked on the FS Order CreditCardInfo object"
+
+        CreditCard mappedCreditCard = orderDetailsMapper.mapCreditCard(creditCardToMap)
+
+        then: "CreditCard object returned should be mapped correctly"
+
+        mappedCreditCard.creditCardNumber == creditCardToMap.getCreditCardNumber()
+        mappedCreditCard.creditCardExpiryDate == creditCardToMap.getCreditCardExpiryDate()
+        mappedCreditCard.creditCardType == creditCardToMap.getCreditCardType()
+        assertMappedAddress(mappedCreditCard.billingAddress, creditCardToMap.getBillingAddress())
+
+        // TODO - Map totalAuthorizedAmount, creditCard3dSecureValue, creditCardAvsResponse, creditCardCvvResponse
     }
 
 
-    ShippingCharge createAShippingCharge(float pst, float gst, float unitPrice){
+    def "Test mapGiftCard()"() {
+
+        given: "A valid FS Order GiftCardInfo object"
+
+        GiftCardInfo giftCardToMap = new GiftCardInfo()
+        giftCardToMap.setGiftCardNumber("GIFTCARDNUMBER")
+        giftCardToMap.setGiftCardType("GIFTCARDTYPE")
+        giftCardToMap.setActive(true)
+        giftCardToMap.setGiftCardSecureCode("SECURECODE")
+        giftCardToMap.setInvoicedAmount(12.99F)
+
+
+        when: "OrderMapper.mapGiftCard() is invoked on the FS Order GiftCardInfo object"
+
+        PaymentDetails.GiftCard mappedGiftCard = orderDetailsMapper.mapGiftCard(giftCardToMap)
+
+        then: "GiftCard object returned should be mapped correctly"
+
+        mappedGiftCard.giftCardNumber == giftCardToMap.getGiftCardNumber()
+    }
+
+
+    def "Test mapAddress()"() {
+
+        given: "A valid FS Order Address object"
+
+        Address addressToMap = new Address()
+        addressToMap.setFirstName("FIRSTNAME")
+        addressToMap.setLastName("LASTNAME")
+        addressToMap.setEmail("EMAIL")
+        addressToMap.setCity("CITY")
+        addressToMap.setProvince("PROVINCE")
+        addressToMap.setCountry("COUNTRY")
+        addressToMap.setPostalCode("POSTALCODE")
+        addressToMap.setPhone("PHONE")
+        addressToMap.setPhoneExt("PHONEEXT")
+        addressToMap.setPhone2("PHONE2")
+        addressToMap.setPhone2Ext("PHONE2EXT")
+        addressToMap.setApartmentNumber("APTNUMBER")
+        addressToMap.setAddress1("ADDRESS1")
+        addressToMap.setAddress2("ADDRESS2")
+        addressToMap.setAddress3("ADDRESS3")
+        addressToMap.setFaxNumber("FAX")
+
+        when: "OrderMapper.mapAddress() is invoked on the FS Order Address object"
+
+        com.bbyc.orders.model.internal.Address mappedAddress = orderDetailsMapper.mapAddress(addressToMap)
+
+        then: "Address object returned should be mapped correctly"
+
+        assertMappedAddress(mappedAddress, addressToMap)
+    }
+
+
+    void assertMappedAddress(com.bbyc.orders.model.internal.Address mappedAddress, Address addressToMap) {
+
+        if(addressToMap != null) {
+            assert mappedAddress != null
+        }
+
+        assert mappedAddress.address1 == addressToMap.getAddress1()
+        assert mappedAddress.address2 == addressToMap.getAddress2()
+        assert mappedAddress.city == addressToMap.getCity()
+        assert mappedAddress.country == addressToMap.getCountry()
+        assert mappedAddress.email == addressToMap.getEmail()
+        assert mappedAddress.firstName == addressToMap.getFirstName()
+        assert mappedAddress.lastName == addressToMap.getLastName()
+        assert mappedAddress.phoneNumber == addressToMap.getPhone()
+        assert mappedAddress.postalCode == addressToMap.getPostalCode()
+        assert mappedAddress.province == addressToMap.getProvince()
+        assert mappedAddress.secondaryPhoneNumber == addressToMap.getPhone2()
+    }
+
+
+    void assertDatesAreEqual(LocalDateTime mappedDate, DateTime dateToMap) {
+
+        if (dateToMap != null) {
+            assert mappedDate != null
+        }
+
+        assert mappedDate.getDayOfMonth() == dateToMap.dayOfMonth().get()
+        assert mappedDate.getMonth().getValue() == dateToMap.monthOfYear().get()
+        assert mappedDate.getYear() == dateToMap.year().get()
+        assert mappedDate.getHour() == dateToMap.hourOfDay().get()
+        assert mappedDate.getMinute() == dateToMap.minuteOfHour().get()
+        assert mappedDate.getSecond() == dateToMap.secondOfMinute().get()
+
+    }
+
+    ShippingCharge createAShippingCharge(float pst, float gst, float unitPrice) {
         ShippingCharge shippingCharge = new ShippingCharge()
         List<Discount> discounts = new ArrayList<>()
         Tax tax = new Tax();
@@ -294,280 +541,6 @@ class OrderMapperTest extends Specification {
         shippingCharge.setDiscounts(discounts)
 
         return shippingCharge
-
-    }
-
-
-
-//    def "Test mapping for Order.fsOrderNumber"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        and: "mapper is invoked to map the response to the respective internal domain object"
-//
-//        expect: "Order.fsOrderNumber should be mapped correctly"
-//
-//        mappedOrder.getFsOrderID() == orderToMap.getId()
-//    }
-//
-//
-//    def "Test mapping for Order.ipAddress"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        and: "mapper is invoked to map the response to the respective internal domain object"
-//
-//        expect: "Order.ipAddress should be mapped correctly"
-//
-//        mappedOrder.getIpAddress() == orderToMap.getIpAddress()
-//    }
-//
-//
-//    def "Test mapping for Order.csrSalesRepID"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        and: "mapper is invoked to map the response to the respective internal domain object"
-//
-//        expect: "Order.csrSalesRepID should be mapped correctly"
-//
-//        // TODO map csrSalesRepID
-//    }
-//
-//
-//    def "Test mapping for Order.rewardZoneID"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        and: "mapper is invoked to map the response to the respective internal domain object"
-//
-//        expect: "Order.rewardZoneID should be mapped correctly"
-//
-//        mappedOrder.getRewardZoneID() == orderToMap.getRewardZone().getRewardZoneId()
-//    }
-//
-//
-//    def "Test mapping for Order.webOrderNumber"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        and: "mapper is invoked to map the response to the respective internal domain object"
-//
-//        expect: "Order.webOrderNumber should be mapped correctly"
-//
-//        mappedOrder.getWebOrderRefID() == orderToMap.getWebOrderRefId()
-//    }
-//
-//
-//    def "Test mapping for Order.webOrderCreationDate"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        and: "mapper is invoked to map the response to the respective internal domain object"
-//
-//        expect: "Order.webOrderCreationDate should be mapped correctly"
-//
-//        assertDatesAreEqual(mappedOrder.getWebOrderCreationDate(), orderToMap.getWebOrderCreationDate())
-//    }
-//
-//
-//    def "Test mapping for Order.items"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        and: "mapper is invoked to map the response to the respective internal domain object"
-//
-//        expect: "Order.items should be mapped correctly"
-//
-//        mappedOrder.getItems().size() == orderToMap.getFsOrderLines().size()
-//
-//        for (int i = 0; i < orderToMap.getFsOrderLines().size(); i++) {
-//
-//            Item mappedItem = mappedOrder.getItems().get(i)
-//            FSOrderLine fsOrderLineToMap = orderToMap.getFsOrderLines().get(i)
-//
-//            mappedItem.getFsoLineID() == fsOrderLineToMap.getId()
-//            mappedItem.getName() == fsOrderLineToMap.getProduct().getName()
-//            mappedItem.getItemUnitPrice() == fsOrderLineToMap.getItemCharge().getUnitPrice()
-//            mappedItem.getItemQuantity() == fsOrderLineToMap.getQtyOrdered()
-//            mappedItem.getItemTax() == fsOrderLineToMap.getItemCharge().getTax().getGst() + fsOrderLineToMap.getItemCharge().getTax().getPst()
-//
-//            // TODO map itemDiscounts, category
-//        }
-//
-//    }
-//
-//
-//    def "Test mapping for Order.paymentDetails"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        and: "mapper is invoked to map the response to the respective internal domain object"
-//
-//        expect: "Order.paymentDetails should be mapped correctly"
-//
-//        PaymentDetails mappedPaymentDetails = mappedOrder.getPaymentDetails()
-//        mappedPaymentDetails != null
-//        // Credit cards
-//        mappedPaymentDetails.creditCards.size() == orderToMap.getPaymentMethodInfo().getCreditCards().size()
-//        for (int i = 0; i < orderToMap.getPaymentMethodInfo().getCreditCards().size(); i++) {
-//            assertMappedCreditCard(mappedPaymentDetails.creditCards.get(i), orderToMap.getPaymentMethodInfo().getCreditCards().get(i))
-//        }
-//
-//        // Gift cards
-//        mappedPaymentDetails.giftCards.size() == orderToMap.getPaymentMethodInfo().getGiftCards().size()
-//        for (int i = 0; i < orderToMap.getPaymentMethodInfo().getGiftCards().size(); i++) {
-//
-//            String mappedGiftCardNumber = mappedPaymentDetails.getGiftCards().get(i).giftCardNumber
-//            String giftCardNumberToMap = orderToMap.getPaymentMethodInfo().getGiftCards().get(i).getGiftCardNumber()
-//
-//            assert mappedGiftCardNumber == giftCardNumberToMap
-//        }
-//
-//        // TODO Paypal mapping
-//    }
-//
-//
-//    def "Test mapping for Order.purchaseOrders"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        and: "mapper is invoked to map the response to the respective internal domain object"
-//
-//        expect: "Order.purchaseOrders should be mapped correctly"
-//
-//        mappedOrder.getPurchaseOrders().size() == orderToMap.getPurchaseOrders().size()
-//        for (int i = 0; i < orderToMap.getPurchaseOrders().size(); i++) {
-//
-//            com.bbyc.orders.model.internal.PurchaseOrder mappedPurchaseOrder = mappedOrder.getPurchaseOrders().get(i)
-//            PurchaseOrder purchaseOrderToMap = orderToMap.getPurchaseOrders().get(i)
-//
-//            mappedPurchaseOrder.getPurchaseOrderID() == purchaseOrderToMap.getId()
-//            mappedPurchaseOrder.getPurchaseOrderStatus() == purchaseOrderToMap.getPoSendStatus().getName()
-//            mappedPurchaseOrder.getShippingOrderRefID() == purchaseOrderToMap.getShippingOrderRefId()
-//        }
-//
-//    }
-//
-//
-//    def "Test mapping for Order.shippingOrders"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        and: "mapper is invoked to map the response to the respective internal domain object"
-//
-//        expect: "Order.shippingOrders should be mapped correctly"
-//
-//        mappedOrder.getShippingOrders().size() == orderToMap.getShippingOrders().size()
-//        for (int i = 0; i < orderToMap.getShippingOrders().size(); i++) {
-//
-//            com.bbyc.orders.model.internal.ShippingOrder mappedShippingOrder = mappedOrder.getShippingOrders().get(i)
-//            ShippingOrder shippingOrderToMap = orderToMap.getShippingOrders().get(i)
-//
-//            mappedShippingOrder.getShippingOrderID() == shippingOrderToMap.getId()
-//            mappedShippingOrder.getGlobalContractID() == shippingOrderToMap.getGlobalContractRefId()
-//            mappedShippingOrder.getFulfillmentPartner() == shippingOrderToMap.getFulfillmentPartner()
-//            mappedShippingOrder.getShippingOrderStatus() == shippingOrderToMap.getStatus().getName()
-//            mappedShippingOrder.getShippingMethod() == shippingOrderToMap.getRequestedCarrier().getName()
-//            assertMappedAddress(mappedShippingOrder.getShippingAddress(), shippingOrderToMap.getShipToAddress())
-//
-//            mappedShippingOrder.getShippingOrderLines().size() == shippingOrderToMap.getShippingOrderLines().size()
-//            for (int j = 0; j < shippingOrderToMap.getShippingOrderLines().size(); j++) {
-//
-//                com.bbyc.orders.model.internal.ShippingOrderLine mappedShippingOrderLine = mappedShippingOrder.getShippingOrderLines().get(j)
-//                ShippingOrderLine shippingOrderLineToMap = shippingOrderToMap.getShippingOrderLines().get(j)
-//
-//                assertMappedShippingOrderLine(mappedShippingOrderLine, shippingOrderLineToMap)
-//            }
-//
-//            assertDatesAreEqual(mappedShippingOrder.getDeliveryDate(), shippingOrderToMap.getRequestedCarrier().getLevelOfService().getDeliveryDate())
-//
-//            // TODO map shippingCharge, chargebacks
-//
-//        }
-//
-//
-//    }
-//
-//
-//    def "Test mapping for Order.shippingOrder charges"() {
-//
-//        given: "A valid FS Order response from Order details"
-//
-//        FSOrder fsOrder = new FSOrder()
-//
-//        ShippingOrder shippingOrder = new ShippingOrder()
-//        shippingOrder.setId("1")
-//
-//
-//        shippingOrder.setShippingCharges()
-//
-//
-//    }
-//
-//
-//    void assertMappedCreditCard(CreditCard mappedCreditCard, CreditCardInfo creditCardToMap) {
-//
-//        if (creditCardToMap != null) {
-//            assert mappedCreditCard != null
-//        }
-//
-//        assert mappedCreditCard.creditCardNumber == creditCardToMap.getCreditCardNumber()
-//        assert mappedCreditCard.creditCardType == creditCardToMap.getCreditCardType()
-//        assertMappedAddress(mappedCreditCard.billingAddress, creditCardToMap.getBillingAddress())
-//        assert mappedCreditCard.creditCardExpiryDate == creditCardToMap.getCreditCardExpiryDate()
-//
-//        // TODO Map avsResponse, cvvResponse, totalAuthorizedAmount, secureValue3D
-//    }
-//
-//
-//    void assertMappedShippingOrderLine(com.bbyc.orders.model.internal.ShippingOrderLine mappedShippingOrderLine, ShippingOrderLine shippingOrderLineToMap) {
-//
-//        if (shippingOrderLineToMap != null) {
-//            assert mappedShippingOrderLine != null
-//        }
-//
-//        assert mappedShippingOrderLine.getShippingOrderLineID() == shippingOrderLineToMap.getId()
-//        assert mappedShippingOrderLine.getShippingOrderLineStatus() == shippingOrderLineToMap.getStatus().getName()
-//        assert mappedShippingOrderLine.getQuantity() == shippingOrderLineToMap.getQtyOrdered()
-//        assert mappedShippingOrderLine.getFsoLineRefID() == shippingOrderLineToMap.getFsoLineRefId()
-//        // TODO map shippingCharge, shippingTax, shippingDiscount, ehf, ehfTax
-//
-//    }
-//
-//
-//    void assertMappedAddress(com.bbyc.orders.model.internal.Address mappedAddress, Address addressToMap) {
-//
-//        if (addressToMap != null) {
-//            assert mappedAddress != null
-//        }
-//
-//        assert mappedAddress.address1 == addressToMap.getAddress1()
-//        assert mappedAddress.address2 == addressToMap.getAddress2()
-//        assert mappedAddress.city == addressToMap.getCity()
-//        assert mappedAddress.country == addressToMap.getCountry()
-//        assert mappedAddress.email == addressToMap.getEmail()
-//        assert mappedAddress.firstName == addressToMap.getFirstName()
-//        assert mappedAddress.lastName == addressToMap.getLastName()
-//        assert mappedAddress.phoneNumber == addressToMap.getPhone()
-//        assert mappedAddress.postalCode == addressToMap.getPostalCode()
-//        assert mappedAddress.province == addressToMap.getProvince()
-//        assert mappedAddress.secondaryPhoneNumber == addressToMap.getPhone2()
-//    }
-//
-//
-    void assertDatesAreEqual(LocalDateTime mappedDate, DateTime dateToMap) {
-
-        if (dateToMap != null) {
-            assert mappedDate != null
-        }
-
-        assert mappedDate.getDayOfMonth() == dateToMap.dayOfMonth().get()
-        assert mappedDate.getMonth().getValue() == dateToMap.monthOfYear().get()
-        assert mappedDate.getYear() == dateToMap.year().get()
-        assert mappedDate.getHour() == dateToMap.hourOfDay().get()
-        assert mappedDate.getMinute() == dateToMap.minuteOfHour().get()
-        assert mappedDate.getSecond() == dateToMap.secondOfMinute().get()
 
     }
 
