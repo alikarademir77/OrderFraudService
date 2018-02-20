@@ -1,0 +1,762 @@
+swagger: "2.0"
+info:
+  description: "REST API for retrieving details of an order."
+  version: "1.0.0"
+  title: "Order Details Service REST API"
+  contact:
+    name: "E-Commerce Orders Team"
+    url: "https://confluence.ca.bestbuy.com/display/OR/Orders"
+    email: "eCommCAOrders@bestbuy.com"
+basePath: "/orderdetails"
+tags:
+- name: "order-details-controller"
+  description: "Operations for retrieving details of an FS Order"
+schemes:
+- "http"
+paths:
+  /v1/categories:
+    get:
+      tags:
+      - "order-details-controller"
+      summary: "Get categories to filter details of an FS Order"
+      description: "View list of valid categories that can be used to filter details of an FS Order."
+      operationId: "listFSOrderDetailsCategoriesUsingGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ordertype"
+        in: "query"
+        description: "Type of order for which categories will be retrieved."
+        required: true
+        type: "string"
+        enum:
+        - "FSORDER"
+      responses:
+        200:
+          description: "Successful Operation"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorDetail"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorDetail"
+  /v1/orders/{fsOrderId}:
+    get:
+      tags:
+      - "order-details-controller"
+      summary: "Get a single order by FS Order ID"
+      description: "View details of a specific order by FS Order ID."
+      operationId: "readFSOrderDetailsUsingGET"
+      produces:
+      - "application/json;charset=UTF-8"
+      parameters:
+      - name: "fsOrderId"
+        in: "path"
+        description: "FS Order ID"
+        required: true
+        type: "string"
+      - name: "categories"
+        in: "query"
+        description: "Comma separated list of sub-elements of the order to retrieve"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "Successful Operation"
+          schema:
+            $ref: "#/definitions/FSOrder"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorDetail"
+        404:
+          description: "Resource Not Found"
+          schema:
+            $ref: "#/definitions/ErrorDetail"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorDetail"
+definitions:
+  ActualCarrier:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      levelOfService:
+        $ref: "#/definitions/LevelOfService"
+      shipmentType:
+        type: "string"
+      tracking:
+        $ref: "#/definitions/Tracking"
+  Address:
+    type: "object"
+    properties:
+      address1:
+        type: "string"
+      address2:
+        type: "string"
+      address3:
+        type: "string"
+      apartmentNumber:
+        type: "string"
+      city:
+        type: "string"
+      country:
+        type: "string"
+      email:
+        type: "string"
+      faxNumber:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      phone:
+        type: "string"
+      phoneExt:
+        type: "string"
+      phone2:
+        type: "string"
+      phone2Ext:
+        type: "string"
+      postalCode:
+        type: "string"
+      province:
+        type: "string"
+  Authorization:
+    type: "object"
+    properties:
+      authAmount:
+        type: "string"
+      authCode:
+        type: "string"
+  Bundle:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      seqNum:
+        type: "string"
+  CreditCardInfo:
+    type: "object"
+    properties:
+      active:
+        type: "boolean"
+      avsStatus:
+        $ref: '#/definitions/Status'
+      billingAddress:
+        $ref: '#/definitions/Address'
+      creditCardNumber:
+        type: "string"
+      creditCardType:
+        type: "string"
+      creditCardExpiryDate:
+        type: "string"
+      creditCardHolderName:
+        type: "string"
+      invoicedAmount:
+        type: "number"
+        format: "float"
+      priority:
+        type: "string"
+  Customer:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      homeAddress:
+        $ref: "#/definitions/Address"
+  Discount:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      code:
+        type: "string"
+      description:
+        type: "string"
+      name:
+        type: "string"
+      quantity:
+        type: "integer"
+      ruleName:
+        type: "string"
+      type:
+        type: "string"
+      unitValue:
+        type: "number"
+        format: "float"
+      uom:
+        type: "string"
+  EffectiveDateRange:
+    type: "object"
+    properties:
+      endDate:
+        type: "string"
+        format: "date-time"
+      startDate:
+        type: "string"
+        format: "date-time"
+  ErrorDetail:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        format: "int32"
+        description: "HTTP status code"
+      timestamp:
+        type: "string"
+        format: "date-time"
+        description: "Time when the error occurred"
+      message:
+        type: "string"
+        description: "User friendly error message"
+      debugMessage:
+        type: "string"
+        description: "Message to provide more context to app developer about the error condition"
+      errorCode:
+        type: "string"
+        description: "Error code to indicate message category"
+      path:
+        type: "string"
+        description: "The request URI that resulted in the error"
+  FSOrder:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      bundles:
+        type: "array"
+        items:
+          $ref: "#/definitions/Bundle"
+      customer:
+        $ref: "#/definitions/Customer"
+      fsOrderLines:
+        type: "array"
+        items:
+          $ref: "#/definitions/FSOrderLine"
+      ipAddress:
+        type: "string"
+      paymentMethodInfo:
+        $ref: '#/definitions/PaymentMethodInfo'
+      purchaseOrders:
+        type: "array"
+        items:
+          $ref: '#/definitions/PurchaseOrder'
+      rewardZone:
+        $ref: '#/definitions/RewardZone'
+      shippingModel:
+        $ref: "#/definitions/ShippingModel"
+      shippingOrders:
+        type: "array"
+        items:
+          $ref: '#/definitions/ShippingOrder'
+      status:
+        $ref: '#/definitions/Status'
+      webOrderRefId:
+        type: "string"
+      webOrderCreationDate:
+        type: "string"
+        format: "date-time"
+  FSOrderLine:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      bundle:
+        $ref: "#/definitions/Bundle"
+      etaDate:
+        type: "string"
+        format: "date-time"
+      itemCharge:
+        $ref: "#/definitions/ItemCharge"
+      lineNumber:
+        type: "string"
+      product:
+        $ref: "#/definitions/Product"
+      qtyCancelled:
+        type: "integer"
+      qtyOnSpecialOrder:
+        type: "integer"
+      qtyOrdered:
+        type: "integer"
+      releaseDate:
+        type: "string"
+        format: "date-time"
+      status:
+        $ref: "#/definitions/FSOrderLineStatus"
+      uom:
+        type: "string"
+  FSOrderLineStatus:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+      date:
+        type: "string"
+        format: "date-time"
+      cancelReason:
+        type: "string"
+  FulfillmentLocationIdentifier:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      address:
+        $ref: "#/definitions/Address"
+  FulfillmentPartner:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "ID of fulfillment partner"
+      name:
+        type: "string"
+        description: "Name of fulfillment partner"
+      type:
+        type: "string"
+      ffpPORefId:
+        type: "string"
+        description: "Purchase order ID of fulfillment partner"
+  FulfillmentPartnerProduct:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      rmsSKU:
+        type: "string"
+      vpn:
+        type: "string"
+  GiftCardInfo:
+    type: "object"
+    properties:
+      active:
+        type: "boolean"
+      giftCardNumber:
+        type: "string"
+      giftCardType:
+        type: "string"
+      giftCardSecureCode:
+        type: "string"
+      invoicedAmount:
+        type: "number"
+        format: "float"
+  ItemCharge:
+    type: "object"
+    properties:
+      discounts:
+        type: "array"
+        items:
+          $ref: "#/definitions/ItemChargeDiscount"
+      discountedUnitPrice:
+        type: "number"
+        format: "float"
+      tax:
+        $ref: "#/definitions/Tax"
+      unitPrice:
+        type: "number"
+        format: "float"
+  ItemChargeDiscount:
+    type: "object"
+    properties:
+      authId:
+        type: "string"
+      code:
+        type: "string"
+      description:
+        type: 'string'
+      id:
+        type: "string"
+      name:
+        type: "string"
+      quantity:
+        type: "integer"
+      ruleName:
+        type: "string"
+      type:
+        type: "string"
+      unitValue:
+        type: 'number'
+        format: "float"
+      uom:
+        type: 'string'
+  LevelOfService:
+    type: "object"
+    properties:
+      carrierCode:
+        type: "string"
+      deliveryDate:
+        type: "string"
+        format: "date-time"
+      id:
+        type: "string"
+      name:
+        type: "string"
+      requiresInsurance:
+        type: "boolean"
+      requiresSignature:
+        type: "boolean"
+      sameDayDelivery:
+        type: "boolean"
+  PaymentInfo:
+    type: "object"
+    properties:
+      authorization:
+        $ref: "#/definitions/Authorization"
+      paymentId:
+        type: "string"
+      status:
+        $ref: "#/definitions/Status"
+  PaymentMethodInfo:
+    type: "object"
+    properties:
+      creditCards:
+        type: "array"
+        items:
+          $ref: '#/definitions/CreditCardInfo'
+      giftCards:
+        type: "array"
+        items:
+          $ref: '#/definitions/GiftCardInfo'
+      payPal:
+        type: "array"
+        items:
+          $ref: '#/definitions/PayPalInfo'
+      posPayments:
+        type: "array"
+        items:
+          $ref: '#/definitions/POSPaymentInfo'
+  PayPalInfo:
+    type: "object"
+    properties:
+      active:
+        type: "boolean"
+      avsStatus:
+        $ref: '#/definitions/Status'
+      invoicedAmount:
+        type: "number"
+        format: "float"
+      payPalInternalRefId:
+        type: "string"
+      priority:
+        type: "string"
+  POSPaymentInfo:
+    type: "object"
+    properties:
+      active:
+        type: "boolean"
+      id:
+        type: "string"
+      priority:
+        type: "string"
+  Product:
+    type: "object"
+    properties:
+      mfr:
+        type: "string"
+      name:
+        type: "string"
+      productServicePlan:
+        $ref: "#/definitions/ProductServicePlan"
+      serialNumbers:
+        type: "array"
+        items:
+          type: "string"
+      sku:
+        type: "string"
+  ProductServicePlan:
+    type: "object"
+    properties:
+      effectiveDateRange:
+        $ref: "#/definitions/EffectiveDateRange"
+      pspCoveredSerialNumbers:
+        type: "array"
+        items:
+          type: "string"
+      term:
+        $ref: "#/definitions/Term"
+  PurchaseOrder:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      creationDate:
+        type: "string"
+        format: "date-time"
+      fulfillmentPartner:
+        $ref: '#/definitions/FulfillmentPartner'
+      poSendStatus:
+        $ref: '#/definitions/Status'
+      purchaseOrderLines:
+        type: "array"
+        items:
+          $ref: '#/definitions/PurchaseOrderLine'
+      shippingOrderRefId:
+        type: "string"
+  PurchaseOrderLine:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      availability:
+        type: 'string'
+      deliveryDate:
+        type: "string"
+        format: "date-time"
+      etaDate:
+        type: "string"
+        format: "date-time"
+      fulfillmentPartnerPOLineRefId:
+        type: "string"
+      fulfillmentPartnerProduct:
+        $ref: '#/definitions/FulfillmentPartnerProduct'
+      fulfillmentLocationIdentifier:
+        $ref: "#/definitions/FulfillmentLocationIdentifier"
+      fsoLineRefId:
+        type: "string"
+      qtyAllocated:
+        type: "integer"
+      qtyBackordered:
+        type: "integer"
+      qtyOrdered:
+        type: "integer"
+      releaseDate:
+        type: "string"
+        format: "date-time"
+      shippingOrderLineRefId:
+        type: "string"
+  RequestedCarrier:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      levelOfService:
+        $ref: "#/definitions/LevelOfService"
+      name:
+        type: "string"
+  RewardZone:
+    type: "object"
+    properties:
+      rewardZoneId:
+        type: "string"
+  ShipFromAddress:
+    type: "object"
+    properties:
+      address1:
+        type: "string"
+      address2:
+        type: "string"
+      address3:
+        type: "string"
+      apartmentNumber:
+        type: "string"
+      city:
+        type: "string"
+      country:
+        type: "string"
+      email:
+        type: "string"
+      faxNumber:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      locationId:
+        type: "string"
+      phone:
+        type: "string"
+      phoneExt:
+        type: "string"
+      phone2:
+        type: "string"
+      phone2Ext:
+        type: "string"
+      postalCode:
+        type: "string"
+      province:
+        type: "string"
+  ShippingCharge:
+    type: "object"
+    properties:
+      description:
+        type: "string"
+      discounts:
+        type: "array"
+        items:
+          $ref: "#/definitions/Discount"
+      sku:
+        type: "string"
+      tax:
+        $ref: "#/definitions/Tax"
+      type:
+        type: "string"
+      unitPrice:
+        type: "number"
+        format: "float"
+  ShippingModel:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+  ShippingOrder:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      actualCarrier:
+        $ref: "#/definitions/ActualCarrier"
+      globalContractRefId:
+        type: "string"
+      fulfillmentMethod:
+        type: "string"
+      fulfillmentPartner:
+        type: "string"
+      isCustomerInvoiceAvailable:
+        type: "boolean"
+      paymentInfo:
+        $ref: "#/definitions/PaymentInfo"
+      requestedCarrier:
+        $ref: "#/definitions/RequestedCarrier"
+      requestedDeliveryDate:
+        type: "string"
+        format: "date-time"
+      shipFromAddress:
+        $ref: '#/definitions/ShipFromAddress'
+      shipToAddress:
+        $ref: '#/definitions/Address'
+      shipmentDate:
+        type: "string"
+        format: "date-time"
+      shippingCharges:
+        type: "array"
+        items:
+          $ref: "#/definitions/ShippingCharge"
+      shippingOrderLines:
+        type: "array"
+        items:
+          $ref: '#/definitions/ShippingOrderLine'
+      status:
+        $ref: '#/definitions/Status'
+      storeToFulfillFrom:
+        type: "string"
+      type:
+        type: "string"
+  ShippingOrderLine:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      availability:
+        type: "string"
+      cancellable:
+        type: "boolean"
+      etaDate:
+        type: "string"
+        format: "date-time"
+      fsoLineRefId:
+        type: "string"
+      inventoryReservationRefId:
+        type: "string"
+      qtyCancelled:
+        type: "integer"
+      qtyOrdered:
+        type: "integer"
+      qtyShipped:
+        type: "integer"
+      shippingCharges:
+        type: "array"
+        items:
+          $ref: "#/definitions/ShippingCharge"
+      status:
+        $ref: '#/definitions/Status'
+      surcharges:
+        type: "array"
+        items:
+          $ref: "#/definitions/Surcharge"
+      unitPrice:
+        type: "number"
+        format: "float"
+  Status:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+      date:
+        type: "string"
+        format: "date-time"
+  Surcharge:
+    type: "object"
+    properties:
+      description:
+        type: "string"
+      discounts:
+        type: "array"
+        items:
+          $ref: "#/definitions/Discount"
+      endDate:
+        type: "string"
+        format: "date-time"
+      id:
+        type: "string"
+      quantity:
+        type: "integer"
+      separateLine:
+        type: "string"
+      sku:
+        type: "string"
+      startDate:
+        type: "string"
+        format: "date-time"
+      tax:
+        $ref: "#/definitions/Tax"
+      totalValue:
+        type: "number"
+        format: "float"
+      type:
+        type: "string"
+  Tax:
+    type: "object"
+    properties:
+      gst:
+        type: "number"
+        format: "float"
+      pst:
+        type: "number"
+        format: "float"
+  Term:
+    type: "object"
+    properties:
+      length:
+        type: "integer"
+      unitOfTerm:
+        type: "string"
+  Tracking:
+    type: "object"
+    properties:
+      trackingHttpMethod:
+        type: "string"
+      trackingNumbers:
+        type: "array"
+        items:
+          type: "string"
+      trackingParameter:
+        type: "string"
+      trackingURL:
+        type: "string"

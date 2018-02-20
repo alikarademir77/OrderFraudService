@@ -1,6 +1,6 @@
 server:
-    port: 8090
-    contextPath: /orderfraud
+  port: 8090
+  contextPath: /orderfraud
     
 spring:
   rabbitmq:
@@ -35,6 +35,18 @@ spring:
 
 messaging:
   errorRetryCount: 3
- 
- 
- 
+
+client:
+  order-details:
+    connection:
+      url: http://localhost:8080/orderdetails
+      getOrderDetailsEndpoint: /v1/fsorders
+      keystore-path: ~
+      keystore-password: ~
+      keystore-type: ~
+      key-alias: ~
+      key-password: ~
+      truststore-path: ~
+      truststore-password: ~
+      truststore-type: JKS
+      tls-enabled: false
