@@ -22,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClientConfig;
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.MessageConsumingService;
@@ -47,6 +48,9 @@ public class OrderFraudServiceMessageConsumptionTest {
 
 	@MockBean
 	private OrderDetailsClientConfig orderDetailsClientConfig;
+	
+	@MockBean
+	OrderDetailsClient orderDetailsClient;
 	    
     @Test
     public void contextLoadsAndWiring() {

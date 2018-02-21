@@ -26,7 +26,7 @@ spring:
           fraudInbound:
             consumer:
               autoBindDlq:  true
-              dlqTtl: 5000
+              dlqTtl: 10000
               republishToDlq: true
               #Using default exchange so dlqDeadLetterExchange is assigned to empty string 
               dlqDeadLetterExchange: 

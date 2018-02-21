@@ -2,6 +2,8 @@ package ca.bestbuy.orders.fraud;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -15,7 +17,6 @@ import org.springframework.messaging.handler.annotation.Header;
 import ca.bestbuy.foundation.logging.LoggingContextFilter;
 import ca.bestbuy.orders.messaging.MessageConsumingService;
 import ca.bestbuy.orders.messaging.MessagingEvent;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author akaradem
@@ -24,9 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
 @EnableBinding(OrderFraudChannels.class)
-@Slf4j
 public class OrderFraudServiceApplication {
-
+	private Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Value("${messaging.errorRetryCount}")
 	private Long errorRetryCount; 
 
@@ -53,7 +54,7 @@ public class OrderFraudServiceApplication {
 			}
 			if (count >= errorRetryCount) {
 	            // giving up - don't send to DLX
-//				log.info("Reached retry limit for event (" + event + ")..");
+				log.info("Reached retry limit for event (" + event + ")..");
 				return;
 	        }
 			throw ex;
