@@ -1,10 +1,12 @@
 package ca.bestbuy.orders.fraud.mappers;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -70,8 +72,24 @@ public abstract class OrderMapper {
         if (itemChargeToMap != null) {
             Tax taxToMap = itemChargeToMap.getTax();
             if (taxToMap != null) {
-                float totalTax = taxToMap.getGst() + taxToMap.getPst();
-                mappedItem.setItemTax(totalTax);
+                try {
+                    BigDecimal totalTax = new BigDecimal(0.0);
+
+                    if(!StringUtils.isBlank(taxToMap.getGst())) {
+                        BigDecimal gst = new BigDecimal(taxToMap.getGst());
+                        totalTax = totalTax.add(gst);
+                    }
+
+                    if(!StringUtils.isBlank(taxToMap.getPst())) {
+                        BigDecimal pst = new BigDecimal(taxToMap.getPst());
+                        totalTax = totalTax.add(pst);
+                    }
+
+                    mappedItem.setItemTax(totalTax);
+
+                } catch (NumberFormatException e) {
+                    throw new IllegalStateException("Error while trying to map Order Detail Response to Order Fraud Service domain objects - mapItem_ItemTax()", e);
+                }
             }
         }
     }
@@ -79,25 +97,36 @@ public abstract class OrderMapper {
     @AfterMapping
     protected  void mapItem_Discounts(FSOrderLine fsOrderLineToMap, @MappingTarget Item mappedItem){
         ItemCharge itemChargeToMap = fsOrderLineToMap.getItemCharge();
-        float totalDiscount = 0.00f;
-        float staffDiscount = 0.00f;
+        BigDecimal totalDiscount = new BigDecimal(0.0);
+        BigDecimal staffDiscount = new BigDecimal(0.0);
+
         if(itemChargeToMap == null || itemChargeToMap.getDiscounts() == null){
             return;
         }
 
         for(ItemChargeDiscount discount : itemChargeToMap.getDiscounts()){
-            totalDiscount += discount.getQuantity() * discount.getUnitValue();
 
+            try {
 
-            if(discount.getCode() != null && discount.getCode().equals("SP")){
-                staffDiscount += discount.getQuantity() * discount.getUnitValue();
+                if(!StringUtils.isBlank(discount.getUnitValue())) {
+                    BigDecimal quantity = new BigDecimal(discount.getQuantity());
+                    BigDecimal unitValue = new BigDecimal(discount.getUnitValue());
+
+                    totalDiscount = totalDiscount.add(quantity.multiply(unitValue));
+
+                    if(discount.getCode() != null && discount.getCode().equals("SP")){
+                        staffDiscount = staffDiscount.add(quantity.multiply(unitValue));
+                    }
+
+                }
+
+            } catch (NumberFormatException e) {
+                throw new IllegalStateException("Error while trying to map Order Detail Response to Order Fraud Service domain objects - mapItem_Discounts()", e);
             }
         }
 
         mappedItem.setStaffDiscount(staffDiscount);
         mappedItem.setItemTotalDiscount(totalDiscount);
-
-
     }
 
     @Mappings({
@@ -128,9 +157,9 @@ public abstract class OrderMapper {
     @AfterMapping
     protected void mapShippingOrder_ShippingChargesAndTax(ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingOrder shippingOrderToMap, @MappingTarget ShippingOrder mappedShippingOrder) {
 
-        float totalShippingCharge = 0.0f;
-        float totalShippingChargeTax = 0.0f;
-        float totalShippingDiscount = 0.0f;
+        BigDecimal totalShippingCharge = new BigDecimal(0.0);
+        BigDecimal totalShippingChargeTax = new BigDecimal(0.0);
+        BigDecimal totalShippingDiscount = new BigDecimal(0.0);
 
         if (shippingOrderToMap.getShippingCharges() == null) {
             return;
@@ -138,22 +167,46 @@ public abstract class OrderMapper {
 
         for (ShippingCharge shippingChargeToMap : shippingOrderToMap.getShippingCharges()) {
 
-            // Add shipping charge to total shipping charge
-            totalShippingCharge += shippingChargeToMap.getUnitPrice();
+            if(!StringUtils.isBlank(shippingChargeToMap.getUnitPrice())) {
+                try {
+                    BigDecimal shippingCharge = new BigDecimal(shippingChargeToMap.getUnitPrice());
+                    totalShippingCharge = totalShippingCharge.add(shippingCharge);
+                } catch (NumberFormatException e) {
+                    throw new IllegalStateException("Error while trying to map Order Detail Response to Order Fraud Service domain objects - mapShippingOrder_ShippingChargesAndTax() - shipping charge", e);
+                }
+            }
 
             // Add shipping charge tax to total shipping charge tax
             Tax shippingChargeTaxToMap = shippingChargeToMap.getTax();
             if (shippingChargeTaxToMap != null) {
-                totalShippingChargeTax += shippingChargeTaxToMap.getGst();
-                totalShippingChargeTax += shippingChargeTaxToMap.getPst();
+                try {
+                    if(!StringUtils.isBlank(shippingChargeTaxToMap.getGst())) {
+                        BigDecimal gst = new BigDecimal(shippingChargeTaxToMap.getGst());
+                        totalShippingChargeTax = totalShippingChargeTax.add(gst);
+                    }
+
+                    if(!StringUtils.isBlank(shippingChargeTaxToMap.getPst())) {
+                        BigDecimal pst = new BigDecimal(shippingChargeTaxToMap.getPst());
+                        totalShippingChargeTax = totalShippingChargeTax.add(pst);
+                    }
+                } catch (NumberFormatException e) {
+                    throw new IllegalStateException("Error while trying to map Order Detail Response to Order Fraud Service domain objects - mapShippingOrder_ShippingChargesAndTax() - shipping tax", e);
+                }
             }
 
-
-            if (shippingChargeToMap.getDiscounts() != null) {
+            List<Discount> shippingDiscounts = shippingChargeToMap.getDiscounts();
+            if (shippingDiscounts != null) {
                 // Add shipping charge discounts to total shipping charge discounts
-                List<Discount> shippingDiscounts = shippingChargeToMap.getDiscounts();
                 for (Discount shippingDiscount : shippingDiscounts) {
-                    totalShippingDiscount += (shippingDiscount.getUnitValue() * shippingDiscount.getQuantity());
+                    try {
+                        if(!StringUtils.isBlank(shippingDiscount.getUnitValue())) {
+                            BigDecimal quantity = new BigDecimal(shippingDiscount.getQuantity());
+                            BigDecimal unitValue = new BigDecimal(shippingDiscount.getUnitValue());
+                            totalShippingDiscount = totalShippingDiscount.add(quantity.multiply(unitValue));
+                        }
+                    } catch (NumberFormatException e) {
+                        throw new IllegalStateException("Error while trying to map Order Detail Response to Order Fraud Service domain objects - mapShippingOrder_ShippingChargesAndTax() - shipping discount", e);
+                    }
                 }
             }
 
@@ -182,9 +235,9 @@ public abstract class OrderMapper {
     @AfterMapping
     protected void mapShippingOrderLine_ShippingChargesAndTax(ShippingOrderLine shippingOrderLineToMap, @MappingTarget ca.bestbuy.orders.fraud.model.internal.ShippingOrderLine mappedShippingOrderLine) {
 
-        float totalShippingCharge = 0.0f;
-        float totalShippingChargeTax = 0.0f;
-        float totalShippingDiscount = 0.0f;
+        BigDecimal totalShippingCharge = new BigDecimal(0.0);
+        BigDecimal totalShippingChargeTax = new BigDecimal(0.0);
+        BigDecimal totalShippingDiscount = new BigDecimal(0.0);
 
         if (shippingOrderLineToMap.getShippingCharges() == null) {
             return;
@@ -193,19 +246,49 @@ public abstract class OrderMapper {
         for (ShippingCharge shippingLineChargeToMap : shippingOrderLineToMap.getShippingCharges()) {
 
             // Add shipping charge to total shipping charge
-            totalShippingCharge += shippingLineChargeToMap.getUnitPrice();
+            if(!StringUtils.isBlank(shippingLineChargeToMap.getUnitPrice())) {
+                try {
+                    BigDecimal shippingCharge = new BigDecimal(shippingLineChargeToMap.getUnitPrice());
+                    totalShippingCharge = totalShippingCharge.add(shippingCharge);
+                } catch (NumberFormatException e) {
+                    throw new IllegalStateException("Error while trying to map Order Detail Response to Order Fraud Service domain objects - mapShippingOrderLine_ShippingChargesAndTax() - shipping line charge", e);
+                }
+            }
 
             // Add shipping charge tax to total shipping charge tax
             Tax shippingChargeTaxToMap = shippingLineChargeToMap.getTax();
             if (shippingChargeTaxToMap != null) {
-                totalShippingChargeTax += shippingChargeTaxToMap.getGst();
-                totalShippingChargeTax += shippingChargeTaxToMap.getPst();
+
+                try {
+                    if(!StringUtils.isBlank(shippingChargeTaxToMap.getGst())) {
+                        BigDecimal gst = new BigDecimal(shippingChargeTaxToMap.getGst());
+                        totalShippingChargeTax = totalShippingChargeTax.add(gst);
+                    }
+
+                    if(!StringUtils.isBlank(shippingChargeTaxToMap.getPst())) {
+                        BigDecimal pst = new BigDecimal(shippingChargeTaxToMap.getPst());
+                        totalShippingChargeTax = totalShippingChargeTax.add(pst);
+                    }
+                } catch (NumberFormatException e) {
+                    throw new IllegalStateException("Error while trying to map Order Detail Response to Order Fraud Service domain objects - mapShippingOrderLine_ShippingChargesAndTax() - shipping line tax", e);
+                }
             }
 
             // Add shipping charge discounts to total shipping charge discounts
             List<Discount> shippingDiscounts = shippingLineChargeToMap.getDiscounts();
             for (Discount shippingLineDiscount : shippingDiscounts) {
-                totalShippingDiscount += (shippingLineDiscount.getUnitValue() * shippingLineDiscount.getQuantity());
+                try {
+
+                    if(!StringUtils.isBlank(shippingLineDiscount.getUnitValue())) {
+                        BigDecimal quantity = new BigDecimal(shippingLineDiscount.getQuantity());
+                        BigDecimal unitValue = new BigDecimal(shippingLineDiscount.getUnitValue());
+
+                        totalShippingDiscount = totalShippingDiscount.add(quantity.multiply(unitValue));
+                    }
+
+                } catch (NumberFormatException e) {
+                    throw new IllegalStateException("Error while trying to map Order Detail Response to Order Fraud Service domain objects - mapShippingOrderLine_ShippingChargesAndTax() - shipping line discount", e);
+                }
             }
 
         }
@@ -219,8 +302,8 @@ public abstract class OrderMapper {
     @AfterMapping
     protected void mapShippingOrderLine_Surcharges(ShippingOrderLine shippingOrderLineToMap, @MappingTarget ca.bestbuy.orders.fraud.model.internal.ShippingOrderLine mappedShippingOrderLine) {
 
-        float totalEhf = 0.0f;
-        float totalEhfTax = 0.0f;
+        BigDecimal totalEhf = new BigDecimal(0.0);
+        BigDecimal totalEhfTax = new BigDecimal(0.0);
 
         if (shippingOrderLineToMap.getSurcharges() == null) {
             return;
@@ -229,13 +312,32 @@ public abstract class OrderMapper {
         for (Surcharge shippingLineSurchargeToMap : shippingOrderLineToMap.getSurcharges()) {
 
             // Add surcharge to total ehf
-            totalEhf += shippingLineSurchargeToMap.getTotalValue();
+            if(!StringUtils.isBlank(shippingLineSurchargeToMap.getTotalValue())) {
+                try {
+                    BigDecimal shippingLineSurcharge = new BigDecimal(shippingLineSurchargeToMap.getTotalValue());
+                    totalEhf = totalEhf.add(shippingLineSurcharge);
+                } catch (NumberFormatException e) {
+                    throw new IllegalStateException("Error while trying to map Order Detail Response to Order Fraud Service domain objects - mapShippingOrderLine_Surcharges() - shipping line ehf", e);
+                }
+            }
 
             // Add ehf tax to total ehf tax
             Tax surchargeTaxToMap = shippingLineSurchargeToMap.getTax();
             if (surchargeTaxToMap != null) {
-                totalEhfTax += surchargeTaxToMap.getGst();
-                totalEhfTax += surchargeTaxToMap.getPst();
+
+                try {
+                    if(!StringUtils.isBlank(surchargeTaxToMap.getGst())) {
+                        BigDecimal gst = new BigDecimal(surchargeTaxToMap.getGst());
+                        totalEhfTax = totalEhfTax.add(gst);
+                    }
+
+                    if(!StringUtils.isBlank(surchargeTaxToMap.getPst())) {
+                        BigDecimal pst = new BigDecimal(surchargeTaxToMap.getPst());
+                        totalEhfTax = totalEhfTax.add(pst);
+                    }
+                } catch (NumberFormatException e) {
+                    throw new IllegalStateException("Error while trying to map Order Detail Response to Order Fraud Service domain objects - mapShippingOrderLine_Surcharges() - shipping line ehf tax", e);
+                }
             }
 
         }

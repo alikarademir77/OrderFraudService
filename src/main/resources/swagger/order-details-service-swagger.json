@@ -1,0 +1,1427 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "REST API for rertrieving details of various order types.",
+    "version": "1",
+    "title": "Order Details Service REST API",
+    "contact": {
+      "name": "EComm Orders Team",
+      "url": "https://confluence.ca.bestbuy.com/display/OR/Orders",
+      "email": "eCommCAOrders@bestbuy.com"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/orderdetails",
+  "tags": [
+    {
+      "name": "order-details-controller",
+      "description": "Operations for retrieving details of an FS Order"
+    }
+  ],
+  "paths": {
+    "/v1/categories": {
+      "get": {
+        "tags": [
+          "order-details-controller"
+        ],
+        "summary": "View list of valid categories that can be used to filter details of an FS Order",
+        "operationId": "listFSOrderDetailsCategoriesUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "ordertype",
+            "in": "query",
+            "description": "Type of order for which categories will be retrieved.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "FSORDER"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorDetail"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorDetail"
+            }
+          }
+        }
+      }
+    },
+    "/v1/fsorders/{fsOrderId}": {
+      "get": {
+        "tags": [
+          "order-details-controller"
+        ],
+        "summary": "View details of a specific FS Order by id",
+        "operationId": "readFSOrderDetailsUsingGET",
+        "produces": [
+          "application/json;charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "fsOrderId",
+            "in": "path",
+            "description": "FS Order Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "categories",
+            "in": "query",
+            "description": "Comma separated list of sub elements of the order detail to retrieve. Elements can be specified by path of the element in object graph starting from root using dot notation.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/FSOrder"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorDetail"
+            }
+          },
+          "404": {
+            "description": "Resource Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorDetail"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorDetail"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ActualCarrier": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "levelOfService": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/LevelOfService"
+        },
+        "shipmentType": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "tracking": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Tracking"
+        }
+      },
+      "title": "ActualCarrier"
+    },
+    "Address": {
+      "type": "object",
+      "properties": {
+        "address1": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "address2": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "address3": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "apartmentNumber": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "city": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "country": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "email": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "faxNumber": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "firstName": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "lastName": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "phone": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "phone2": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "phone2Ext": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "phoneExt": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "postalCode": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "province": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Address"
+    },
+    "Authorization": {
+      "type": "object",
+      "properties": {
+        "authAmount": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "authCode": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Authorization"
+    },
+    "Bundle": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "seqNum": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Bundle"
+    },
+    "CreditCardInfo": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        },
+        "avsStatus": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Status"
+        },
+        "billingAddress": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Address"
+        },
+        "creditCardExpiryDate": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "creditCardHolderName": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "creditCardNumber": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "creditCardType": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "invoicedAmount": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "priority": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "CreditCardInfo"
+    },
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "homeAddress": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Address"
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Customer"
+    },
+    "Discount": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "description": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "name": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "ruleName": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "type": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "unitValue": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "uom": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Discount"
+    },
+    "EffectiveDateRange": {
+      "type": "object",
+      "properties": {
+        "endDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "EffectiveDateRange"
+    },
+    "ErrorDetail": {
+      "type": "object",
+      "properties": {
+        "debugMessage": {
+          "type": "string",
+          "description": "Message to provide more context to app developer about the error condition",
+          "allowEmptyValue": false
+        },
+        "errorCode": {
+          "type": "string",
+          "description": "Error code to indicate message category",
+          "allowEmptyValue": false
+        },
+        "message": {
+          "type": "string",
+          "description": "User friendly error message",
+          "allowEmptyValue": false
+        },
+        "path": {
+          "type": "string",
+          "description": "The request URI that resulted in the error",
+          "allowEmptyValue": false
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code",
+          "allowEmptyValue": false
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Time when the error occurred",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "ErrorDetail"
+    },
+    "FSOrder": {
+      "type": "object",
+      "properties": {
+        "bundles": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/Bundle"
+          }
+        },
+        "customer": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Customer"
+        },
+        "fsOrderLines": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/FSOrderLine"
+          }
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "ipAddress": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "paymentMethodInfo": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/PaymentMethodInfo"
+        },
+        "purchaseOrders": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/PurchaseOrder"
+          }
+        },
+        "rewardZone": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/RewardZone"
+        },
+        "shippingModel": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/ShippingModel"
+        },
+        "shippingOrders": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/ShippingOrder"
+          }
+        },
+        "status": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Status"
+        },
+        "webOrderCreationDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "webOrderRefId": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "FSOrder"
+    },
+    "FSOrderLine": {
+      "type": "object",
+      "properties": {
+        "bundle": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Bundle"
+        },
+        "etaDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "itemCharge": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/ItemCharge"
+        },
+        "lineNumber": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "product": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Product"
+        },
+        "qtyCancelled": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "qtyOnSpecialOrder": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "qtyOrdered": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "releaseDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "status": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/FSOrderLineStatus"
+        },
+        "uom": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "FSOrderLine"
+    },
+    "FSOrderLineStatus": {
+      "type": "object",
+      "properties": {
+        "cancelReason": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "description": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "name": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "FSOrderLineStatus"
+    },
+    "FulfillmentLocationIdentifier": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Address"
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "FulfillmentLocationIdentifier"
+    },
+    "FulfillmentPartner": {
+      "type": "object",
+      "properties": {
+        "ffpPORefId": {
+          "type": "string",
+          "description": "Purchase order ID of fulfillment partner",
+          "allowEmptyValue": false
+        },
+        "id": {
+          "type": "string",
+          "description": "ID of fulfillment partner",
+          "allowEmptyValue": false
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of fulfillment partner",
+          "allowEmptyValue": false
+        },
+        "type": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "FulfillmentPartner"
+    },
+    "FulfillmentPartnerProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "rmsSKU": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "vpn": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "FulfillmentPartnerProduct"
+    },
+    "GiftCardInfo": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        },
+        "giftCardNumber": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "giftCardSecureCode": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "giftCardType": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "invoicedAmount": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "GiftCardInfo"
+    },
+    "ItemCharge": {
+      "type": "object",
+      "properties": {
+        "discountedUnitPrice": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "discounts": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/ItemChargeDiscount"
+          }
+        },
+        "tax": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Tax"
+        },
+        "unitPrice": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "ItemCharge"
+    },
+    "ItemChargeDiscount": {
+      "type": "object",
+      "properties": {
+        "authId": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "code": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "description": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "name": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "ruleName": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "type": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "unitValue": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "uom": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "ItemChargeDiscount"
+    },
+    "LevelOfService": {
+      "type": "object",
+      "properties": {
+        "carrierCode": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "deliveryDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "name": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "requiresInsurance": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        },
+        "requiresSignature": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        },
+        "sameDayDelivery": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        }
+      },
+      "title": "LevelOfService"
+    },
+    "POSPaymentInfo": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "priority": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "POSPaymentInfo"
+    },
+    "PayPalInfo": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        },
+        "avsStatus": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Status"
+        },
+        "invoicedAmount": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "payPalInternalRefId": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "priority": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "PayPalInfo"
+    },
+    "PaymentInfo": {
+      "type": "object",
+      "properties": {
+        "authorization": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Authorization"
+        },
+        "paymentId": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "status": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Status"
+        }
+      },
+      "title": "PaymentInfo"
+    },
+    "PaymentMethodInfo": {
+      "type": "object",
+      "properties": {
+        "creditCards": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/CreditCardInfo"
+          }
+        },
+        "giftCards": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/GiftCardInfo"
+          }
+        },
+        "payPal": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/PayPalInfo"
+          }
+        },
+        "posPayments": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/POSPaymentInfo"
+          }
+        }
+      },
+      "title": "PaymentMethodInfo"
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "mfr": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "name": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "productServicePlan": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/ProductServicePlan"
+        },
+        "serialNumbers": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "type": "string"
+          }
+        },
+        "sku": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Product"
+    },
+    "ProductServicePlan": {
+      "type": "object",
+      "properties": {
+        "effectiveDateRange": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/EffectiveDateRange"
+        },
+        "pspCoveredSerialNumbers": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "type": "string"
+          }
+        },
+        "term": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Term"
+        }
+      },
+      "title": "ProductServicePlan"
+    },
+    "PurchaseOrder": {
+      "type": "object",
+      "properties": {
+        "creationDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "fulfillmentPartner": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/FulfillmentPartner"
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "poSendStatus": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Status"
+        },
+        "purchaseOrderLines": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/PurchaseOrderLine"
+          }
+        },
+        "shippingOrderRefId": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "PurchaseOrder"
+    },
+    "PurchaseOrderLine": {
+      "type": "object",
+      "properties": {
+        "availability": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "deliveryDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "etaDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "fsoLineRefId": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "fulfillmentLocationIdentifier": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/FulfillmentLocationIdentifier"
+        },
+        "fulfillmentPartnerPOLineRefId": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "fulfillmentPartnerProduct": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/FulfillmentPartnerProduct"
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "qtyAllocated": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "qtyBackordered": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "qtyOrdered": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "releaseDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "shippingOrderLineRefId": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "PurchaseOrderLine"
+    },
+    "RequestedCarrier": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "levelOfService": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/LevelOfService"
+        },
+        "name": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "RequestedCarrier"
+    },
+    "RewardZone": {
+      "type": "object",
+      "properties": {
+        "rewardZoneId": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "RewardZone"
+    },
+    "ShipFromAddress": {
+      "type": "object",
+      "properties": {
+        "address1": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "address2": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "address3": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "apartmentNumber": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "city": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "country": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "email": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "faxNumber": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "firstName": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "lastName": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "locationId": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "phone": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "phone2": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "phone2Ext": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "phoneExt": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "postalCode": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "province": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "ShipFromAddress"
+    },
+    "ShippingCharge": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "discounts": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/Discount"
+          }
+        },
+        "sku": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "tax": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Tax"
+        },
+        "type": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "unitPrice": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "ShippingCharge"
+    },
+    "ShippingModel": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "name": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "ShippingModel"
+    },
+    "ShippingOrder": {
+      "type": "object",
+      "properties": {
+        "actualCarrier": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/ActualCarrier"
+        },
+        "fulfillmentMethod": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "fulfillmentPartner": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "globalContractRefId": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "isCustomerInvoiceAvailable": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        },
+        "paymentInfo": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/PaymentInfo"
+        },
+        "requestedCarrier": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/RequestedCarrier"
+        },
+        "requestedDeliveryDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "shipFromAddress": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/ShipFromAddress"
+        },
+        "shipToAddress": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Address"
+        },
+        "shipmentDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "shippingCharges": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/ShippingCharge"
+          }
+        },
+        "shippingOrderLines": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/ShippingOrderLine"
+          }
+        },
+        "status": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Status"
+        },
+        "storeToFulfillFrom": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "type": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "ShippingOrder"
+    },
+    "ShippingOrderLine": {
+      "type": "object",
+      "properties": {
+        "availability": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "cancellable": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        },
+        "etaDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "fsoLineRefId": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "inventoryReservationRefId": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "qtyCancelled": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "qtyOrdered": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "qtyShipped": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "shippingCharges": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/ShippingCharge"
+          }
+        },
+        "status": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Status"
+        },
+        "surcharges": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/Surcharge"
+          }
+        },
+        "unitPrice": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "ShippingOrderLine"
+    },
+    "Status": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "description": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "name": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Status"
+    },
+    "Surcharge": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "discounts": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "$ref": "#/definitions/Discount"
+          }
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "id": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "separateLine": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "sku": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time",
+          "allowEmptyValue": false
+        },
+        "tax": {
+          "allowEmptyValue": false,
+          "$ref": "#/definitions/Tax"
+        },
+        "totalValue": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "type": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Surcharge"
+    },
+    "Tax": {
+      "type": "object",
+      "properties": {
+        "gst": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "pst": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Tax"
+    },
+    "Term": {
+      "type": "object",
+      "properties": {
+        "length": {
+          "type": "integer",
+          "format": "int32",
+          "allowEmptyValue": false
+        },
+        "unitOfTerm": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Term"
+    },
+    "Tracking": {
+      "type": "object",
+      "properties": {
+        "trackingHttpMethod": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "trackingNumbers": {
+          "type": "array",
+          "allowEmptyValue": false,
+          "items": {
+            "type": "string"
+          }
+        },
+        "trackingParameter": {
+          "type": "string",
+          "allowEmptyValue": false
+        },
+        "trackingURL": {
+          "type": "string",
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Tracking"
+    }
+  }
+}

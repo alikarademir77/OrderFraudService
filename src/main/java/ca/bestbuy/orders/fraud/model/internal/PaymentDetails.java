@@ -1,5 +1,6 @@
 package ca.bestbuy.orders.fraud.model.internal;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -67,7 +68,7 @@ public class PaymentDetails {
 
         public String creditCard3dSecureValue;
 
-        public float totalAuthorizedAmount;
+        public BigDecimal totalAuthorizedAmount;
 
     }
 
@@ -93,7 +94,7 @@ public class PaymentDetails {
 
         public String verifiedStatus;
 
-        public float totalAuthorizedAmount;
+        public BigDecimal totalAuthorizedAmount;
 
     }
 

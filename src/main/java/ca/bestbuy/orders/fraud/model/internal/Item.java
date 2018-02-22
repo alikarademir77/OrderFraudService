@@ -1,5 +1,7 @@
 package ca.bestbuy.orders.fraud.model.internal;
 
+import java.math.BigDecimal;
+
 public class Item {
 
     /**
@@ -20,7 +22,7 @@ public class Item {
     /**
      * Item unit price
      */
-    private float itemUnitPrice;
+    private BigDecimal itemUnitPrice;
 
     /**
      * Item quantity ordered
@@ -30,20 +32,17 @@ public class Item {
     /**
      * Tax on item
      */
-    private float itemTax;
-
+    private BigDecimal itemTax;
 
     /**
      * Total Item discounts including Staff Purchases
      */
-    private float itemTotalDiscount;
+    private BigDecimal itemTotalDiscount;
 
     /**
      * Staff Purchase Discount
-     *
      */
-    private float staffDiscount;
-
+    private BigDecimal staffDiscount;
 
 
     public String getFsoLineID() {
@@ -70,11 +69,11 @@ public class Item {
         this.category = category;
     }
 
-    public float getItemUnitPrice() {
+    public BigDecimal getItemUnitPrice() {
         return itemUnitPrice;
     }
 
-    public void setItemUnitPrice(float itemUnitPrice) {
+    public void setItemUnitPrice(BigDecimal itemUnitPrice) {
         this.itemUnitPrice = itemUnitPrice;
     }
 
@@ -86,38 +85,28 @@ public class Item {
         this.itemQuantity = itemQuantity;
     }
 
-    public float getItemTax() {
+    public BigDecimal getItemTax() {
         return itemTax;
     }
 
-    public void setItemTax(float itemTax) {
+    public void setItemTax(BigDecimal itemTax) {
         this.itemTax = itemTax;
     }
 
-    public float getItemTotalDiscount() {
+    public BigDecimal getItemTotalDiscount() {
         return itemTotalDiscount;
     }
 
-    public void setItemTotalDiscount(float itemTotalDiscount) {
+    public void setItemTotalDiscount(BigDecimal itemTotalDiscount) {
         this.itemTotalDiscount = itemTotalDiscount;
     }
 
-    public float getStaffDiscount() {
+    public BigDecimal getStaffDiscount() {
         return staffDiscount;
     }
 
-    public void setStaffDiscount(float staffDiscount) {
+    public void setStaffDiscount(BigDecimal staffDiscount) {
         this.staffDiscount = staffDiscount;
-    }
-
-    public static class Discount {
-
-        public Boolean isStaffPurchase;
-
-        public float unitValue;
-
-        public int quantity;
-
     }
 
 }

@@ -1,5 +1,6 @@
 package ca.bestbuy.orders.fraud.model.internal;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -34,18 +35,18 @@ public class ShippingOrder {
     /**
      * Shipping charge
      */
-    private float shippingCharge;
+    private BigDecimal shippingCharge;
 
 
     /**
      * Tax on shipping charge
      */
-    private float shippingTax;
+    private BigDecimal shippingTax;
 
     /**
      * Total Shipping Discount
      */
-    private float shippingDiscount;
+    private BigDecimal shippingDiscount;
 
 
     /**
@@ -105,27 +106,27 @@ public class ShippingOrder {
         this.globalContractID = globalContractID;
     }
 
-    public float getShippingCharge() {
+    public BigDecimal getShippingCharge() {
         return shippingCharge;
     }
 
-    public void setShippingCharge(float shippingCharge) {
+    public void setShippingCharge(BigDecimal shippingCharge) {
         this.shippingCharge = shippingCharge;
     }
 
-    public float getShippingTax() {
+    public BigDecimal getShippingTax() {
         return shippingTax;
     }
 
-    public void setShippingTax(float shippingTax) {
+    public void setShippingTax(BigDecimal shippingTax) {
         this.shippingTax = shippingTax;
     }
 
-    public float getShippingDiscount() {
+    public BigDecimal getShippingDiscount() {
         return shippingDiscount;
     }
 
-    public void setShippingDiscount(float shippingDiscount) {
+    public void setShippingDiscount(BigDecimal shippingDiscount) {
         this.shippingDiscount = shippingDiscount;
     }
 

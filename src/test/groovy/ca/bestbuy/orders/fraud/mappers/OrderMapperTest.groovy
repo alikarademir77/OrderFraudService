@@ -96,9 +96,6 @@ class OrderMapperTest extends Specification {
     def "Test Item Mapper"(){
 
         given: "a valid fsorderline"
-        float totalDiscount = 0.00f
-        float totalTaxes = 0.00f
-        float staffDiscount = 0.00f
         FSOrderLine fsOrderLineToMap = new FSOrderLine()
         fsOrderLineToMap.setId("fsoLineId")
 
@@ -107,50 +104,41 @@ class OrderMapperTest extends Specification {
         fsOrderLineToMap.setProduct(product)
 
         ItemCharge itemCharge = new ItemCharge()
-        List<Discount> discounts = new ArrayList<>()
+        List<ItemChargeDiscount> discounts = new ArrayList<>()
         ItemChargeDiscount discount1 = new ItemChargeDiscount()
-        discount1.setUnitValue(1.0f)
+        discount1.setUnitValue("1.22")
         discount1.setQuantity(1)
         ItemChargeDiscount discount2 = new ItemChargeDiscount()
-        discount2.setUnitValue(0.10f)
-        discount2.setQuantity(5)
+        discount2.setUnitValue("2.22")
+        discount2.setQuantity(2)
         discount2.setCode("SP")
         discounts.add(discount1)
         discounts.add(discount2)
         itemCharge.setDiscounts(discounts)
 
-
-
         Tax tax = new Tax()
-        tax.setGst(0.05f)
-        tax.setPst(0.06f)
+        tax.setGst("0.05")
+        tax.setPst("0.06")
         itemCharge.setTax(tax)
-        itemCharge.setUnitPrice(2.00f)
+        itemCharge.setUnitPrice("2.00")
         fsOrderLineToMap.setItemCharge(itemCharge)
 
         fsOrderLineToMap.setQtyOrdered(5)
+
+        BigDecimal totalTaxes = new BigDecimal("0.11")
+        BigDecimal totalDiscount = new BigDecimal("5.66")
+        BigDecimal staffDiscount = new BigDecimal("4.44")
+        BigDecimal itemPrice = new BigDecimal("2")
 
         when: "the order mapper is called to map the FSOrderLine to our internal Item object"
 
         Item mappedItem = orderDetailsMapper.mapItem(fsOrderLineToMap)
 
-        for(int i = 0; i < fsOrderLineToMap.getItemCharge().getDiscounts().size(); i++){
-            ItemChargeDiscount discount = fsOrderLineToMap.getItemCharge().getDiscounts().get(i)
-            totalDiscount += discount.getQuantity() * discount.getUnitValue()
-
-            if(discount.getCode() != null && discount.getCode().equals("SP")){
-                staffDiscount += discount.getQuantity() * discount.getUnitValue()
-            }
-
-        }
-
-        totalTaxes = fsOrderLineToMap.getItemCharge().getTax().getGst() + fsOrderLineToMap.getItemCharge().getTax().getPst()
-
         then: "our internal domain Item object were correctly mapped to"
 
         mappedItem.getFsoLineID() == fsOrderLineToMap.getId()
         mappedItem.getName() == fsOrderLineToMap.getProduct().getName()
-        mappedItem.getItemUnitPrice() == fsOrderLineToMap.getItemCharge().getUnitPrice()
+        mappedItem.getItemUnitPrice() == itemPrice
         mappedItem.getItemQuantity() == fsOrderLineToMap.getQtyOrdered()
         mappedItem.getItemTax() == totalTaxes
         mappedItem.getItemTotalDiscount() == totalDiscount
@@ -173,7 +161,7 @@ class OrderMapperTest extends Specification {
         shippingOrderLineToMap.setId("SHIPPINGORDERLINEID")
         shippingOrderLineToMap.setFsoLineRefId("FSOLINEREFID")
         shippingOrderLineToMap.setQtyOrdered(1)
-        shippingOrderLineToMap.setUnitPrice(1.09F)
+        shippingOrderLineToMap.setUnitPrice("1.09")
         shippingOrderLineToMap.setAvailability("AVAILABLE")
         shippingOrderLineToMap.setQtyCancelled(3)
         shippingOrderLineToMap.setQtyShipped(2)
@@ -183,34 +171,34 @@ class OrderMapperTest extends Specification {
 
         // Shipping charge 1
         ShippingCharge shippingCharge = new ShippingCharge()
-        shippingCharge.setUnitPrice(2.54F)
+        shippingCharge.setUnitPrice("2.54")
 
         Tax tax = new Tax()
-        tax.setGst(1.23F)
-        tax.setPst(4.56F)
+        tax.setGst("1.23")
+        tax.setPst("4.56")
         shippingCharge.setTax(tax)
 
         Discount discount = new Discount()
-        discount.setUnitValue(15.99F)
+        discount.setUnitValue("16.10")
         discount.setQuantity(1)
 
         Discount discount2 = new Discount()
-        discount2.setUnitValue(1.45F)
+        discount2.setUnitValue("1.50")
         discount2.setQuantity(2)
 
         Discount discount3 = new Discount()
-        discount3.setUnitValue(34.56F)
+        discount3.setUnitValue("1.25")
         discount3.setQuantity(1)
 
         shippingCharge.setDiscounts(Arrays.asList(discount, discount2))
 
         // Shipping charge 2
         ShippingCharge shippingCharge2 = new ShippingCharge()
-        shippingCharge2.setUnitPrice(34.56F)
+        shippingCharge2.setUnitPrice("34.56")
 
         Tax tax2 = new Tax()
-        tax2.setGst(1.12F)
-        tax2.setPst(2.12F)
+        tax2.setGst("1.12")
+        tax2.setPst("2.12")
         shippingCharge2.setTax(tax2)
 
         shippingCharge2.setDiscounts(Arrays.asList(discount3))
@@ -221,19 +209,19 @@ class OrderMapperTest extends Specification {
         // Surcharge 1
         Surcharge surcharge = new Surcharge()
         surcharge.setTax(tax)
-        surcharge.setTotalValue(15.66F)
+        surcharge.setTotalValue("15.55")
 
         Surcharge surcharge2 = new Surcharge()
         surcharge2.setTax(tax)
-        surcharge2.setTotalValue(14.67F)
+        surcharge2.setTotalValue("14.56")
 
-        shippingOrderLineToMap.setSurcharges(Arrays.asList(surcharge, surcharge, surcharge2))
+        shippingOrderLineToMap.setSurcharges(Arrays.asList(surcharge, surcharge2))
 
-        float totalShippingCharge = shippingCharge.getUnitPrice() + shippingCharge2.getUnitPrice()
-        float totalShippingDiscount = (discount.getUnitValue() * discount.getQuantity()) + (discount2.getUnitValue() * discount2.getQuantity()) + (discount3.getUnitValue() * discount3.getQuantity())
-        float totalShippingTax = (tax.getPst() + tax.getGst()) + (tax2.getPst() + tax2.getGst())
-        float totalEhf = surcharge.getTotalValue() + surcharge.getTotalValue() + surcharge2.getTotalValue()
-        float totalEhfTax = (tax.getPst() + tax.getGst())*3
+        BigDecimal totalShippingCharge = new BigDecimal("37.1")
+        BigDecimal totalShippingDiscount = new BigDecimal("20.35")
+        BigDecimal totalShippingTax = new BigDecimal("9.03")
+        BigDecimal totalEhf = new BigDecimal("30.11")
+        BigDecimal totalEhfTax = new BigDecimal("11.58")
 
 
         when: "OrderMapper.mapShippingOrderLine() is invoked on the FS Order ShippingOrderLine object"
@@ -299,15 +287,10 @@ class OrderMapperTest extends Specification {
 
     }
 
+
     def "Test Shipping Order Mapper"() {
 
         given: "a valid shipping order"
-        float unitPrice1 = 1.00f
-        float unitPrice2 = 2.00f
-        float unitPrice3 = 3.00f
-        float totalUnitPrice = 0
-        float totalTax = 0
-        float totalDiscounts = 0
 
         ShippingOrder shippingOrderToMap = new ShippingOrder()
         shippingOrderToMap.setId("shippingOrderId")
@@ -317,6 +300,9 @@ class OrderMapperTest extends Specification {
         shippingOrderStatus.setName("shipping order status")
         shippingOrderToMap.setStatus(shippingOrderStatus)
 
+        float unitPrice1 = 1.00f
+        float unitPrice2 = 2.00f
+        float unitPrice3 = 3.00f
 
         List<ShippingCharge> shippingCharges = new ArrayList<>()
         ShippingCharge shippingCharge1 = createAShippingCharge(0.07f, 0.07f, unitPrice1)
@@ -333,10 +319,8 @@ class OrderMapperTest extends Specification {
         LevelOfService levelOfService = new LevelOfService()
         levelOfService.setId("level of service id")
 
-
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
-        DateTime deliveryDate = formatter.parseDateTime("2018-02-19T09:15:52Z");
-
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ")
+        DateTime deliveryDate = formatter.parseDateTime("2018-02-19T09:15:52Z")
 
         levelOfService.setDeliveryDate(deliveryDate)
         requestedCarrier.setLevelOfService(levelOfService)
@@ -345,31 +329,18 @@ class OrderMapperTest extends Specification {
         Address shippingAddress = new Address()
         shippingOrderToMap.setShipToAddress(shippingAddress)
 
+        shippingOrderToMap.setShippingOrderLines(Arrays.asList(new ShippingOrderLine(), new ShippingOrderLine()))
 
-        List<ShippingOrderLine> shippingOrderLines = new ArrayList<>()
-        ShippingOrderLine shippingOrderLine1 = new ShippingOrderLine()
-        ShippingOrderLine shippingOrderLine2 = new ShippingOrderLine()
-        shippingOrderLines.add(shippingOrderLine1)
-        shippingOrderLines.add(shippingOrderLine2)
-        shippingOrderToMap.setShippingOrderLines(shippingOrderLines)
-
-
+        BigDecimal totalUnitPrice = new BigDecimal("6")
+        BigDecimal totalTax = new BigDecimal("0.48")
+        BigDecimal totalDiscounts = new BigDecimal("9.0")
 
         when: "the order mapper is called to map the Shipping Order object to our internal domain object"
+
         ca.bestbuy.orders.fraud.model.internal.ShippingOrder mappedShippingOrder = orderDetailsMapper.mapShippingOrder(shippingOrderToMap)
 
-        for (int i = 0; i < shippingOrderToMap.getShippingCharges().size(); i++) {
-            ShippingCharge shippingCharge = shippingOrderToMap.getShippingCharges().get(i)
-            totalUnitPrice += shippingCharge.getUnitPrice()
-            totalTax += shippingOrderToMap.getShippingCharges().get(i).getTax().getGst() + shippingOrderToMap.getShippingCharges().get(i).getTax().getPst()
-            for (int j = 0; j < shippingCharge.getDiscounts().size(); j++) {
-                Discount discount = shippingCharge.getDiscounts().get(j)
-                totalDiscounts += discount.getQuantity() * discount.getUnitValue()
-
-            }
-        }
-
         then: "our internal domain Shipping Order object were correctly mapped to"
+
         mappedShippingOrder.getShippingOrderID() == shippingOrderToMap.getId()
         mappedShippingOrder.getGlobalContractID() == shippingOrderToMap.getGlobalContractRefId()
         mappedShippingOrder.getShippingOrderStatus() == shippingOrderToMap.getStatus().getName()
@@ -389,7 +360,7 @@ class OrderMapperTest extends Specification {
 
         CreditCardInfo creditCardToMap = new CreditCardInfo()
         creditCardToMap.setActive(true)
-        creditCardToMap.setInvoicedAmount(125.99F)
+        creditCardToMap.setInvoicedAmount("125.99")
 
         Address billingAddress = new Address()
         billingAddress.setFirstName("FIRSTNAME")
@@ -446,7 +417,7 @@ class OrderMapperTest extends Specification {
         giftCardToMap.setGiftCardType("GIFTCARDTYPE")
         giftCardToMap.setActive(true)
         giftCardToMap.setGiftCardSecureCode("SECURECODE")
-        giftCardToMap.setInvoicedAmount(12.99F)
+        giftCardToMap.setInvoicedAmount("12.99")
 
 
         when: "OrderMapper.mapGiftCard() is invoked on the FS Order GiftCardInfo object"
@@ -526,24 +497,25 @@ class OrderMapperTest extends Specification {
 
     }
 
+
     ShippingCharge createAShippingCharge(float pst, float gst, float unitPrice) {
         ShippingCharge shippingCharge = new ShippingCharge()
         List<Discount> discounts = new ArrayList<>()
-        Tax tax = new Tax();
-        tax.setPst(pst)
-        tax.setGst(gst)
+        Tax tax = new Tax()
+        tax.setPst(Float.toString(pst))
+        tax.setGst(Float.toString(gst))
 
         Discount discount1 = new Discount()
         Discount discount2 = new Discount()
         discount1.setQuantity(1)
-        discount1.setUnitValue(2.00f)
+        discount1.setUnitValue("2.0")
         discount2.setQuantity(2)
-        discount2.setUnitValue(0.50f)
+        discount2.setUnitValue("0.50")
         discounts.add(discount1)
         discounts.add(discount2)
 
         shippingCharge.setTax(tax)
-        shippingCharge.setUnitPrice(unitPrice)
+        shippingCharge.setUnitPrice(Float.toString(unitPrice))
         shippingCharge.setDiscounts(discounts)
 
         return shippingCharge

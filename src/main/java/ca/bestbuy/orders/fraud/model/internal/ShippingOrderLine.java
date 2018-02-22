@@ -1,5 +1,7 @@
 package ca.bestbuy.orders.fraud.model.internal;
 
+import java.math.BigDecimal;
+
 public class ShippingOrderLine {
 
     /**
@@ -29,27 +31,27 @@ public class ShippingOrderLine {
     /**
      * Shipping charge for shipping order line
      */
-    private float shippingCharge;
+    private BigDecimal shippingCharge;
 
     /**
      * Tax on shipping charge
      */
-    private float shippingTax;
+    private BigDecimal shippingTax;
 
     /**
      * Discount on shipping charge
      */
-    private float shippingDiscount;
+    private BigDecimal shippingDiscount;
 
     /**
      * Environment handling fee on shipping order line
      */
-    private float ehf;
+    private BigDecimal ehf;
 
     /**
      * Tax on environment handling fee
      */
-    private float ehfTax;
+    private BigDecimal ehfTax;
 
 
     public String getShippingOrderLineID() {
@@ -84,43 +86,43 @@ public class ShippingOrderLine {
         this.quantity = quantity;
     }
 
-    public float getShippingCharge() {
+    public BigDecimal getShippingCharge() {
         return shippingCharge;
     }
 
-    public void setShippingCharge(float shippingCharge) {
+    public void setShippingCharge(BigDecimal shippingCharge) {
         this.shippingCharge = shippingCharge;
     }
 
-    public float getShippingTax() {
+    public BigDecimal getShippingTax() {
         return shippingTax;
     }
 
-    public void setShippingTax(float shippingTax) {
+    public void setShippingTax(BigDecimal shippingTax) {
         this.shippingTax = shippingTax;
     }
 
-    public float getShippingDiscount() {
+    public BigDecimal getShippingDiscount() {
         return shippingDiscount;
     }
 
-    public void setShippingDiscount(float shippingDiscount) {
+    public void setShippingDiscount(BigDecimal shippingDiscount) {
         this.shippingDiscount = shippingDiscount;
     }
 
-    public float getEhf() {
+    public BigDecimal getEhf() {
         return ehf;
     }
 
-    public void setEhf(float ehf) {
+    public void setEhf(BigDecimal ehf) {
         this.ehf = ehf;
     }
 
-    public float getEhfTax() {
+    public BigDecimal getEhfTax() {
         return ehfTax;
     }
 
-    public void setEhfTax(float ehfTax) {
+    public void setEhfTax(BigDecimal ehfTax) {
         this.ehfTax = ehfTax;
     }
 }
