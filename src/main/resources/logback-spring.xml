@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <springProperty scope="context" name="env" source="spring.profiles.active" />
+  <springProperty scope="context" name="env" source="spring.profiles.active"/>
 
-    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-            <layout class="ca.bestbuy.foundation.logging.logback.Layout">
-                <appName>@project.artifactId@</appName>
-                <appVersion>@project.version@</appVersion>
-                <env>${env}</env>
-                <hostname>${HOSTNAME}</hostname>
-            </layout>
-        </encoder>
-    </appender>
+  <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <!-- Default Spring Boot log pattern from org/springframework/boot/logging/logback/defaults.xml -->
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+    </encoder>
 
-    <springProfile name="dev">
-        <logger name="ca.bestbuy.orders" level="DEBUG"/>
+    <springProfile name="!dev">
+      <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+        <layout class="ca.bestbuy.foundation.logging.logback.Layout">
+          <appName>@project.artifactId@</appName>
+          <appVersion>@project.version@</appVersion>
+          <env>${env}</env>
+          <hostname>${HOSTNAME}</hostname>
+        </layout>
+      </encoder>
     </springProfile>
+  </appender>
 
-    <springProfile name="test">
-        <logger name="ca.bestbuy.orders" level="INFO"/>
-    </springProfile>
-        
-    <springProfile name="prod">
-        <logger name="ca.bestbuy.orders" level="WARN"/>
-    </springProfile>
+  <springProfile name="dev">
+    <logger name="ca.bestbuy.orders" level="DEBUG"/>
+  </springProfile>
 
-    <root level="INFO">
-        <appender-ref ref="consoleAppender"/>
-    </root>
+  <springProfile name="test">
+    <logger name="ca.bestbuy.orders" level="INFO"/>
+  </springProfile>
 
+  <springProfile name="prod">
+    <logger name="ca.bestbuy.orders" level="WARN"/>
+  </springProfile>
+
+  <root level="INFO">
+    <appender-ref ref="consoleAppender"/>
+  </root>
 </configuration>

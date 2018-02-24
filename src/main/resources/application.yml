@@ -1,8 +1,11 @@
 server:
   port: 8090
   contextPath: /orderfraud
-    
+
 spring:
+  profiles:
+    active: dev
+
   rabbitmq:
     host: 127.0.0.1
     port: 5672
