@@ -22,18 +22,6 @@
     </springProfile>
   </appender>
 
-  <springProfile name="dev">
-    <logger name="ca.bestbuy.orders" level="DEBUG"/>
-  </springProfile>
-
-  <springProfile name="test">
-    <logger name="ca.bestbuy.orders" level="INFO"/>
-  </springProfile>
-
-  <springProfile name="prod">
-    <logger name="ca.bestbuy.orders" level="WARN"/>
-  </springProfile>
-
   <root level="INFO">
     <appender-ref ref="consoleAppender"/>
   </root>
