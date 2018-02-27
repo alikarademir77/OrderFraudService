@@ -1,10 +1,10 @@
 FROM ecomm-devops-team/bby-rhel7-atomic-java
 
-ENV APP_NAME=bby-orders-fraud-service
-ENV CERT_PATH=/etc/pki/ca-trust/extracted/java/cacerts
-ENV PROFILE=dev
-ENV PORT=8080
-ENV JAVA_TRUSTORE_OPTS=-Djavax.net.ssl.trustStore=$CERT_PATH -Djavax.net.ssl.trustStorePassword=$SSL_TRUST_STORE_PWD
+ENV APP_NAME=bby-orders-fraud-service \
+    CERT_PATH=/etc/pki/ca-trust/extracted/java/cacerts \
+    PROFILE=dev \
+    PORT=8080 \
+    JAVA_TRUSTORE_OPTS=-Djavax.net.ssl.trustStore=$CERT_PATH -Djavax.net.ssl.trustStorePassword=$SSL_TRUST_STORE_PWD
 
 RUN mkdir -p /opt/app/${APP_NAME}
 
