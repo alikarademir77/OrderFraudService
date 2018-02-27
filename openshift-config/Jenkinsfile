@@ -1,0 +1,29 @@
+def appName="bby-orders-fraud-service"
+def project="ecomm-orders-team"
+def buildConfigPath = "openshift-config/build-config.yml"
+
+node('maven') {
+
+    stage('Checkout Source Code') {
+        checkout scm
+    }
+
+    stage('Build') {
+        sh 'mvn clean compile'
+    }
+
+    stage('Execute Tests') {
+        sh 'mvn test'
+    }
+
+    stage('Package') {
+        sh 'mvn package'
+        sh 'mv target/*.jar ${appName}.jar'
+    }
+
+    stage('Create Container Image') {
+
+        sh "oc start-build ${buildConfigPath} --from-file=${appName}.jar --follow -n ${project}"
+
+    }
+}

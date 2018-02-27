@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  name: bby-orders-fraud-service
+  namespace: ecomm-orders-team
+  labels:
+    app: bby-orders-fraud-service
+spec:
+  triggers: []
+  runPolicy: Serial
+  source:
+    type: Binary
+    binary:
+      asFile: bby-orders-fraud-service.jar
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: openshift-config/Dockerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'bby-orders-fraud-service:latest'
+  resources: {}
+  postCommit: {}
+  nodeSelector: null
