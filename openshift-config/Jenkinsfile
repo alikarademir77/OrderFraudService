@@ -8,16 +8,16 @@ node('maven') {
     }
 
     stage('Build') {
-        sh 'mvn clean compile'
+        sh "mvn clean compile"
     }
 
 //    stage('Execute Tests') {
-//        sh 'mvn test'
+//        sh "mvn test"
 //    }
 
     stage('Package') {
-        sh 'mvn package -DskipTests=true'
-        sh 'mv target/*.jar ${appName}.jar'
+        sh "mvn package -DskipTests=true"
+        sh "mv target/*.jar ${appName}.jar"
     }
 
     stage('Create Container Image') {
