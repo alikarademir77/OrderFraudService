@@ -1,15 +1,18 @@
 server:
   port: 8090
   contextPath: /orderfraud
-    
+
 spring:
+  profiles:
+    active: dev
+
   rabbitmq:
     host: 127.0.0.1
     port: 5672
     username: guest
     password: guest
     virtual-host: orders
- 
+
   cloud:
     stream:
       bindings:
@@ -28,10 +31,10 @@ spring:
               autoBindDlq:  true
               dlqTtl: 10000
               republishToDlq: true
-              #Using default exchange so dlqDeadLetterExchange is assigned to empty string 
-              dlqDeadLetterExchange: 
-      default: 
-        contentType:  application/json 
+              #Using default exchange so dlqDeadLetterExchange is assigned to empty string
+              dlqDeadLetterExchange:
+      default:
+        contentType:  application/json
 
 messaging:
   errorRetryCount: 3
@@ -50,3 +53,33 @@ client:
       truststore-password: ~
       truststore-type: JKS
       tls-enabled: false
+
+---
+
+spring:
+  profiles: dev
+logging:
+  level:
+    ca.bestbuy: DEBUG
+    # ROOT: WARN means that any logging context not matching a context described above will be filtered to level WARN
+    ROOT: WARN
+
+---
+
+spring:
+  profiles: test
+logging:
+  level:
+    ca.bestbuy: INFO
+
+---
+
+spring:
+  profiles: prod
+logging:
+  level:
+    ROOT: WARN
+    ca.bestbuy: INFO
+
+---
+
