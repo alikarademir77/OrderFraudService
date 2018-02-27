@@ -1,6 +1,5 @@
 def appName="bby-orders-fraud-service"
 def project="ecomm-orders-team"
-def buildConfigPath = "openshift-config/build-config.yml"
 
 node('maven') {
 
@@ -23,7 +22,7 @@ node('maven') {
 
     stage('Create Container Image') {
 
-        sh "oc start-build ${buildConfigPath} --from-file=${appName}.jar --follow -n ${project}"
+        sh "oc start-build ${appName} --from-file=${appName}.jar --follow -n ${project}"
 
     }
 }
