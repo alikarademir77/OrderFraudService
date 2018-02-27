@@ -12,9 +12,9 @@ node('maven') {
         sh 'mvn clean compile'
     }
 
-    stage('Execute Tests') {
-        sh 'mvn test'
-    }
+//    stage('Execute Tests') {
+//        sh 'mvn test'
+//    }
 
     stage('Package') {
         sh 'mvn package'
