@@ -17,7 +17,7 @@ node('maven') {
 //    }
 
     stage('Package') {
-        sh 'mvn package'
+        sh 'mvn package -DskipTests=true'
         sh 'mv target/*.jar ${appName}.jar'
     }
 
