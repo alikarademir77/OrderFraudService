@@ -1,4 +1,4 @@
-FROM ecomm-devops-team/bby-rhel7-atomic-java
+FROM registry.dev-ocp.ca.bestbuy.com/ecomm-devops-team/bby-rhel7-atomic-java:latest
 
 ENV APP_NAME=bby-orders-fraud-service \
     CERT_PATH=/etc/pki/ca-trust/extracted/java/cacerts \
