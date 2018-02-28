@@ -14,7 +14,7 @@ spec:
       intervalSeconds: 1
       maxSurge: 100%
       maxUnavailable: 100%
-      timeoutSeconds: 600
+      timeoutSeconds: 60
       updatePeriodSeconds: 1
     type: Rolling
   template:
@@ -26,7 +26,7 @@ spec:
         name: bby-orders-fraud-service
     spec:
       containers:
-      - image: ecomm-orders-team/bby-orders-fraud-service:latest
+      - image: bby-orders-fraud-service:latest
         imagePullPolicy: Always
         name: bby-orders-fraud-service
         ports:
