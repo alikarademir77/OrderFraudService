@@ -34,7 +34,7 @@ node('maven') {
 
     stage('Deploy Container') {
         // Here we use the Openshift Jenkins Pipeline Plugin DSL to trigger a deployment of our image
-        openshiftDeploy(deploymentConfig: ${appName})
+        openshiftDeploy(deploymentConfig: "${appName}")
     }
 
 
