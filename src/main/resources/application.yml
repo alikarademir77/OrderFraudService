@@ -36,6 +36,10 @@ spring:
 messaging:
   errorRetryCount: 3
 
+info:
+  name: @project.name@
+  version: @project.version@
+
 client:
   order-details:
     connection:
