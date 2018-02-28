@@ -17,12 +17,14 @@ node('maven') {
 
     stage('Package') {
         sh "mvn package -DskipTests=true"
-        sh "mv target/*.jar ${appName}.jar"
+        sh "mkdir run"
+        sh "mv target/*.jar run/${appName}.jar"
+        sh "mv openshift-config/Dockerfile run/Dockerfile"
     }
 
     stage('Create Container Image') {
 
-        sh "oc start-build ${appName} --from-file=${appName}.jar --follow -n ${project}"
+        sh "oc start-build ${appName} --from-dir=run --follow -n ${project}"
 
     }
 }
