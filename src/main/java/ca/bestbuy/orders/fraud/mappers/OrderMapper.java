@@ -393,13 +393,14 @@ public abstract class OrderMapper {
     protected ZonedDateTime mapDateTime(DateTime dateTime) {
 
         if (dateTime != null) {
+
+            // Gets UTC of input datetime
             Instant instant = Instant.ofEpochMilli(dateTime.getMillis());
 
-            ZonedDateTime ldtZoned = instant.atZone(ZoneId.systemDefault());
+            // Get PST zone ID
+            ZoneId zoneId = ZoneId.of("America/Los_Angeles");
 
-            ZonedDateTime pstZoned = ldtZoned.withZoneSameInstant(ZoneId.of("America/Los_Angeles"));
-
-
+            ZonedDateTime pstZoned = instant.atZone(zoneId);
             return pstZoned;
         }
 
