@@ -20,8 +20,7 @@ node('maven') {
     }
 
     stage('Execute Tests') {
-        //TODO - Fix tests before running this
-//        sh "mvn test"
+        sh "mvn test"
     }
 
 
