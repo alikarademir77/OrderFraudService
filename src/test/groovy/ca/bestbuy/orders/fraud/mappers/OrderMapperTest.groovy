@@ -6,6 +6,7 @@ import ca.bestbuy.orders.fraud.model.internal.Order
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails.CreditCard
 import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 import org.mapstruct.factory.Mappers
@@ -31,10 +32,8 @@ class OrderMapperTest extends Specification {
         fsOrderToMap.setId("fsorderId")
         fsOrderToMap.setIpAddress("ipAddress")
 
-        DateTime dateTimeToMap = new DateTime()
-        dateTimeToMap = DateTime.now()
+        DateTime dateTimeToMap = new DateTime().withZone(DateTimeZone.forID("America/Los_Angeles"))
         fsOrderToMap.setWebOrderCreationDate(dateTimeToMap)
-
 
         RewardZone rewardZoneToMap = new RewardZone()
         rewardZoneToMap.setRewardZoneId("rewardZoneID")
@@ -154,7 +153,7 @@ class OrderMapperTest extends Specification {
 
         Status status = new Status()
         status.setName("STATUS")
-        status.setDate(DateTime.now())
+        status.setDate(new DateTime().withZone(DateTimeZone.forID("America/Los_Angeles")))
         status.setDescription("DESCRIPTION")
         shippingOrderLineToMap.setStatus(status)
 
