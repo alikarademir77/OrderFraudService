@@ -13,8 +13,6 @@ import org.mapstruct.factory.Mappers
 import spock.lang.Shared
 import spock.lang.Specification
 
-import java.time.ZonedDateTime
-
 class OrderMapperTest extends Specification {
 
     @Shared
@@ -481,18 +479,18 @@ class OrderMapperTest extends Specification {
     }
 
 
-    void assertDatesAreEqual(ZonedDateTime mappedDate, DateTime dateToMap) {
+    void assertDatesAreEqual(DateTime mappedDate, DateTime dateToMap) {
 
         if (dateToMap != null) {
             assert mappedDate != null
         }
 
-        assert mappedDate.getDayOfMonth() == dateToMap.dayOfMonth().get()
-        assert mappedDate.getMonth().getValue() == dateToMap.monthOfYear().get()
-        assert mappedDate.getYear() == dateToMap.year().get()
-        assert mappedDate.getHour() == dateToMap.hourOfDay().get()
-        assert mappedDate.getMinute() == dateToMap.minuteOfHour().get()
-        assert mappedDate.getSecond() == dateToMap.secondOfMinute().get()
+        assert mappedDate.dayOfMonth().get() == dateToMap.dayOfMonth().get()
+        assert mappedDate.monthOfYear().get() == dateToMap.monthOfYear().get()
+        assert mappedDate.year().get() == dateToMap.year().get()
+        assert mappedDate.hourOfDay().get() == dateToMap.hourOfDay().get()
+        assert mappedDate.minuteOfHour().get() == dateToMap.minuteOfHour().get()
+        assert mappedDate.secondOfMinute().get() == dateToMap.secondOfMinute().get()
 
     }
 

@@ -1,8 +1,9 @@
 package ca.bestbuy.orders.fraud.model.internal;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.List;
+
+import org.joda.time.DateTime;
 
 /**
  * Shipping order representation
@@ -64,7 +65,7 @@ public class ShippingOrder {
     /**
      * Shipping deliveryDate
      */
-    private ZonedDateTime deliveryDate;
+    private DateTime deliveryDate;
 
     /**
      * Shipping address
@@ -146,11 +147,11 @@ public class ShippingOrder {
         this.shippingMethod = shippingMethod;
     }
 
-    public ZonedDateTime getDeliveryDate() {
+    public DateTime getDeliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(ZonedDateTime deliveryDate) {
+    public void setDeliveryDate(DateTime deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 
