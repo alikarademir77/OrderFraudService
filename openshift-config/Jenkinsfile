@@ -26,7 +26,7 @@ node("maven") {
     stage('Create Container Image') {
         // This is responsible for creating our image
         // NOTE: The first argument is the name of the BuildConfig to trigger
-        sh "oc start-build ${appName} --from-dir=${outputDir} --follow -n ${project}"
+        sh "oc start-build ${appName} --from-dir=${outputDir} --follow -n ${project} --rm"
     }
 
     stage('Deploy Container') {
