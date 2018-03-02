@@ -6,7 +6,7 @@ node("maven") {
 
     stage('Checkout Source Code') {
         // Clone our git repository
-        scm checkout
+        checkout scm
     }
 
     stage('Build') {
