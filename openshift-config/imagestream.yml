@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ImageStream
-metadata:
-  name: bby-orders-fraud-service
-  namespace: ecomm-orders-team
-  labels:
-    app: bby-orders-fraud-service
