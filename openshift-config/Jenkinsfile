@@ -1,0 +1,36 @@
+def appName="order-fraud-service"
+def project="ecomm-orders-team"
+def outputDir="run"
+
+node("maven") {
+
+    stage('Checkout Source Code') {
+        // Clone our git repository
+        checkout scm
+    }
+
+    stage('Build') {
+        // We compile our code and produce our jar file
+        // We skip tests here as we have a later stage for running tests
+        sh "mvn clean package -DskipTests=true"
+        // We create an output directory and place all the files that we will need when we build our container image
+        sh "mkdir ${outputDir}"
+        sh "mv target/*.jar ${outputDir}/${appName}.jar"
+    }
+
+    stage('Execute Tests') {
+        // Run tests
+        sh "mvn test"
+    }
+
+    stage('Create Container Image') {
+        // This is responsible for creating our image
+        // NOTE: The first argument is the name of the BuildConfig to trigger
+        sh "oc start-build ${appName} --from-dir=${outputDir} --follow -n ${project}"
+    }
+
+    stage('Deploy Container') {
+        // Here we use the Openshift Jenkins Pipeline Plugin DSL to trigger a deployment of our image
+        openshiftDeploy(deploymentConfig: "${appName}")
+    }
+}

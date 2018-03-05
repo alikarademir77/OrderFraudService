@@ -1,13 +1,9 @@
 package ca.bestbuy.orders.fraud.mappers;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -388,23 +384,6 @@ public abstract class OrderMapper {
             @Mapping(target = "secondaryPhoneNumber", source = "phone2")
     })
     protected abstract Address mapAddress(ca.bestbuy.orders.fraud.model.client.orderdetails.Address addressToMap);
-
-
-    protected ZonedDateTime mapDateTime(DateTime dateTime) {
-
-        if (dateTime != null) {
-            Instant instant = Instant.ofEpochMilli(dateTime.getMillis());
-
-            ZonedDateTime ldtZoned = instant.atZone(ZoneId.systemDefault());
-
-            ZonedDateTime pstZoned = ldtZoned.withZoneSameInstant(ZoneId.of("America/Los_Angeles"));
-
-
-            return pstZoned;
-        }
-
-        return null;
-    }
 
 
 }

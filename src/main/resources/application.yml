@@ -7,7 +7,7 @@ spring:
     active: dev
 
   rabbitmq:
-    host: 127.0.0.1
+    host: dtl24vmqcix51.ca.bestbuy.com
     port: 5672
     username: guest
     password: guest
@@ -38,6 +38,10 @@ spring:
 
 messaging:
   errorRetryCount: 3
+
+info:
+  name: @project.name@
+  version: @project.version@
 
 client:
   order-details:

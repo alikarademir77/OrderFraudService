@@ -1,7 +1,8 @@
 package ca.bestbuy.orders.fraud.model.internal;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+
+import org.joda.time.DateTime;
 
 public class Chargeback {
 
@@ -18,7 +19,7 @@ public class Chargeback {
     /**
      * Chargeback receive date
      */
-    private ZonedDateTime receiveDate;
+    private DateTime receiveDate;
 
 
     public BigDecimal getAmount() {
@@ -37,11 +38,11 @@ public class Chargeback {
         this.reasonCode = reasonCode;
     }
 
-    public ZonedDateTime getReceiveDate() {
+    public DateTime getReceiveDate() {
         return receiveDate;
     }
 
-    public void setReceiveDate(ZonedDateTime receiveDate) {
+    public void setReceiveDate(DateTime receiveDate) {
         this.receiveDate = receiveDate;
     }
 }

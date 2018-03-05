@@ -1,7 +1,8 @@
 package ca.bestbuy.orders.fraud.model.internal;
 
-import java.time.ZonedDateTime;
 import java.util.List;
+
+import org.joda.time.DateTime;
 
 public class Order {
 
@@ -14,7 +15,7 @@ public class Order {
     /**
      * Date-time order was created on the website
      */
-    private ZonedDateTime webOrderCreationDate;
+    private DateTime webOrderCreationDate;
 
 
     /**
@@ -97,11 +98,11 @@ public class Order {
         this.ipAddress = ipAddress;
     }
 
-    public ZonedDateTime getWebOrderCreationDate() {
+    public DateTime getWebOrderCreationDate() {
         return webOrderCreationDate;
     }
 
-    public void setWebOrderCreationDate(ZonedDateTime webOrderCreationDate) {
+    public void setWebOrderCreationDate(DateTime webOrderCreationDate) {
         this.webOrderCreationDate = webOrderCreationDate;
     }
 

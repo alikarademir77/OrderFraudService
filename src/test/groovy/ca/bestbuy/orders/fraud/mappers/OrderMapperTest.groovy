@@ -6,13 +6,12 @@ import ca.bestbuy.orders.fraud.model.internal.Order
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails.CreditCard
 import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 import org.mapstruct.factory.Mappers
 import spock.lang.Shared
 import spock.lang.Specification
-
-import java.time.ZonedDateTime
 
 class OrderMapperTest extends Specification {
 
@@ -31,10 +30,8 @@ class OrderMapperTest extends Specification {
         fsOrderToMap.setId("fsorderId")
         fsOrderToMap.setIpAddress("ipAddress")
 
-        DateTime dateTimeToMap = new DateTime()
-        dateTimeToMap = DateTime.now()
+        DateTime dateTimeToMap = new DateTime().withZone(DateTimeZone.forID("America/Los_Angeles"))
         fsOrderToMap.setWebOrderCreationDate(dateTimeToMap)
-
 
         RewardZone rewardZoneToMap = new RewardZone()
         rewardZoneToMap.setRewardZoneId("rewardZoneID")
@@ -154,7 +151,7 @@ class OrderMapperTest extends Specification {
 
         Status status = new Status()
         status.setName("STATUS")
-        status.setDate(DateTime.now())
+        status.setDate(new DateTime().withZone(DateTimeZone.forID("America/Los_Angeles")))
         status.setDescription("DESCRIPTION")
         shippingOrderLineToMap.setStatus(status)
 
@@ -482,18 +479,18 @@ class OrderMapperTest extends Specification {
     }
 
 
-    void assertDatesAreEqual(ZonedDateTime mappedDate, DateTime dateToMap) {
+    void assertDatesAreEqual(DateTime mappedDate, DateTime dateToMap) {
 
         if (dateToMap != null) {
             assert mappedDate != null
         }
 
-        assert mappedDate.getDayOfMonth() == dateToMap.dayOfMonth().get()
-        assert mappedDate.getMonth().getValue() == dateToMap.monthOfYear().get()
-        assert mappedDate.getYear() == dateToMap.year().get()
-        assert mappedDate.getHour() == dateToMap.hourOfDay().get()
-        assert mappedDate.getMinute() == dateToMap.minuteOfHour().get()
-        assert mappedDate.getSecond() == dateToMap.secondOfMinute().get()
+        assert mappedDate.dayOfMonth().get() == dateToMap.dayOfMonth().get()
+        assert mappedDate.monthOfYear().get() == dateToMap.monthOfYear().get()
+        assert mappedDate.year().get() == dateToMap.year().get()
+        assert mappedDate.hourOfDay().get() == dateToMap.hourOfDay().get()
+        assert mappedDate.minuteOfHour().get() == dateToMap.minuteOfHour().get()
+        assert mappedDate.secondOfMinute().get() == dateToMap.secondOfMinute().get()
 
     }
 
