@@ -1,0 +1,3789 @@
+
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:tns="http://bestbuy.com/TenderAuth" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	targetNamespace="http://bestbuy.com/TenderAuth">
+	<wsdl:types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://bestbuy.com/TenderAuth">
+			<s:element name="AuthorizeApplicationForPEL">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="uniqueID"
+							type="s:string" />
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="AuthorizeApplicationForPELResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1"
+							name="AuthorizeApplicationForPELResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:any />
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="AuthorizeGiftCardForPEL">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="uniqueID"
+							type="s:string" />
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="AuthorizeGiftCardForPELResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1"
+							name="AuthorizeGiftCardForPELResult" type="s:string" />
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="HeartBeat106MessageCall">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="message"
+							type="s:string" />
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="HeartBeat106MessageCallResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1"
+							name="HeartBeat106MessageCallResult" type="s:string" />
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="debitAuthorizationRequest" type="tns:DebitAuthorizationRequest" />
+			<s:complexType name="DebitAuthorizationRequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="debitCardInfo"
+						type="tns:DebitCardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="DebitCardInfo">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="pinBlock"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ksn" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="swipe" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="EMVData">
+						<s:complexType mixed="true">
+							<s:sequence>
+								<s:any />
+							</s:sequence>
+						</s:complexType>
+					</s:element>
+					<s:element minOccurs="1" maxOccurs="1" name="debitCardEntryType"
+						type="tns:DebitCardEntryType" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="DebitCardEntryType">
+				<s:restriction base="s:string">
+					<s:enumeration value="NOTYPE" />
+					<s:enumeration value="SWIPE" />
+					<s:enumeration value="CONTACTLESS" />
+					<s:enumeration value="EMV" />
+					<s:enumeration value="FALLBACK" />
+					<s:enumeration value="FALLBACKMSR" />
+				</s:restriction>
+			</s:simpleType>
+			<s:complexType name="RequestId">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="invoice"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="trace" type="s:int" />
+					<s:element minOccurs="1" maxOccurs="1" name="transactionTime"
+						type="s:dateTime" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="RequestSource">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="mStoreNumber"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="terminalNumber"
+						type="s:int" />
+					<s:element minOccurs="1" maxOccurs="1" name="pointOfService"
+						type="tns:PointOfService" />
+					<s:element minOccurs="1" maxOccurs="1" name="mCountryCode"
+						type="tns:CountryCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="mTransactionLanguage"
+						type="tns:TransactionLanguage" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="msalessourceindicator" type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="countryCode"
+						type="tns:CountryCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="transactionLanguage"
+						type="tns:TransactionLanguage" />
+					<s:element minOccurs="0" maxOccurs="1" name="salessourceindicator"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="storeNumber"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="PointOfService">
+				<s:restriction base="s:string">
+					<s:enumeration value="INTERNETCARDNOTPRESENT" />
+					<s:enumeration value="INSTOREPOS" />
+					<s:enumeration value="ECOMMERCE" />
+					<s:enumeration value="KIOSK" />
+				</s:restriction>
+			</s:simpleType>
+			<s:simpleType name="CountryCode">
+				<s:restriction base="s:string">
+					<s:enumeration value="NOTYPE" />
+					<s:enumeration value="UNITEDSTATES" />
+					<s:enumeration value="CANADA" />
+					<s:enumeration value="MEXICO" />
+				</s:restriction>
+			</s:simpleType>
+			<s:simpleType name="TransactionLanguage">
+				<s:restriction base="s:string">
+					<s:enumeration value="ENGLISH" />
+					<s:enumeration value="FRENCH" />
+					<s:enumeration value="NOTYPE" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="debitAuthorizationResult" type="tns:DebitAuthorizationResult" />
+			<s:complexType name="DebitAuthorizationResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="authAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="requestedAmount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="receiptDisplay"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNodeId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="account"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="EMVData">
+						<s:complexType mixed="true">
+							<s:sequence>
+								<s:any />
+							</s:sequence>
+						</s:complexType>
+					</s:element>
+					<s:element minOccurs="0" maxOccurs="1" name="TASAuthKey"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="ActionCode">
+				<s:restriction base="s:string">
+					<s:enumeration value="NOTSET" />
+					<s:enumeration value="SUCCESS" />
+					<s:enumeration value="DECLINED" />
+					<s:enumeration value="CALLBANK" />
+					<s:enumeration value="BANKDOWN" />
+					<s:enumeration value="MODEMPHONEISSUE" />
+					<s:enumeration value="FORMATERROR" />
+					<s:enumeration value="TRYLATER" />
+					<s:enumeration value="APPROVEDADMIN" />
+					<s:enumeration value="MACERROR" />
+					<s:enumeration value="REQUESTNOTSUPPORTED" />
+					<s:enumeration value="CVVREVERSE" />
+					<s:enumeration value="AVSREVERSE" />
+					<s:enumeration value="SPDECLINED" />
+					<s:enumeration value="UNAVAIL" />
+					<s:enumeration value="INVALIDSC" />
+					<s:enumeration value="UNRECOGNIZEDCODE" />
+					<s:enumeration value="FRAUDUNAVAILABLE" />
+					<s:enumeration value="SECUREVAULTDECLINED" />
+					<s:enumeration value="ZIPREQUIRED" />
+					<s:enumeration value="INSFUNDS" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="debitReversalRequest" type="tns:DebitReversalRequest" />
+			<s:complexType name="DebitReversalRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="reversalReason"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="originalRequest"
+						type="tns:DebitAuthorizationRequest" />
+					<s:element minOccurs="0" maxOccurs="1" name="originalResult"
+						type="tns:DebitAuthorizationResult" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="debitReversalResult" type="tns:DebitReversalResult" />
+			<s:complexType name="DebitReversalResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="debitAuthWithFullFraudReversalRequest"
+				type="tns:DebitAuthWithFullfraudReversalRequest" />
+			<s:complexType name="DebitAuthWithFullfraudReversalRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="reversalReason"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="originalRequest"
+						type="tns:DebitAuthorizationWithFullFraudRequest" />
+					<s:element minOccurs="0" maxOccurs="1" name="originalResult"
+						type="tns:DebitAuthorizationWithFullFraudResult" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="DebitAuthorizationWithFullFraudRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1"
+						name="debitAuthorizationRequest" type="tns:DebitAuthorizationRequest" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fullFraudTransactionData" type="tns:ManageOrderRequest" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ManageOrderRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="IxTimeout"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxStoreNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTerminalNumber"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="IxTranType"
+						type="tns:ManageOrderActionCode" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxRuleSet"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="TransactionData"
+						type="tns:TransactionData" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="ManageOrderActionCode">
+				<s:restriction base="s:string">
+					<s:enumeration value="MODIFYORDER" />
+					<s:enumeration value="FRAUDCHECK" />
+				</s:restriction>
+			</s:simpleType>
+			<s:complexType name="TransactionData">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="requestVersion"
+							   type="s:int" />
+					<s:element minOccurs="1" maxOccurs="1" name="transactionId"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="webOrderId"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="transactionType"
+						type="tns:transactionType" />
+					<s:element minOccurs="1" maxOccurs="1" name="transactionDateTime"
+						type="s:dateTime" />
+					<s:element minOccurs="1" maxOccurs="1" name="orderDateTime"
+						type="s:dateTime" />
+					<s:element minOccurs="1" maxOccurs="1"
+						name="transactionTotalAmount" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="csrSalesRep"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="enterpriseCutId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="browserCookie"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="salesChannel"
+						type="tns:salesChannels"/>
+					<s:element minOccurs="0" maxOccurs="1" name="deviceIndicator"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ipAddress"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="orderMessage"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="billingDetails"
+							   type="tns:billingDetails" />
+					<s:element minOccurs="1" maxOccurs="1" name="paymentMethods"
+						type="tns:paymentMethods" />
+					<s:element minOccurs="0" maxOccurs="1" name="member"
+						type="tns:member" />
+					<s:element minOccurs="1" name="items" type="tns:items" />
+					<s:element minOccurs="1" maxOccurs="1" name="shippingOrders"
+						type="tns:shippingOrders" />
+					<s:element minOccurs="0" name="chargeBacks" type="tns:chargeBacks" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="transactionType">
+				<s:restriction base="s:string">
+					<s:enumeration value="ORDER" />
+					<s:enumeration value="CANCEL" />
+					<s:enumeration value="UPDATE" />
+				</s:restriction>
+			</s:simpleType>
+
+			<s:simpleType name="salesChannels">
+				<s:restriction base="s:string">
+					<s:enumeration value="WEB"/>
+					<s:enumeration value="CSR APP"/>
+				</s:restriction>
+			</s:simpleType>
+
+			<s:complexType name="billingDetails">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="billingEmailAddress"
+							   type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="currencyCode"
+							   type="s:string" />
+					<s:element minOccurs="0" name="totalNumberOfFailedCcAttempts"
+							   type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="paymentMethods">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="100" name="paymentMethod"
+							   type="tns:caPaymentMethod" />
+				</s:sequence>
+			</s:complexType>
+
+			<s:complexType name="caPaymentMethod">
+				<s:sequence>
+					<s:element minOccurs="1"  name="paymentMethodType"
+							   type="tns:paymentMethodType" />
+					<s:element minOccurs="1" name="paymentMethodStatus"
+							   type="tns:paymentMethodStatus" />
+					<s:element minOccurs="0" name="paypals" type="tns:paypal" />
+					<s:element minOccurs="0" name="creditCard" type="tns:creditCard" />
+					<s:element minOccurs="0" name="giftCard" type="tns:giftCard" />
+					<s:element minOccurs="0" name="coupon" type="tns:coupon" />
+				</s:sequence>
+			</s:complexType>
+
+			<s:simpleType name="paymentMethodType">
+				<s:restriction base="s:string">
+					<s:enumeration value="PAYPAL" />
+					<s:enumeration value="CREDITCARD" />
+					<s:enumeration value="GIFTCARD" />
+					<s:enumeration value="COUPON" />
+				</s:restriction>
+			</s:simpleType>
+
+			<s:simpleType name="paymentMethodStatus">
+				<s:restriction base="s:string">
+					<s:enumeration value="ACTIVE"/>
+					<s:enumeration value="INACTIVE"/>
+				</s:restriction>
+			</s:simpleType>
+
+			<s:complexType name="paypal">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="paypalRequestId"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="paypalEmail"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="paypalStatus"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="totalPaypalAuthAmt"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="creditCard">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="billingAddress"
+						type="tns:addressDetails" />
+					<s:element minOccurs="1" maxOccurs="1" name="creditCardType"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="creditCardNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="totalCreditCardAuthAmount" type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1"
+						name="creditCardExpireMonth" type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="creditCardExpireYear"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="creditCardAuthorizationCode" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="creditCardAvsResponse" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="creditCardCvvResponse" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="creditCard3DSecureValue" type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="giftCard">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="giftCardNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="totalGiftCardAuthAmount" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="giftCardDigital"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="coupon">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="couponCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="couponAmount"
+						type="s:string" />
+				</s:sequence>
+		</s:complexType>
+			<s:complexType name="member">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="memberLoggedIn"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="memberId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="memberShipDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="memberAddress"
+						type="tns:addressDetails" />
+					<s:element minOccurs="0" maxOccurs="1" name="membershipLevel"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="membershipStatus"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="shippingOrders">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="999" name="shippingOrder" type="tns:shippingOrder" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="shippingOrder">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="shippingOrderId"
+							   type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="purchaseOrderId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="globalContractId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="shippingOrderStatus"
+						type="tns:shippingOrderStatus" />
+					<s:element minOccurs="0" maxOccurs="1" name="purchaseOrderStatus"
+						type="tns:purchaseOrderStatus" />
+					<s:element minOccurs="0" maxOccurs="1" name="shippingCharge"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="shippingDetails"
+						type="tns:shippingDetails" />
+					<s:element minOccurs="1" maxOccurs="1" name="fulfillmentPartner"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="shippingOrderStatus">
+				<s:restriction base="s:string">
+					<s:enumeration value="OPEN" />
+					<s:enumeration value="CANCEL" />
+					<s:enumeration value="COMPLETED" />
+				</s:restriction>
+			</s:simpleType>
+			<s:simpleType name="purchaseOrderStatus">
+				<s:restriction base="s:string">
+					<s:enumeration value="OPEN" />
+					<s:enumeration value="CANCEL" />
+					<s:enumeration value="COMPLETED" />
+				</s:restriction>
+			</s:simpleType>
+			<s:complexType name="shippingDetails">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="shippingMethod"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="shippingDeadline"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="shippingAddress"
+						type="tns:addressDetails" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="addressDetails">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="firstName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="middleName"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="lastName"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="emailAddress"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="address1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="address2"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="city" type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="state" type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="postalCode"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="country"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="phoneNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="secondaryPhoneNumber"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="items">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="999" name="item" type="tns:item" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="item">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="shippingOrderId"
+							   type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="fsOrderLineId"
+							   type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="itemStatus"
+							   type="tns:itemStatus" />
+					<s:element minOccurs="1" maxOccurs="1" name="itemSkuNumber"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="itemSkuDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="itemPrice"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="itemQuantity"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="itemSkuCategory"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="staffDiscount"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="postCaptureDiscount"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="itemSaleTax"
+						type="tns:itemStatus" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="itemStatus">
+				<s:restriction base="s:string">
+					<s:enumeration value="BACKORDER" />
+					<s:enumeration value="OPEN" />
+					<s:enumeration value="CANCEL" />
+					<s:enumeration value="COMPLETED" />
+				</s:restriction>
+			</s:simpleType>
+			<s:complexType name="chargeBacks">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="100" name="chargeBack" type="tns:chargeBack" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="chargeBack">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="shippingOrderId"
+							   type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="chargeBackAmount"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="chargeBackReasonCode"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="chargeBackReciveDate"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="DebitAuthorizationWithFullFraudResult">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1"
+						name="debitAuthorizationResult" type="tns:DebitAuthorizationResult" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fraudErrorDescription" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fullFraudTransactionresults" type="tns:ArrayOfString" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfString">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="string"
+						nillable="true" type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="DebitAuthWithFullFraudReversalResult"
+				type="tns:DebitAuthWithFullFraudReversalResult" />
+			<s:complexType name="DebitAuthWithFullFraudReversalResult">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="debitReversalResult"
+						type="tns:DebitReversalResult" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="ManageOrderRequest" type="tns:ManageOrderRequest" />
+			<s:element name="ManageOrderResult" type="tns:ManageOrderResponse" />
+			<s:complexType name="ManageOrderResponse">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="0" maxOccurs="1" name="errorDescription"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="transaction-results"
+						type="tns:Transaction-results" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Transaction-results">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="transaction-id"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cross-reference"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="rules-tripped"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="total-score"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="recommendation-code"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="remarks"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseData"
+						type="tns:ResponseData" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ResponseData">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="transaction"
+						type="tns:Transaction" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Transaction">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="reason-code"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="reason-description"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="transaction-details"
+						type="tns:ArrayOfString1" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfString1">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="transaction-detail"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="FraudNegativeRequest" type="tns:FraudNegativeRequest" />
+			<s:complexType name="FraudNegativeRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="IxTimeout"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxStoreNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTerminalNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxRuleSet"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="TransactionData">
+						<s:complexType mixed="true">
+							<s:sequence>
+								<s:any />
+							</s:sequence>
+						</s:complexType>
+					</s:element>
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="FraudNegativeResponse" type="tns:FraudNegativeResponse" />
+			<s:complexType name="FraudNegativeResponse">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="IxTranType"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="0" maxOccurs="1" name="errorDescription"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="transaction-results"
+						type="tns:Transaction-results" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="FraudNegativeRequest1" type="tns:FraudNegativeRequest1" />
+			<s:complexType name="FraudNegativeRequest1">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="IxStoreNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTerminalNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxRuleSet"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="NeedDetokenization"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Order" type="tns:Order" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTimeout"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Order">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="EnteredBy"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="EntryType"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="OrderDate"
+						type="s:dateTime" />
+					<s:element minOccurs="0" maxOccurs="1" name="OrderNo"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="OriginalTotalAmount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="CustomerEMailID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="DownloadItem"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="unbounded" name="Extn"
+						type="tns:Extn" />
+					<s:element minOccurs="0" maxOccurs="unbounded" name="PriceInfo"
+						type="tns:PriceInfo" />
+					<s:element minOccurs="0" maxOccurs="unbounded" name="PersonInfoBillTo"
+						type="tns:PersonInfoBillTo" />
+					<s:element minOccurs="0" maxOccurs="unbounded" name="PersonInfoContact"
+						type="tns:PersonInfoContact" />
+					<s:element minOccurs="0" maxOccurs="1" name="PaymentMethods"
+						type="tns:ArrayOfPaymentMethod" />
+					<s:element minOccurs="0" maxOccurs="1" name="OrderLines"
+						type="tns:ArrayOfOrderLine" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="Extn">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1"
+						name="AddressOverriddenFlag" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="AddressStandardizedFlag" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="BillingPhoneNo"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="CustomerOrderCount"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IPAddress"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="LoggedInFlag"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="LoyaltyID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PitchInFlag"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="SessionID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="EnteredUserId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PayPalCustomerID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PayPalEmailAddress"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PayPalBillingPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="CustomerFraudFlag"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="BillingAddressStatus"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="TECCardNo"
+						type="s:long" />
+					<s:element minOccurs="0" maxOccurs="unbounded" name="EOMSBBYMHeaderList"
+						type="tns:EOMSBBYMHeaderList" />
+					<s:element minOccurs="0" maxOccurs="1" name="APIKey"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AffiliateID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PartnerID"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="EOMSBBYMHeaderList">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="EOMSBBYMHeader"
+						type="tns:EOMSBBYMHeaderListEOMSBBYMHeader" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="EOMSBBYMHeaderListEOMSBBYMHeader">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="CAPTransactionID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="MessageType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="TotalDepositAmount"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AccountNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AccountPhoneNumber"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="PriceInfo">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="Currency"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="TotalAmount"
+						type="s:decimal" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="PersonInfoBillTo">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="AddressLine1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AddressLine2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Country"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="DayPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="EMailID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="EveningPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="FirstName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="LastName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="MobilePhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="OtherPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ZipCode"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="PersonInfoContact">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="AddressLine1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AddressLine2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Country"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="DayPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="EMailID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="EveningPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="FirstName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="LastName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="MobilePhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="OtherPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ZipCode"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfPaymentMethod">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="PaymentMethod"
+						type="tns:PaymentMethod" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="PaymentMethod">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="CreditCardExpDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="CreditCardName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="CreditCardNo"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="CreditCardType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PaymentReference1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PaymentReference2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PaymentReference3"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PaymentType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="SvcNo" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="TotalAuthorized"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="TotalCharged"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AuthAvs"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AuthCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AuthReturnCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AuthReturnMessage"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AuthTime"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="CVVAuthCode"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfOrderLine">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="OrderLine"
+						nillable="true" type="tns:OrderLine" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="OrderLine">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="CarrierServiceCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="GiftFlag"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="HoldFlag"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="HoldReasonCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ReqDeliveryDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ImportLicenseNo"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="LineType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="MaxLineStatusDesc"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="MinLineStatusDesc"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="OrderedQty"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="OriginalOrderedQty"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="OtherCharges"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ReturnReason"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ShipNode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Status"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="OverallTotalsCharges"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Discount"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ExtendedPrice"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="LineTotals"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="OptionPrice"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PricingQty"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Tax" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="UnitPrice"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="LineChargeShippingCharge" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="unbounded" name="DigitalItem"
+						type="tns:DigitalItem" />
+					<s:element minOccurs="0" maxOccurs="unbounded" name="DigitalExtn"
+						type="tns:DigitalExtn" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="DigitalItem">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="CustomerItem"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ItemDesc"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ItemType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ItemID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ItemShortDesc"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ProductLine"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ManufacturerName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="UPCCode"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="DigitalExtn">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="FulfillmentStatus"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="GenericSKU"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="VendorID"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="CreditCardAccountInquiryRequest" type="tns:CreditCardAccountInquiryRequest" />
+			<s:complexType name="CreditCardAccountInquiryRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="IxAccount"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxStoreId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTerminalId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOperatorId"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="IxCardType"
+						type="tns:CCAccountInquiryCardType" />
+					<s:element minOccurs="1" maxOccurs="1" name="IxCountryCode"
+						type="tns:CountryCode" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="CCAccountInquiryCardType">
+				<s:restriction base="s:string">
+					<s:enumeration value="HOUSEHOLDCONSUMER" />
+					<s:enumeration value="CHASECONSUMER" />
+					<s:enumeration value="BESTBUYCONSUMER" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="CreditCardAccountInquiryResponse" type="tns:CreditCardAccountInquiryResponse" />
+			<s:complexType name="CreditCardAccountInquiryResponse">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="IxOpenToBuy"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="IxAccountStanding"
+						type="s:boolean" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="PreScreenApplicationRequest" type="tns:PreScreenApplicationRequest" />
+			<s:complexType name="PreScreenApplicationRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="IxFirstName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMiddleInitial"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxLastName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxAddressLine1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxAddressLine2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxState"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCity"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxZip" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxHomePhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxBusinessPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTrackingNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxStoreNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTerminalNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTASReferencenumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCardIssuer"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="PreScreenApplicationResponse" type="tns:PreScreenApplicationResponse" />
+			<s:complexType name="PreScreenApplicationResponse">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="IxActionCode"
+						type="tns:PreScreenActionCode" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxProductCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxProductDescription"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTASReferenceNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxVendorReferenceNumber" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCardType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutSourceCode"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="PreScreenActionCode">
+				<s:restriction base="s:string">
+					<s:enumeration value="APPROVED" />
+					<s:enumeration value="DECLINED" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="PreScreenUpdateRequest" type="tns:PreScreenUpdateRequest" />
+			<s:complexType name="PreScreenUpdateRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="IxTasReferenceNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxVendorReferenceNumber" type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1"
+						name="IxPreScreenUpdateStatus" type="tns:PreScreenUpdateStatus" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCardIssuer"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxStoreNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTerminalNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutSourceCode"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="PreScreenUpdateStatus">
+				<s:restriction base="s:string">
+					<s:enumeration value="REFUSED" />
+					<s:enumeration value="NOTPRESENTED" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="PreScreenUpdateResponse" type="tns:PreScreenUpdateResponse" />
+			<s:complexType name="PreScreenUpdateResponse">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="IxActionCode"
+						type="tns:PreScreenUpdateActionCode" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="PreScreenUpdateActionCode">
+				<s:restriction base="s:string">
+					<s:enumeration value="NOTSET" />
+					<s:enumeration value="SUCCESS" />
+					<s:enumeration value="DECLINED" />
+					<s:enumeration value="CALLBANK" />
+					<s:enumeration value="BANKDOWN" />
+					<s:enumeration value="PENDING" />
+					<s:enumeration value="FORMATERROR" />
+					<s:enumeration value="DUPLICATE" />
+					<s:enumeration value="COMPLETEOFFER" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="CreditCardAuthorizationWithFraudRequest"
+				type="tns:CreditCardAuthorizationWithFraudRequest" />
+			<s:complexType name="CreditCardAuthorizationWithFraudRequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardInfo"
+						type="tns:CardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="customerInfo"
+						type="tns:CustomerInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="commercialSequenceNum" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="trackOneData"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="cardholderAuthVeriValue" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="electronicCommerceTransIdent" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="customerPO"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="sellerInfo"
+						type="tns:SellerInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="transactionID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fraudNegativeTransactionData" type="tns:FraudNegativeRequest" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fullFraudTransactionData" type="tns:ManageOrderRequest" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CardInfo">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="account"
+						nillable="true" type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="cardType"
+						type="tns:CardType" />
+					<s:element minOccurs="0" maxOccurs="1" name="expirationDate"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="cardEntryType"
+						type="tns:CardEntryType" />
+					<s:element minOccurs="0" maxOccurs="1" name="swipe" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="CID" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="RecurringPayment"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ETCCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AuthorizationCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="CreditPlanNbr"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="creditFinanceType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="creditGracePeriod"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="creditTerm"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="EMVData">
+						<s:complexType mixed="true">
+							<s:sequence>
+								<s:any />
+							</s:sequence>
+						</s:complexType>
+					</s:element>
+					<s:element minOccurs="0" maxOccurs="1" name="pinBlock"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ksn" type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="CardType">
+				<s:restriction base="s:string">
+					<s:enumeration value="NOTYPE" />
+					<s:enumeration value="AMEX" />
+					<s:enumeration value="AMEXSVC" />
+					<s:enumeration value="VISA" />
+					<s:enumeration value="MASTERCARD" />
+					<s:enumeration value="DISCOVER" />
+					<s:enumeration value="HRS" />
+					<s:enumeration value="JCB" />
+					<s:enumeration value="DINERS" />
+					<s:enumeration value="HOUSEHOLDCONSUMER" />
+					<s:enumeration value="HOUSEHOLDCOMMERCIAL" />
+					<s:enumeration value="MULTISERVICECOMMERCIAL" />
+					<s:enumeration value="CHASECONSUMER" />
+					<s:enumeration value="RZMC" />
+					<s:enumeration value="DCSPLCC" />
+					<s:enumeration value="APPLEPAY" />
+					<s:enumeration value="BESTBUYCOBRAND" />
+					<s:enumeration value="BESTBUYCONSUMER" />
+					<s:enumeration value="BESTBUYGIFTCARD" />
+					<s:enumeration value="BESTBUYCOMMERCIAL" />
+				</s:restriction>
+			</s:simpleType>
+			<s:simpleType name="CardEntryType">
+				<s:restriction base="s:string">
+					<s:enumeration value="NOTYPE" />
+					<s:enumeration value="SWIPE" />
+					<s:enumeration value="SCAN" />
+					<s:enumeration value="KEY" />
+					<s:enumeration value="CONTACTLESS" />
+					<s:enumeration value="PROFILE" />
+					<s:enumeration value="EMV" />
+					<s:enumeration value="FALLBACK" />
+					<s:enumeration value="FALLBACKMSR" />
+				</s:restriction>
+			</s:simpleType>
+			<s:complexType name="CustomerInfo">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="ZIP" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="FirstName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="LastName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="mStreetAddress"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="stateCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="driversLicense"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="militaryID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ssn" type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="dateOfBirth"
+						type="s:dateTime" />
+					<s:element minOccurs="0" maxOccurs="1" name="streetAddress"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="SellerInfo">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="ID" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="mStreetAddress"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="city" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ZIP" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="stateCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="streetAddress"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="CreditCardAuthorizationWithFraudResult"
+				type="tns:CreditCardAuthorizationWithFraudResult" />
+			<s:complexType name="CreditCardAuthorizationWithFraudResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="authAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="requestedAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="balance"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="avsResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cvvResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="receiptDisplay"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNodeId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="account"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="visaNetResponse"
+						type="tns:VisaNetResponse" />
+					<s:element minOccurs="0" maxOccurs="1" name="expirationDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="securityCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardLevelResults"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cavvResp"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="transactionIdentifier" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="reversalinformation"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="POSDataCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="TrackIndicator"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="systemTraceAuditNumber" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="fraudAvsResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="fraudCvvResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ACN" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="AuthorizationExpirationDate" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fraudErrorDescription" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fraudNegativeTransactionresults" type="tns:ArrayOfString" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fullFraudTransactionresults" type="tns:ArrayOfString" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="VisaNetResponse">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="bankNetRefNum"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNetRefDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="trackCVCData"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="authSource"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="registerMessage"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="entryMode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="invoice"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="validationCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="transactionID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="paymentService"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="CreditCardAuthorizationWithFullFraudRequest"
+				type="tns:CreditCardAuthorizationWithFullFraudRequest" />
+			<s:complexType name="CreditCardAuthorizationWithFullFraudRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1"
+						name="creditCardAuthorizationRequest" type="tns:CreditCardAuthorizationRequest" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fullFraudTransactionData" type="tns:ManageOrderRequest" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CreditCardAuthorizationRequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardInfo"
+						type="tns:CardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="customerInfo"
+						type="tns:CustomerInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="commercialSequenceNum" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="trackOneData"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="electronicCommerceTransIdent" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="cardholderAuthVeriValue" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="customerPO"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="sellerInfo"
+						type="tns:SellerInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="transactionID"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="authType"
+						type="tns:PLAuthType" />
+					<s:element minOccurs="0" maxOccurs="1" name="dcsAuthInfo"
+						type="tns:DCSAuthInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="applePayInfo"
+						type="tns:ApplePayInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="reversalInformation"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="highRiskIndicator"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="PLAuthType">
+				<s:restriction base="s:string">
+					<s:enumeration value="ACCTINQ" />
+					<s:enumeration value="COMPLETE" />
+					<s:enumeration value="PREAUTH" />
+					<s:enumeration value="REFUND" />
+				</s:restriction>
+			</s:simpleType>
+			<s:complexType name="DCSAuthInfo">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="ApprovalNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="AVSresult"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ApplePayInfo">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="merchantRef"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="paymentType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="merchantIdentifier"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="applicationData"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="signature"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="algorithmVersion"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="applicationDataHash"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ephemeralPublicKey"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="publicKeyHash"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="transactionId"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="CreditCardAuthorizationWithFullFraudResult"
+				type="tns:CreditCardAuthorizationWithFullFraudResult" />
+			<s:complexType name="CreditCardAuthorizationWithFullFraudResult">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1"
+						name="creditCardAuthorizationResult" type="tns:CreditCardAuthorizationResult" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fraudErrorDescription" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="fullFraudTransactionresults" type="tns:ArrayOfString" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CreditCardAuthorizationResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="authAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="requestedAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="balance"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="avsResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cvvResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="receiptDisplay"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNodeId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="account"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="expirationDate"
+						type="s:dateTime" />
+					<s:element minOccurs="0" maxOccurs="1" name="securityCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="visaNetResponse"
+						type="tns:VisaNetResponse" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardLevelResults"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cavvResp"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="transactionIdentifier" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="reversalInformation"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="POSDataCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="TrackIndicator"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="systemTraceAuditNumber" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="FraudAVSResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="FraudCVVResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="AuthorizationExpirationDate" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="ACNCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="applePayNetResponse"
+						type="tns:ApplePayNetResponse" />
+					<s:element minOccurs="0" maxOccurs="1" name="EMVData">
+						<s:complexType mixed="true">
+							<s:sequence>
+								<s:any />
+							</s:sequence>
+						</s:complexType>
+					</s:element>
+					<s:element minOccurs="0" maxOccurs="1" name="TASAuthKey"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ApplePayNetResponse">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="transactionId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="transactionTag"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="corelationId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="transactionStatus"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="validationStatus"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="PayEzeeyResponseCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="PayEzeeyResponseDescription" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="expirationDate"
+						type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="DebitAuthorizationWithFullFraudRequest"
+				type="tns:DebitAuthorizationWithFullFraudRequest" />
+			<s:element name="DebitAuthorizationWithFullFraudResult"
+				type="tns:DebitAuthorizationWithFullFraudResult" />
+			<s:element name="privateLabelRefundRequest" type="tns:PrivateLabelRefundRequest" />
+			<s:complexType name="PrivateLabelRefundRequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardInfo"
+						type="tns:CardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+					<s:element minOccurs="1" maxOccurs="1" name="mRefundType"
+						type="tns:RefundType" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+					<s:element minOccurs="1" maxOccurs="1" name="refundType"
+						type="tns:RefundType" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="RefundType">
+				<s:restriction base="s:string">
+					<s:enumeration value="NOTYPE" />
+					<s:enumeration value="REFUND" />
+					<s:enumeration value="TIMEOUTREVERSAL" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="privateLabelRefundResponse" type="tns:PrivateLabelRefundResponse" />
+			<s:complexType name="PrivateLabelRefundResponse">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="receiptDisplay"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNodeId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="reversalInformation"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="AuthorizeApplication">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="request">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:any />
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="AuthorizeApplicationResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1"
+							name="AuthorizeApplicationResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:any />
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="authorizeFlashApplicationRequest" type="tns:AuthorizeFlashApplicationRequest" />
+			<s:complexType name="AuthorizeFlashApplicationRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="IxInAJBID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxCreditInterfaceIdentification" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved4"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved5"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved6"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTermid"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxStoreNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTerminalNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved10"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInRecType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxDeptId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInFName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInInitial"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInLName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInRefNum"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInSIN"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInPostalCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInHouseNo"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInHomePhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInBusPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInAmount"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInCashier"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInBirthDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInIncome"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInInsurance"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInResidence"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInAuthorizer"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInResTime"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInPremium"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInPaymentPayer"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInAddress1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInAddress2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxAptNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInCity"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInStateCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInPhotoIDType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInPhotoIDState"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInPhotoIDNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInExpDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInEntryMode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInPrefLanguage"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInTermLanguage"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMaritalStatus"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxEmployerName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxEmployedDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxSignature"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMortgageAmount"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInsuranceType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxApplicationType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppFName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppInitial"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppLName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppSIN"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppBirthDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppAddress1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppAptNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppCity"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppStateCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppZipCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppHomePhon"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppWorkPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppResTime"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppEmployerName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppEmployerDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppIncome"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppSignature"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxFraudFlag"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMembershipNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInMaidenName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="InInEmail"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxIDVerification"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxAuthUserFName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved74"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved75"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved76"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxConsCommInd"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxKeyClicks"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCpVerification"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxDownPayment"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxModel"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxProductLine"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxNewUsedStatus"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxYearOfProduct"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTradeInAmount"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxShipToStreetAddress" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxShipToAptNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxShipToCity"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxShipToStateProvince" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxShipToZipcodePostalCode" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxSecondaryId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxMiscellaneousOtherIncome" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxVisaMcRequested"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMembershipCardInd1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMembershipNumber2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMembershipCardInd2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxMembershipRenewalDate" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMembershipFeeInd"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxBusinessName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxResaleLicense"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxResaleNumberStateProv" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxFirstResaleType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxSecondResaleType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCreditCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTobaccoTax"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMoveDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMoveStreetAddress"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMoveAptNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMoveCity"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxMoveStateProv"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxMoveZipcodePostalcode" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxEmployeePosition"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxEmployeeJobCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxPreviousStreetAddress" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxPreviousAptNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxPreviousCity"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxPreviousStateProvince" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxPreviousZipcodePostalcode" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxPreviousEmployeePosition" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxPreviousEmployeeJobcode" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxPreviousEmployeePhoneNum" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxBankName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxBankAddress"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxBankCardName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxBankCardReference"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxSpecialAccountInd"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppJobCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxRscComment"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxBankCardNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxBankCardExp"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxAuthResult"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxAuthErrorCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxSourceIPAddress"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxEntryMode"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="authorizeFlashApplicationResult" type="tns:AuthorizeFlashApplicationResult" />
+			<s:complexType name="AuthorizeFlashApplicationResult">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="IxInAJBID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxCreditInterfaceIdentification" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxActionCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved5"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="Reserved6"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTermid"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxStoreNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxTerminalNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInRecType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInFName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInInitial"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxInLName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutAddress1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutAddress2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutCity"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutState"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutAccount"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutLimit"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutAuthID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutReturnNo"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutReturnText"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutAppID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutPremiumRequest"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutPaymentPayer"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutExpDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxPrevHouseNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxPrevZipCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppFName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppInitial"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppLName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppAddress1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppAptNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppCity"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppStateCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxCoAppZipCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxPendingNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxCorrelationUniqueID" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxCallCenterPhoneNumber" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutInterestRate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutHomePhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutSIN"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutCurrentBalance"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutNextPayment"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutLastPayment"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutOpenToBuy"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutGEData"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutBusPhone"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxOutCreditRespIndicator" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutBusinessName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutDeclineTypeInd"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutRefusalReason"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutPendingInfoCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutEmailAddress"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutApprovalAdj"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutReplyComment"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutContactName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutResponseSent"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutSalesPerson"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxOutMembershipNumber1" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutCardInd1"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxOutMembershipNumber2" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutCardInd2"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutRenewalDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutHypTnsMsgId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutDiscountPCT"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutOrgTypeInd"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutFirstRespTime"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxOutSalesOrderNumber" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxOutCreditProductDescription" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxOutCreditProductCode" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutProgramType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxOutAltProgramIndicator" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="IxOutAltProgramPCT"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="IxOutPrimeInterestRate" type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardBalanceInquiryRequest" type="tns:GiftCardBalanceInquiryRequest" />
+			<s:complexType name="GiftCardBalanceInquiryRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="cardInfo"
+						type="tns:CardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardBalanceInquiryResult" type="tns:GiftCardBalanceInquiryResult" />
+			<s:complexType name="GiftCardBalanceInquiryResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="balance"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardAuthorizationRequest" type="tns:GiftCardAuthorizationRequest" />
+			<s:complexType name="GiftCardAuthorizationRequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="authType"
+						type="tns:AuthType" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardInfo"
+						type="tns:CardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="customerInfo"
+						type="tns:CustomerInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="AuthType">
+				<s:restriction base="s:string">
+					<s:enumeration value="NOTSET" />
+					<s:enumeration value="DEBIT" />
+					<s:enumeration value="CREDIT" />
+					<s:enumeration value="FUNDANDACTIVATECOMMIT" />
+					<s:enumeration value="FUNDANDACTIVATEINITIATE" />
+					<s:enumeration value="FUNDANDACTIVATE" />
+					<s:enumeration value="FUNDINITIATE" />
+					<s:enumeration value="FUNDCOMMIT" />
+					<s:enumeration value="FUNDONLY" />
+					<s:enumeration value="VOIDTRIAL" />
+					<s:enumeration value="VOIDFUND" />
+					<s:enumeration value="CASHOUT" />
+					<s:enumeration value="VOIDRELOAD" />
+					<s:enumeration value="VOIDACTIVATE" />
+					<s:enumeration value="REMOVEVOIDLOCK" />
+					<s:enumeration value="SETVOIDLOCK" />
+					<s:enumeration value="VOIDREDEEM" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="giftCardAuthorizationResult" type="tns:GiftCardAuthorizationResult" />
+			<s:complexType name="GiftCardAuthorizationResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="authAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="requestedAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="balance"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="avsResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cvvResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="receiptDisplay"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNodeId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:element minOccurs="1" maxOccurs="1" name="classCode"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="TASAuthKey"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardReversalRequest" type="tns:GiftCardReversalRequest" />
+			<s:complexType name="GiftCardReversalRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="originalRequest"
+						type="tns:GiftCardAuthorizationRequest" />
+					<s:element minOccurs="0" maxOccurs="1" name="originalResult"
+						type="tns:GiftCardAuthorizationResult" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardReversalResult" type="tns:GiftCardReversalResult" />
+			<s:complexType name="GiftCardReversalResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="TASAuthKey"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardActivateRequest" type="tns:GiftCardActivateRequest" />
+			<s:complexType name="GiftCardActivateRequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="authType"
+						type="tns:AuthType" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardInfo"
+						type="tns:CardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardActivateResult" type="tns:GiftCardActivateResult" />
+			<s:complexType name="GiftCardActivateResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="authAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="requestedAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="balance"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="receiptDisplay"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNodeId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardReloadRequest" type="tns:GiftCardReloadRequest" />
+			<s:complexType name="GiftCardReloadRequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="authType"
+						type="tns:AuthType" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardInfo"
+						type="tns:CardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardReloadResult" type="tns:GiftCardReloadResult" />
+			<s:complexType name="GiftCardReloadResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="authAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="requestedAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="balance"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="avsResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cvvResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="receiptDisplay"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNodeId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardActivateReversalRequest" type="tns:GiftCardActivateReversalRequest" />
+			<s:complexType name="GiftCardActivateReversalRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="originalRequest"
+						type="tns:GiftCardActivateRequest" />
+					<s:element minOccurs="0" maxOccurs="1" name="originalResult"
+						type="tns:GiftCardActivateResult" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="giftCardActivateReversalResult" type="tns:GiftCardActivateReversalResult" />
+			<s:complexType name="GiftCardActivateReversalResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="creditCardAuthorizationRequest" type="tns:CreditCardAuthorizationRequest" />
+			<s:element name="creditCardAuthorizationResult" type="tns:CreditCardAuthorizationResult" />
+			<s:element name="creditCardAccountLookupRequest" type="tns:CreditCardAccountLookupRequest" />
+			<s:complexType name="CreditCardAccountLookupRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="cardInfo"
+						type="tns:CardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="customerInfo"
+						type="tns:CustomerInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+					<s:element minOccurs="1" maxOccurs="1" name="lookupType"
+						type="tns:LookupType" />
+					<s:element minOccurs="1" maxOccurs="1" name="creditCardAccepted"
+						type="s:boolean" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="LookupType">
+				<s:restriction base="s:string">
+					<s:enumeration value="OUTOFTRAN" />
+					<s:enumeration value="PAYMENT" />
+					<s:enumeration value="SALES" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="CreditCardAccountLookupResponse" type="tns:CreditCardAccountLookupResponse" />
+			<s:complexType name="CreditCardAccountLookupResponse">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="actionCodeList"
+						type="tns:ArrayOfLookupActionCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="numberofAccounts"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="accountInfoList"
+						type="tns:ArrayOfAccountInfo" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfLookupActionCode">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="LookupActionCode"
+						nillable="true" type="tns:LookupActionCode" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="LookupActionCode">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="Vendor"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="VendorResponse"
+						type="tns:ActionCode" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfAccountInfo">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="AccountInfo"
+						nillable="true" type="tns:AccountInfo" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="AccountInfo">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="vendor"
+						type="tns:Vendor" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="creditProductDescription" type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="availableCredit"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="accountOpenDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardType"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="creditProductCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="accountNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="expirationDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardHolderName"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="lastStatementBalance"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="minimumPaymentDue"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="paymentDueDate"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardUsageAdvisory"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="sequence"
+						type="s:int" />
+					<s:element minOccurs="1" maxOccurs="1" name="tokenized"
+						type="s:boolean" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="internetRequiredFields" type="s:string" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="Vendor">
+				<s:restriction base="s:string">
+					<s:enumeration value="HSBC" />
+					<s:enumeration value="CHASE" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="creditCardReversalRequest" type="tns:CreditCardReversalRequest" />
+			<s:complexType name="CreditCardReversalRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="reversalReason"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="originalRequest"
+						type="tns:CreditCardAuthorizationRequest" />
+					<s:element minOccurs="0" maxOccurs="1" name="originalResult"
+						type="tns:CreditCardAuthorizationResult" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="creditCardReversalResult" type="tns:CreditCardReversalResult" />
+			<s:complexType name="CreditCardReversalResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="creditCardwithFullFraudReversalRequest"
+				type="tns:CreditCardwithFullFraudReversalRequest" />
+			<s:complexType name="CreditCardwithFullFraudReversalRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="reversalReason"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="originalRequest"
+						type="tns:CreditCardAuthorizationWithFullFraudRequest" />
+					<s:element minOccurs="0" maxOccurs="1" name="originalResult"
+						type="tns:CreditCardAuthorizationWithFullFraudResult" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="creditCardwithFullFraudReversalResult"
+				type="tns:CreditCardwithFullFraudReversalResult" />
+			<s:complexType name="CreditCardwithFullFraudReversalResult">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1"
+						name="creditCardReversalResult" type="tns:CreditCardReversalResult" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="paymentOnAccountRequest" type="tns:PaymentOnAccountRequest" />
+			<s:complexType name="PaymentOnAccountRequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardInfo"
+						type="tns:CardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="customerInfo"
+						type="tns:CustomerInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+					<s:element minOccurs="0" maxOccurs="1" name="trackOneData"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="paymentOnAccountResult" type="tns:PaymentOnAccountResult" />
+			<s:complexType name="PaymentOnAccountResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="authAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="paymentAmount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="openToBuy"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="receiptDisplay"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNodeId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="account"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="posaRequest" type="tns:POSARequest" />
+			<s:complexType name="POSARequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="transactionTime"
+						type="s:dateTime" />
+					<s:element minOccurs="1" maxOccurs="1" name="posaType"
+						type="tns:PosaType" />
+					<s:element minOccurs="0" maxOccurs="1" name="userID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+					<s:element minOccurs="0" maxOccurs="1" name="serialNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="vendorID"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1"
+						name="messageSequenceNumber" type="s:int" />
+					<s:element minOccurs="1" maxOccurs="1" name="cardEntryType"
+						type="tns:CardEntryType" />
+					<s:element minOccurs="1" maxOccurs="1"
+						name="applicationTransactionNumber" type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="barCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="UPC" type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="PosaType">
+				<s:restriction base="s:string">
+					<s:enumeration value="ACTIVATE" />
+					<s:enumeration value="DEACTIVATE" />
+					<s:enumeration value="PREAUTH" />
+					<s:enumeration value="REVERSAL" />
+				</s:restriction>
+			</s:simpleType>
+			<s:element name="posaResult" type="tns:POSAResult" />
+			<s:complexType name="POSAResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNodeId"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="TASAuthKey"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="vBVCheckRequest" type="tns:VBVCheckRequest" />
+			<s:complexType name="VBVCheckRequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardInfo"
+						type="tns:CardInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="merchantName"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="invoice"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="vBVCheckResult" type="tns:VBVCheckResult" />
+			<s:complexType name="VBVCheckResult">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="alphaAuthRequired"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="aCSUrl"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="pAReqMsg"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="eCI" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="transactionId"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="vBVProcessRequest" type="tns:VBVProcessRequest" />
+			<s:complexType name="VBVProcessRequest">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="pAReqMsg"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="cardNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="invoice"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="transactionId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="merchantName"
+						type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="vBVProcessResult" type="tns:VBVProcessResult" />
+			<s:complexType name="VBVProcessResult">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1"
+						name="alphaAuthenticationResult" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="aCSVerificationID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="eCI" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1"
+						name="authenticationStatusMsg" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="xID" type="s:string" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="checkAuthorizationRequest" type="tns:CheckAuthorizationRequest" />
+			<s:complexType name="CheckAuthorizationRequest">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="checkInfo"
+						type="tns:CheckInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="skuInfo"
+						type="tns:SkuInfo" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestId"
+						type="tns:RequestId" />
+					<s:element minOccurs="0" maxOccurs="1" name="requestSource"
+						type="tns:RequestSource" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="CheckInfo">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="transitNumber"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="account"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="checkNumber"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="checkType"
+						type="tns:CheckType" />
+					<s:element minOccurs="1" maxOccurs="1" name="checkEntryType"
+						type="tns:CheckEntryType" />
+					<s:element minOccurs="0" maxOccurs="1" name="swipe" type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="operatorID"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="customerInfo"
+						type="tns:CustomerInfo" />
+				</s:sequence>
+			</s:complexType>
+			<s:simpleType name="CheckType">
+				<s:restriction base="s:string">
+					<s:enumeration value="PERSONAL" />
+					<s:enumeration value="CORPORATE" />
+				</s:restriction>
+			</s:simpleType>
+			<s:simpleType name="CheckEntryType">
+				<s:restriction base="s:string">
+					<s:enumeration value="KEY" />
+					<s:enumeration value="SWIPE" />
+				</s:restriction>
+			</s:simpleType>
+			<s:complexType name="SkuInfo">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="1" name="highestSKU"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="amount"
+						type="s:decimal" />
+					<s:element minOccurs="1" maxOccurs="1" name="classID"
+						type="s:int" />
+					<s:element minOccurs="1" maxOccurs="1" name="subClassID"
+						type="s:int" />
+				</s:sequence>
+			</s:complexType>
+			<s:element name="checkAuthorizationResult" type="tns:CheckAuthorizationResult" />
+			<s:complexType name="CheckAuthorizationResult">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="actionCode"
+						type="tns:ActionCode" />
+					<s:element minOccurs="1" maxOccurs="1" name="authAmount"
+						type="s:decimal" />
+					<s:element minOccurs="0" maxOccurs="1" name="authCode"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="isoResponse"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="receiptDisplay"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="bankNodeId"
+						type="s:string" />
+					<s:element minOccurs="0" maxOccurs="1" name="responseDescription"
+						type="s:string" />
+					<s:element minOccurs="1" maxOccurs="1" name="rtsResponseTime"
+						type="s:int" />
+					<s:element minOccurs="0" maxOccurs="1" name="checkInfo"
+						type="tns:CheckInfo" />
+					<s:any minOccurs="0" maxOccurs="unbounded" />
+				</s:sequence>
+			</s:complexType>
+		</s:schema>
+	</wsdl:types>
+	<wsdl:message name="AuthorizeApplicationForPELSoapIn">
+		<wsdl:part name="parameters" element="tns:AuthorizeApplicationForPEL" />
+	</wsdl:message>
+	<wsdl:message name="AuthorizeApplicationForPELSoapOut">
+		<wsdl:part name="parameters" element="tns:AuthorizeApplicationForPELResponse" />
+	</wsdl:message>
+	<wsdl:message name="AuthorizeGiftCardForPELSoapIn">
+		<wsdl:part name="parameters" element="tns:AuthorizeGiftCardForPEL" />
+	</wsdl:message>
+	<wsdl:message name="AuthorizeGiftCardForPELSoapOut">
+		<wsdl:part name="parameters" element="tns:AuthorizeGiftCardForPELResponse" />
+	</wsdl:message>
+	<wsdl:message name="HeartBeat106MessageCallSoapIn">
+		<wsdl:part name="parameters" element="tns:HeartBeat106MessageCall" />
+	</wsdl:message>
+	<wsdl:message name="HeartBeat106MessageCallSoapOut">
+		<wsdl:part name="parameters" element="tns:HeartBeat106MessageCallResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetDebitAuthorizationSoapIn">
+		<wsdl:part name="debitAuthorizationRequest" element="tns:debitAuthorizationRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetDebitAuthorizationSoapOut">
+		<wsdl:part name="GetDebitAuthorizationResult" element="tns:debitAuthorizationResult" />
+	</wsdl:message>
+	<wsdl:message name="GetDebitReversalSoapIn">
+		<wsdl:part name="debitReversalRequest" element="tns:debitReversalRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetDebitReversalSoapOut">
+		<wsdl:part name="GetDebitReversalResult" element="tns:debitReversalResult" />
+	</wsdl:message>
+	<wsdl:message name="GetDebitAuthWithFullFraudReversalSoapIn">
+		<wsdl:part name="debitAuthWithFullFraudReversalRequest"
+			element="tns:debitAuthWithFullFraudReversalRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetDebitAuthWithFullFraudReversalSoapOut">
+		<wsdl:part name="GetDebitAuthWithFullFraudReversalResult"
+			element="tns:DebitAuthWithFullFraudReversalResult" />
+	</wsdl:message>
+	<wsdl:message name="ManageOrderSoapIn">
+		<wsdl:part name="ManageOrderRequest" element="tns:ManageOrderRequest" />
+	</wsdl:message>
+	<wsdl:message name="ManageOrderSoapOut">
+		<wsdl:part name="ManageOrderResult" element="tns:ManageOrderResult" />
+	</wsdl:message>
+	<wsdl:message name="FraudNegativeSoapIn">
+		<wsdl:part name="FraudNegativeRequest" element="tns:FraudNegativeRequest" />
+	</wsdl:message>
+	<wsdl:message name="FraudNegativeSoapOut">
+		<wsdl:part name="FraudNegativeResult" element="tns:FraudNegativeResponse" />
+	</wsdl:message>
+	<wsdl:message name="FraudNegative1SoapIn">
+		<wsdl:part name="FraudNegativeRequest1" element="tns:FraudNegativeRequest1" />
+	</wsdl:message>
+	<wsdl:message name="FraudNegative1SoapOut">
+		<wsdl:part name="FraudNegative1Result" element="tns:FraudNegativeResponse" />
+	</wsdl:message>
+	<wsdl:message name="CreditCardAccountInquirySoapIn">
+		<wsdl:part name="CreditCardAccountInquiryRequest" element="tns:CreditCardAccountInquiryRequest" />
+	</wsdl:message>
+	<wsdl:message name="CreditCardAccountInquirySoapOut">
+		<wsdl:part name="CreditCardAccountInquiryResult" element="tns:CreditCardAccountInquiryResponse" />
+	</wsdl:message>
+	<wsdl:message name="PreScreenApplicationSoapIn">
+		<wsdl:part name="PreScreenApplicationRequest" element="tns:PreScreenApplicationRequest" />
+	</wsdl:message>
+	<wsdl:message name="PreScreenApplicationSoapOut">
+		<wsdl:part name="PreScreenApplicationResult" element="tns:PreScreenApplicationResponse" />
+	</wsdl:message>
+	<wsdl:message name="PreScreenUpdateSoapIn">
+		<wsdl:part name="PreScreenUpdateRequest" element="tns:PreScreenUpdateRequest" />
+	</wsdl:message>
+	<wsdl:message name="PreScreenUpdateSoapOut">
+		<wsdl:part name="PreScreenUpdateResult" element="tns:PreScreenUpdateResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetCreditCardAuthWithFraudSoapIn">
+		<wsdl:part name="CreditCardAuthorizationWithFraudRequest"
+			element="tns:CreditCardAuthorizationWithFraudRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetCreditCardAuthWithFraudSoapOut">
+		<wsdl:part name="GetCreditCardAuthWithFraudResult" element="tns:CreditCardAuthorizationWithFraudResult" />
+	</wsdl:message>
+	<wsdl:message name="GetCreditCardAuthWithFullFraudSoapIn">
+		<wsdl:part name="CreditCardAuthorizationWithFullFraudRequest"
+			element="tns:CreditCardAuthorizationWithFullFraudRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetCreditCardAuthWithFullFraudSoapOut">
+		<wsdl:part name="GetCreditCardAuthWithFullFraudResult"
+			element="tns:CreditCardAuthorizationWithFullFraudResult" />
+	</wsdl:message>
+	<wsdl:message name="GetDebitAuthorizationWithFullFraudSoapIn">
+		<wsdl:part name="DebitAuthorizationWithFullFraudRequest"
+			element="tns:DebitAuthorizationWithFullFraudRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetDebitAuthorizationWithFullFraudSoapOut">
+		<wsdl:part name="GetDebitAuthorizationWithFullFraudResult"
+			element="tns:DebitAuthorizationWithFullFraudResult" />
+	</wsdl:message>
+	<wsdl:message name="RefundPrivateLabelSoapIn">
+		<wsdl:part name="privateLabelRefundRequest" element="tns:privateLabelRefundRequest" />
+	</wsdl:message>
+	<wsdl:message name="RefundPrivateLabelSoapOut">
+		<wsdl:part name="RefundPrivateLabelResult" element="tns:privateLabelRefundResponse" />
+	</wsdl:message>
+	<wsdl:message name="AuthorizeApplicationSoapIn">
+		<wsdl:part name="parameters" element="tns:AuthorizeApplication" />
+	</wsdl:message>
+	<wsdl:message name="AuthorizeApplicationSoapOut">
+		<wsdl:part name="parameters" element="tns:AuthorizeApplicationResponse" />
+	</wsdl:message>
+	<wsdl:message name="AuthorizeFlashApplicationSoapIn">
+		<wsdl:part name="authorizeFlashApplicationRequest" element="tns:authorizeFlashApplicationRequest" />
+	</wsdl:message>
+	<wsdl:message name="AuthorizeFlashApplicationSoapOut">
+		<wsdl:part name="AuthorizeFlashApplicationResult" element="tns:authorizeFlashApplicationResult" />
+	</wsdl:message>
+	<wsdl:message name="GetGiftCardBalanceSoapIn">
+		<wsdl:part name="giftCardBalanceInquiryRequest" element="tns:giftCardBalanceInquiryRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetGiftCardBalanceSoapOut">
+		<wsdl:part name="GetGiftCardBalanceResult" element="tns:giftCardBalanceInquiryResult" />
+	</wsdl:message>
+	<wsdl:message name="GetGiftCardAuthorizationSoapIn">
+		<wsdl:part name="giftCardAuthorizationRequest" element="tns:giftCardAuthorizationRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetGiftCardAuthorizationSoapOut">
+		<wsdl:part name="GetGiftCardAuthorizationResult" element="tns:giftCardAuthorizationResult" />
+	</wsdl:message>
+	<wsdl:message name="ReverseGiftCardAuthorizationSoapIn">
+		<wsdl:part name="giftCardReversalRequest" element="tns:giftCardReversalRequest" />
+	</wsdl:message>
+	<wsdl:message name="ReverseGiftCardAuthorizationSoapOut">
+		<wsdl:part name="ReverseGiftCardAuthorizationResult"
+			element="tns:giftCardReversalResult" />
+	</wsdl:message>
+	<wsdl:message name="ActivateGiftCardSoapIn">
+		<wsdl:part name="giftCardActivateRequest" element="tns:giftCardActivateRequest" />
+	</wsdl:message>
+	<wsdl:message name="ActivateGiftCardSoapOut">
+		<wsdl:part name="ActivateGiftCardResult" element="tns:giftCardActivateResult" />
+	</wsdl:message>
+	<wsdl:message name="ReloadGiftCardSoapIn">
+		<wsdl:part name="giftCardReloadRequest" element="tns:giftCardReloadRequest" />
+	</wsdl:message>
+	<wsdl:message name="ReloadGiftCardSoapOut">
+		<wsdl:part name="ReloadGiftCardResult" element="tns:giftCardReloadResult" />
+	</wsdl:message>
+	<wsdl:message name="ReverseGiftCardActivationSoapIn">
+		<wsdl:part name="giftCardActivateReversalRequest" element="tns:giftCardActivateReversalRequest" />
+	</wsdl:message>
+	<wsdl:message name="ReverseGiftCardActivationSoapOut">
+		<wsdl:part name="ReverseGiftCardActivationResult" element="tns:giftCardActivateReversalResult" />
+	</wsdl:message>
+	<wsdl:message name="GetCreditCardAuthorizationSoapIn">
+		<wsdl:part name="creditCardAuthorizationRequest" element="tns:creditCardAuthorizationRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetCreditCardAuthorizationSoapOut">
+		<wsdl:part name="GetCreditCardAuthorizationResult" element="tns:creditCardAuthorizationResult" />
+	</wsdl:message>
+	<wsdl:message name="CreditCardAccountLookupSoapIn">
+		<wsdl:part name="creditCardAccountLookupRequest" element="tns:creditCardAccountLookupRequest" />
+	</wsdl:message>
+	<wsdl:message name="CreditCardAccountLookupSoapOut">
+		<wsdl:part name="CreditCardAccountLookupResult" element="tns:CreditCardAccountLookupResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetCreditCardReversalSoapIn">
+		<wsdl:part name="creditCardReversalRequest" element="tns:creditCardReversalRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetCreditCardReversalSoapOut">
+		<wsdl:part name="GetCreditCardReversalResult" element="tns:creditCardReversalResult" />
+	</wsdl:message>
+	<wsdl:message name="GetCreditCardwithFullFraudReversalSoapIn">
+		<wsdl:part name="creditCardwithFullFraudReversalRequest"
+			element="tns:creditCardwithFullFraudReversalRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetCreditCardwithFullFraudReversalSoapOut">
+		<wsdl:part name="GetCreditCardwithFullFraudReversalResult"
+			element="tns:creditCardwithFullFraudReversalResult" />
+	</wsdl:message>
+	<wsdl:message name="PaymentOnAccountAuthorizationSoapIn">
+		<wsdl:part name="paymentOnAccountRequest" element="tns:paymentOnAccountRequest" />
+	</wsdl:message>
+	<wsdl:message name="PaymentOnAccountAuthorizationSoapOut">
+		<wsdl:part name="PaymentOnAccountAuthorizationResult"
+			element="tns:paymentOnAccountResult" />
+	</wsdl:message>
+	<wsdl:message name="POSAAuthorizationSoapIn">
+		<wsdl:part name="posaRequest" element="tns:posaRequest" />
+	</wsdl:message>
+	<wsdl:message name="POSAAuthorizationSoapOut">
+		<wsdl:part name="POSAAuthorizationResult" element="tns:posaResult" />
+	</wsdl:message>
+	<wsdl:message name="CheckVBVSoapIn">
+		<wsdl:part name="vBVCheckRequest" element="tns:vBVCheckRequest" />
+	</wsdl:message>
+	<wsdl:message name="CheckVBVSoapOut">
+		<wsdl:part name="CheckVBVResult" element="tns:vBVCheckResult" />
+	</wsdl:message>
+	<wsdl:message name="ProcessVBVSoapIn">
+		<wsdl:part name="vBVProcessRequest" element="tns:vBVProcessRequest" />
+	</wsdl:message>
+	<wsdl:message name="ProcessVBVSoapOut">
+		<wsdl:part name="ProcessVBVResult" element="tns:vBVProcessResult" />
+	</wsdl:message>
+	<wsdl:message name="GetCheckAuthorizationSoapIn">
+		<wsdl:part name="checkAuthorizationRequest" element="tns:checkAuthorizationRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetCheckAuthorizationSoapOut">
+		<wsdl:part name="GetCheckAuthorizationResult" element="tns:checkAuthorizationResult" />
+	</wsdl:message>
+	<wsdl:portType name="TenderAuthSoap">
+		<wsdl:operation name="AuthorizeApplicationForPEL">
+			<wsdl:input message="tns:AuthorizeApplicationForPELSoapIn" />
+			<wsdl:output message="tns:AuthorizeApplicationForPELSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="AuthorizeGiftCardForPEL">
+			<wsdl:input message="tns:AuthorizeGiftCardForPELSoapIn" />
+			<wsdl:output message="tns:AuthorizeGiftCardForPELSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="HeartBeat106MessageCall">
+			<wsdl:input message="tns:HeartBeat106MessageCallSoapIn" />
+			<wsdl:output message="tns:HeartBeat106MessageCallSoapOut" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:portType name="TenderAuth">
+		<wsdl:operation name="GetDebitAuthorization">
+			<wsdl:input message="tns:GetDebitAuthorizationSoapIn" />
+			<wsdl:output message="tns:GetDebitAuthorizationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetDebitReversal">
+			<wsdl:input message="tns:GetDebitReversalSoapIn" />
+			<wsdl:output message="tns:GetDebitReversalSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetDebitAuthWithFullFraudReversal">
+			<wsdl:input message="tns:GetDebitAuthWithFullFraudReversalSoapIn" />
+			<wsdl:output message="tns:GetDebitAuthWithFullFraudReversalSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="ManageOrder">
+			<wsdl:input message="tns:ManageOrderSoapIn" />
+			<wsdl:output message="tns:ManageOrderSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="FraudNegative">
+			<wsdl:input message="tns:FraudNegativeSoapIn" />
+			<wsdl:output message="tns:FraudNegativeSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="FraudNegative1">
+			<wsdl:input message="tns:FraudNegative1SoapIn" />
+			<wsdl:output message="tns:FraudNegative1SoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="CreditCardAccountInquiry">
+			<wsdl:input message="tns:CreditCardAccountInquirySoapIn" />
+			<wsdl:output message="tns:CreditCardAccountInquirySoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="PreScreenApplication">
+			<wsdl:input message="tns:PreScreenApplicationSoapIn" />
+			<wsdl:output message="tns:PreScreenApplicationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="PreScreenUpdate">
+			<wsdl:input message="tns:PreScreenUpdateSoapIn" />
+			<wsdl:output message="tns:PreScreenUpdateSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardAuthWithFraud">
+			<wsdl:input message="tns:GetCreditCardAuthWithFraudSoapIn" />
+			<wsdl:output message="tns:GetCreditCardAuthWithFraudSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardAuthWithFullFraud">
+			<wsdl:input message="tns:GetCreditCardAuthWithFullFraudSoapIn" />
+			<wsdl:output message="tns:GetCreditCardAuthWithFullFraudSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetDebitAuthorizationWithFullFraud">
+			<wsdl:input message="tns:GetDebitAuthorizationWithFullFraudSoapIn" />
+			<wsdl:output message="tns:GetDebitAuthorizationWithFullFraudSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="RefundPrivateLabel">
+			<wsdl:input message="tns:RefundPrivateLabelSoapIn" />
+			<wsdl:output message="tns:RefundPrivateLabelSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="AuthorizeApplication">
+			<wsdl:input message="tns:AuthorizeApplicationSoapIn" />
+			<wsdl:output message="tns:AuthorizeApplicationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="AuthorizeFlashApplication">
+			<wsdl:input message="tns:AuthorizeFlashApplicationSoapIn" />
+			<wsdl:output message="tns:AuthorizeFlashApplicationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetGiftCardBalance">
+			<wsdl:input message="tns:GetGiftCardBalanceSoapIn" />
+			<wsdl:output message="tns:GetGiftCardBalanceSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetGiftCardAuthorization">
+			<wsdl:input message="tns:GetGiftCardAuthorizationSoapIn" />
+			<wsdl:output message="tns:GetGiftCardAuthorizationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="ReverseGiftCardAuthorization">
+			<wsdl:input message="tns:ReverseGiftCardAuthorizationSoapIn" />
+			<wsdl:output message="tns:ReverseGiftCardAuthorizationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="ActivateGiftCard">
+			<wsdl:input message="tns:ActivateGiftCardSoapIn" />
+			<wsdl:output message="tns:ActivateGiftCardSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="ReloadGiftCard">
+			<wsdl:input message="tns:ReloadGiftCardSoapIn" />
+			<wsdl:output message="tns:ReloadGiftCardSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="ReverseGiftCardActivation">
+			<wsdl:input message="tns:ReverseGiftCardActivationSoapIn" />
+			<wsdl:output message="tns:ReverseGiftCardActivationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardAuthorization">
+			<wsdl:input message="tns:GetCreditCardAuthorizationSoapIn" />
+			<wsdl:output message="tns:GetCreditCardAuthorizationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="CreditCardAccountLookup">
+			<wsdl:input message="tns:CreditCardAccountLookupSoapIn" />
+			<wsdl:output message="tns:CreditCardAccountLookupSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardReversal">
+			<wsdl:input message="tns:GetCreditCardReversalSoapIn" />
+			<wsdl:output message="tns:GetCreditCardReversalSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardwithFullFraudReversal">
+			<wsdl:input message="tns:GetCreditCardwithFullFraudReversalSoapIn" />
+			<wsdl:output message="tns:GetCreditCardwithFullFraudReversalSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="PaymentOnAccountAuthorization">
+			<wsdl:input message="tns:PaymentOnAccountAuthorizationSoapIn" />
+			<wsdl:output message="tns:PaymentOnAccountAuthorizationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="POSAAuthorization">
+			<wsdl:input message="tns:POSAAuthorizationSoapIn" />
+			<wsdl:output message="tns:POSAAuthorizationSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="CheckVBV">
+			<wsdl:input message="tns:CheckVBVSoapIn" />
+			<wsdl:output message="tns:CheckVBVSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="ProcessVBV">
+			<wsdl:input message="tns:ProcessVBVSoapIn" />
+			<wsdl:output message="tns:ProcessVBVSoapOut" />
+		</wsdl:operation>
+		<wsdl:operation name="GetCheckAuthorization">
+			<wsdl:input message="tns:GetCheckAuthorizationSoapIn" />
+			<wsdl:output message="tns:GetCheckAuthorizationSoapOut" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="TenderAuthSoap" type="tns:TenderAuthSoap">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="AuthorizeApplicationForPEL">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/AuthorizeApplicationForPEL"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="AuthorizeGiftCardForPEL">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/AuthorizeGiftCardForPEL"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="HeartBeat106MessageCall">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/HeartBeat106MessageCall"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="TenderAuth" type="tns:TenderAuth">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="GetDebitAuthorization">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/GetDebitAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDebitReversal">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/GetDebitReversal"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDebitAuthWithFullFraudReversal">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetDebitAuthWithFullFraudReversal"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ManageOrder">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/ManageOrder"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FraudNegative">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/FraudNegative"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FraudNegative1">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/FraudNegative1"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreditCardAccountInquiry">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/CreditCardAccountInquiry"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PreScreenApplication">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/PreScreenApplication"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PreScreenUpdate">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/PreScreenUpdate"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardAuthWithFraud">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetCreditCardAuthWithFraud"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardAuthWithFullFraud">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetCreditCardAuthWithFullFraud"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDebitAuthorizationWithFullFraud">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetDebitAuthorizationWithFullFraud"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="RefundPrivateLabel">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/RefundPrivateLabel"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="AuthorizeApplication">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/AuthorizeApplication"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="AuthorizeFlashApplication">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/AuthorizeFlashApplication"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetGiftCardBalance">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/GetGiftCardBalance"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetGiftCardAuthorization">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetGiftCardAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ReverseGiftCardAuthorization">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/ReverseGiftCardAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ActivateGiftCard">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/ActivateGiftCard"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ReloadGiftCard">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/ReloadGiftCard"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ReverseGiftCardActivation">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/ReverseGiftCardActivation"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardAuthorization">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetCreditCardAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreditCardAccountLookup">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/CreditCardAccountLookup"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardReversal">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/GetCreditCardReversal"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardwithFullFraudReversal">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetCreditCardwithFullFraudReversal"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PaymentOnAccountAuthorization">
+			<soap:operation
+				soapAction="http://bestbuy.com/TenderAuth/PaymentOnAccountAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="POSAAuthorization">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/POSAAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CheckVBV">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/CheckVBV"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessVBV">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/ProcessVBV"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCheckAuthorization">
+			<soap:operation soapAction="http://bestbuy.com/TenderAuth/GetCheckAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="TenderAuthSoap12" type="tns:TenderAuthSoap">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="AuthorizeApplicationForPEL">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/AuthorizeApplicationForPEL"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="AuthorizeGiftCardForPEL">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/AuthorizeGiftCardForPEL"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="HeartBeat106MessageCall">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/HeartBeat106MessageCall"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="TenderAuth1" type="tns:TenderAuth">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="GetDebitAuthorization">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetDebitAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDebitReversal">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/GetDebitReversal"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDebitAuthWithFullFraudReversal">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetDebitAuthWithFullFraudReversal"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ManageOrder">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/ManageOrder"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FraudNegative">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/FraudNegative"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FraudNegative1">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/FraudNegative1"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreditCardAccountInquiry">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/CreditCardAccountInquiry"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PreScreenApplication">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/PreScreenApplication"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PreScreenUpdate">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/PreScreenUpdate"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardAuthWithFraud">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetCreditCardAuthWithFraud"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardAuthWithFullFraud">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetCreditCardAuthWithFullFraud"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDebitAuthorizationWithFullFraud">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetDebitAuthorizationWithFullFraud"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="RefundPrivateLabel">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/RefundPrivateLabel"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="AuthorizeApplication">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/AuthorizeApplication"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="AuthorizeFlashApplication">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/AuthorizeFlashApplication"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetGiftCardBalance">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/GetGiftCardBalance"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetGiftCardAuthorization">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetGiftCardAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ReverseGiftCardAuthorization">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/ReverseGiftCardAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ActivateGiftCard">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/ActivateGiftCard"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ReloadGiftCard">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/ReloadGiftCard"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ReverseGiftCardActivation">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/ReverseGiftCardActivation"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardAuthorization">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetCreditCardAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CreditCardAccountLookup">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/CreditCardAccountLookup"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardReversal">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetCreditCardReversal"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCreditCardwithFullFraudReversal">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetCreditCardwithFullFraudReversal"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PaymentOnAccountAuthorization">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/PaymentOnAccountAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="POSAAuthorization">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/POSAAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CheckVBV">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/CheckVBV"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessVBV">
+			<soap12:operation soapAction="http://bestbuy.com/TenderAuth/ProcessVBV"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCheckAuthorization">
+			<soap12:operation
+				soapAction="http://bestbuy.com/TenderAuth/GetCheckAuthorization"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="TenderAuth">
+		<wsdl:port name="TenderAuthSoap" binding="tns:TenderAuthSoap">
+			<soap:address
+				location="https://plw01tacap01c.na.bestbuy.com/TenderAuthCAV4/TenderAuth.asmx" />
+		</wsdl:port>
+		<wsdl:port name="TenderAuth" binding="tns:TenderAuth">
+			<soap:address
+				location="https://plw01tacap01c.na.bestbuy.com/TenderAuthCAV4/TenderAuth.asmx" />
+		</wsdl:port>
+		<wsdl:port name="TenderAuthSoap12" binding="tns:TenderAuthSoap12">
+			<soap12:address
+				location="https://plw01tacap01c.na.bestbuy.com/TenderAuthCAV4/TenderAuth.asmx" />
+		</wsdl:port>
+		<wsdl:port name="TenderAuth1" binding="tns:TenderAuth1">
+			<soap12:address
+				location="https://plw01tacap01c.na.bestbuy.com/TenderAuthCAV4/TenderAuth.asmx" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

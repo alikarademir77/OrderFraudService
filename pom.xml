@@ -242,6 +242,34 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.13.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <schemaLanguage>WSDL</schemaLanguage>
+                    <generatePackage>ca.bestbuy.orders.fraud.model.client.accertify.wsdl</generatePackage>
+                    <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
+                    <schemas>
+                        <schema>
+                            <fileset>
+                                <directory>${basedir}/src/main/resources/schemas</directory>
+                                <includes>
+                                    <include>TenderAuthCAV4.wsdl</include>
+                                </includes>
+                            </fileset>
+                        </schema>
+                    </schemas>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 </project>
