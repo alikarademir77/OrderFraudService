@@ -1,8 +1,0 @@
-<?xml version = '1.0' encoding = 'UTF-8'?>
-<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="FraudServiceModel" id="755E2213-50B9-626D-61F5-E05469634AF0" version="3.5">
-<createdBy>akaradem</createdBy>
-<createdTime>2018-02-19 19:27:37 UTC</createdTime>
-<ownerDesignName>FraudServiceModel</ownerDesignName>
-<capitalNames>false</capitalNames>
-<designId>755E2213-50B9-626D-61F5-E05469634AF0</designId>
-</OSDM_Design>
