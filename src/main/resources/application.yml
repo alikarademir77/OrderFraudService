@@ -3,64 +3,6 @@ server:
   contextPath: /orderfraud
 
 spring:
-  profiles:
-    active: dev
-
-  rabbitmq:
-    host: dtl24vmqcix51.ca.bestbuy.com
-    port: 5672
-    username: guest
-    password: guest
-    virtual-host: orders
-
-  cloud:
-    stream:
-      bindings:
-        fraudInbound:
-          destination: fraudInbound
-          group: fraudInboundConsumersGroup
-          consumer:
-            concurrency:  20
-            maxAttempts: 1
-        fraudOutbound:
-          destination: fraudOutbound
-      rabbit:
-        bindings:
-          fraudInbound:
-            consumer:
-              autoBindDlq:  true
-              dlqTtl: 10000
-              republishToDlq: true
-              #Using default exchange so dlqDeadLetterExchange is assigned to empty string
-              dlqDeadLetterExchange:
-      default:
-        contentType:  application/json
-
-messaging:
-  errorRetryCount: 3
-
-info:
-  name: @project.name@
-  version: @project.version@
-
-client:
-  order-details:
-    connection:
-      url: http://localhost:8080/orderdetails
-      getOrderDetailsEndpoint: /v1/fsorders
-      keystore-path: ~
-      keystore-password: ~
-      keystore-type: ~
-      key-alias: ~
-      key-password: ~
-      truststore-path: ~
-      truststore-password: ~
-      truststore-type: JKS
-      tls-enabled: false
-
----
-
-spring:
   profiles: dev
 logging:
   level:
@@ -75,6 +17,7 @@ spring:
 logging:
   level:
     ca.bestbuy: INFO
+    ROOT: WARN
 
 ---
 
@@ -82,8 +25,8 @@ spring:
   profiles: prod
 logging:
   level:
-    ROOT: WARN
     ca.bestbuy: INFO
+    ROOT: WARN
 
 ---
 
