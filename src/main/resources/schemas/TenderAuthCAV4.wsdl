@@ -283,6 +283,7 @@
 				<s:restriction base="s:string">
 					<s:enumeration value="MODIFYORDER" />
 					<s:enumeration value="FRAUDCHECK" />
+					<s:enumeration value="CANCELORDER"/>
 				</s:restriction>
 			</s:simpleType>
 			<s:complexType name="TransactionData">

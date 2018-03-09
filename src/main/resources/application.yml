@@ -58,6 +58,22 @@ client:
       truststore-type: JKS
       tls-enabled: false
 
+  tas:
+    connection:
+      url: ~
+      fraudCheckEndpoint: ~
+      key-alias: ~
+      keystore-path: ~
+      keystore-password: ~
+      keystore-type: ~
+      keystore-provider: ~
+      truststore-path: ~
+      truststore-password: ~
+      truststore-type: ~
+      truststore-provider: ~
+      tls-enabled: false
+
+
 ---
 
 spring:
