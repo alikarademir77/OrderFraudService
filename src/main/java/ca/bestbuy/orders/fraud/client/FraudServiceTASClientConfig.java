@@ -1,7 +1,9 @@
 package ca.bestbuy.orders.fraud.client;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 @Configuration
 public class FraudServiceTASClientConfig {
@@ -25,20 +27,31 @@ public class FraudServiceTASClientConfig {
     @Value("${client.tas.connection.keystore-provider}")
     public String keyStoreProvider;
 
-    @Value("${client.tas.connection.trustore-path}")
+    @Value("${client.tas.connection.truststore-path}")
     public String trustStore;
 
-    @Value("${client.tas.connection.trustore-password}")
+    @Value("${client.tas.connection.truststore-password}")
     public String trustStorePassword;
 
-    @Value("${client.tas.connection.trustore-type}")
+    @Value("${client.tas.connection.truststore-type}")
     public String trustStoreType;
 
-    @Value("${client.tas.connection.trustore-provider}")
+    @Value("${client.tas.connection.truststore-provider}")
     public String trustStoreProvider;
 
     @Value("${client.tas.connection.tls-enabled}")
     public Boolean tlsEnabled;
+
+
+    @Bean
+    public Jaxb2Marshaller marshaller() {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        // this package must match the package in the <generatePackage> specified in
+        // pom.xml
+        marshaller.setContextPath("ca.bestbuy.orders.fraud.model.client.accertify.wsdl");
+        return marshaller;
+    }
+
 
     public String getKeyAlias() {
         return keyAlias;

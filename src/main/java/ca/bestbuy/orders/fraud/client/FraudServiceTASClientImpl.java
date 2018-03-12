@@ -1,55 +1,84 @@
 package ca.bestbuy.orders.fraud.client;
 
-import ca.bestbuy.orders.fraud.mappers.XMLMapper;
+import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper;
+import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderRequest;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContexts;
+import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ObjectFactory;
+import ca.bestbuy.orders.fraud.model.internal.FraudResult;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
+import org.springframework.ws.transport.http.HttpsUrlConnectionMessageSender;
 
-import javax.net.ssl.SSLContext;
-import java.security.KeyManagementException;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.TrustManagerFactory;
+import javax.xml.bind.JAXBElement;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
 @Component
-public class FraudServiceTASClientImpl implements FraudServiceTASClient {
+public class FraudServiceTASClientImpl extends WebServiceGatewaySupport implements FraudServiceTASClient {
 
 
-    private XMLMapper xmlMapper;
-    private RestTemplate restTemplate;
     private FraudServiceTASClientConfig config;
+    private TASResponseXMLMapper tasResponseXMLMapper;
 
+    private final static String FILE_RESOURCE_PREFIX = "file://";
+    private final static String CLASSPATH_RESOURCE_PREFIX = "classpath:";
 
     @Autowired
-    public FraudServiceTASClientImpl() {
-
-        this.restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(createHttpClient()));
-
+    public FraudServiceTASClientImpl(TASResponseXMLMapper tasResponseXMLMapper, FraudServiceTASClientConfig config){
+        this.tasResponseXMLMapper = tasResponseXMLMapper;
+        this.config = config;
     }
 
     @Override
-    public ManageOrderResponse getFraudCheckResponse(ManageOrderRequest request) {
+    public FraudResult getFraudCheckResponse(ManageOrderRequest request) {
 
-        String tasURL = null;
+
+        //todo: take in internal request object as parameter, and map that into jaxb manageorderrequest
+        boolean tlsEnabled = config.getTlsEnabled();
+
+        String tasURL = "http://localhost:8999/";
         String fraudCheckEndpoint = null;
+        ObjectFactory  objectFactory = new ObjectFactory();
 
-        ManageOrderResponse response = restTemplate.getForObject(tasURL+fraudCheckEndpoint , ManageOrderResponse.class);
+        JAXBElement<ManageOrderRequest> jaxbRequest = objectFactory.createManageOrderRequest(request);
 
-        return null;
+        getWebServiceTemplate().setMarshaller(config.marshaller());
+        getWebServiceTemplate().setUnmarshaller(config.marshaller());
+
+        if(tlsEnabled) {
+            getWebServiceTemplate().setMessageSender(createHttpsUrlConnectionMessageSender());
+        }
+
+        JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) getWebServiceTemplate().marshalSendAndReceive(
+                tasURL,
+                jaxbRequest);
+
+
+        ManageOrderResponse response = jaxbResponse.getValue();
+        FraudResult fraudResult = null;
+        fraudResult = tasResponseXMLMapper.mapManageOrderResult(response);
+        return fraudResult;
     }
 
 
-    private HttpClient createHttpClient() {
 
-        boolean tlsEnabled = config.getTlsEnabled();
+    private HttpsUrlConnectionMessageSender createHttpsUrlConnectionMessageSender(){
+
         String keystorePath = config.getKeyStore();
         String keystorePassword = config.getKeyStorePassword();
         String keyAlias = config.getKeyAlias();
@@ -58,35 +87,50 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
         String truststorePath = config.getTrustStore();
         String truststorePassword = config.getTrustStorePassword();
         String truststoreType = config.getTrustStoreType();
+        HttpsUrlConnectionMessageSender messageSender = null;
 
-        if (tlsEnabled) {
-            try {
-                final KeyStore trustStore = KeyStore.getInstance(keystoreType);
-                final KeyStore keyStore = KeyStore.getInstance(truststoreType);
-                final SSLContext sslContext;
+        try {
+            KeyStore keystore = KeyStore.getInstance(keystoreType);
+            keystore.load(new FileInputStream(makeResource(keystorePath).getFile()), keystorePassword.toCharArray());
 
-                sslContext = SSLContexts.custom()
-                        .loadKeyMaterial(keyStore, keystorePassword.toCharArray(), (aliases, socket) -> keyAlias)
-                        .loadTrustMaterial(trustStore, ((x509Certificates, s) -> false))
-                        .build();
+            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            keyManagerFactory.init(keystore, keystorePassword.toCharArray());
 
+            KeyStore truststore = KeyStore.getInstance(truststoreType);
+            truststore.load(new FileInputStream(makeResource(truststorePath).getFile()), truststorePassword.toCharArray());
 
-                final SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(
-                        sslContext,
-                        new String[]{"TLSv1.2"},
-                        null,
-                        SSLConnectionSocketFactory.getDefaultHostnameVerifier()
-                );
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init(truststore);
 
-                return HttpClients.custom().setSSLSocketFactory(sslConnectionSocketFactory).build();
+            messageSender = new HttpsUrlConnectionMessageSender();
 
-            } catch (KeyManagementException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException e) {
-                throw new IllegalStateException("Could not load key store and/or trust store for TAS", e);
-            }
+            messageSender.setKeyManagers(keyManagerFactory.getKeyManagers());
+            messageSender.setTrustManagers(trustManagerFactory.getTrustManagers());
 
-        } else {
-            return HttpClients.createDefault();
+            //todo: might have to change hostname for this
+            messageSender.setHostnameVerifier((hostname, sslSession) -> {
+                if (hostname.equals("localhost")) {
+                    return true;
+                }
+                return false;
+            });
+
+        }catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException | UnrecoverableKeyException e) {
+            e.printStackTrace();
         }
+
+        return messageSender;
+    }
+
+    protected static Resource makeResource(final String path) {
+        if (path.startsWith(FILE_RESOURCE_PREFIX)) {
+            return new FileSystemResource(new File(path.substring(FILE_RESOURCE_PREFIX.length())));
+        } else if (path.startsWith(CLASSPATH_RESOURCE_PREFIX)) {
+            return new ClassPathResource(path.substring(CLASSPATH_RESOURCE_PREFIX.length()));
+        }
+
+        // We assume any path without a known prefix is a file
+        return new FileSystemResource(new File(path));
     }
 
 
