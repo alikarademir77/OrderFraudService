@@ -59,8 +59,12 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 		//Below is a mock implementation just to test Oracle DB Access is successful
 		if(EventTypes.FraudCheck.equals(event.getType())){
 			long fsOrderId = Long.parseLong(event.getOrderNumer(), 10);
-			FraudRequest foundRequest = fraudRequestRepository.findOne(fsOrderId);
-			if(foundRequest == null){
+			long requestVersion = Long.parseLong(event.getRequestVersion(), 10);
+			Iterable<FraudRequest> foundRequestIt = fraudRequestRepository
+					.findByOrderNumberAndRequestVersionGreaterThanOrderByRequestVersionDesc(new BigDecimal(fsOrderId),
+							new BigDecimal(requestVersion - 1));
+			
+			if((foundRequestIt == null)||(foundRequestIt.iterator().hasNext()==false)){
 				createNewFraudRequest(event);
 			}
 			
