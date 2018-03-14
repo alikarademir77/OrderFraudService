@@ -59,7 +59,11 @@ public abstract class OrderMapper {
             @Mapping(target = "itemQuantity", source = "qtyOrdered"),
             @Mapping(target = "itemTax", ignore = true), // Handled by custom mapping - mapItem_ItemTax()
             @Mapping(target = "itemTotalDiscount", ignore = true), // Handled by custom mapping - mapItem_Discounts()
-            @Mapping(target = "staffDiscount", ignore = true) // Handled by custom mapping - mapItem_Discounts()
+            @Mapping(target = "staffDiscount", ignore = true), // Handled by custom mapping - mapItem_Discounts()
+            @Mapping(target = "itemStatus", ignore = true), // TODO - Need to add to Order Details
+            @Mapping(target = "itemSkuNumber", ignore = true), // TODO - Need to add to Order Details
+            @Mapping(target = "itemSkuDescription", ignore = true), // TODO - Need to add to Order Details
+            @Mapping(target = "postCaptureDiscount", ignore = true) // TODO - Need to add to Order Details
 
     })
     protected abstract Item mapItem(FSOrderLine fsOrderLineToMap);
@@ -362,13 +366,17 @@ public abstract class OrderMapper {
             @Mapping(target = "creditCardAvsResponse", ignore = true), // TODO - Figure out how to get value
             @Mapping(target = "creditCardCvvResponse", ignore = true), // TODO - Figure out how to get value
             @Mapping(target = "creditCard3dSecureValue", ignore = true), // TODO - Figure out how to get value
-            @Mapping(target = "totalAuthorizedAmount", ignore = true) // TODO - Figure out how to get value
+            @Mapping(target = "totalAuthorizedAmount", ignore = true), // TODO - Figure out how to get value
+            @Mapping(target="status",ignore=true) // TODO - Figure out how to get value
     })
     protected abstract PaymentDetails.CreditCard mapCreditCard(CreditCardInfo creditCardToMap);
 
 
     @Mappings({
-            @Mapping(target = "giftCardNumber", source = "giftCardNumber")
+            @Mapping(target = "giftCardNumber", source = "giftCardNumber"),
+            @Mapping(target = "totalAuthorizedAmount", ignore = true), // TODO - Figure out how to get value
+            @Mapping(target="status",ignore=true) // TODO - Figure out how to get value
+
     })
     protected abstract PaymentDetails.GiftCard mapGiftCard(GiftCardInfo giftCardToMap);
 

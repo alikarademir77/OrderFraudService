@@ -44,6 +44,27 @@ public class Item {
      */
     private BigDecimal staffDiscount;
 
+    /**
+     * Item Status
+     */
+    private String itemStatus;
+
+    /**
+     * Item Sku
+     */
+    private String itemSkuNumber;
+
+    /**
+     * Item Sku Description
+     */
+    private String itemSkuDescription;
+
+
+    /**
+     * Post-Capture Discount Total
+     */
+    private BigDecimal postCaptureDiscount;
+
 
     public String getFsoLineID() {
         return fsoLineID;
@@ -109,4 +130,35 @@ public class Item {
         this.staffDiscount = staffDiscount;
     }
 
+    public String getItemStatus() {
+        return itemStatus;
+    }
+
+    public void setItemStatus(String itemStatus) {
+        this.itemStatus = itemStatus;
+    }
+
+    public String getItemSkuNumber() {
+        return itemSkuNumber;
+    }
+
+    public void setItemSkuNumber(String itemSkuNumber) {
+        this.itemSkuNumber = itemSkuNumber;
+    }
+
+    public String getItemSkuDescription() {
+        return itemSkuDescription;
+    }
+
+    public void setItemSkuDescription(String itemSkuDescription) {
+        this.itemSkuDescription = itemSkuDescription;
+    }
+
+    public BigDecimal getPostCaptureDiscount() {
+        return postCaptureDiscount;
+    }
+
+    public void setPostCaptureDiscount(BigDecimal postCaptureDiscount) {
+        this.postCaptureDiscount = postCaptureDiscount;
+    }
 }

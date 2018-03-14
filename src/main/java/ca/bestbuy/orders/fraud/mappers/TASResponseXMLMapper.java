@@ -16,6 +16,7 @@ public abstract class TASResponseXMLMapper {
             @Mapping(target="actionCode", source="actionCode"),
             @Mapping(target="errorDescription", source="errorDescription"),
             @Mapping(target="transactionId", source="transactionResults.transactionId"),
+            @Mapping(target="version", source="transactionResults.responseVersion"),
             @Mapping(target="crossReference", source="transactionResults.crossReference"),
             @Mapping(target="rulesTripped", source="transactionResults.rulesTripped"),
             @Mapping(target="totalScore", source="transactionResults.totalScore"),
