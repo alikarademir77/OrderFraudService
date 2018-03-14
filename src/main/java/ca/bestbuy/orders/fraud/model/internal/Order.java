@@ -66,6 +66,23 @@ public class Order {
     private PaymentDetails paymentDetails;
 
 
+    /**
+     * Enterprise Customer Id
+     */
+    private String enterpriseCustomerId;
+
+    /**
+     *  Sales Channel
+     */
+    private String salesChannel;
+
+    /**
+     * Order Message
+     */
+
+    private String OrderMessage;
+
+
     public String getWebOrderRefID() {
         return webOrderRefID;
     }
@@ -144,5 +161,29 @@ public class Order {
 
     public void setPaymentDetails(PaymentDetails paymentDetails) {
         this.paymentDetails = paymentDetails;
+    }
+
+    public String getEnterpriseCustomerId() {
+        return enterpriseCustomerId;
+    }
+
+    public void setEnterpriseCustomerId(String enterpriseCustomerId) {
+        this.enterpriseCustomerId = enterpriseCustomerId;
+    }
+
+    public String getSalesChannel() {
+        return salesChannel;
+    }
+
+    public void setSalesChannel(String salesChannel) {
+        this.salesChannel = salesChannel;
+    }
+
+    public String getOrderMessage() {
+        return OrderMessage;
+    }
+
+    public void setOrderMessage(String orderMessage) {
+        OrderMessage = orderMessage;
     }
 }

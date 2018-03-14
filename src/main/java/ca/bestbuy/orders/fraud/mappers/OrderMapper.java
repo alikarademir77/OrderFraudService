@@ -43,7 +43,10 @@ public abstract class OrderMapper {
             @Mapping(target = "items", source = "fsOrderLines"),
             @Mapping(target = "purchaseOrders", source = "purchaseOrders"),
             @Mapping(target = "shippingOrders", source = "shippingOrders"),
-            @Mapping(target = "paymentDetails", source = "paymentMethodInfo")
+            @Mapping(target = "paymentDetails", source = "paymentMethodInfo"),
+            @Mapping(target = "enterpriseCustomerId", ignore = true), // TODO - Figure out how to get value
+            @Mapping(target = "salesChannel", ignore = true), // TODO - Figure out how to get value
+            @Mapping(target = "orderMessage",ignore = true) // TODO - Figure out how to get value
     })
     public abstract Order mapOrder(FSOrder fsOrderToMap);
 
