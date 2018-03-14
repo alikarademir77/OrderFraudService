@@ -3,6 +3,8 @@ package ca.bestbuy.orders.fraud.model.jpa;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,21 +12,23 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 
 /**
+ * 
+ *	@author akaradem
+ * 
  * The persistent class for the FRAUDREQUESTHISTORYDETAILS database table.
  * 
  */
+@SuppressWarnings("serial")
 @Entity
-@Table(name="FRAUDREQUESTHISTORYDETAILS")
-@NamedQuery(name="FraudRequestHistoryDetail.findAll", query="SELECT f FROM FraudRequestHistoryDetail f")
+@Access(AccessType.FIELD)
+@Table(name="FRAUDREQUESTHISTORYDETAILS", schema="ORDER_FRAUD")
 public class FraudRequestHistoryDetail implements Serializable {
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "FRAUDREQUESTHISTORYID")
@@ -53,8 +57,8 @@ public class FraudRequestHistoryDetail implements Serializable {
 	private String updateUser;
 
 	//bi-directional many-to-one association to Fraudrequesthistory
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="FRAUDREQUESTHISTORYID")
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="FRAUDREQUESTHISTORYID", insertable=false, updatable=false)
 	private FraudRequestHistory fraudRequestHistory;
 
 	public FraudRequestHistoryDetail() {

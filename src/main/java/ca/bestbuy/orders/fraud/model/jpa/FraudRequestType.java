@@ -3,28 +3,35 @@ package ca.bestbuy.orders.fraud.model.jpa;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 
 /**
+ * 
+ *	@author akaradem
+ * 
  * The persistent class for the FRAUDREQUESTTYPES database table.
  * 
  */
+@SuppressWarnings("serial")
 @Entity
-@Table(name="FRAUDREQUESTTYPES")
-@NamedQuery(name="FraudRequestType.findAll", query="SELECT f FROM FraudRequestType f")
+@Access(AccessType.FIELD)
+@Table(name="FRAUDREQUESTTYPES", schema="ORDER_FRAUD")
 public class FraudRequestType implements Serializable {
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "REQUESTTYPECODE")
-	private String requestTypeCode;
+	@Enumerated(EnumType.STRING)
+	private RequestTypes requestTypeCode;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "CREATEDATE")
@@ -46,11 +53,11 @@ public class FraudRequestType implements Serializable {
 	public FraudRequestType() {
 	}
 
-	public String getRequestTypeCode() {
+	public RequestTypes getRequestTypeCode() {
 		return requestTypeCode;
 	}
 
-	public void setRequestTypeCode(String requestTypeCode) {
+	public void setRequestTypeCode(RequestTypes requestTypeCode) {
 		this.requestTypeCode = requestTypeCode;
 	}
 
@@ -92,5 +99,9 @@ public class FraudRequestType implements Serializable {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+	
+	public static enum RequestTypes {
+		FRAUD_CHECK, ORDER_CANCEL;
 	}
 }

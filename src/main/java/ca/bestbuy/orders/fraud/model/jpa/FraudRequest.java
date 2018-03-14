@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,27 +16,28 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 
 /**
+ * 
+ *	@author akaradem
+ * 
  * The persistent class for the FRAUDREQUEST database table.
  * 
  */
+@SuppressWarnings("serial")
+@TableGenerator(name = "orderFraudIdGenerator", schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUDREQUESTID" )
 @Entity
-@NamedQuery(name="FraudRequest.findAll", query="SELECT f FROM FraudRequest f")
-@Table(name = "FRAUDREQUEST")
+@Access(AccessType.FIELD)
+@Table(name = "FRAUDREQUEST", schema="ORDER_FRAUD")
 public class FraudRequest implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@SequenceGenerator(name="FRAUDREQUEST_FRAUDREQUESTID_GENERATOR", sequenceName="FRAUDREQUEST_SEQ")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="FRAUDREQUEST_FRAUDREQUESTID_GENERATOR")
+	@Id @GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator" )
 	@Column(name = "FRAUDREQUESTID")
 	private long fraudRequestId;
 
@@ -59,17 +62,17 @@ public class FraudRequest implements Serializable {
 	private String updateUser;
 
 	//uni-directional many-to-one association to FraudRequestType
-	@ManyToOne(cascade={CascadeType.REFRESH}, fetch=FetchType.LAZY)
+	@ManyToOne(cascade={CascadeType.REFRESH}, fetch=FetchType.EAGER)
 	@JoinColumn(name="REQUESTTYPECODE")
 	private FraudRequestType fraudRequestType;
 
 	//uni-directional many-to-one association to FraudStatus
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="FRAUDSTATUSCODE")
 	private FraudStatus fraudStatus;
 
 	//bi-directional many-to-one association to FraudRquestHistory
-	@OneToMany(mappedBy = "fraudRequest")
+	@OneToMany(mappedBy="fraudRequest", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	private List<FraudRequestHistory> fraudRequestHistory;
 
 	public FraudRequest() {

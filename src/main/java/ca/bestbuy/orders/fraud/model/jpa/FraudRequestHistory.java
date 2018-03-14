@@ -3,8 +3,9 @@ package ca.bestbuy.orders.fraud.model.jpa;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,27 +15,29 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 
 /**
+ * 
+ *	@author akaradem
+ * 
  * The persistent class for the FRAUDREQUESTHISTORY database table.
  * 
  */
+@SuppressWarnings("serial")
+@TableGenerator(name = "orderFraudIdGenerator",  schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUDREQUESTHISTORYID")
 @Entity
-@NamedQuery(name="FraudRequestHistory.findAll", query="SELECT f FROM FraudRequestHistory f")
-@Table(name = "FRAUDREQUESTHISTORY")
+@Access(AccessType.FIELD)
+@Table(name = "FRAUDREQUESTHISTORY", schema="ORDER_FRAUD")
 public class FraudRequestHistory implements Serializable {
-	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="FRAUDREQUESTHISTORY_FRAUDREQUESTHISTORYID_GENERATOR", sequenceName="FRAUDREQUESTHISTORY_SEQ")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="FRAUDREQUESTHISTORY_FRAUDREQUESTHISTORYID_GENERATOR")
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator")
 	@Column(name = "FRAUDREQUESTHISTORYID")
 	private long fraudRequestHistoryId;
 
@@ -59,21 +62,22 @@ public class FraudRequestHistory implements Serializable {
 	private String updateUser;
 
 	//bi-directional many-to-one association to FraudRequestHistoryDetail
-	@OneToMany(mappedBy="fraudRequestHistory", cascade={CascadeType.ALL})
-	private List<FraudRequestHistoryDetail> fraudRequestHistoryDetail;
+	@OneToOne(mappedBy="fraudRequestHistory", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+	private FraudRequestHistoryDetail fraudRequestHistoryDetail;
 
 	//bi-directional many-to-one association to FraudRequest
-	@ManyToOne(cascade={CascadeType.REFRESH}, fetch=FetchType.LAZY)
+
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="FRAUDREQUESTID")
 	private FraudRequest fraudRequest;
 
 	//uni-directional many-to-one association to FraudRequestType
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="REQUESTTYPECODE")
 	private FraudRequestType fraudRequestType;
 
 	//uni-directional many-to-one association to FraudStatus
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="FRAUDSTATUSCODE")
 	private FraudStatus fraudStatus;
 
@@ -136,26 +140,12 @@ public class FraudRequestHistory implements Serializable {
 		this.updateUser = updateUser;
 	}
 
-	public List<FraudRequestHistoryDetail> getFraudRequestHistoryDetail() {
+	public FraudRequestHistoryDetail getFraudRequestHistoryDetail() {
 		return this.fraudRequestHistoryDetail;
 	}
 
-	public void setFraudRequestHistoryDetail(List<FraudRequestHistoryDetail> fraudRequestHistoryDetail) {
+	public void setFraudRequestHistoryDetail(FraudRequestHistoryDetail fraudRequestHistoryDetail) {
 		this.fraudRequestHistoryDetail = fraudRequestHistoryDetail;
-	}
-
-	public FraudRequestHistoryDetail addFraudRequestHistoryDetail(FraudRequestHistoryDetail fraudRequestHistoryDetail) {
-		getFraudRequestHistoryDetail().add(fraudRequestHistoryDetail);
-		fraudRequestHistoryDetail.setFraudRequestHistory(this);
-
-		return fraudRequestHistoryDetail;
-	}
-
-	public FraudRequestHistoryDetail removeFraudRequesthHistoryDetail(FraudRequestHistoryDetail fraudRequestHistoryDetail) {
-		getFraudRequestHistoryDetail().remove(fraudRequestHistoryDetail);
-		fraudRequestHistoryDetail.setFraudRequestHistory(null);
-
-		return fraudRequestHistoryDetail;
 	}
 
 	public FraudRequest getFraudRequest() {

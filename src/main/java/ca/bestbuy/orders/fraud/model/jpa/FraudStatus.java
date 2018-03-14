@@ -3,28 +3,35 @@ package ca.bestbuy.orders.fraud.model.jpa;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 
 /**
+ * 
+ *	@author akaradem
+ * 
  * The persistent class for the FRAUDSTATUSES database table.
  * 
  */
+@SuppressWarnings("serial")
 @Entity
-@Table(name="FRAUDSTATUSES")
-@NamedQuery(name="FraudStatus.findAll", query="SELECT f FROM FraudStatus f")
+@Access(AccessType.FIELD)
+@Table(name="FRAUDSTATUSES", schema="ORDER_FRAUD")
 public class FraudStatus implements Serializable {
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "FRAUDSTATUSCODE")
-	private String fraudStatusCode;
+	@Enumerated(EnumType.STRING)
+	private FraudStatuses fraudStatusCode;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "CREATEDATE")
@@ -46,11 +53,11 @@ public class FraudStatus implements Serializable {
 	public FraudStatus() {
 	}
 
-	public String getFraudStatusCode() {
+	public FraudStatuses getFraudStatusCode() {
 		return fraudStatusCode;
 	}
 
-	public void setFraudStatusCode(String fraudStatusCode) {
+	public void setFraudStatusCode(FraudStatuses fraudStatusCode) {
 		this.fraudStatusCode = fraudStatusCode;
 	}
 
@@ -94,4 +101,8 @@ public class FraudStatus implements Serializable {
 		this.updateUser = updateUser;
 	}
 
+	public static enum FraudStatuses{
+		INITIAL_REQUEST, DECISION_MADE, PENDING_REVIEW, CANCELLED;
+	}
+	
 }
