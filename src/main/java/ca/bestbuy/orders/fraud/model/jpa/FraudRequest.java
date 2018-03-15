@@ -31,7 +31,7 @@ import javax.persistence.TemporalType;
  * 
  */
 @SuppressWarnings("serial")
-@TableGenerator(name = "orderFraudIdGenerator", schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUDREQUESTID" )
+@TableGenerator(name = "orderFraudIdGenerator", schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUDREQUESTID")
 @Entity
 @Access(AccessType.FIELD)
 @Table(name = "FRAUDREQUEST", schema="ORDER_FRAUD")
@@ -73,7 +73,7 @@ public class FraudRequest implements Serializable {
 
 	//bi-directional many-to-one association to FraudRquestHistory
 	@OneToMany(mappedBy="fraudRequest", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-	private List<FraudRequestHistory> fraudRequestHistory;
+	private List<FraudRequestStatusHistory> fraudRequestStatusHistory;
 
 	public FraudRequest() {
 	}
@@ -150,26 +150,26 @@ public class FraudRequest implements Serializable {
 		this.fraudStatus = fraudStatus;
 	}
 
-	public List<FraudRequestHistory> getFraudRequestHistory() {
-		return this.fraudRequestHistory;
+	public List<FraudRequestStatusHistory> getFraudRequestStatusHistory() {
+		return this.fraudRequestStatusHistory;
 	}
 
-	public void setFraudRequestHistory(List<FraudRequestHistory> fraudRequestHistory) {
-		this.fraudRequestHistory = fraudRequestHistory;
+	public void setFraudRequestStatusHistory(List<FraudRequestStatusHistory> fraudRequestStatusHistory) {
+		this.fraudRequestStatusHistory = fraudRequestStatusHistory;
 	}
 
-	public FraudRequestHistory addFraudrequesthistory(FraudRequestHistory fraudRequestHistory) {
-		getFraudRequestHistory().add(fraudRequestHistory);
-		fraudRequestHistory.setFraudRequest(this);
+	public FraudRequestStatusHistory addFraudRequestStatusHistory(FraudRequestStatusHistory fraudRequestStatusHistory) {
+		getFraudRequestStatusHistory().add(fraudRequestStatusHistory);
+		fraudRequestStatusHistory.setFraudRequest(this);
 
-		return fraudRequestHistory;
+		return fraudRequestStatusHistory;
 	}
 
-	public FraudRequestHistory removeFraudRequestHistory(FraudRequestHistory fraudRequestHistory) {
-		getFraudRequestHistory().remove(fraudRequestHistory);
-		fraudRequestHistory.setFraudRequest(null);
+	public FraudRequestStatusHistory removeFraudRequestStatusHistory(FraudRequestStatusHistory fraudRequestStatusHistory) {
+		getFraudRequestStatusHistory().remove(fraudRequestStatusHistory);
+		fraudRequestStatusHistory.setFraudRequest(null);
 
-		return fraudRequestHistory;
+		return fraudRequestStatusHistory;
 	}
 
 }

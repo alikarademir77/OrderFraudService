@@ -31,7 +31,7 @@ public class FraudStatus implements Serializable {
 	@Id
 	@Column(name = "FRAUDSTATUSCODE")
 	@Enumerated(EnumType.STRING)
-	private FraudStatuses fraudStatusCode;
+	private FraudStatusCodes fraudStatusCode;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "CREATEDATE")
@@ -53,11 +53,11 @@ public class FraudStatus implements Serializable {
 	public FraudStatus() {
 	}
 
-	public FraudStatuses getFraudStatusCode() {
+	public FraudStatusCodes getFraudStatusCode() {
 		return fraudStatusCode;
 	}
 
-	public void setFraudStatusCode(FraudStatuses fraudStatusCode) {
+	public void setFraudStatusCode(FraudStatusCodes fraudStatusCode) {
 		this.fraudStatusCode = fraudStatusCode;
 	}
 
@@ -101,7 +101,7 @@ public class FraudStatus implements Serializable {
 		this.updateUser = updateUser;
 	}
 
-	public static enum FraudStatuses{
+	public static enum FraudStatusCodes{
 		INITIAL_REQUEST, DECISION_MADE, PENDING_REVIEW, CANCELLED;
 	}
 	

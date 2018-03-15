@@ -30,16 +30,16 @@ import javax.persistence.TemporalType;
  * 
  */
 @SuppressWarnings("serial")
-@TableGenerator(name = "orderFraudIdGenerator",  schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUDREQUESTHISTORYID")
+@TableGenerator(name = "orderFraudIdGenerator",  schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUDREQUESTSTATUSHISTORYID")
 @Entity
 @Access(AccessType.FIELD)
-@Table(name = "FRAUDREQUESTHISTORY", schema="ORDER_FRAUD")
-public class FraudRequestHistory implements Serializable {
+@Table(name = "FRAUDREQUESTSTATUSHISTORY", schema="ORDER_FRAUD")
+public class FraudRequestStatusHistory implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator")
-	@Column(name = "FRAUDREQUESTHISTORYID")
-	private long fraudRequestHistoryId;
+	@Column(name = "FRAUDREQUESTSTATUSHISTORYID")
+	private long fraudRequestStatusHistoryId;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "CREATEDATE")
@@ -61,9 +61,9 @@ public class FraudRequestHistory implements Serializable {
 	@Column(name = "UPDATEUSER")
 	private String updateUser;
 
-	//bi-directional many-to-one association to FraudRequestHistoryDetail
-	@OneToOne(mappedBy="fraudRequestHistory", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-	private FraudRequestHistoryDetail fraudRequestHistoryDetail;
+	//bi-directional many-to-one association to FraudRequestStatusHistoryDetail
+	@OneToOne(mappedBy="fraudRequestStatusHistory", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+	private FraudRequestStatusHistoryDetail fraudRequestStatusHistoryDetail;
 
 	//bi-directional many-to-one association to FraudRequest
 
@@ -81,15 +81,15 @@ public class FraudRequestHistory implements Serializable {
 	@JoinColumn(name="FRAUDSTATUSCODE")
 	private FraudStatus fraudStatus;
 
-	public FraudRequestHistory() {
+	public FraudRequestStatusHistory() {
 	}
 
-	public long getFraudRequestHistoryId() {
-		return this.fraudRequestHistoryId;
+	public long getFraudRequestStatusHistoryId() {
+		return this.fraudRequestStatusHistoryId;
 	}
 
-	public void setFraudRequestHistoryId(long fraudRequestHistoryId) {
-		this.fraudRequestHistoryId = fraudRequestHistoryId;
+	public void setFraudRequestStatusHistoryId(long fraudRequestStatusHistoryId) {
+		this.fraudRequestStatusHistoryId = fraudRequestStatusHistoryId;
 	}
 
 	public Date getCreateDate() {
@@ -140,12 +140,12 @@ public class FraudRequestHistory implements Serializable {
 		this.updateUser = updateUser;
 	}
 
-	public FraudRequestHistoryDetail getFraudRequestHistoryDetail() {
-		return this.fraudRequestHistoryDetail;
+	public FraudRequestStatusHistoryDetail getFraudRequestStatusHistoryDetail() {
+		return this.fraudRequestStatusHistoryDetail;
 	}
 
-	public void setFraudRequestHistoryDetail(FraudRequestHistoryDetail fraudRequestHistoryDetail) {
-		this.fraudRequestHistoryDetail = fraudRequestHistoryDetail;
+	public void setFraudRequestStatusHistoryDetail(FraudRequestStatusHistoryDetail fraudRequestStatusHistoryDetail) {
+		this.fraudRequestStatusHistoryDetail = fraudRequestStatusHistoryDetail;
 	}
 
 	public FraudRequest getFraudRequest() {

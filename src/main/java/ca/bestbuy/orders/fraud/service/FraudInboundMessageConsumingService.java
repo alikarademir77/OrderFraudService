@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.bestbuy.orders.fraud.dao.FraudRequestHistoryRepository;
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
+import ca.bestbuy.orders.fraud.dao.FraudRequestStatusHistoryRepository;
 import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
 import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
-import ca.bestbuy.orders.fraud.model.jpa.FraudRequestHistory;
+import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
 import ca.bestbuy.orders.messaging.EventTypes;
@@ -38,7 +38,7 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 	FraudRequestRepository fraudRequestRepository;
 	
 	@Autowired
-	FraudRequestHistoryRepository historyRepository;
+	FraudRequestStatusHistoryRepository historyRepository;
 
 	
 	@Autowired
@@ -61,8 +61,8 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 			long fsOrderId = Long.parseLong(event.getOrderNumer(), 10);
 			long requestVersion = Long.parseLong(event.getRequestVersion(), 10);
 			Iterable<FraudRequest> foundRequestIt = fraudRequestRepository
-					.findByOrderNumberAndRequestVersionGreaterThanOrderByRequestVersionDesc(new BigDecimal(fsOrderId),
-							new BigDecimal(requestVersion - 1));
+					.findByOrderNumberAndRequestVersionGTE(new BigDecimal(fsOrderId),
+							new BigDecimal(requestVersion));
 			
 			if((foundRequestIt == null)||(foundRequestIt.iterator().hasNext()==false)){
 				createNewFraudRequest(event);
@@ -77,7 +77,7 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 		FraudRequest request = new FraudRequest();
 		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypes.FRAUD_CHECK);
 		request.setFraudRequestType(fraudCheckType);
-		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatuses.INITIAL_REQUEST);
+		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.INITIAL_REQUEST);
 		request.setFraudStatus(status);
 		
 		String userName = "order_fraud_test";
@@ -89,7 +89,7 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 		request.setOrderNumber(new BigDecimal(event.getOrderNumer()));
 		request.setRequestVersion(new BigDecimal(event.getRequestVersion()));
 		
-		FraudRequestHistory history = new FraudRequestHistory();
+		FraudRequestStatusHistory history = new FraudRequestStatusHistory();
 		history.setFraudRequest(request);
 		history.setFraudRequestType(fraudCheckType);
 		history.setFraudStatus(status);
@@ -99,10 +99,10 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 		history.setCreateUser(userName);
 		history.setUpdateDate(now);
 		history.setUpdateUser(userName);
-		List<FraudRequestHistory> historyList = new ArrayList<>();
+		List<FraudRequestStatusHistory> historyList = new ArrayList<>();
 		historyList.add(history);
 		
-		request.setFraudRequestHistory(historyList);
+		request.setFraudRequestStatusHistory(historyList);
 		fraudRequestRepository.save(request);
 	}
 

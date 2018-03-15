@@ -27,12 +27,12 @@ import javax.persistence.TemporalType;
 @SuppressWarnings("serial")
 @Entity
 @Access(AccessType.FIELD)
-@Table(name="FRAUDREQUESTHISTORYDETAILS", schema="ORDER_FRAUD")
-public class FraudRequestHistoryDetail implements Serializable {
+@Table(name="FRAUDREQUESTSTATUSHISTORYDETAILS", schema="ORDER_FRAUD")
+public class FraudRequestStatusHistoryDetail implements Serializable {
 
 	@Id
-	@Column(name = "FRAUDREQUESTHISTORYID")
-	private long fraudRequestHistoryId;
+	@Column(name = "FRAUDREQUESTSTATUSHISTORYID")
+	private long fraudRequestStatusHistoryId;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "CREATEDATE")
@@ -56,20 +56,20 @@ public class FraudRequestHistoryDetail implements Serializable {
 	@Column(name = "UPDATEUSER")
 	private String updateUser;
 
-	//bi-directional many-to-one association to Fraudrequesthistory
+	//bi-directional many-to-one association to Fraudrequeststatushistory
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="FRAUDREQUESTHISTORYID", insertable=false, updatable=false)
-	private FraudRequestHistory fraudRequestHistory;
+	@JoinColumn(name="FRAUDREQUESTSTATUSHISTORYID", insertable=false, updatable=false)
+	private FraudRequestStatusHistory fraudRequestStatusHistory;
 
-	public FraudRequestHistoryDetail() {
+	public FraudRequestStatusHistoryDetail() {
 	}
 
-	public long getFraudRequestHistoryId() {
-		return fraudRequestHistoryId;
+	public long getFraudRequestStatusHistoryId() {
+		return fraudRequestStatusHistoryId;
 	}
 
-	public void setFraudRequestHistoryId(long fraudRequestHistoryId) {
-		this.fraudRequestHistoryId = fraudRequestHistoryId;
+	public void setFraudRequestStatusHistoryId(long fraudRequestStatusHistoryId) {
+		this.fraudRequestStatusHistoryId = fraudRequestStatusHistoryId;
 	}
 
 	public Date getCreateDate() {
@@ -120,12 +120,12 @@ public class FraudRequestHistoryDetail implements Serializable {
 		this.updateUser = updateUser;
 	}
 
-	public FraudRequestHistory getFraudRequestHistory() {
-		return fraudRequestHistory;
+	public FraudRequestStatusHistory getFraudRequestStatusHistory() {
+		return fraudRequestStatusHistory;
 	}
 
-	public void setFraudRequestHistory(FraudRequestHistory fraudRequestHistory) {
-		this.fraudRequestHistory = fraudRequestHistory;
+	public void setFraudRequestStatusHistory(FraudRequestStatusHistory fraudRequestStatusHistory) {
+		this.fraudRequestStatusHistory = fraudRequestStatusHistory;
 	}
 	
 }
