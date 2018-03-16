@@ -103,31 +103,30 @@ public class FraudRequestStatusHistoryRepositoryTest {
 
 	//private
 	private FraudRequest createAndSaveFraudRequest(String orderNumber, long requestVersion) {
-		FraudRequest request = new FraudRequest();
 		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypes.FRAUD_CHECK);
-		request.setFraudRequestType(fraudCheckType);
 		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.INITIAL_REQUEST);
-		request.setFraudStatus(status);
-		
+
 		String userName = "order_fraud_test";
 		Date now = new Date();
-		request.setCreateDate(now);
-		request.setCreateUser(userName);
-		request.setUpdateDate(now);
-		request.setUpdateUser(userName);
-		request.setOrderNumber(new BigDecimal(orderNumber));
-		request.setRequestVersion(new BigDecimal(requestVersion));
-		
-		FraudRequestStatusHistory history = new FraudRequestStatusHistory();
-		history.setFraudRequest(request);
-		history.setFraudRequestType(fraudCheckType);
-		history.setFraudStatus(status);
-		history.setOrderNumber(new BigDecimal(orderNumber));
-		history.setRequestVersion(new BigDecimal(requestVersion));
-		history.setCreateDate(now);
-		history.setCreateUser(userName);
-		history.setUpdateDate(now);
-		history.setUpdateUser(userName);
+
+		FraudRequest request = new FraudRequest()
+				.setFraudRequestType(fraudCheckType)
+				.setFraudStatus(status)
+				.setEventDate(now)
+				.setCreateDate(now)
+				.setCreateUser(userName)
+				.setUpdateDate(now)
+				.setUpdateUser(userName)
+				.setOrderNumber(new BigDecimal(orderNumber))
+				.setRequestVersion(new BigDecimal(requestVersion));
+
+		FraudRequestStatusHistory history = new FraudRequestStatusHistory()
+				.setFraudRequest(request)
+				.setFraudStatus(status)
+				.setCreateDate(now)
+				.setCreateUser(userName)
+				.setUpdateDate(now)
+				.setUpdateUser(userName);
 		List<FraudRequestStatusHistory> historyList = new ArrayList<>();
 		historyList.add(history);
 		

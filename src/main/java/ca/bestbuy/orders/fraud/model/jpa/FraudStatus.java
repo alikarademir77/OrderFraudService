@@ -1,5 +1,11 @@
 package ca.bestbuy.orders.fraud.model.jpa;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -26,6 +32,11 @@ import javax.persistence.TemporalType;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name="FRAUDSTATUSES", schema="ORDER_FRAUD")
+@Accessors(chain=true)
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 public class FraudStatus implements Serializable {
 
 	@Id
@@ -51,54 +62,6 @@ public class FraudStatus implements Serializable {
 	private String updateUser;
 
 	public FraudStatus() {
-	}
-
-	public FraudStatusCodes getFraudStatusCode() {
-		return fraudStatusCode;
-	}
-
-	public void setFraudStatusCode(FraudStatusCodes fraudStatusCode) {
-		this.fraudStatusCode = fraudStatusCode;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public String getCreateUser() {
-		return createUser;
-	}
-
-	public void setCreateUser(String createUser) {
-		this.createUser = createUser;
-	}
-
-	public String getFraudStatusDescription() {
-		return fraudStatusDescription;
-	}
-
-	public void setFraudStatusDescription(String fraudStatusDescription) {
-		this.fraudStatusDescription = fraudStatusDescription;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
 	}
 
 	public static enum FraudStatusCodes{
