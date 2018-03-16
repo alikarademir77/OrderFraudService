@@ -2,12 +2,12 @@ package ca.bestbuy.orders.fraud.client;
 
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper;
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
+import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderActionCode;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderRequest;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ObjectFactory;
 import ca.bestbuy.orders.fraud.model.internal.FraudResult;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import ca.bestbuy.orders.fraud.model.internal.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
@@ -33,26 +33,31 @@ public class FraudServiceTASClientImpl extends WebServiceGatewaySupport implemen
 
 
     private FraudServiceTASClientConfig config;
+    private TASRequestXMLMapper tasRequestXMLMapper;
     private TASResponseXMLMapper tasResponseXMLMapper;
 
     private final static String FILE_RESOURCE_PREFIX = "file://";
     private final static String CLASSPATH_RESOURCE_PREFIX = "classpath:";
 
     @Autowired
-    public FraudServiceTASClientImpl(TASResponseXMLMapper tasResponseXMLMapper, FraudServiceTASClientConfig config){
+    public FraudServiceTASClientImpl(TASRequestXMLMapper tasRequestXMLMapper, TASResponseXMLMapper tasResponseXMLMapper, FraudServiceTASClientConfig config){
+        this.tasRequestXMLMapper = tasRequestXMLMapper;
         this.tasResponseXMLMapper = tasResponseXMLMapper;
         this.config = config;
     }
 
     @Override
-    public FraudResult getFraudCheckResponse(ManageOrderRequest request) {
+    public FraudResult doFraudCheck(Order order) {
 
 
-        //todo: take in internal request object as parameter, and map that into jaxb manageorderrequest
+        ManageOrderRequest request = new ManageOrderRequest();
+        request.setIxTranType(ManageOrderActionCode.FRAUDCHECK);
+        request.setTransactionData(tasRequestXMLMapper.mapTransactionData(order));
+
         boolean tlsEnabled = config.getTlsEnabled();
 
-        String tasURL = "http://localhost:8999/";
-        String fraudCheckEndpoint = null;
+        String tasURL = config.getUrl();
+        String fraudCheckEndpoint = config.getFraudCheckEndpoint();
         ObjectFactory  objectFactory = new ObjectFactory();
 
         JAXBElement<ManageOrderRequest> jaxbRequest = objectFactory.createManageOrderRequest(request);
@@ -65,7 +70,7 @@ public class FraudServiceTASClientImpl extends WebServiceGatewaySupport implemen
         }
 
         JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) getWebServiceTemplate().marshalSendAndReceive(
-                tasURL,
+                tasURL+fraudCheckEndpoint,
                 jaxbRequest);
 
 
@@ -107,9 +112,8 @@ public class FraudServiceTASClientImpl extends WebServiceGatewaySupport implemen
             messageSender.setKeyManagers(keyManagerFactory.getKeyManagers());
             messageSender.setTrustManagers(trustManagerFactory.getTrustManagers());
 
-            //todo: might have to change hostname for this
             messageSender.setHostnameVerifier((hostname, sslSession) -> {
-                if (hostname.equals("localhost")) {
+                if (hostname.equals(config.getHostname())) {
                     return true;
                 }
                 return false;

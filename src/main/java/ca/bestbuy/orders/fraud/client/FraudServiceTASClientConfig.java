@@ -8,6 +8,15 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 @Configuration
 public class FraudServiceTASClientConfig {
 
+    @Value("${client.tas.connection.url}")
+    public String url;
+
+
+    @Value("${client.tas.connection.fraudCheckEndpoint}")
+    public String fraudCheckEndpoint;
+
+    @Value("${client.tas.connection.hostname}")
+    public  String hostname;
 
     @Value("${client.tas.connection.key-alias}")
     public String keyAlias;
@@ -52,6 +61,17 @@ public class FraudServiceTASClientConfig {
         return marshaller;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public String getFraudCheckEndpoint() {
+        return fraudCheckEndpoint;
+    }
+
+    public String getHostname(){
+        return hostname;
+    }
 
     public String getKeyAlias() {
         return keyAlias;

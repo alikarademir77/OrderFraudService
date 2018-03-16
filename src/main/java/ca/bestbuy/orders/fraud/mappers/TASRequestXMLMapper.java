@@ -8,8 +8,6 @@ import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ChargeBacks;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.CreditCard;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.GiftCard;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Item;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Items;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethod;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethodStatus;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethodType;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethods;
@@ -30,22 +28,27 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.ObjectFactory;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
 
-@Mapper(uses = ObjectFactory.class)
+@Mapper(uses = ObjectFactory.class, componentModel = "spring")
 public abstract class TASRequestXMLMapper {
 
 
     @Mappings({
 
-            @Mapping(target = "requestVersion", ignore = true), //todo: will be generated when fms flow is implemented.
-            @Mapping(target = "transactionId", ignore = true), // todo: will be generated when fms flow is implemented.
+            @Mapping(target = "requestVersion", defaultValue = "1.0.0"), //todo: will be generated when fms flow is implemented. hardcoded now for testing purposes
+            @Mapping(target = "transactionId", source = "fsOrderID"),
             @Mapping(target = "webOrderId", source = "webOrderRefID"),
-            @Mapping(target = "transactionType", ignore = true), //will be mapped when we call doFraudCheck() in TAS client
-            @Mapping(target = "transactionDateTime", ignore = true), //todo: will be generated when fms flow is implemented
+            @Mapping(target = "transactionType", constant = "ORDER"), //will be mapped when we call doFraudCheck() in TAS client
+            @Mapping(target = "transactionDateTime", ignore = true), //handled by mapTransactionData_TransactionData custom mapping
             @Mapping(target = "orderDateTime", source = "webOrderCreationDate"),
             @Mapping(target = "transactionTotalAmount", ignore = true), //handled by mapTransactionData_TransactionTotalAmount custom mapping
             @Mapping(target = "csrSalesRep", source = "csrSalesRepID"),
@@ -63,6 +66,24 @@ public abstract class TASRequestXMLMapper {
     public abstract TransactionData mapTransactionData(Order orderToMap);
 
 
+
+    @AfterMapping
+    public void mapTransactionData_TransactionData(@MappingTarget TransactionData mappedTransactionData){
+
+        if(mappedTransactionData == null){
+            return;
+        }
+
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setTime(new Date());
+        try {
+            XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+            mappedTransactionData.setTransactionDateTime(xmlDate);
+        } catch (DatatypeConfigurationException e) {
+            throw new IllegalStateException("Date format is incorrect");
+        }
+    }
+
     //TODO: hardcoding billing details for now. In the future, we will need to iterate through our payment methods to identify
     //TODO: the ACTIVE payment method. We should then use the details of that payment method to map billing details.
     @AfterMapping()
@@ -70,7 +91,7 @@ public abstract class TASRequestXMLMapper {
 
         BillingDetails mappedBillingDetails = new BillingDetails();
 
-        mappedBillingDetails.setBillingEmailAddress("billingEmailAddress@bestbuycanada.ca");
+        mappedBillingDetails.setBillingEmailAddress("billing@bestbuycanada.com");
         mappedBillingDetails.setCurrencyCode("CAN");
         mappedBillingDetails.setTotalNumberOfFailedCcAttempts("0");
 
@@ -86,6 +107,8 @@ public abstract class TASRequestXMLMapper {
         BigDecimal transactionTotalToMap = new BigDecimal(0.00);
         if(itemsToMap != null){
 
+            //todo: might have to do some null checks
+            //todo: does this include shipping costs?
             for(ca.bestbuy.orders.fraud.model.internal.Item item : itemsToMap){
 
                 BigDecimal itemUnitPrice = item.getItemUnitPrice();
@@ -210,6 +233,8 @@ public abstract class TASRequestXMLMapper {
                 mappedCreditCard.setCreditCardAvsResponse(creditCardToMap.creditCardAvsResponse);
                 mappedCreditCard.setCreditCardCvvResponse(creditCardToMap.creditCardCvvResponse);
                 mappedCreditCard.setCreditCard3DSecureValue(creditCardToMap.creditCard3dSecureValue);
+
+                //todo: needs to be mapped in internal domain object
                 mappedCreditCard.setTotalCreditCardAuthAmount(creditCardToMap.totalAuthorizedAmount.toString());
 
                 mappedCreditCardPaymentMethod.setCreditCard(mappedCreditCard);
@@ -224,6 +249,7 @@ public abstract class TASRequestXMLMapper {
                 CaPaymentMethod mappedGiftCardPaymentMethod = new CaPaymentMethod();
                 GiftCard mappedGiftCard = new GiftCard();
 
+                //todo: need to identify active payment method
                 mappedGiftCardPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.INACTIVE);
                 mappedGiftCardPaymentMethod.setPaymentMethodType(PaymentMethodType.GIFTCARD);
 
@@ -245,11 +271,14 @@ public abstract class TASRequestXMLMapper {
             CaPaymentMethod mappedPaypalPaymentMethod = new CaPaymentMethod();
             Paypal mappedPaypal = new Paypal();
 
+            //todo: need to identify active payment method
             mappedPaypalPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.INACTIVE);
             mappedPaypalPaymentMethod.setPaymentMethodType(PaymentMethodType.PAYPAL);
             mappedPaypal.setPaypalEmail(paymentDetailsToMap.getPayPal().email);
             mappedPaypal.setPaypalRequestId(paymentDetailsToMap.getPayPal().requestID);
             mappedPaypal.setPaypalStatus(paymentDetailsToMap.getPayPal().verifiedStatus);
+
+            //todo: needs to be mapped in internal domain object
             mappedPaypal.setTotalPaypalAuthAmt(paymentDetailsToMap.getPayPal().totalAuthorizedAmount.toString());
 
             mappedPaypalPaymentMethod.setPaypals(mappedPaypal);
@@ -296,7 +325,7 @@ public abstract class TASRequestXMLMapper {
 
     @Mappings({
 
-            @Mapping(target = "shippingOrderId", ignore = true), // handled in mapTransactionData_Item_ShippingOrderId custom mapping... hopefully
+            @Mapping(target = "shippingOrderId", ignore = true), // handled in mapTransactionData_Item_ShippingOrderId custom mapping
             @Mapping(target = "fsOrderLineId", source = "fsoLineID"),
             @Mapping(target = "itemStatus", source = "itemStatus"),
             @Mapping(target = "itemSkuNumber", source = "itemSkuNumber"),
