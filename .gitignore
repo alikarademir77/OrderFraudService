@@ -157,5 +157,5 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 Servers/
 
-# Avoid the following intellij files
+# OSX files
 .DS_Store
