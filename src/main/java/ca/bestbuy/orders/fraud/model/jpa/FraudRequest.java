@@ -1,5 +1,11 @@
 package ca.bestbuy.orders.fraud.model.jpa;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -35,11 +41,20 @@ import javax.persistence.TemporalType;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name = "FRAUDREQUEST", schema="ORDER_FRAUD")
+@Accessors(chain=true)
+@Getter
+@Setter
+@EqualsAndHashCode(exclude={"fraudRequestHistory"})
+@ToString
 public class FraudRequest implements Serializable {
 
 	@Id @GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator" )
 	@Column(name = "FRAUDREQUESTID")
 	private long fraudRequestId;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "EVENTDATE")
+	private Date eventDate;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "CREATEDATE")
@@ -76,86 +91,6 @@ public class FraudRequest implements Serializable {
 	private List<FraudRequestStatusHistory> fraudRequestStatusHistory;
 
 	public FraudRequest() {
-	}
-
-	public long getFraudRequestId() {
-		return this.fraudRequestId;
-	}
-
-	public void setFraudRequestId(long fraudRequestId) {
-		this.fraudRequestId = fraudRequestId;
-	}
-
-	public Date getCreateDate() {
-		return this.createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public String getCreateUser() {
-		return this.createUser;
-	}
-
-	public void setCreateUser(String createUser) {
-		this.createUser = createUser;
-	}
-
-	public BigDecimal getOrderNumber() {
-		return this.orderNumber;
-	}
-
-	public void setOrderNumber(BigDecimal orderNumber) {
-		this.orderNumber = orderNumber;
-	}
-
-	public BigDecimal getRequestVersion() {
-		return this.requestVersion;
-	}
-
-	public void setRequestVersion(BigDecimal requestVersion) {
-		this.requestVersion = requestVersion;
-	}
-
-	public Date getUpdateDate() {
-		return this.updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public String getUpdateUser() {
-		return this.updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
-
-	public FraudRequestType getFraudRequestType() {
-		return this.fraudRequestType;
-	}
-
-	public void setFraudRequestType(FraudRequestType fraudRequestType) {
-		this.fraudRequestType = fraudRequestType;
-	}
-
-	public FraudStatus getFraudStatus() {
-		return this.fraudStatus;
-	}
-
-	public void setFraudStatus(FraudStatus fraudStatus) {
-		this.fraudStatus = fraudStatus;
-	}
-
-	public List<FraudRequestStatusHistory> getFraudRequestStatusHistory() {
-		return this.fraudRequestStatusHistory;
-	}
-
-	public void setFraudRequestStatusHistory(List<FraudRequestStatusHistory> fraudRequestStatusHistory) {
-		this.fraudRequestStatusHistory = fraudRequestStatusHistory;
 	}
 
 	public FraudRequestStatusHistory addFraudRequestStatusHistory(FraudRequestStatusHistory fraudRequestStatusHistory) {

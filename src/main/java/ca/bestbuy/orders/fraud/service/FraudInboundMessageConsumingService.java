@@ -58,7 +58,7 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 		//TODO Should replace below code with actual implementation 
 		//Below is a mock implementation just to test Oracle DB Access is successful
 		if(EventTypes.FraudCheck.equals(event.getType())){
-			long fsOrderId = Long.parseLong(event.getOrderNumer(), 10);
+			long fsOrderId = Long.parseLong(event.getOrderNumber(), 10);
 			long requestVersion = Long.parseLong(event.getRequestVersion(), 10);
 			Iterable<FraudRequest> foundRequestIt = fraudRequestRepository
 					.findByOrderNumberAndRequestVersionGTE(new BigDecimal(fsOrderId),
@@ -67,45 +67,52 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 			if((foundRequestIt == null)||(foundRequestIt.iterator().hasNext()==false)){
 				createNewFraudRequest(event);
 			}
-			
 		}
 	}
 
 	
 	//private
 	private void createNewFraudRequest(MessagingEvent event){
-		FraudRequest request = new FraudRequest();
+
 		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypes.FRAUD_CHECK);
-		request.setFraudRequestType(fraudCheckType);
 		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.INITIAL_REQUEST);
-		request.setFraudStatus(status);
-		
-		String userName = "order_fraud_test";
-		Date now = new Date();
-		request.setCreateDate(now);
-		request.setCreateUser(userName);
-		request.setUpdateDate(now);
-		request.setUpdateUser(userName);
-		request.setOrderNumber(new BigDecimal(event.getOrderNumer()));
-		request.setRequestVersion(new BigDecimal(event.getRequestVersion()));
-		
-		FraudRequestStatusHistory history = new FraudRequestStatusHistory();
-		history.setFraudRequest(request);
-		history.setFraudRequestType(fraudCheckType);
-		history.setFraudStatus(status);
-		history.setOrderNumber(new BigDecimal(event.getOrderNumer()));
-		history.setRequestVersion(new BigDecimal(event.getRequestVersion()));
-		history.setCreateDate(now);
-		history.setCreateUser(userName);
-		history.setUpdateDate(now);
-		history.setUpdateUser(userName);
-		List<FraudRequestStatusHistory> historyList = new ArrayList<>();
-		historyList.add(history);
-		
-		request.setFraudRequestStatusHistory(historyList);
-		fraudRequestRepository.save(request);
+
+		FraudRequest request = new FraudRequest();
+
+		try {
+			String userName = "order_fraud_test";
+			Date now = new Date();
+
+			request.setFraudRequestType(fraudCheckType)
+					.setFraudStatus(status)
+					.setEventDate(event.getMessageCreationDate())
+					.setCreateDate(now)
+					.setCreateUser(userName)
+					.setUpdateDate(now)
+					.setUpdateUser(userName)
+					.setOrderNumber(new BigDecimal(event.getOrderNumber()))
+					.setRequestVersion(new BigDecimal(event.getRequestVersion()));
+
+			FraudRequestStatusHistory history = new FraudRequestStatusHistory()
+					.setFraudRequest(request)
+					.setFraudStatus(status)
+					.setCreateDate(now)
+					.setCreateUser(userName)
+					.setUpdateDate(now)
+					.setUpdateUser(userName);
+
+			List<FraudRequestStatusHistory> historyList = new ArrayList<>();
+			historyList.add(history);
+			request.setFraudRequestStatusHistory(historyList);
+		} catch (Exception ex) {
+			log.error("Failed to parse MessageEvent: " + event, ex);
+			return;
+		}
+
+		try {
+			fraudRequestRepository.save(request);
+		} catch (Exception ex) {
+			log.error("Failed to save to DB MessageEvent: " + event, ex);
+		}
 	}
-
-
-
 }

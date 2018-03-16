@@ -1,5 +1,11 @@
 package ca.bestbuy.orders.fraud.model.jpa;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,6 +34,11 @@ import javax.persistence.TemporalType;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name="FRAUDREQUESTSTATUSHISTORYDETAILS", schema="ORDER_FRAUD")
+@Accessors(chain=true)
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 public class FraudRequestStatusHistoryDetail implements Serializable {
 
 	@Id
@@ -57,75 +68,10 @@ public class FraudRequestStatusHistoryDetail implements Serializable {
 	private String updateUser;
 
 	//bi-directional many-to-one association to Fraudrequeststatushistory
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="FRAUDREQUESTSTATUSHISTORYID", insertable=false, updatable=false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "FRAUDREQUESTSTATUSHISTORYID", insertable = false, updatable = false)
 	private FraudRequestStatusHistory fraudRequestStatusHistory;
 
 	public FraudRequestStatusHistoryDetail() {
 	}
-
-	public long getFraudRequestStatusHistoryId() {
-		return fraudRequestStatusHistoryId;
-	}
-
-	public void setFraudRequestStatusHistoryId(long fraudRequestStatusHistoryId) {
-		this.fraudRequestStatusHistoryId = fraudRequestStatusHistoryId;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public String getCreateUser() {
-		return createUser;
-	}
-
-	public void setCreateUser(String createUser) {
-		this.createUser = createUser;
-	}
-
-	public String getTasRequest() {
-		return tasRequest;
-	}
-
-	public void setTasRequest(String tasRequest) {
-		this.tasRequest = tasRequest;
-	}
-
-	public String getTasResponse() {
-		return tasResponse;
-	}
-
-	public void setTasResponse(String tasResponse) {
-		this.tasResponse = tasResponse;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public String getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-	}
-
-	public FraudRequestStatusHistory getFraudRequestStatusHistory() {
-		return fraudRequestStatusHistory;
-	}
-
-	public void setFraudRequestStatusHistory(FraudRequestStatusHistory fraudRequestStatusHistory) {
-		this.fraudRequestStatusHistory = fraudRequestStatusHistory;
-	}
-	
 }
