@@ -66,6 +66,11 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 			
 			if((foundRequestIt == null)||(foundRequestIt.iterator().hasNext()==false)){
 				createNewFraudRequest(event);
+			}else if(foundRequestIt != null) {
+				FraudRequest request = foundRequestIt.iterator().next();
+				request.setCreateUser("Updated");
+				fraudRequestRepository.save(request);
+				System.out.println(request.getCreateUser());
 			}
 		}
 	}
@@ -86,15 +91,16 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 			request.setFraudRequestType(fraudCheckType)
 					.setFraudStatus(status)
 					.setEventDate(event.getMessageCreationDate())
+					.setOrderNumber(new BigDecimal(event.getOrderNumber()))
+					.setRequestVersion(new BigDecimal(event.getRequestVersion()))
 					.setCreateDate(now)
 					.setCreateUser(userName)
 					.setUpdateDate(now)
-					.setUpdateUser(userName)
-					.setOrderNumber(new BigDecimal(event.getOrderNumber()))
-					.setRequestVersion(new BigDecimal(event.getRequestVersion()));
+					.setUpdateUser(userName);
 
-			FraudRequestStatusHistory history = new FraudRequestStatusHistory()
-					.setFraudRequest(request)
+			FraudRequestStatusHistory history = new FraudRequestStatusHistory();
+			
+			history.setFraudRequest(request)
 					.setFraudStatus(status)
 					.setCreateDate(now)
 					.setCreateUser(userName)

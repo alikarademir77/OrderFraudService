@@ -1,14 +1,5 @@
 package ca.bestbuy.orders.fraud.model.jpa;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-
-import java.io.Serializable;
-import java.util.Date;
-
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -19,8 +10,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 
 /**
@@ -37,20 +32,13 @@ import javax.persistence.TemporalType;
 @Accessors(chain=true)
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
-public class FraudRequestStatusHistoryDetail implements Serializable {
+@EqualsAndHashCode(callSuper=true)
+@ToString(callSuper=true)
+public class FraudRequestStatusHistoryDetail extends OrderFraudBaseEntity {
 
 	@Id
 	@Column(name = "FRAUDREQUESTSTATUSHISTORYID")
 	private long fraudRequestStatusHistoryId;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATEDATE")
-	private Date createDate;
-
-	@Column(name = "CREATEUSER")
-	private String createUser;
 
 	@Lob
 	@Column(name = "TASREQUEST")
@@ -59,14 +47,7 @@ public class FraudRequestStatusHistoryDetail implements Serializable {
 	@Lob
 	@Column(name = "TASRESPONSE")
 	private String tasResponse;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "UPDATEDATE")
-	private Date updateDate;
-
-	@Column(name = "UPDATEUSER")
-	private String updateUser;
-
+	
 	//bi-directional many-to-one association to Fraudrequeststatushistory
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "FRAUDREQUESTSTATUSHISTORYID", insertable = false, updatable = false)

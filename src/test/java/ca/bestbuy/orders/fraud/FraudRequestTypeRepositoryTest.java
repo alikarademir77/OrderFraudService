@@ -44,7 +44,7 @@ public class FraudRequestTypeRepositoryTest {
 	FraudRequestTypeRepository typeRepository;
 	
 	@Test
-	@Transactional(readOnly=true)
+	@Transactional
 	public void testFindAll(){
 		Iterable<FraudRequestType> it = typeRepository.findAll();
 		List<FraudRequestType.RequestTypes> allTypesList  = Arrays.asList(FraudRequestType.RequestTypes.values());
@@ -55,7 +55,7 @@ public class FraudRequestTypeRepositoryTest {
 	}
 
 	@Test
-	@Transactional(readOnly=true)
+	@Transactional
 	public void testFindOne(){
 		FraudRequestType fraudRequestType = typeRepository.findOne(FraudRequestType.RequestTypes.ORDER_CANCEL);
 		

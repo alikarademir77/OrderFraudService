@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,7 +65,7 @@ public class FraudRequestStatusHistoryRepositoryTest {
 	FraudRequestRepository fraudRequestRepository;
 
 
-	@Test
+	//@Test
 	@Transactional
 	public void testFraudRequestStatusHistoryRetrieval(){
 		String orderNumber = "123456";
@@ -101,6 +102,70 @@ public class FraudRequestStatusHistoryRepositoryTest {
 		}
 	}
 
+	@Test
+	public void testFraudRequestStatusHistoryConcurrentUpdate(){
+		String orderNumber = "123456";
+		Long requestVersion = 1l;
+		
+		FraudRequest[] fraudRequestArr = new FraudRequest[1]; 
+		AtomicBoolean[] updatedFlag = new AtomicBoolean[]{new AtomicBoolean(false)};  
+		
+		Thread thread1 = new Thread(new Runnable(){
+			
+			@Transactional
+			public void doIt(){
+				fraudRequestArr[0] = createAndSaveFraudRequest(orderNumber, requestVersion);
+				while(!updatedFlag[0].get()){
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+					}
+				}
+				fraudRequestArr[0].setCreateDate(new Date());
+				FraudRequest result = fraudRequestRepository.save(fraudRequestArr[0]);
+			}
+			
+			@Override
+			public void run() {
+				doIt();
+			}
+		});
+		Thread thread2 = new Thread(new Runnable(){
+			@Transactional
+			public void doIt(){
+				FraudRequest request = null;
+				while(request == null){
+					Iterable<FraudRequest> it = fraudRequestRepository.findByOrderNumber(new BigDecimal(orderNumber));
+					if((it!=null) && (it.iterator().hasNext())){
+						request = it.iterator().next();
+					}else{
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+						}
+					}
+				}
+				request.setUpdateDate(new Date());
+				request = fraudRequestRepository.save(request);
+				updatedFlag[0].set(true);
+			}
+
+			@Override
+			public void run() {
+				doIt();
+			}
+		});
+		thread1.start();
+		thread2.start();
+		try {
+			thread1.join();
+			thread2.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	//private
 	private FraudRequest createAndSaveFraudRequest(String orderNumber, long requestVersion) {
 		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypes.FRAUD_CHECK);
@@ -109,19 +174,20 @@ public class FraudRequestStatusHistoryRepositoryTest {
 		String userName = "order_fraud_test";
 		Date now = new Date();
 
-		FraudRequest request = new FraudRequest()
-				.setFraudRequestType(fraudCheckType)
+		FraudRequest request = new FraudRequest();
+		request.setFraudRequestType(fraudCheckType)
 				.setFraudStatus(status)
 				.setEventDate(now)
+				.setOrderNumber(new BigDecimal(orderNumber))
+				.setRequestVersion(new BigDecimal(requestVersion))
 				.setCreateDate(now)
 				.setCreateUser(userName)
 				.setUpdateDate(now)
-				.setUpdateUser(userName)
-				.setOrderNumber(new BigDecimal(orderNumber))
-				.setRequestVersion(new BigDecimal(requestVersion));
+				.setUpdateUser(userName);
 
-		FraudRequestStatusHistory history = new FraudRequestStatusHistory()
-				.setFraudRequest(request)
+		FraudRequestStatusHistory history = new FraudRequestStatusHistory();
+		
+		history.setFraudRequest(request)
 				.setFraudStatus(status)
 				.setCreateDate(now)
 				.setCreateUser(userName)

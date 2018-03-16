@@ -1,11 +1,5 @@
 package ca.bestbuy.orders.fraud.model.jpa;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -28,6 +22,12 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
 
 /**
  * 
@@ -44,9 +44,9 @@ import javax.persistence.TemporalType;
 @Accessors(chain=true)
 @Getter
 @Setter
-@EqualsAndHashCode(exclude={"fraudRequestHistory"})
-@ToString
-public class FraudRequest implements Serializable {
+@EqualsAndHashCode(callSuper=true, exclude={"fraudRequestStatusHistory"})
+@ToString(callSuper=true)
+public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 
 	@Id @GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator" )
 	@Column(name = "FRAUDREQUESTID")
@@ -56,25 +56,11 @@ public class FraudRequest implements Serializable {
 	@Column(name = "EVENTDATE")
 	private Date eventDate;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATEDATE")
-	private Date createDate;
-
-	@Column(name = "CREATEUSER")
-	private String createUser;
-
 	@Column(name = "ORDERNUMBER")
 	private BigDecimal orderNumber;
 
 	@Column(name = "REQUESTVERSION")
 	private BigDecimal requestVersion;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "UPDATEDATE")
-	private Date updateDate;
-
-	@Column(name = "UPDATEUSER")
-	private String updateUser;
 
 	//uni-directional many-to-one association to FraudRequestType
 	@ManyToOne(cascade={CascadeType.REFRESH}, fetch=FetchType.EAGER)

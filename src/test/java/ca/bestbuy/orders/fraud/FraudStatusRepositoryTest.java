@@ -44,7 +44,7 @@ public class FraudStatusRepositoryTest {
 	FraudStatusRepository fraudStatusRepository;
 	
 	@Test
-	@Transactional(readOnly=true)
+	@Transactional
 	public void testFindAll(){
 		Iterable<FraudStatus> it = fraudStatusRepository.findAll();
 		List<FraudStatus.FraudStatusCodes> allStatusList  = Arrays.asList(FraudStatus.FraudStatusCodes.values());
@@ -55,11 +55,12 @@ public class FraudStatusRepositoryTest {
 	}
 
 	@Test
-	@Transactional(readOnly=true)
+	@Transactional
 	public void testFindOne(){
 		FraudStatus fraudStatus = fraudStatusRepository.findOne(FraudStatus.FraudStatusCodes.PENDING_REVIEW);
 		
 		assertEquals(FraudStatus.FraudStatusCodes.PENDING_REVIEW,fraudStatus.getFraudStatusCode());
 		
 	}
+	
 }

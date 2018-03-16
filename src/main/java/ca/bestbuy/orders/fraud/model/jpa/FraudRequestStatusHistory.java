@@ -1,14 +1,6 @@
 package ca.bestbuy.orders.fraud.model.jpa;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -24,8 +16,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 
 /**
@@ -43,28 +39,20 @@ import javax.persistence.TemporalType;
 @Accessors(chain=true)
 @Getter
 @Setter
-@EqualsAndHashCode(exclude={"fraudRequestStatusHistoryDetail"})
-@ToString(exclude={"fraudRequestStatusHistoryDetail"})
-public class FraudRequestStatusHistory implements Serializable {
+@EqualsAndHashCode(callSuper=true, exclude={"fraudRequestStatusHistoryDetail"})
+@ToString(callSuper=true, exclude={"fraudRequestStatusHistoryDetail"})
+public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator")
 	@Column(name = "FRAUDREQUESTSTATUSHISTORYID")
 	private long fraudRequestStatusHistoryId;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATEDATE")
-	private Date createDate;
+	@Column(name = "ORDERNUMBER")
+	private BigDecimal orderNumber;
 
-	@Column(name = "CREATEUSER")
-	private String createUser;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "UPDATEDATE")
-	private Date updateDate;
-
-	@Column(name = "UPDATEUSER")
-	private String updateUser;
+	@Column(name = "REQUESTVERSION")
+	private BigDecimal requestVersion;
 
 	//bi-directional many-to-one association to FraudRequestStatusHistoryDetail
 	@OneToOne(mappedBy="fraudRequestStatusHistory", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
