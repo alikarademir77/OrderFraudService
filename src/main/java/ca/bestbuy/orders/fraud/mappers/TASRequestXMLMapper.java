@@ -14,6 +14,7 @@ import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethods;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Paypal;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PurchaseOrderStatus;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ShippingOrder;
+import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Transaction;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.TransactionData;
 import ca.bestbuy.orders.fraud.model.internal.Address;
 import ca.bestbuy.orders.fraud.model.internal.Chargeback;
@@ -100,31 +101,22 @@ public abstract class TASRequestXMLMapper {
 
     }
 
+
+
     @AfterMapping
     public void mapTransactionData_TransactionTotalAmount(Order orderToMap, @MappingTarget TransactionData mappedTransactionData){
 
-        List<ca.bestbuy.orders.fraud.model.internal.Item> itemsToMap = orderToMap.getItems();
+        if(orderToMap == null || orderToMap.getShippingOrders() == null){
+            return;
+        }
+
+        List<ca.bestbuy.orders.fraud.model.internal.ShippingOrder> shippingOrdersToMap = orderToMap.getShippingOrders();
         BigDecimal transactionTotalToMap = new BigDecimal(0.00);
-        if(itemsToMap != null){
 
-            //todo: might have to do some null checks
-            //todo: does this include shipping costs?
-            for(ca.bestbuy.orders.fraud.model.internal.Item item : itemsToMap){
-
-                BigDecimal itemUnitPrice = item.getItemUnitPrice();
-                BigDecimal itemQuantity = new BigDecimal(item.getItemQuantity());
-                BigDecimal itemTotalDiscount = item.getItemTotalDiscount();
-                BigDecimal itemTax = item.getItemTax();
-                BigDecimal staffDiscount = item.getStaffDiscount();
-
-                BigDecimal totalOfThisItem = itemUnitPrice.add(itemTax);
-                totalOfThisItem = totalOfThisItem.multiply(itemQuantity);
-                totalOfThisItem = totalOfThisItem.subtract(itemTotalDiscount);
-                totalOfThisItem = totalOfThisItem.subtract(staffDiscount);
-
-                transactionTotalToMap = transactionTotalToMap.add(totalOfThisItem);
+        for(ca.bestbuy.orders.fraud.model.internal.ShippingOrder shippingOrderToMap : shippingOrdersToMap){
+            if(shippingOrderToMap.getTotalAuthorizedAmount() != null ) {
+                transactionTotalToMap = transactionTotalToMap.add(shippingOrderToMap.getTotalAuthorizedAmount());
             }
-
         }
 
         mappedTransactionData.setTransactionTotalAmount(transactionTotalToMap.toString());
@@ -351,8 +343,6 @@ public abstract class TASRequestXMLMapper {
             @Mapping(target = "shippingDetails.shippingDeadline", source = "deliveryDate"),
             @Mapping(target = "shippingDetails.shippingAddress", source = "shippingAddress"),
             @Mapping(target = "fulfillmentPartner", source = "fulfillmentPartner")
-
-
     })
     public abstract ShippingOrder mapShippingOrder(ca.bestbuy.orders.fraud.model.internal.ShippingOrder shippingOrderToMap);
 

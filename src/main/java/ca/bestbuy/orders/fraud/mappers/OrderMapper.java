@@ -144,6 +144,7 @@ public abstract class OrderMapper {
             @Mapping(target = "shippingOrderID", source = "id"),
             @Mapping(target = "globalContractID", source = "globalContractRefId"),
             @Mapping(target = "shippingOrderStatus", source = "status.name"),
+            @Mapping(target = "totalAuthorizedAmount", ignore = true), //todo: need to add to Order Details first
             @Mapping(target = "shippingCharge", ignore = true), // Handled by custom mapping - mapShippingOrder_ShippingChargesAndTax()
             @Mapping(target = "shippingTax", ignore = true), // Handled by custom mapping - mapShippingOrder_ShippingChargesAndTax()
             @Mapping(target = "shippingDiscount", ignore = true), // Handled by custom mapping - mapShippingOrder_ShippingChargesAndTax()

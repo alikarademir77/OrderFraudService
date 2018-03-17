@@ -34,6 +34,11 @@ public class ShippingOrder {
     private String globalContractID;
 
     /**
+     * Total Authorized Amount
+     */
+    private BigDecimal totalAuthorizedAmount;
+
+    /**
      * Shipping charge
      */
     private BigDecimal shippingCharge;
@@ -105,6 +110,14 @@ public class ShippingOrder {
 
     public void setGlobalContractID(String globalContractID) {
         this.globalContractID = globalContractID;
+    }
+
+    public BigDecimal getTotalAuthorizedAmount() {
+        return totalAuthorizedAmount;
+    }
+
+    public void setTotalAuthorizedAmount(BigDecimal totalAuthorizedAmount) {
+        this.totalAuthorizedAmount = totalAuthorizedAmount;
     }
 
     public BigDecimal getShippingCharge() {
