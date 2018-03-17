@@ -48,12 +48,6 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 	@Column(name = "FRAUDREQUESTSTATUSHISTORYID")
 	private long fraudRequestStatusHistoryId;
 
-	@Column(name = "ORDERNUMBER")
-	private BigDecimal orderNumber;
-
-	@Column(name = "REQUESTVERSION")
-	private BigDecimal requestVersion;
-
 	//bi-directional many-to-one association to FraudRequestStatusHistoryDetail
 	@OneToOne(mappedBy="fraudRequestStatusHistory", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	private FraudRequestStatusHistoryDetail fraudRequestStatusHistoryDetail;

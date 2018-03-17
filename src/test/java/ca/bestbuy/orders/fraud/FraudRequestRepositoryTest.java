@@ -105,38 +105,39 @@ public class FraudRequestRepositoryTest {
 		}
 	}
 
-	@Test
-	public void testVersionUpdate(){
-	
+//	@Test
+	public void testVersionUpdate() {
+
 		testCreateForUpdate();
 		testUpdate();
 	}
 	
 	@Transactional
-	public void testCreateForUpdate(){
+	public void testCreateForUpdate() {
 		String orderNumber = "123456";
-		
-		List<Long> requestVersions = Arrays.asList(new Long[]{1l});
+
+		List<Long> requestVersions = Arrays.asList(new Long[] { 1l });
 		FraudRequest request = null;
-		for(Long nextVersion:requestVersions){
+		for (Long nextVersion : requestVersions) {
 			request = createAndSaveFraudRequest(orderNumber, nextVersion);
 		}
 	}
 	
 	@Transactional
-	public void testUpdate(){
+	public void testUpdate() {
 		String orderNumber = "123456";
-		
+
 		long requestVersions = 1L;
 		Iterable<FraudRequest> it = fraudRequestRepository.findByOrderNumber(new BigDecimal(orderNumber));
 		FraudRequest request = it.iterator().next();
 		request.setCreateDate(new Date());
-		
+
 		request = fraudRequestRepository.save(request);
 	}
 	
 	
-	//@Test
+	@Test
+	@Transactional
 	public void testStatusUpdate(){
 		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypes.FRAUD_CHECK);
 		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.DECISION_MADE);

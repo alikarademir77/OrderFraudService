@@ -9,8 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -27,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class MessagingEvent {
 	private final EventTypes type;
 	private final String orderNumber;
-	private final String purchaseOrderNumer;
+	private final String purchaseOrderNumber;
 	private final String requestVersion;
 	private final Date messageCreationDate;
 	
@@ -46,7 +44,7 @@ public final class MessagingEvent {
 			final Date messageCreationDate){
 		this.type = type;
 		this.orderNumber = orderNumber;
-		this.purchaseOrderNumer = purchaseOrderNumber;
+		this.purchaseOrderNumber = purchaseOrderNumber;
 		this.requestVersion = requestVersion;
 		this.messageCreationDate = messageCreationDate;
 	}
