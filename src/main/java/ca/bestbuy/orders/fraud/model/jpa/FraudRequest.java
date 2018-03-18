@@ -45,7 +45,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper=true, exclude={"fraudRequestStatusHistory"})
-@ToString(callSuper=true)
+@ToString(callSuper=true, exclude={"fraudRequestStatusHistory"})
 public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 
 	@Id @GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator" )

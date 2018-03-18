@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -42,131 +44,93 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
-@ActiveProfiles({"dev","unittest"})
+@ActiveProfiles({ "dev", "unittest" })
 @DirtiesContext
 public class FraudRequestStatusHistoryRepositoryTest {
 
 	@MockBean
 	private OrderDetailsClientConfig orderDetailsClientConfig;
-	
+
 	@MockBean
 	OrderDetailsClient orderDetailsClient;
-	
+
 	@Autowired
 	FraudStatusRepository statusRepository;
-	
+
 	@Autowired
 	FraudRequestTypeRepository typeRepository;
-	
+
 	@Autowired
 	FraudRequestStatusHistoryRepository fraudRequestStatusHistoryRepository;
 
 	@Autowired
 	FraudRequestRepository fraudRequestRepository;
 
-
-	//@Test
+	// @Test
 	@Transactional
-	public void testFraudRequestStatusHistoryRetrieval(){
+	public void testFraudRequestStatusHistoryRetrieval() {
 		String orderNumber = "123456";
-		
-		List<Long> requestVersions = Arrays.asList(new Long[]{1l,2l,3l,4l,5l});
-		
-		
-		for(Long nextVersion:requestVersions){
+
+		List<Long> requestVersions = Arrays.asList(new Long[] { 1l, 2l, 3l, 4l, 5l });
+
+		for (Long nextVersion : requestVersions) {
 			createAndSaveFraudRequest(orderNumber, nextVersion);
 		}
-		
+
 		Iterable<FraudRequestStatusHistory> requestHistoriesRetrieved = fraudRequestStatusHistoryRepository
 				.findByFraudRequestOrderNumber(new BigDecimal(orderNumber), new Sort(Direction.DESC, "createDate"));
-		
+
 		long fraudRequestStatusHistoryId = 0;
-		for(FraudRequestStatusHistory requestStatusHistory:requestHistoriesRetrieved){
+		for (FraudRequestStatusHistory requestStatusHistory : requestHistoriesRetrieved) {
 			assertTrue(requestStatusHistory.getFraudRequest().getOrderNumber().toString().equals(orderNumber));
 			assertTrue(requestVersions.contains(requestStatusHistory.getFraudRequest().getRequestVersion().longValue()));
-			fraudRequestStatusHistoryId =  requestStatusHistory.getFraudRequestStatusHistoryId();
+			fraudRequestStatusHistoryId = requestStatusHistory.getFraudRequestStatusHistoryId();
 		}
 
-		FraudRequestStatusHistory requestStatusHistoryRetrieved = fraudRequestStatusHistoryRepository
-				.findOne(fraudRequestStatusHistoryId);
+		FraudRequestStatusHistory requestStatusHistoryRetrieved = fraudRequestStatusHistoryRepository.findOne(fraudRequestStatusHistoryId);
 		assertNotNull(requestStatusHistoryRetrieved);
 		assertTrue(requestStatusHistoryRetrieved.getFraudRequestStatusHistoryId() == fraudRequestStatusHistoryId);
 
 		Iterable<FraudRequestStatusHistory> requestsHistoryRetrieved2 = fraudRequestStatusHistoryRepository
 				.findByFraudRequestOrderNumberAndFraudRequestRequestVersion(new BigDecimal(orderNumber),
 						new BigDecimal(2l), new Sort(Direction.DESC, "createDate"));
-		for(FraudRequestStatusHistory requestStatusHistory:requestsHistoryRetrieved2){
+		for (FraudRequestStatusHistory requestStatusHistory : requestsHistoryRetrieved2) {
 			assertTrue(requestStatusHistory.getFraudRequest().getOrderNumber().toString().equals(orderNumber));
 			assertTrue(requestStatusHistory.getFraudRequest().getRequestVersion().longValue() == 2l);
-			
 		}
 	}
 
-	@Test
-	public void testFraudRequestStatusHistoryConcurrentUpdate(){
+	@Test(expected = ObjectOptimisticLockingFailureException.class)
+	public void testFraudRequestStatusHistoryConcurrentUpdate() {
 		String orderNumber = "123456";
 		Long requestVersion = 1l;
-		
-		FraudRequest[] fraudRequestArr = new FraudRequest[1]; 
-		AtomicBoolean[] updatedFlag = new AtomicBoolean[]{new AtomicBoolean(false)};  
-		
-		Thread thread1 = new Thread(new Runnable(){
-			
-			@Transactional
-			public void doIt(){
-				fraudRequestArr[0] = createAndSaveFraudRequest(orderNumber, requestVersion);
-				while(!updatedFlag[0].get()){
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-					}
-				}
-				fraudRequestArr[0].setCreateDate(new Date());
-				FraudRequest result = fraudRequestRepository.save(fraudRequestArr[0]);
-			}
-			
-			@Override
-			public void run() {
-				doIt();
-			}
-		});
-		Thread thread2 = new Thread(new Runnable(){
-			@Transactional
-			public void doIt(){
-				FraudRequest request = null;
-				while(request == null){
-					Iterable<FraudRequest> it = fraudRequestRepository.findByOrderNumber(new BigDecimal(orderNumber));
-					if((it!=null) && (it.iterator().hasNext())){
-						request = it.iterator().next();
-					}else{
-						try {
-							Thread.sleep(50);
-						} catch (InterruptedException e) {
-						}
-					}
-				}
-				request.setUpdateDate(new Date());
-				request = fraudRequestRepository.save(request);
-				updatedFlag[0].set(true);
-			}
 
+		FraudRequest fraudRequest = createAndSaveFraudRequest(orderNumber, requestVersion);
+
+		Thread thread = new Thread(new Runnable() {
+			@Transactional
 			@Override
 			public void run() {
-				doIt();
+				Iterable<FraudRequest> it = fraudRequestRepository.findByOrderNumber(new BigDecimal(orderNumber));
+				FraudRequest request = it.iterator().next();
+				request.setRequestVersion(BigDecimal.valueOf(request.getRequestVersion().longValue() + 1));
+				request = fraudRequestRepository.save(request);
 			}
 		});
-		thread1.start();
-		thread2.start();
+
 		try {
-			thread1.join();
-			thread2.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			thread.start();
+			thread.join();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
 		}
+		fraudRequest.setRequestVersion(BigDecimal.valueOf(fraudRequest.getRequestVersion().longValue() + 1));
+		
+		// this should throw the ObjectOptimisticLockingFailureException
+		fraudRequestRepository.save(fraudRequest);
 	}
 
-	//private
+	// private
 	private FraudRequest createAndSaveFraudRequest(String orderNumber, long requestVersion) {
 		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypes.FRAUD_CHECK);
 		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.INITIAL_REQUEST);
@@ -186,7 +150,7 @@ public class FraudRequestStatusHistoryRepositoryTest {
 				.setUpdateUser(userName);
 
 		FraudRequestStatusHistory history = new FraudRequestStatusHistory();
-		
+
 		history.setFraudRequest(request)
 				.setFraudStatus(status)
 				.setCreateDate(now)
@@ -195,11 +159,11 @@ public class FraudRequestStatusHistoryRepositoryTest {
 				.setUpdateUser(userName);
 		List<FraudRequestStatusHistory> historyList = new ArrayList<>();
 		historyList.add(history);
-		
+
 		request.setFraudRequestStatusHistory(historyList);
-		
+
 		request = fraudRequestRepository.save(request);
 		return request;
 	}
-	
+
 }
