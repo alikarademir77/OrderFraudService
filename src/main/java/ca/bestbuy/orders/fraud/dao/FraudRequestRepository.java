@@ -50,7 +50,7 @@ public interface FraudRequestRepository extends OrderFraudBaseRepository<FraudRe
 	 * @return all matching instances of FraudRequest or {@literal null} if none found
 	 * @throws IllegalArgumentException if {@code orderNumber} is {@literal null} or {@code requestVersion} is {@literal null} 
 	 */
-	 @Query("select fr from FRAUD_RQST fr where fr.ORDER_NUMBER= :orderNumber and fr.REQUEST_VERSION >= :requestVersion order by fr.REQUEST_VERSION desc")
+	 @Query("select fr from FraudRequest fr where fr.orderNumber= :orderNumber and fr.requestVersion >= :requestVersion order by fr.requestVersion desc")
 	Iterable<FraudRequest> findByOrderNumberAndRequestVersionGTE(@Param("orderNumber") BigDecimal orderNumber,
 			@Param("requestVersion") BigDecimal requestVersion);
 
