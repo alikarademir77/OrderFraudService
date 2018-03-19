@@ -116,7 +116,6 @@ class TASRequestXMLMapperTest extends Specification {
         }
 
 
-        mappedTxnData.getRequestVersion() == Integer.parseInt("1")
         mappedTxnData.getTransactionId() == order.getFsOrderID()
         mappedTxnData.getWebOrderId() == order.getWebOrderRefID()
         mappedTxnData.transactionType == TransactionType.ORDER
@@ -248,7 +247,6 @@ class TASRequestXMLMapperTest extends Specification {
 
         then:
 
-        mappedTxnData.getRequestVersion() == Integer.parseInt("1")
         mappedTxnData.getTransactionId() == null
         mappedTxnData.getWebOrderId() == null
         mappedTxnData.transactionType == TransactionType.ORDER
@@ -329,7 +327,6 @@ class TASRequestXMLMapperTest extends Specification {
         }
 
 
-        mappedTxnData.getRequestVersion() == Integer.parseInt("1")
         mappedTxnData.getTransactionId() == order.getFsOrderID()
         mappedTxnData.getWebOrderId() == order.getWebOrderRefID()
         mappedTxnData.transactionType == TransactionType.ORDER
@@ -403,7 +400,6 @@ class TASRequestXMLMapperTest extends Specification {
 
         then:
 
-        mappedTxnData.getRequestVersion() == Integer.parseInt("1")
         mappedTxnData.getTransactionId() == order.getFsOrderID()
         mappedTxnData.getWebOrderId() == order.getWebOrderRefID()
         mappedTxnData.transactionType == TransactionType.ORDER

@@ -46,10 +46,10 @@ public abstract class TASRequestXMLMapper {
      */
     @Mappings({
 
-            @Mapping(target = "requestVersion", constant = "1"), //todo: will be generated when fms flow is implemented. hardcoded now for testing purposes
+            @Mapping(target = "requestVersion", ignore = true), //todo: will be generated when fms flow is implemented. hardcoded now for testing purposes
             @Mapping(target = "transactionId", source = "fsOrderID"),
             @Mapping(target = "webOrderId", source = "webOrderRefID"),
-            @Mapping(target = "transactionType", constant = "ORDER"), //will be mapped when we call doFraudCheck() in TAS client
+            @Mapping(target = "transactionType", constant = "ORDER"), //will always be ORDER for Fraud Checks
             @Mapping(target = "transactionDateTime", ignore = true), //handled by mapTransactionData_TransactionData custom mapping
             @Mapping(target = "orderDateTime", source = "webOrderCreationDate"),
             @Mapping(target = "transactionTotalAmount", ignore = true), //handled by mapTransactionData_TransactionTotalAmount custom mapping
@@ -58,7 +58,7 @@ public abstract class TASRequestXMLMapper {
             @Mapping(target = "salesChannel", source = "salesChannel"),
             @Mapping(target = "ipAddress", source = "ipAddress"),
             @Mapping(target = "orderMessage", source = "orderMessage"),
-            @Mapping(target = "billingDetails", ignore = true), //todo: (requires order details change) handle with a custom Billing Details mapper
+            @Mapping(target = "billingDetails", ignore = true), //todo: (requires order details change) handle with a custom Billing Details mapper because we need to implement a check for ACTIVE payment method
             @Mapping(target = "paymentMethods", ignore = true), //handled by mapTransactionData_PaymentMethods() custom mapping
             @Mapping(target = "member.memberId", source = "rewardZoneID"),
             @Mapping(target = "items.item", source = "items"),
