@@ -61,18 +61,18 @@ client:
   tas:
     connection:
       url: ~
-      fraudCheckEndpoint: ~
+      fraudCheckEndpoint: fraudMockService
       hostname: ~
-      key-alias: ~
-      keystore-path: ~
-      keystore-password: ~
-      keystore-type: ~
-      keystore-provider: ~
-      truststore-path: ~
-      truststore-password: ~
-      truststore-type: ~
-      truststore-provider: ~
-      tls-enabled: false
+      ssl:
+        verify-hostname: false
+        key-alias: "tas (fms)"
+        keystore-path: ~
+        keystore-password: ~
+        keystore-type: JKS
+        truststore-path: ~
+        truststore-password: ~
+        truststore-type: JKS
+        tls-enabled: false
 
 
 ---

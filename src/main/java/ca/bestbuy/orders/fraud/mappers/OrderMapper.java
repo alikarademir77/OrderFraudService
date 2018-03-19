@@ -367,7 +367,7 @@ public abstract class OrderMapper {
             @Mapping(target = "creditCardAvsResponse", ignore = true), // TODO - Figure out how to get value
             @Mapping(target = "creditCardCvvResponse", ignore = true), // TODO - Figure out how to get value
             @Mapping(target = "creditCard3dSecureValue", ignore = true), // TODO - Figure out how to get value
-            @Mapping(target = "totalAuthorizedAmount", ignore = true), // TODO - Figure out how to get value
+            @Mapping(target = "totalAuthorizedAmount", ignore = true), // TODO - Figure out how to get value -- hardcoding for now
             @Mapping(target="status",ignore=true) // TODO - Figure out how to get value
     })
     protected abstract PaymentDetails.CreditCard mapCreditCard(CreditCardInfo creditCardToMap);

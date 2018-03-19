@@ -100,7 +100,10 @@ public abstract class TASRequestXMLMapper {
     @AfterMapping
     public void mapTransactionData_TransactionTotalAmount(Order orderToMap, @MappingTarget TransactionData mappedTransactionData){
 
-        if(orderToMap == null || mappedTransactionData == null || orderToMap.getShippingOrders() == null || mappedTransactionData == null){
+        if(orderToMap == null || mappedTransactionData == null || orderToMap.getShippingOrders() == null){
+            if(mappedTransactionData != null) {
+                mappedTransactionData.setTransactionTotalAmount("0");
+            }
             return;
         }
 

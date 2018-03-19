@@ -253,7 +253,7 @@ class TASRequestXMLMapperTest extends Specification {
         mappedTxnData.getWebOrderId() == null
         mappedTxnData.transactionType == TransactionType.ORDER
         mappedTxnData.getOrderDateTime() == null
-        mappedTxnData.getTransactionTotalAmount() == null
+        mappedTxnData.getTransactionTotalAmount() == "0"
         mappedTxnData.getCsrSalesRep() == null
         mappedTxnData.getEnterpriseCutId() == null
         mappedTxnData.getSalesChannel() == null
@@ -408,7 +408,7 @@ class TASRequestXMLMapperTest extends Specification {
         mappedTxnData.getWebOrderId() == order.getWebOrderRefID()
         mappedTxnData.transactionType == TransactionType.ORDER
         assertGregorianDateAndDateTimeAreEqual(mappedTxnData.getOrderDateTime(),order.getWebOrderCreationDate())
-        mappedTxnData.getTransactionTotalAmount() == null
+        mappedTxnData.getTransactionTotalAmount() == "0"
         mappedTxnData.getCsrSalesRep() == order.getCsrSalesRepID()
         mappedTxnData.getEnterpriseCutId() == order.getEnterpriseCustomerId()
         mappedTxnData.getSalesChannel() == SalesChannels.valueOf(order.getSalesChannel())
