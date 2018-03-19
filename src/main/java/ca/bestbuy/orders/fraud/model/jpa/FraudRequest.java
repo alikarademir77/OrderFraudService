@@ -37,7 +37,7 @@ import lombok.experimental.Accessors;
  * 
  */
 @SuppressWarnings("serial")
-@TableGenerator(name = "orderFraudIdGenerator", schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUDREQUESTID")
+@TableGenerator(name = "orderFraudIdGenerator", schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUD_RQST_ID")
 @Entity
 @Access(AccessType.FIELD)
 @Table(name = "FRAUD_RQST", schema="ORDER_FRAUD")
