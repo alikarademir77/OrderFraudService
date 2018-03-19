@@ -62,6 +62,7 @@ client:
     connection:
       url: ~
       fraudCheckEndpoint: ~
+      hostname: ~
       key-alias: ~
       keystore-path: ~
       keystore-password: ~

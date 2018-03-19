@@ -50,6 +50,7 @@ public class FraudServiceTASClientImpl extends WebServiceGatewaySupport implemen
     public FraudResult doFraudCheck(Order order) {
 
 
+        //Map the request
         ManageOrderRequest request = new ManageOrderRequest();
         request.setIxTranType(ManageOrderActionCode.FRAUDCHECK);
         request.setTransactionData(tasRequestXMLMapper.mapTransactionData(order));
@@ -65,29 +66,30 @@ public class FraudServiceTASClientImpl extends WebServiceGatewaySupport implemen
         getWebServiceTemplate().setMarshaller(config.marshaller());
         getWebServiceTemplate().setUnmarshaller(config.marshaller());
 
+
+        //Set up 2-way SSL configurations if enabled
         if(tlsEnabled) {
             getWebServiceTemplate().setMessageSender(createHttpsUrlConnectionMessageSender());
         }
+
+        //Send request to TAS and receive response
 
         JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) getWebServiceTemplate().marshalSendAndReceive(
                 tasURL+fraudCheckEndpoint,
                 jaxbRequest);
 
-
+        //map response to FraudResult object
         ManageOrderResponse response = jaxbResponse.getValue();
-        FraudResult fraudResult = null;
-        fraudResult = tasResponseXMLMapper.mapManageOrderResult(response);
+        FraudResult fraudResult = tasResponseXMLMapper.mapManageOrderResult(response);
         return fraudResult;
     }
 
 
-
+    //Set up HTTPS configurations for 2-way SSL
     private HttpsUrlConnectionMessageSender createHttpsUrlConnectionMessageSender(){
 
         String keystorePath = config.getKeyStore();
         String keystorePassword = config.getKeyStorePassword();
-        String keyAlias = config.getKeyAlias();
-        String keyPassword = config.getKeyPassword();
         String keystoreType = config.getKeyStoreType();
         String truststorePath = config.getTrustStore();
         String truststorePassword = config.getTrustStorePassword();
