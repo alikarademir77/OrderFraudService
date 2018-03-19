@@ -26,7 +26,7 @@ import lombok.experimental.Accessors;
 @SuppressWarnings("serial")
 @Entity
 @Access(AccessType.FIELD)
-@Table(name="FRAUDSTATUSES", schema="ORDER_FRAUD")
+@Table(name="FRAUD_STATUSES", schema="ORDER_FRAUD")
 @Accessors(chain=true)
 @Getter
 @Setter

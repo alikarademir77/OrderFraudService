@@ -35,7 +35,7 @@ import lombok.experimental.Accessors;
 @TableGenerator(name = "orderFraudIdGenerator",  schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUDREQUESTSTATUSHISTORYID")
 @Entity
 @Access(AccessType.FIELD)
-@Table(name = "FRAUDREQUESTSTATUSHISTORY", schema="ORDER_FRAUD")
+@Table(name = "FRAUD_RQST_STATUS_HSTRY", schema="ORDER_FRAUD")
 @Accessors(chain=true)
 @Getter
 @Setter
