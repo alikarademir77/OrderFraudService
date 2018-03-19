@@ -36,17 +36,17 @@ public class OrderFraudBaseEntity implements Serializable {
 	private Integer version;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATEDATE")
+	@Column(name = "CREATE_DATE")
 	private Date createDate;
 
-	@Column(name = "CREATEUSER")
+	@Column(name = "CREATE_USER")
 	private String createUser;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name = "UPDATEDATE")
+	@Column(name = "UPDATE_DATE")
 	private Date updateDate;
 
-	@Column(name = "UPDATEUSER")
+	@Column(name = "UPDATE_USER")
 	private String updateUser;
 	
 	public OrderFraudBaseEntity(){

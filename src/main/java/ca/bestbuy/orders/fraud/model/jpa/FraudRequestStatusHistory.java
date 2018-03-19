@@ -1,7 +1,5 @@
 package ca.bestbuy.orders.fraud.model.jpa;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -45,7 +43,7 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator")
-	@Column(name = "FRAUDREQUESTSTATUSHISTORYID")
+	@Column(name = "FRAUD_RQST_STATUS_HSTRY_ID")
 	private long fraudRequestStatusHistoryId;
 
 	//bi-directional many-to-one association to FraudRequestStatusHistoryDetail
@@ -55,12 +53,12 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 	//bi-directional many-to-one association to FraudRequest
 
 	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
-	@JoinColumn(name="FRAUDREQUESTID")
+	@JoinColumn(name="FRAUD_RQST_ID")
 	private FraudRequest fraudRequest;
 
 	//uni-directional many-to-one association to FraudStatus
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="FRAUDSTATUSCODE")
+	@JoinColumn(name="FRAUD_STATUS_CODE")
 	private FraudStatus fraudStatus;
 
 	public FraudRequestStatusHistory() {

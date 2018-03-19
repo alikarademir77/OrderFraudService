@@ -35,11 +35,11 @@ import lombok.experimental.Accessors;
 public class FraudStatus extends OrderFraudBaseEntity {
 
 	@Id
-	@Column(name = "FRAUDSTATUSCODE")
+	@Column(name = "FRAUD_STATUS_CODE")
 	@Enumerated(EnumType.STRING)
 	private FraudStatusCodes fraudStatusCode;
 
-	@Column(name = "FRAUDSTATUSDESCRIPTION")
+	@Column(name = "FRAUD_STATUS_DESCRIPTION")
 	private String fraudStatusDescription;
 
 	public FraudStatus() {
