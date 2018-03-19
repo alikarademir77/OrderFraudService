@@ -92,7 +92,7 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 					.setFraudStatus(status)
 					.setEventDate(event.getMessageCreationDate())
 					.setOrderNumber(new BigDecimal(event.getOrderNumber()))
-					.setRequestVersion(new BigDecimal(event.getRequestVersion()))
+					.setRequestVersion(Long.valueOf(event.getRequestVersion()))
 					.setCreateDate(now)
 					.setCreateUser(userName)
 					.setUpdateDate(now)

@@ -60,7 +60,7 @@ public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 	private BigDecimal orderNumber;
 
 	@Column(name = "REQUESTVERSION")
-	private BigDecimal requestVersion;
+	private Long requestVersion;
 
 	//uni-directional many-to-one association to FraudRequestType
 	@ManyToOne(cascade={CascadeType.REFRESH}, fetch=FetchType.EAGER)
