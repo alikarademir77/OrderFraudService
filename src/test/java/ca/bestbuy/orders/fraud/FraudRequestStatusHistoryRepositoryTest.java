@@ -93,7 +93,7 @@ public class FraudRequestStatusHistoryRepositoryTest {
 
 		Iterable<FraudRequestStatusHistory> requestsHistoryRetrieved2 = fraudRequestStatusHistoryRepository
 				.findByFraudRequestOrderNumberAndFraudRequestRequestVersion(new BigDecimal(orderNumber),
-						new BigDecimal(2l), new Sort(Direction.DESC, "createDate"));
+						2L, new Sort(Direction.DESC, "createDate"));
 		for (FraudRequestStatusHistory requestStatusHistory : requestsHistoryRetrieved2) {
 			assertTrue(requestStatusHistory.getFraudRequest().getOrderNumber().toString().equals(orderNumber));
 			assertTrue(requestStatusHistory.getFraudRequest().getRequestVersion().longValue() == 2l);
