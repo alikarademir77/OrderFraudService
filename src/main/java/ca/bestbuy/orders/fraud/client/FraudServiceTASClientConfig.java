@@ -6,6 +6,7 @@ import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -58,6 +59,20 @@ public class FraudServiceTASClientConfig {
         }
         this.hostname = hostname;
     }
+
+    protected int connectionTimeout;
+    @Value("${client.tas.connection.connectionTimeout}")
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+
+
+    protected int readTimeout;
+    @Value("${client.tas.connection.readTimeout}")
+    public void setReadTimeout(int readTimeout) {
+        this.readTimeout = readTimeout;
+    }
+
 
     protected Boolean verifyHostName;
     @Value("${client.tas.connection.ssl.verify-hostname:true}")
@@ -166,6 +181,11 @@ public class FraudServiceTASClientConfig {
     protected HttpClient httpClient(){
 
         HttpClientBuilder builder = HttpClientBuilder.create();
+        //setting timeouts
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(readTimeout).build();
+        builder = builder.setDefaultRequestConfig(requestConfig);
+
+        //removing http headers because headers are already set, otherwise we get an exception about content length header already existing
         builder.addInterceptorFirst(new HttpRequestInterceptor() {
             @Override
             public void process(HttpRequest httpRequest, HttpContext httpContext) throws HttpException, IOException {
@@ -213,7 +233,7 @@ public class FraudServiceTASClientConfig {
         }
 
         if (trustStore == null) {
-            throw new IllegalArgumentException(" The value for 'client.tas.connection.ssl.truststore' was found to be null. Please ensure it is set correctly in the application configuration.");
+            throw new IllegalArgumentException(" The value for 'client.tas.connection.ssl.truststore-path' was found to be null. Please ensure it is set correctly in the application configuration.");
         }
 
         if (trustStorePassword == null) {
