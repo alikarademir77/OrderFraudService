@@ -113,7 +113,7 @@ public class FraudRequestStatusHistoryRepositoryTest {
 			public void run() {
 				Iterable<FraudRequest> it = fraudRequestRepository.findByOrderNumber(new BigDecimal(orderNumber));
 				FraudRequest request = it.iterator().next();
-				request.setRequestVersion(BigDecimal.valueOf(request.getRequestVersion().longValue() + 1));
+				request.setRequestVersion(request.getRequestVersion() + 1L);
 				request = fraudRequestRepository.save(request);
 			}
 		});
@@ -124,7 +124,7 @@ public class FraudRequestStatusHistoryRepositoryTest {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-		fraudRequest.setRequestVersion(BigDecimal.valueOf(fraudRequest.getRequestVersion().longValue() + 1));
+		fraudRequest.setRequestVersion(fraudRequest.getRequestVersion().longValue() + 1L);
 		
 		// this should throw the ObjectOptimisticLockingFailureException
 		fraudRequestRepository.save(fraudRequest);
@@ -143,7 +143,7 @@ public class FraudRequestStatusHistoryRepositoryTest {
 				.setFraudStatus(status)
 				.setEventDate(now)
 				.setOrderNumber(new BigDecimal(orderNumber))
-				.setRequestVersion(new BigDecimal(requestVersion))
+				.setRequestVersion(requestVersion)
 				.setCreateDate(now)
 				.setCreateUser(userName)
 				.setUpdateDate(now)
