@@ -9,6 +9,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
+import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
+import ca.bestbuy.orders.fraud.client.FraudServiceTASClientConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,13 @@ public class FraudRequestTypeRepositoryTest {
 	
 	@MockBean
 	OrderDetailsClient orderDetailsClient;
-	
+
+	@MockBean
+	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
+
+	@MockBean
+	private FraudServiceTASClient fraudServiceTASClient;
+
 	@Autowired
 	FraudRequestTypeRepository typeRepository;
 	

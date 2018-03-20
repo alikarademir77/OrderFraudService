@@ -11,6 +11,8 @@ import static org.mockito.Mockito.verify;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
+import ca.bestbuy.orders.fraud.client.FraudServiceTASClientConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -51,6 +53,12 @@ public class OrderFraudServiceMessageConsumptionTest {
 	
 	@MockBean
 	OrderDetailsClient orderDetailsClient;
+
+	@MockBean
+	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
+
+	@MockBean
+	private FraudServiceTASClient fraudServiceTASClient;
 	    
     @Test
     public void contextLoadsAndWiring() {
