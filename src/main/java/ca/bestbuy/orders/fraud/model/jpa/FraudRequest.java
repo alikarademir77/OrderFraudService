@@ -37,7 +37,7 @@ import lombok.experimental.Accessors;
  * 
  */
 @SuppressWarnings("serial")
-@TableGenerator(name = "orderFraudIdGenerator", schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUDREQUESTID")
+@TableGenerator(name = "orderFraudIdGenerator", schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUD_RQST_ID")
 @Entity
 @Access(AccessType.FIELD)
 @Table(name = "FRAUD_RQST", schema="ORDER_FRAUD")
@@ -49,27 +49,27 @@ import lombok.experimental.Accessors;
 public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 
 	@Id @GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator" )
-	@Column(name = "FRAUDREQUESTID")
+	@Column(name = "FRAUD_RQST_ID")
 	private long fraudRequestId;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "EVENTDATE")
+	@Column(name = "EVENT_DATE")
 	private Date eventDate;
 
-	@Column(name = "ORDERNUMBER")
+	@Column(name = "ORDER_NUMBER")
 	private BigDecimal orderNumber;
 
-	@Column(name = "REQUESTVERSION")
-	private Long requestVersion;
+	@Column(name = "REQUEST_VERSION")
+	private BigDecimal requestVersion;
 
 	//uni-directional many-to-one association to FraudRequestType
 	@ManyToOne(cascade={CascadeType.REFRESH}, fetch=FetchType.EAGER)
-	@JoinColumn(name="REQUESTTYPECODE")
+	@JoinColumn(name="REQUEST_TYPE_CODE")
 	private FraudRequestType fraudRequestType;
 
 	//uni-directional many-to-one association to FraudStatus
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="FRAUDSTATUSCODE")
+	@JoinColumn(name="FRAUD_STATUS_CODE")
 	private FraudStatus fraudStatus;
 
 	//bi-directional many-to-one association to FraudRquestHistory

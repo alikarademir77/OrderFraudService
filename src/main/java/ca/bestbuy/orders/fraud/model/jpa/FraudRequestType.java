@@ -34,11 +34,11 @@ import lombok.experimental.Accessors;
 @ToString(callSuper=true)
 public class FraudRequestType extends OrderFraudBaseEntity {
 	@Id
-	@Column(name = "REQUESTTYPECODE")
+	@Column(name = "REQUEST_TYPE_CODE")
 	@Enumerated(EnumType.STRING)
 	private RequestTypes requestTypeCode;
 
-	@Column(name = "REQUESTTYPEDESCRIPTION")
+	@Column(name = "REQUEST_TYPE_DESCRIPTION")
 	private String requestTypeDescription;
 
 	public FraudRequestType() {

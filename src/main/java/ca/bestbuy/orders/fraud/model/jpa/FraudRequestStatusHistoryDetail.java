@@ -37,20 +37,20 @@ import lombok.experimental.Accessors;
 public class FraudRequestStatusHistoryDetail extends OrderFraudBaseEntity {
 
 	@Id
-	@Column(name = "FRAUDREQUESTSTATUSHISTORYID")
+	@Column(name = "FRAUD_RQST_STATUS_HSTRY_ID")
 	private long fraudRequestStatusHistoryId;
 
 	@Lob
-	@Column(name = "TASREQUEST")
+	@Column(name = "TAS_REQUEST")
 	private String tasRequest;
 
 	@Lob
-	@Column(name = "TASRESPONSE")
+	@Column(name = "TAS_RESPONSE")
 	private String tasResponse;
 	
 	//bi-directional many-to-one association to Fraudrequeststatushistory
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "FRAUDREQUESTSTATUSHISTORYID", insertable = false, updatable = false)
+	@JoinColumn(name = "FRAUD_RQST_STATUS_HSTRY_ID", insertable = false, updatable = false)
 	private FraudRequestStatusHistory fraudRequestStatusHistory;
 
 	public FraudRequestStatusHistoryDetail() {
