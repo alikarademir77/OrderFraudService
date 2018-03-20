@@ -50,5 +50,5 @@ public interface FraudRequestStatusHistoryRepository extends OrderFraudBaseRepos
 	 * @param requestVersion
 	 * @return
 	 */
-	 Iterable<FraudRequestStatusHistory> findByFraudRequestOrderNumberAndFraudRequestRequestVersion(BigDecimal orderNumber, BigDecimal requestVersion, Sort sort);
+	 Iterable<FraudRequestStatusHistory> findByFraudRequestOrderNumberAndFraudRequestRequestVersion(BigDecimal orderNumber, Long requestVersion, Sort sort);
 }
