@@ -1,5 +1,21 @@
 package ca.bestbuy.orders.fraud.mappers;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
+import org.mapstruct.ObjectFactory;
+
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.AddressDetails;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.CaPaymentMethod;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ChargeBack;
@@ -20,20 +36,6 @@ import ca.bestbuy.orders.fraud.model.internal.Order;
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails;
 import ca.bestbuy.orders.fraud.model.internal.PurchaseOrder;
 import ca.bestbuy.orders.fraud.model.internal.ShippingOrderLine;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
-import org.mapstruct.ObjectFactory;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 
 @Mapper(uses = ObjectFactory.class, componentModel = "spring")
@@ -135,8 +137,8 @@ public abstract class TASRequestXMLMapper {
         if(orderToMap == null || mappedTransactionData == null || orderToMap.getShippingOrders() == null
                 || orderToMap.getShippingOrders().isEmpty()
                 || mappedTransactionData.getItems() == null
-                || mappedTransactionData.getItems().getItem().isEmpty()
-                || mappedTransactionData.getItems().getItem() == null){
+                || mappedTransactionData.getItems().getItem() == null
+                || mappedTransactionData.getItems().getItem().isEmpty()){
             return;
         }
 
@@ -175,8 +177,8 @@ public abstract class TASRequestXMLMapper {
 
         if(orderToMap == null || mappedTransactionData == null ||orderToMap.getPurchaseOrders() == null
                 || orderToMap.getPurchaseOrders().isEmpty() || mappedTransactionData.getShippingOrders() == null
-                || mappedTransactionData.getShippingOrders().getShippingOrder().isEmpty()
-                || mappedTransactionData.getShippingOrders().getShippingOrder() == null){
+                || mappedTransactionData.getShippingOrders().getShippingOrder() == null
+                || mappedTransactionData.getShippingOrders().getShippingOrder().isEmpty()){
             return;
         }
 

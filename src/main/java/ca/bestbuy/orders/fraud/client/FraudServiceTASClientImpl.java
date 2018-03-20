@@ -1,5 +1,12 @@
 package ca.bestbuy.orders.fraud.client;
 
+import java.io.IOException;
+
+import javax.xml.bind.JAXBElement;
+
+import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.xml.transform.StringResult;
+
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper;
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderActionCode;
@@ -9,11 +16,6 @@ import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ObjectFactory;
 import ca.bestbuy.orders.fraud.model.internal.FraudResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ws.client.core.WebServiceTemplate;
-import org.springframework.xml.transform.StringResult;
-
-import javax.xml.bind.JAXBElement;
-import java.io.IOException;
 
 @Slf4j
 public class FraudServiceTASClientImpl implements FraudServiceTASClient {
@@ -63,7 +65,7 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
         try {
             webServiceTemplate.getMarshaller().marshal(jaxbElement, output);
         } catch (IOException e) {
-            throw new IllegalStateException("an IO exception occured");
+            throw new IllegalStateException("Error while marshalling TAS request/response for logging purposes", e);
         }
 
         return output.toString();
