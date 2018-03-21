@@ -10,11 +10,6 @@ spring:
       # Git branch to use for the backing config server configurations git repository
       label: master
 
-# information exposed via the endpoint /<contextPath>/info
-info:
-  name: @project.name@
-  version: @project.version@
-
 # TODO remove - this allows access to all spring boot actuator endpoints
 management.security.enabled: false
 
