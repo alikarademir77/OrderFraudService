@@ -1,5 +1,15 @@
 package ca.bestbuy.orders.fraud.client;
 
+import java.io.IOException;
+
+import javax.xml.bind.JAXBElement;
+
+import org.springframework.ws.client.WebServiceIOException;
+import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.ws.soap.client.SoapFaultClientException;
+import org.springframework.ws.soap.client.core.SoapActionCallback;
+import org.springframework.xml.transform.StringResult;
+
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper;
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderActionCode;
@@ -9,13 +19,6 @@ import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ObjectFactory;
 import ca.bestbuy.orders.fraud.model.internal.FraudResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ws.client.WebServiceIOException;
-import org.springframework.ws.client.core.WebServiceTemplate;
-import org.springframework.ws.soap.client.SoapFaultClientException;
-import org.springframework.xml.transform.StringResult;
-
-import javax.xml.bind.JAXBElement;
-import java.io.IOException;
 
 @Slf4j
 public class FraudServiceTASClientImpl implements FraudServiceTASClient {
@@ -24,13 +27,13 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
     private TASRequestXMLMapper tasRequestXMLMapper;
     private TASResponseXMLMapper tasResponseXMLMapper;
     private WebServiceTemplate webServiceTemplate;
-    private String fraudCheckEndpoint;
+    private String fraudCheckOperation;
 
-    public FraudServiceTASClientImpl(TASRequestXMLMapper tasRequestXMLMapper, TASResponseXMLMapper tasResponseXMLMapper, WebServiceTemplate webServiceTemplate, String fraudCheckEndpoint){
+    public FraudServiceTASClientImpl(TASRequestXMLMapper tasRequestXMLMapper, TASResponseXMLMapper tasResponseXMLMapper, WebServiceTemplate webServiceTemplate, String fraudCheckOperation){
         this.tasRequestXMLMapper = tasRequestXMLMapper;
         this.tasResponseXMLMapper = tasResponseXMLMapper;
         this.webServiceTemplate = webServiceTemplate;
-        this.fraudCheckEndpoint = fraudCheckEndpoint;
+        this.fraudCheckOperation = fraudCheckOperation;
     }
 
     @Override
@@ -49,13 +52,14 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
 
         try {
             //Send request to TAS and receive response
-            JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) webServiceTemplate.marshalSendAndReceive(webServiceTemplate.getDefaultUri() + fraudCheckEndpoint, jaxbRequest);
+            JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) webServiceTemplate.marshalSendAndReceive(jaxbRequest, new SoapActionCallback(fraudCheckOperation));
             log.info("Response received from TAS:" + convertToXMLString(jaxbResponse));
 
             //map response to FraudResult object
             ManageOrderResponse response = jaxbResponse.getValue();
             FraudResult fraudResult = tasResponseXMLMapper.mapManageOrderResult(response);
             return fraudResult;
+
         }catch(SoapFaultClientException sfce){
             //todo: handle this during flow implementation
             log.error("An error occurred while sending request to TAS: FAULT CODE is " + sfce.getFaultCode() + " and FAULT STRING is " + sfce.getFaultStringOrReason());

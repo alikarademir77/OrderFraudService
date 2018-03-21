@@ -45,14 +45,14 @@ public class FraudServiceTASClientConfig {
     }
 
 
-    protected String fraudCheckEndpoint;
+    protected String fraudCheckOperation;
 
-    @Value("${client.tas.connection.fraudCheckEndpoint}")
-    protected void setFraudCheckEndpoint(String fraudCheckEndpoint) {
-        if (fraudCheckEndpoint == null) {
-            throw new IllegalArgumentException("client.tas.connection.fraudCheckEndpoint cannot be null");
+    @Value("${client.tas.connection.fraudCheckOperation}")
+    protected void setFraudCheckOperation(String fraudCheckOperation) {
+        if (fraudCheckOperation == null) {
+            throw new IllegalArgumentException("client.tas.connection.fraudCheckOperation cannot be null");
         }
-        this.fraudCheckEndpoint = fraudCheckEndpoint;
+        this.fraudCheckOperation = fraudCheckOperation;
     }
 
     protected String hostname;
@@ -161,7 +161,7 @@ public class FraudServiceTASClientConfig {
 
     @Bean
     public FraudServiceTASClient fraudServiceTASClient(TASRequestXMLMapper tasRequestXMLMapper, TASResponseXMLMapper tasResponseXMLMapper, WebServiceTemplate webServiceTemplate) {
-        FraudServiceTASClient fraudServiceTASClient = new FraudServiceTASClientImpl(tasRequestXMLMapper, tasResponseXMLMapper, webServiceTemplate, fraudCheckEndpoint);
+        FraudServiceTASClient fraudServiceTASClient = new FraudServiceTASClientImpl(tasRequestXMLMapper, tasResponseXMLMapper, webServiceTemplate, fraudCheckOperation);
         return fraudServiceTASClient;
     }
 

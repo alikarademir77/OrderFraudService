@@ -23,7 +23,7 @@ class FraudServiceTASClientConfigTest extends Specification {
     }
 
 
-    def "Test that exception is thrown if fraudCheckEndpoint configuration is not set"() {
+    def "Test that exception is thrown if fraudCheckOperation configuration is not set"() {
 
         given:
 
@@ -31,7 +31,7 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         when:
 
-        config.setFraudCheckEndpoint(null)
+        config.setFraudCheckOperation(null)
 
         then:
 

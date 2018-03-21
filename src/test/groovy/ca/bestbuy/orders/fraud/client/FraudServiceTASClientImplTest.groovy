@@ -28,6 +28,7 @@ class FraudServiceTASClientImplTest extends Specification {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller()
         marshaller.setContextPath("ca.bestbuy.orders.fraud.model.client.accertify.wsdl")
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate()
+        webServiceTemplate.setDefaultUri("defaultURI")
         webServiceTemplate.setMarshaller(marshaller)
         webServiceTemplate.setUnmarshaller(marshaller)
 
