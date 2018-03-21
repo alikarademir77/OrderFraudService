@@ -82,9 +82,9 @@ client:
 
   tas:
     connection:
-      url: ~
+      url: dummyUrl
       fraudCheckOperation: fraudMockService
-      hostname: ~
+      hostname: dummyHost
       connectionTimeout: 10000
       readTimeout: 15000
       ssl:
