@@ -34,7 +34,7 @@ import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
 @Configuration
 public class FraudServiceTASClientConfig {
 
-    protected String url;
+    private String url;
 
     @Value("${client.tas.connection.url}")
     protected void setUrl(String url) {
@@ -45,7 +45,7 @@ public class FraudServiceTASClientConfig {
     }
 
 
-    protected String fraudCheckOperation;
+    private String fraudCheckOperation;
 
     @Value("${client.tas.connection.fraudCheckOperation}")
     protected void setFraudCheckOperation(String fraudCheckOperation) {
@@ -55,7 +55,7 @@ public class FraudServiceTASClientConfig {
         this.fraudCheckOperation = fraudCheckOperation;
     }
 
-    protected String hostname;
+    private String hostname;
 
     @Value("${client.tas.connection.hostname}")
     protected void setHostname(String hostname) {
@@ -65,7 +65,7 @@ public class FraudServiceTASClientConfig {
         this.hostname = hostname;
     }
 
-    protected int connectionTimeout;
+    private int connectionTimeout;
 
     @Value("${client.tas.connection.connectionTimeout}")
     public void setConnectionTimeout(int connectionTimeout) {
@@ -73,7 +73,7 @@ public class FraudServiceTASClientConfig {
     }
 
 
-    protected int readTimeout;
+    private int readTimeout;
 
     @Value("${client.tas.connection.readTimeout}")
     public void setReadTimeout(int readTimeout) {
@@ -81,7 +81,7 @@ public class FraudServiceTASClientConfig {
     }
 
 
-    protected Boolean verifyHostName;
+    private Boolean verifyHostName;
 
     @Value("${client.tas.connection.ssl.verify-hostname:true}")
     protected void setVerifyHostName(Boolean verifyHostName) {
@@ -92,63 +92,72 @@ public class FraudServiceTASClientConfig {
         }
     }
 
-    protected String keyAlias;
+
+    private String keyAlias;
 
     @Value("${client.tas.connection.ssl.key-alias}")
     protected void setKeyAlias(String keyAlias) {
         this.keyAlias = keyAlias;
     }
 
-    protected String keyPassword;
+
+    private String keyPassword;
 
     @Value("${client.tas.connection.ssl.keystore-password}")
     protected void setKeyPassword(String keyPassword) {
         this.keyPassword = keyPassword;
     }
 
-    protected Resource keyStore;
+
+    private Resource keyStore;
 
     @Value("${client.tas.connection.ssl.keystore-path}")
     protected void setKeyStore(Resource keyStore) {
         this.keyStore = keyStore;
     }
 
-    protected String keyStorePassword;
+
+    private String keyStorePassword;
 
     @Value("${client.tas.connection.ssl.keystore-password}")
     protected void setKeyStorePassword(String keyStorePassword) {
         this.keyStorePassword = keyStorePassword;
     }
 
-    protected String keyStoreType;
+
+    private String keyStoreType;
 
     @Value("${client.tas.connection.ssl.keystore-type}")
     protected void setKeyStoreType(String keyStoreType) {
         this.keyStoreType = keyStoreType;
     }
 
-    protected Resource trustStore;
+
+    private Resource trustStore;
 
     @Value("${client.tas.connection.ssl.truststore-path}")
     protected void setTrustStore(Resource trustStore) {
         this.trustStore = trustStore;
     }
 
-    protected String trustStorePassword;
+
+    private String trustStorePassword;
 
     @Value("${client.tas.connection.ssl.truststore-password}")
     protected void setTrustStorePassword(String trustStorePassword) {
         this.trustStorePassword = trustStorePassword;
     }
 
-    protected String trustStoreType;
+
+    private String trustStoreType;
 
     @Value("${client.tas.connection.ssl.truststore-type}")
     protected void setTrustStoreType(String trustStoreType) {
         this.trustStoreType = trustStoreType;
     }
 
-    protected Boolean tlsEnabled;
+
+    private Boolean tlsEnabled;
 
     @Value("${client.tas.connection.ssl.tls-enabled:true}")
     protected void setTlsEnabled(Boolean tlsEnabled) {
