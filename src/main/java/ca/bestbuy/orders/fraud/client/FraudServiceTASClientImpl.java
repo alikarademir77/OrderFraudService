@@ -30,6 +30,31 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
     private String fraudCheckOperation;
 
     public FraudServiceTASClientImpl(TASRequestXMLMapper tasRequestXMLMapper, TASResponseXMLMapper tasResponseXMLMapper, WebServiceTemplate webServiceTemplate, String fraudCheckOperation){
+
+        if(tasRequestXMLMapper == null) {
+            throw new IllegalArgumentException("TASRequestXMLMapper provided to FraudServiceTASClientImpl must not be null");
+        }
+
+        if(tasResponseXMLMapper == null) {
+            throw new IllegalArgumentException("TASResponseXMLMapper provided to FraudServiceTASClientImpl must not be null");
+        }
+
+        if(webServiceTemplate == null) {
+            throw new IllegalArgumentException("WebServiceTemplate provided to FraudServiceTASClientImpl must not be null");
+        }
+
+        if(fraudCheckOperation == null || fraudCheckOperation.isEmpty()) {
+            throw new IllegalArgumentException("fraudCheckOperation provided to FraudServiceTASClientImpl must not be null");
+        }
+
+        if(webServiceTemplate.getMarshaller() == null || webServiceTemplate.getUnmarshaller() == null) {
+            throw new IllegalArgumentException("WebServiceTemplate provided to FraudServiceTASClientImpl must have a marshaller and unmarshaller set");
+        }
+
+        if(webServiceTemplate.getDefaultUri() == null || webServiceTemplate.getDefaultUri().isEmpty()) {
+            throw new IllegalArgumentException("WebServiceTemplate provided to FraudServiceTASClientImpl must have a default uri set");
+        }
+
         this.tasRequestXMLMapper = tasRequestXMLMapper;
         this.tasResponseXMLMapper = tasResponseXMLMapper;
         this.webServiceTemplate = webServiceTemplate;
