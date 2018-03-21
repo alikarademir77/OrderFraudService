@@ -1,7 +1,14 @@
 package ca.bestbuy.orders.fraud.client;
 
-import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper;
-import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+
+import javax.net.ssl.SSLContext;
+
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
@@ -21,21 +28,17 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
-import javax.net.ssl.SSLContext;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
+import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper;
+import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
 
 @Configuration
 public class FraudServiceTASClientConfig {
 
     protected String url;
+
     @Value("${client.tas.connection.url}")
     protected void setUrl(String url) {
-        if(url == null){
+        if (url == null) {
             throw new IllegalArgumentException("client.tas.connection.url cannot be null");
         }
         this.url = url;
@@ -43,24 +46,27 @@ public class FraudServiceTASClientConfig {
 
 
     protected String fraudCheckEndpoint;
+
     @Value("${client.tas.connection.fraudCheckEndpoint}")
     protected void setFraudCheckEndpoint(String fraudCheckEndpoint) {
-        if(fraudCheckEndpoint == null){
+        if (fraudCheckEndpoint == null) {
             throw new IllegalArgumentException("client.tas.connection.fraudCheckEndpoint cannot be null");
         }
         this.fraudCheckEndpoint = fraudCheckEndpoint;
     }
 
-    protected  String hostname;
+    protected String hostname;
+
     @Value("${client.tas.connection.hostname}")
     protected void setHostname(String hostname) {
-        if(hostname == null){
+        if (hostname == null) {
             throw new IllegalArgumentException("client.tas.connection.hostname cannot be null");
         }
         this.hostname = hostname;
     }
 
     protected int connectionTimeout;
+
     @Value("${client.tas.connection.connectionTimeout}")
     public void setConnectionTimeout(int connectionTimeout) {
         this.connectionTimeout = connectionTimeout;
@@ -68,6 +74,7 @@ public class FraudServiceTASClientConfig {
 
 
     protected int readTimeout;
+
     @Value("${client.tas.connection.readTimeout}")
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
@@ -75,9 +82,10 @@ public class FraudServiceTASClientConfig {
 
 
     protected Boolean verifyHostName;
+
     @Value("${client.tas.connection.ssl.verify-hostname:true}")
     protected void setVerifyHostName(Boolean verifyHostName) {
-        if(verifyHostName == null){
+        if (verifyHostName == null) {
             this.verifyHostName = true;
         } else {
             this.verifyHostName = verifyHostName;
@@ -85,61 +93,89 @@ public class FraudServiceTASClientConfig {
     }
 
     protected String keyAlias;
+
     @Value("${client.tas.connection.ssl.key-alias}")
     protected void setKeyAlias(String keyAlias) {
         this.keyAlias = keyAlias;
     }
 
     protected String keyPassword;
+
     @Value("${client.tas.connection.ssl.keystore-password}")
     protected void setKeyPassword(String keyPassword) {
         this.keyPassword = keyPassword;
     }
 
     protected Resource keyStore;
+
     @Value("${client.tas.connection.ssl.keystore-path}")
     protected void setKeyStore(Resource keyStore) {
         this.keyStore = keyStore;
     }
 
     protected String keyStorePassword;
+
     @Value("${client.tas.connection.ssl.keystore-password}")
     protected void setKeyStorePassword(String keyStorePassword) {
         this.keyStorePassword = keyStorePassword;
     }
 
     protected String keyStoreType;
+
     @Value("${client.tas.connection.ssl.keystore-type}")
     protected void setKeyStoreType(String keyStoreType) {
         this.keyStoreType = keyStoreType;
     }
 
     protected Resource trustStore;
+
     @Value("${client.tas.connection.ssl.truststore-path}")
     protected void setTrustStore(Resource trustStore) {
         this.trustStore = trustStore;
     }
 
     protected String trustStorePassword;
+
     @Value("${client.tas.connection.ssl.truststore-password}")
     protected void setTrustStorePassword(String trustStorePassword) {
         this.trustStorePassword = trustStorePassword;
     }
 
     protected String trustStoreType;
+
     @Value("${client.tas.connection.ssl.truststore-type}")
     protected void setTrustStoreType(String trustStoreType) {
         this.trustStoreType = trustStoreType;
     }
 
     protected Boolean tlsEnabled;
+
     @Value("${client.tas.connection.ssl.tls-enabled:true}")
     protected void setTlsEnabled(Boolean tlsEnabled) {
-        if(tlsEnabled == null){
+        if (tlsEnabled == null) {
             throw new IllegalArgumentException("client.tas.connection.ssl.tls-enabled cannot be null");
         }
         this.tlsEnabled = tlsEnabled;
     }
+
+
+    @Bean
+    public FraudServiceTASClient fraudServiceTASClient(TASRequestXMLMapper tasRequestXMLMapper, TASResponseXMLMapper tasResponseXMLMapper, WebServiceTemplate webServiceTemplate) {
+        FraudServiceTASClient fraudServiceTASClient = new FraudServiceTASClientImpl(tasRequestXMLMapper, tasResponseXMLMapper, webServiceTemplate, fraudCheckEndpoint);
+        return fraudServiceTASClient;
+    }
+
+
+    @Bean
+    protected WebServiceTemplate webServiceTemplate(HttpComponentsMessageSender httpComponentsMessageSender, Jaxb2Marshaller marshaller) {
+        WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+        webServiceTemplate.setDefaultUri(url);
+        webServiceTemplate.setMarshaller(marshaller);
+        webServiceTemplate.setUnmarshaller(marshaller);
+        webServiceTemplate.setMessageSender(httpComponentsMessageSender);
+        return webServiceTemplate;
+    }
+
 
     @Bean
     protected Jaxb2Marshaller marshaller() {
@@ -152,25 +188,8 @@ public class FraudServiceTASClientConfig {
 
 
     @Bean
-    public FraudServiceTASClient fraudServiceTASClient(TASRequestXMLMapper tasRequestXMLMapper, TASResponseXMLMapper tasResponseXMLMapper){
-        FraudServiceTASClient fraudServiceTASClient = new FraudServiceTASClientImpl(tasRequestXMLMapper, tasResponseXMLMapper, webServiceTemplate(), fraudCheckEndpoint);
-        return fraudServiceTASClient;
-    }
-
-    @Bean
-    protected WebServiceTemplate webServiceTemplate(){
-        WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-        webServiceTemplate.setDefaultUri(url);
-        webServiceTemplate.setMarshaller(marshaller());
-        webServiceTemplate.setUnmarshaller(marshaller());
-        webServiceTemplate.setMessageSender(httpComponentsMessageSender());
-        return webServiceTemplate;
-
-    }
-
-    @Bean
     //Set up HTTPS configurations for 2-way SSL
-    protected HttpComponentsMessageSender httpComponentsMessageSender(){
+    protected HttpComponentsMessageSender httpComponentsMessageSender() {
 
         HttpComponentsMessageSender httpComponentsMessageSender = new HttpComponentsMessageSender();
         httpComponentsMessageSender.setHttpClient(httpClient());
@@ -178,7 +197,7 @@ public class FraudServiceTASClientConfig {
     }
 
 
-    protected HttpClient httpClient(){
+    protected HttpClient httpClient() {
 
         HttpClientBuilder builder = HttpClientBuilder.create();
         //setting timeouts
@@ -192,7 +211,7 @@ public class FraudServiceTASClientConfig {
                 httpRequest.removeHeaders(HTTP.CONTENT_LEN);
             }
         });
-        if(tlsEnabled){
+        if (tlsEnabled) {
             builder = builder.setSSLSocketFactory(sslConnectionSocketFactory());
         }
 
@@ -200,9 +219,9 @@ public class FraudServiceTASClientConfig {
 
     }
 
-    protected SSLConnectionSocketFactory sslConnectionSocketFactory(){
+    protected SSLConnectionSocketFactory sslConnectionSocketFactory() {
 
-        if(verifyHostName){
+        if (verifyHostName) {
             return new SSLConnectionSocketFactory(sslContext());
         } else {
             return new SSLConnectionSocketFactory(sslContext(), NoopHostnameVerifier.INSTANCE);
@@ -213,39 +232,47 @@ public class FraudServiceTASClientConfig {
     protected SSLContext sslContext() {
 
         if (keyStore == null) {
-            throw new IllegalArgumentException(" The value for 'client.tas.connection.ssl.keystore-path' was found to be null. Please ensure it is set correctly in the application configuration.");
+            throw new IllegalArgumentException(
+                " The value for 'client.tas.connection.ssl.keystore-path' was found to be null. Please ensure it is set correctly in the application configuration.");
         }
 
         if (keyStorePassword == null) {
-            throw new IllegalArgumentException(" The value for 'client.tas.connection.ssl.keystore-password' was found to be null. Please ensure it is set correctly in the application configuration.");
+            throw new IllegalArgumentException(
+                " The value for 'client.tas.connection.ssl.keystore-password' was found to be null. Please ensure it is set correctly in the application configuration.");
         }
 
         if (keyStoreType == null || keyStoreType.isEmpty() || !keyStoreType.equals("JKS")) {
-            throw new IllegalArgumentException(" The value for 'client.tas.connection.ssl.keystore-type' was found to be null, empty, or does not have a value of 'JKS'. Please ensure it is set correctly in the application configuration.");
+            throw new IllegalArgumentException(
+                " The value for 'client.tas.connection.ssl.keystore-type' was found to be null, empty, or does not have a value of 'JKS'. Please ensure it is set correctly in "
+                    + "the application configuration.");
         }
 
         if (keyAlias == null || keyAlias.isEmpty()) {
-            throw new IllegalArgumentException(" The value for 'client.tas.connection.ssl.key-alias' was found to be null or empty. Please ensure it is set correctly in the application configuration.");
+            throw new IllegalArgumentException(
+                " The value for 'client.tas.connection.ssl.key-alias' was found to be null or empty. Please ensure it is set correctly in the application configuration.");
         }
 
         if (keyPassword == null) {
-            throw new IllegalArgumentException(" The value for 'client.tas.connection.ssl.key-password' was found to be null. Please ensure it is set correctly in the application configuration.");
+            throw new IllegalArgumentException(
+                " The value for 'client.tas.connection.ssl.key-password' was found to be null. Please ensure it is set correctly in the application configuration.");
         }
 
         if (trustStore == null) {
-            throw new IllegalArgumentException(" The value for 'client.tas.connection.ssl.truststore-path' was found to be null. Please ensure it is set correctly in the application configuration.");
+            throw new IllegalArgumentException(
+                " The value for 'client.tas.connection.ssl.truststore-path' was found to be null. Please ensure it is set correctly in the application configuration.");
         }
 
         if (trustStorePassword == null) {
-            throw new IllegalArgumentException(" The value for 'client.tas.connection.ssl.truststore-password' was found to be null. Please ensure it is set correctly in the application configuration.");
+            throw new IllegalArgumentException(
+                " The value for 'client.tas.connection.ssl.truststore-password' was found to be null. Please ensure it is set correctly in the application configuration.");
         }
 
         try {
-            return SSLContextBuilder.create()
-                    .loadKeyMaterial(keyStore.getFile(), keyStorePassword.toCharArray(), keyPassword.toCharArray(), (map, socket) -> keyAlias)
-                    .loadTrustMaterial(trustStore.getFile(), trustStorePassword.toCharArray()).build();
+            return SSLContextBuilder.create().loadKeyMaterial(keyStore.getFile(), keyStorePassword.toCharArray(), keyPassword.toCharArray(),
+                (map, socket) -> keyAlias).loadTrustMaterial(trustStore.getFile(), trustStorePassword.toCharArray()).build();
         } catch (NoSuchAlgorithmException | KeyStoreException | IOException | CertificateException | UnrecoverableKeyException | KeyManagementException e) {
-            throw new IllegalStateException("Could not load keystore and/or trust store for TAS Client. Please ensure all relevant application configurations are correctly set.", e);
+            throw new IllegalStateException("Could not load keystore and/or trust store for TAS Client. Please ensure all relevant application configurations are correctly set.",
+                e);
         }
     }
 
