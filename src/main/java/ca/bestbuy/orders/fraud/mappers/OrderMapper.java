@@ -43,7 +43,10 @@ public abstract class OrderMapper {
             @Mapping(target = "items", source = "fsOrderLines"),
             @Mapping(target = "purchaseOrders", source = "purchaseOrders"),
             @Mapping(target = "shippingOrders", source = "shippingOrders"),
-            @Mapping(target = "paymentDetails", source = "paymentMethodInfo")
+            @Mapping(target = "paymentDetails", source = "paymentMethodInfo"),
+            @Mapping(target = "enterpriseCustomerId", ignore = true), // TODO - Figure out how to get value
+            @Mapping(target = "salesChannel", ignore = true), // TODO - Figure out how to get value
+            @Mapping(target = "orderMessage",ignore = true) // TODO - Figure out how to get value
     })
     public abstract Order mapOrder(FSOrder fsOrderToMap);
 
@@ -56,7 +59,11 @@ public abstract class OrderMapper {
             @Mapping(target = "itemQuantity", source = "qtyOrdered"),
             @Mapping(target = "itemTax", ignore = true), // Handled by custom mapping - mapItem_ItemTax()
             @Mapping(target = "itemTotalDiscount", ignore = true), // Handled by custom mapping - mapItem_Discounts()
-            @Mapping(target = "staffDiscount", ignore = true) // Handled by custom mapping - mapItem_Discounts()
+            @Mapping(target = "staffDiscount", ignore = true), // Handled by custom mapping - mapItem_Discounts()
+            @Mapping(target = "itemStatus", ignore = true), // TODO - Need to add to Order Details
+            @Mapping(target = "itemSkuNumber", ignore = true), // TODO - Need to add to Order Details
+            @Mapping(target = "itemSkuDescription", ignore = true), // TODO - Need to add to Order Details
+            @Mapping(target = "postCaptureDiscount", ignore = true) // TODO - Need to add to Order Details
 
     })
     protected abstract Item mapItem(FSOrderLine fsOrderLineToMap);
@@ -137,6 +144,7 @@ public abstract class OrderMapper {
             @Mapping(target = "shippingOrderID", source = "id"),
             @Mapping(target = "globalContractID", source = "globalContractRefId"),
             @Mapping(target = "shippingOrderStatus", source = "status.name"),
+            @Mapping(target = "totalAuthorizedAmount", ignore = true), //todo: need to add to Order Details first
             @Mapping(target = "shippingCharge", ignore = true), // Handled by custom mapping - mapShippingOrder_ShippingChargesAndTax()
             @Mapping(target = "shippingTax", ignore = true), // Handled by custom mapping - mapShippingOrder_ShippingChargesAndTax()
             @Mapping(target = "shippingDiscount", ignore = true), // Handled by custom mapping - mapShippingOrder_ShippingChargesAndTax()
@@ -359,13 +367,17 @@ public abstract class OrderMapper {
             @Mapping(target = "creditCardAvsResponse", ignore = true), // TODO - Figure out how to get value
             @Mapping(target = "creditCardCvvResponse", ignore = true), // TODO - Figure out how to get value
             @Mapping(target = "creditCard3dSecureValue", ignore = true), // TODO - Figure out how to get value
-            @Mapping(target = "totalAuthorizedAmount", ignore = true) // TODO - Figure out how to get value
+            @Mapping(target = "totalAuthorizedAmount", ignore = true), // TODO - Figure out how to get value -- hardcoding for now
+            @Mapping(target="status",ignore=true) // TODO - Figure out how to get value
     })
     protected abstract PaymentDetails.CreditCard mapCreditCard(CreditCardInfo creditCardToMap);
 
 
     @Mappings({
-            @Mapping(target = "giftCardNumber", source = "giftCardNumber")
+            @Mapping(target = "giftCardNumber", source = "giftCardNumber"),
+            @Mapping(target = "totalAuthorizedAmount", ignore = true), // TODO - Figure out how to get value
+            @Mapping(target="status",ignore=true) // TODO - Figure out how to get value
+
     })
     protected abstract PaymentDetails.GiftCard mapGiftCard(GiftCardInfo giftCardToMap);
 

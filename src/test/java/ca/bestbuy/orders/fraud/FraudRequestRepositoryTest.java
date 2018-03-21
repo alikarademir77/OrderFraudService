@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
+import ca.bestbuy.orders.fraud.client.FraudServiceTASClientConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,12 @@ public class FraudRequestRepositoryTest {
 	
 	@MockBean
 	OrderDetailsClient orderDetailsClient;
+
+	@MockBean
+	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
+
+	@MockBean
+	private FraudServiceTASClient fraudServiceTASClient;
 	
 	@Autowired
 	FraudStatusRepository statusRepository;

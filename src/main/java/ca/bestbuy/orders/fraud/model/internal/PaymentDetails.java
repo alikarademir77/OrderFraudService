@@ -70,6 +70,11 @@ public class PaymentDetails {
 
         public BigDecimal totalAuthorizedAmount;
 
+        /**
+         * ACTIVE or DEACTIVE
+         */
+        public String status;
+
     }
 
 
@@ -79,6 +84,13 @@ public class PaymentDetails {
     public static class GiftCard {
 
         public String giftCardNumber;
+
+        public BigDecimal totalAuthorizedAmount;
+
+        /**
+         * ACTIVE or DEACTIVE
+         */
+        public String status;
 
     }
 
@@ -95,6 +107,11 @@ public class PaymentDetails {
         public String verifiedStatus;
 
         public BigDecimal totalAuthorizedAmount;
+
+        /**
+         * ACTIVE or DEACTIVE
+         */
+        public String status;
 
     }
 
