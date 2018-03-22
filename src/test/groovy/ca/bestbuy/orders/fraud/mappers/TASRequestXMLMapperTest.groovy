@@ -132,6 +132,7 @@ class TASRequestXMLMapperTest extends Specification {
         mappedTxnData.getMember().getMemberId() == order.getRewardZoneID()
         mappedTxnData.getShippingOrders().getShippingOrder().size() == order.getShippingOrders().size()
         mappedTxnData.getItems().getItem().size() == order.getItems().size()
+        mappedTxnData.getBillingDetails().getCurrencyCode() == "CAD"
 
         doExtraPaymentMethodsAssertions(mappedTxnData.getPaymentMethods(), order.getPaymentDetails())
         doChargebacksMapperAssertions(mappedTxnData, order.getShippingOrders())
@@ -344,6 +345,8 @@ class TASRequestXMLMapperTest extends Specification {
         mappedTxnData.getMember().getMemberId() == order.getRewardZoneID()
         mappedTxnData.getShippingOrders().getShippingOrder().size() == order.getShippingOrders().size()
         mappedTxnData.getItems().getItem().size() == order.getItems().size()
+        mappedTxnData.getBillingDetails().getCurrencyCode() == "CAD"
+
 
         doExtraPaymentMethodsAssertions(mappedTxnData.getPaymentMethods(), order.getPaymentDetails())
         doChargebacksMapperAssertions(mappedTxnData, order.getShippingOrders())
@@ -419,6 +422,8 @@ class TASRequestXMLMapperTest extends Specification {
         mappedTxnData.getShippingOrders().getShippingOrder().isEmpty()
         mappedTxnData.getItems().getItem().isEmpty()
         mappedTxnData.getChargeBacks() == null
+        mappedTxnData.getBillingDetails().getCurrencyCode() == "CAD"
+
     }
 
 

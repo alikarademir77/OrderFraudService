@@ -60,7 +60,7 @@ public abstract class TASRequestXMLMapper {
             @Mapping(target = "salesChannel", source = "salesChannel"),
             @Mapping(target = "ipAddress", source = "ipAddress"),
             @Mapping(target = "orderMessage", source = "orderMessage"),
-            @Mapping(target = "billingDetails", ignore = true), //todo: (requires order details change) handle with a custom Billing Details mapper because we need to implement a check for ACTIVE payment method
+            @Mapping(target = "billingDetails.currencyCode", constant = "CAD"),
             @Mapping(target = "paymentMethods", ignore = true), //handled by mapTransactionData_PaymentMethods() custom mapping
             @Mapping(target = "member.memberId", source = "rewardZoneID"),
             @Mapping(target = "items.item", source = "items"),
