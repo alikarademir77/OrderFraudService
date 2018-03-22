@@ -288,120 +288,122 @@
 	</dependencyManagement>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>build-info</goal>
-                            <goal>repackage</goal>
-                        </goals>
-                        <configuration>
-                            <additionalProperties>
-                                <java.target>${maven.compiler.target}</java.target>
-                                <time>${maven.build.timestamp}</time>
-                            </additionalProperties>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <configuration>
-                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
-                    <verbose>false</verbose>
-                    <useNativeGit>false</useNativeGit>
-                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+	<resources>
+		<resource>
+			<directory>src/main/resources</directory>
+			<filtering>true</filtering>
+		</resource>
+	</resources>
+	<pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<additionalProperties>
+								<java.target>${maven.compiler.target}</java.target>
+								<time>${maven.build.timestamp}</time>
+							</additionalProperties>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<configuration>
+					<failOnNoGitDirectory>false</failOnNoGitDirectory>
+					<verbose>false</verbose>
+					<useNativeGit>false</useNativeGit>
+					<generateGitPropertiesFile>true</generateGitPropertiesFile>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-            <!--For generating model classes from a swagger.json-->
-            <!--<plugin>-->
-                <!--<groupId>io.swagger</groupId>-->
-                <!--<artifactId>swagger-codegen-maven-plugin</artifactId>-->
-                <!--<version>2.2.3</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<goals>-->
-                            <!--<goal>generate</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<configOptions>-->
-                                <!--<sourceFolder>src/main/java</sourceFolder>-->
-                            <!--</configOptions>-->
-                            <!--<inputSpec>src/main/resources/swagger/order-details-service-swagger.json</inputSpec>-->
-                            <!--<language>java</language>-->
-                            <!--<library>resttemplate</library>-->
-                            <!--<generateApis>false</generateApis>-->
-                            <!--<generateSupportingFiles>false</generateSupportingFiles>-->
-                            <!--<generateModelDocumentation>true</generateModelDocumentation>-->
-                            <!--<modelPackage>ca.bestbuy.orders.fraud.model.client.orderdetails</modelPackage>-->
-                            <!--<output>.</output>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
+			<!--For generating model classes from a swagger.json -->
+			<!--<plugin> -->
+			<!--<groupId>io.swagger</groupId> -->
+			<!--<artifactId>swagger-codegen-maven-plugin</artifactId> -->
+			<!--<version>2.2.3</version> -->
+			<!--<executions> -->
+			<!--<execution> -->
+			<!--<goals> -->
+			<!--<goal>generate</goal> -->
+			<!--</goals> -->
+			<!--<configuration> -->
+			<!--<configOptions> -->
+			<!--<sourceFolder>src/main/java</sourceFolder> -->
+			<!--</configOptions> -->
+			<!--<inputSpec>src/main/resources/swagger/order-details-service-swagger.json</inputSpec> -->
+			<!--<language>java</language> -->
+			<!--<library>resttemplate</library> -->
+			<!--<generateApis>false</generateApis> -->
+			<!--<generateSupportingFiles>false</generateSupportingFiles> -->
+			<!--<generateModelDocumentation>true</generateModelDocumentation> -->
+			<!--<modelPackage>ca.bestbuy.orders.fraud.model.client.orderdetails</modelPackage> -->
+			<!--<output>.</output> -->
+			<!--</configuration> -->
+			<!--</execution> -->
+			<!--</executions> -->
+			<!--</plugin> -->
 
-            <!--To compile Groovy scripts-->
-            <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+			<!--To compile Groovy scripts -->
+			<plugin>
+				<groupId>org.codehaus.gmavenplus</groupId>
+				<artifactId>gmavenplus-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-            <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.13.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <schemaLanguage>WSDL</schemaLanguage>
-                    <generatePackage>ca.bestbuy.orders.fraud.model.client.accertify.wsdl</generatePackage>
-                    <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
-                    <schemas>
-                        <schema>
-                            <fileset>
-                                <directory>${basedir}/src/main/resources/schemas</directory>
-                                <includes>
-                                    <include>TenderAuthCAV4.wsdl</include>
-                                </includes>
-                            </fileset>
-                        </schema>
-                    </schemas>
-                </configuration>
-            </plugin>
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.13.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<schemaLanguage>WSDL</schemaLanguage>
+					<generatePackage>ca.bestbuy.orders.fraud.model.client.accertify.wsdl</generatePackage>
+					<generateDirectory>${project.basedir}/src/main/java</generateDirectory>
+					<schemas>
+						<schema>
+							<fileset>
+								<directory>${basedir}/src/main/resources/schemas</directory>
+								<includes>
+									<include>TenderAuthCAV4.wsdl</include>
+								</includes>
+							</fileset>
+						</schema>
+					</schemas>
+				</configuration>
+			</plugin>
 
-        </plugins>
-    </build>
+		</plugins>
+	</pluginManagement>
+</build>
 
 </project>
