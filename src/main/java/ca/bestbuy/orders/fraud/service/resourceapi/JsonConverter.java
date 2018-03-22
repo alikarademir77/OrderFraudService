@@ -42,14 +42,23 @@ public class JsonConverter {
     public ProductDetail toProductDetail(String jsonResult) {
 
         ObjectMapper objectMapper = new ObjectMapper();
+        ProductDetail productDetail = new ProductDetail();
         try {
             JsonNode responseJsonNode = objectMapper.readTree(jsonResult);
+            String sku = responseJsonNode.path("catalog/products/10362263/details").path("body").path("id").asText();
+            String depatmentId = "" + responseJsonNode.path("catalog/products/10362263/details").path("body").path("rmsDeptID").asInt();
+            String classId = "" + responseJsonNode.path("catalog/products/10362263/details").path("body").path("rmsClassID").asInt();
+            String subClassId = "" + responseJsonNode.path("catalog/products/10362263/details").path("body").path("rmsSubclassID").asInt();
+            productDetail.setSku(sku);
+            productDetail.setDepartment(depatmentId);
+            productDetail.setItemClass(classId);
+            productDetail.setItemSubClass(subClassId);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return productDetail;
 
-        return null;
     }
 }
