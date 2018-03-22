@@ -5,9 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-public class RequestHeaders {
+public class ResourceApiItem {
 
-    @JsonProperty("Accept")
-    @Getter @Setter private String accept;
+    @JsonProperty("id")
+    @Getter @Setter String id;
+
+    @JsonProperty("headers")
+    @Getter @Setter RequestHeaders headers;
+
 
 }
