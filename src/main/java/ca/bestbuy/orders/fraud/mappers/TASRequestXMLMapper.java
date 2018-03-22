@@ -283,26 +283,28 @@ public abstract class TASRequestXMLMapper {
             }
         }
 
-        // TODO: change mapping of this as we will now be mapping a list of Paypals, instead of just one PayPal
-//        if (paymentDetailsToMap.getPayPal() != null) {
-//            CaPaymentMethod mappedPaypalPaymentMethod = new CaPaymentMethod();
-//            Paypal mappedPaypal = new Paypal();
-//
-//            //todo: (requires order details change) need to identify active payment method
-//            mappedPaypalPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.INACTIVE);
-//            mappedPaypalPaymentMethod.setPaymentMethodType(PaymentMethodType.PAYPAL);
-//            mappedPaypal.setPaypalEmail(paymentDetailsToMap.getPayPal().email);
-//            mappedPaypal.setPaypalRequestId(paymentDetailsToMap.getPayPal().requestID);
-//            mappedPaypal.setPaypalStatus(paymentDetailsToMap.getPayPal().verifiedStatus);
-//
-//            //todo: (requires order details change) needs to be mapped in internal domain object
-//            if(paymentDetailsToMap.getPayPal().totalAuthorizedAmount != null) {
-//                mappedPaypal.setTotalPaypalAuthAmt(paymentDetailsToMap.getPayPal().totalAuthorizedAmount.toString());
-//            }
-//
-//            mappedPaypalPaymentMethod.setPaypals(mappedPaypal);
-//            mappedPaymentMethods.getPaymentMethod().add(mappedPaypalPaymentMethod);
-//        }
+        if(paymentDetailsToMap.getPayPals() != null && !(paymentDetailsToMap.getGiftCards().isEmpty())){
+
+            for(PaymentDetails.PayPal payPalToMap : paymentDetailsToMap.getPayPals()){
+                CaPaymentMethod mappedPayPalPaymentMethod = new CaPaymentMethod();
+                Paypal mappedPayPal = new Paypal();
+
+                //todo: (requires order details change) need to identify active payment method
+                mappedPayPalPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.INACTIVE);
+                mappedPayPalPaymentMethod.setPaymentMethodType(PaymentMethodType.PAYPAL);
+
+                mappedPayPal.setPaypalRequestId(payPalToMap.requestID);
+                mappedPayPal.setPaypalStatus(payPalToMap.verifiedStatus);
+                mappedPayPal.setPaypalEmail(payPalToMap.email);
+
+                //todo: (requires order details change) need to get total gift card amount in internal domain object -- should be same as total credit card amt
+                mappedPayPal.setTotalPaypalAuthAmt(payPalToMap.totalAuthorizedAmount.toString());
+
+                mappedPayPalPaymentMethod.setPaypals(mappedPayPal);
+                mappedPaymentMethods.getPaymentMethod().add(mappedPayPalPaymentMethod);
+            }
+
+        }
 
         mappedTransactionData.setPaymentMethods(mappedPaymentMethods);
     }

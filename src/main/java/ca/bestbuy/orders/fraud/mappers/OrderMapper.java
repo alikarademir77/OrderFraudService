@@ -3,6 +3,7 @@ package ca.bestbuy.orders.fraud.mappers;
 import java.math.BigDecimal;
 import java.util.List;
 
+import ca.bestbuy.orders.fraud.model.client.orderdetails.PayPalInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -354,7 +355,7 @@ public abstract class OrderMapper {
     @Mappings({
             @Mapping(target = "creditCards", source = "creditCards"),
             @Mapping(target = "giftCards", source = "giftCards"),
-            @Mapping(target = "payPals", ignore = true) // TODO - Figure out how to get value -- might need to call Payment Service
+            @Mapping(target = "payPals", source = "payPal")
     })
     protected abstract PaymentDetails mapPaymentDetails(PaymentMethodInfo paymentDetailsToMap);
 
@@ -380,6 +381,16 @@ public abstract class OrderMapper {
 
     })
     protected abstract PaymentDetails.GiftCard mapGiftCard(GiftCardInfo giftCardToMap);
+
+
+    @Mappings({
+            @Mapping(target="requestID",source="payPalAdditionalInfo.payPalOrderId"),
+            @Mapping(target="email",ignore=true), //todo: get from Billing Address?
+            @Mapping(target="verifiedStatus",source="payPalAdditionalInfo.payPalVerifiedStatus"),
+            @Mapping(target="totalAuthorizedAmount",ignore=true), //we will not be sending this
+            @Mapping(target="status",ignore=true) //todo: map based on whether PayPalInfo.active is true or false
+    })
+    protected abstract PaymentDetails.PayPal mapPayPal(PayPalInfo payPalToMap);
 
 
     @Mappings({

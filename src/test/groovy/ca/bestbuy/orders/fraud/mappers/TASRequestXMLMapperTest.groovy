@@ -87,11 +87,12 @@ class TASRequestXMLMapperTest extends Specification {
         giftCards.add(createAGiftCard())
 
         //create a paypal payment
-        PaymentDetails.PayPal paypal = createAPaypal()
+        List<PaymentDetails.PayPal> paypals = new ArrayList<>()
+        paypals.add(createAPaypal())
 
         paymentDetails.setCreditCards(creditCards)
         paymentDetails.setGiftCards(giftCards)
-//        paymentDetails.setPayPal(paypal) todo: this is now a list of paypals
+        paymentDetails.setPayPals(paypals)
 
         order.setPaymentDetails(paymentDetails);
 
@@ -111,11 +112,10 @@ class TASRequestXMLMapperTest extends Specification {
         then:
 
         int amtOfPaypalPayments = 0;
-        //todo: paypal should now be a list of paypals
-      /*  if(order.getPaymentDetails() != null  && order.getPaymentDetails().getPayPal() != null){
-            amtOfPaypalPayments = 1;
+        if(order.getPaymentDetails() != null  && order.getPaymentDetails().getPayPals() != null){
+            amtOfPaypalPayments = order.getPaymentDetails().getPayPals().size();
         }
-        */
+
 
 
         mappedTxnData.getTransactionId() == order.getFsOrderID()
@@ -133,8 +133,7 @@ class TASRequestXMLMapperTest extends Specification {
         mappedTxnData.getShippingOrders().getShippingOrder().size() == order.getShippingOrders().size()
         mappedTxnData.getItems().getItem().size() == order.getItems().size()
 
-        //todo: fix paypal stuff because paypal should now be a list of paypals
-        //doExtraPaymentMethodsAssertions(mappedTxnData.getPaymentMethods(), order.getPaymentDetails())
+        doExtraPaymentMethodsAssertions(mappedTxnData.getPaymentMethods(), order.getPaymentDetails())
         doChargebacksMapperAssertions(mappedTxnData, order.getShippingOrders())
 
     }
@@ -302,11 +301,11 @@ class TASRequestXMLMapperTest extends Specification {
 
 
         //create a paypal payment
-        PaymentDetails.PayPal paypal = createAPaypal()
+        List<PaymentDetails.PayPal> paypals = new ArrayList<>()
 
         paymentDetails.setCreditCards(creditCards)
         paymentDetails.setGiftCards(giftCards)
-//        paymentDetails.setPayPal(paypal) //        paymentDetails.setPayPal(paypal) todo: this is now a list of paypals
+        paymentDetails.setPayPals(paypals)
 
 
         order.setPaymentDetails(paymentDetails);
@@ -326,10 +325,9 @@ class TASRequestXMLMapperTest extends Specification {
         then:
 
         int amtOfPaypalPayments = 0;
-        /* //todo: paypal should now be a list of paypals
-         if(order.getPaymentDetails() != null && order.getPaymentDetails().getPayPal() != null){
-            amtOfPaypalPayments = 1;
-        }*/
+         if(order.getPaymentDetails() != null && order.getPaymentDetails().getPayPals() != null){
+            amtOfPaypalPayments = order.getPaymentDetails().getPayPals().size();
+        }
 
 
         mappedTxnData.getTransactionId() == order.getFsOrderID()
@@ -347,8 +345,7 @@ class TASRequestXMLMapperTest extends Specification {
         mappedTxnData.getShippingOrders().getShippingOrder().size() == order.getShippingOrders().size()
         mappedTxnData.getItems().getItem().size() == order.getItems().size()
 
-        //todo: fix paypal stuff because paypal should now be a list of paypals
-        //doExtraPaymentMethodsAssertions(mappedTxnData.getPaymentMethods(), order.getPaymentDetails())
+        doExtraPaymentMethodsAssertions(mappedTxnData.getPaymentMethods(), order.getPaymentDetails())
         doChargebacksMapperAssertions(mappedTxnData, order.getShippingOrders())
     }
 
@@ -389,11 +386,11 @@ class TASRequestXMLMapperTest extends Specification {
 
 
         //create a paypal payment
-        PaymentDetails.PayPal paypal = null
+        List<PaymentDetails.PayPal> paypals = null
 
         paymentDetails.setCreditCards(creditCards)
         paymentDetails.setGiftCards(giftCards)
-  //      paymentDetails.setPayPal(paypal) //        paymentDetails.setPayPal(paypal) todo: this is now a list of paypals
+        paymentDetails.setPayPals(paypals)
 
 
         order.setPaymentDetails(paymentDetails);
@@ -633,14 +630,15 @@ class TASRequestXMLMapperTest extends Specification {
 
         int numOfCreditCardPayments = paymentDetails.getCreditCards().size()
         int numOfGiftCardPayments = paymentDetails.getGiftCards().size()
+        int numOfPayPalPayments = paymentDetails.getPayPals().size()
 
         List<CaPaymentMethod> paymentMethodsList = paymentMethods.getPaymentMethod()
         List<PaymentDetails.CreditCard> creditCardsList = paymentDetails.getCreditCards()
         List<PaymentDetails.GiftCard> giftCardList = paymentDetails.getGiftCards()
-        //todo: paypal should now be a list of paypals
-//        PaymentDetails.PayPal payPal = paymentDetails.getPayPal()
+        List<PaymentDetails.PayPal> payPalList = paymentDetails.getPayPals()
         int creditCardPaymentIndex;
         int giftCardPaymentIndex;
+        int payPalPaymentIndex;
 
         for(creditCardPaymentIndex = 0; creditCardPaymentIndex < numOfCreditCardPayments; creditCardPaymentIndex++){
             assert paymentMethodsList.get(creditCardPaymentIndex).getPaymentMethodType() == PaymentMethodType.CREDITCARD
@@ -670,15 +668,17 @@ class TASRequestXMLMapperTest extends Specification {
             assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals() == null
         }
 
+        for(payPalPaymentIndex = giftCardPaymentIndex; payPalPaymentIndex < (numOfCreditCardPayments+numOfGiftCardPayments+numOfPayPalPayments); payPalPaymentIndex++) {
 
-        assert paymentMethodsList.get(giftCardPaymentIndex).getPaymentMethodType() == PaymentMethodType.PAYPAL
-        assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalEmail() == payPal.email
-        assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalRequestId() == payPal.requestID
-        assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalStatus() == payPal.verifiedStatus
-        assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getTotalPaypalAuthAmt() == payPal.totalAuthorizedAmount.toString()
+            assert paymentMethodsList.get(giftCardPaymentIndex).getPaymentMethodType() == PaymentMethodType.PAYPAL
+            assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalEmail() == payPalList.get(payPalPaymentIndex-(numOfGiftCardPayments+numOfCreditCardPayments)).email
+            assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalRequestId() == payPalList.get(payPalPaymentIndex-(numOfGiftCardPayments+numOfCreditCardPayments)).requestID
+            assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalStatus() == payPalList.get(payPalPaymentIndex-(numOfGiftCardPayments+numOfCreditCardPayments)).verifiedStatus
+            assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getTotalPaypalAuthAmt() == payPalList.get(payPalPaymentIndex-(numOfGiftCardPayments+numOfCreditCardPayments)).totalAuthorizedAmount.toString()
 
-        assert paymentMethodsList.get(giftCardPaymentIndex).getCreditCard() == null
-        assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard() == null
+            assert paymentMethodsList.get(giftCardPaymentIndex).getCreditCard() == null
+            assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard() == null
+        }
 
 
     }
