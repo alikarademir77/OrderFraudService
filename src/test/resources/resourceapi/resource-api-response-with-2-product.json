@@ -1,0 +1,215 @@
+{
+  "catalog/products/10362263/details": {
+    "status": 200,
+    "body": {
+      "id": "10362263",
+      "displayTemplate": "Hardgood",
+      "name": {
+        "en-CA": "Haier 8000 BTU Window Air Conditioner (ESA408N)",
+        "fr-CA": "Climatiseur de fenêtre de 8000 BTU de Haier (ESA408N)"
+      },
+      "brandName": "HAIER",
+      "make": "N/A",
+      "modelNumber": "ESA408N",
+      "manufacturer": "HAIE",
+      "manufacturerPartNumber": "ESA408N",
+      "isRefurbished": false,
+      "esrbRating": false,
+      "isFrenchCompliant": true,
+      "hasFrenchContent": true,
+      "isGiftCard": false,
+      "isVisible": false,
+      "isPurchasable": false,
+      "isDiscountable": true,
+      "displayStartDate": "2015-03-02T17:41:46Z",
+      "searchStartDate": "2015-03-02T17:41:46Z",
+      "webStoreSku": "0926INGFS10362263",
+      "shortDescription": {
+        "en-CA": "Beat the heat with the 8,000BTU window air conditioner from Haier. This air conditioner cools rooms that are 250 to 350sq. ft. in size, and comes equipped with 3 cooling and fan speeds. An energy-saving mode and dehumidifier mode are also included for added convenience and versatility.",
+        "fr-CA": "Combattez la chaleur de l'été avec ce climatiseur de fenêtre de 8000 BTU de Haier. Ce climatiseur peut rafraîchir des pièces d'une superficie entre 250 à 350 pi² et est doté de 3 vitesses de refroidissement et de ventilation. Un mode d'économie d'énergie et un mode déshumidificateur sont aussi inclus pour plus de commodité et de polyvalence."
+      },
+      "longDescription": {
+        "en-CA": "<ul><li>Features 4-way air direction that cools rooms that are 250 to 350 square feet</li><li>Three cooling and fan speeds allow you to control temperature </li><li>Electronic controls and full function magnetic remote let you control air conditioner with ease </li><li>Reminder light turns on when filter needs to be cleaned </li><li>Includes an energy-saving mode and dehumidifier mode for added convenience and versatility </li><li>Easy access to washable filter for quick cleanup </li><li>Window install kit included for easy setup</li></ul>",
+        "fr-CA": "<ul><li>Circulation d'air à 4 directions qui permet de rafraîchir une pièce d'une superficie qui peut atteindre entre 250 et 350 pi²</li><li>Trois vitesses de refroidissement et de ventilation qui vous permettent de contrôler la température </li><li>Commandes électroniques et télécommande magnétique qui vous permettent de contrôler toutes les fonctions de votre climatiseur facilement </li><li>Voyant lumineux qui s'allume quand le filtre doit être nettoyé </li><li>Mode d'économie d'énergie et mode de déshumidification inclus pour plus de commodité et de polyvalence </li><li>Filtre lavable facile d'accès pour un nettoyage rapide </li><li>Trousse d'installation sur fenêtre incluse pour faciliter l'installation</li></ul>"
+      },
+      "seoText": {
+        "en-CA": "haier-8000-btu-window-air-conditioner-esa408n",
+        "fr-CA": "climatiseur-de-fenetre-de-8000-btu-de-haier-esa408n"
+      },
+      "isEnergyStarItem": true,
+      "upc": [
+        {
+          "value": "688057404233",
+          "isPrimary": true
+        }
+      ],
+      "dimensionsAndWeight": {
+        "inBox": {
+          "height": 42.6,
+          "length": 46,
+          "width": 53.8,
+          "weight": 26.78
+        },
+        "outOfBox": {
+          "height": 38.1,
+          "length": 36,
+          "width": 47.5,
+          "weight": 24.4
+        },
+        "linearUom": "cm",
+        "weightUom": "kg"
+      },
+      "warranty": {
+        "warrantyCarryInLabourDays": 0,
+        "warrantyOnSiteLabourDays": 0,
+        "fullPartsWarranty": 365
+      },
+      "fulfillment": {
+        "isShippable": true,
+        "hasFreeShipping": false,
+        "freeShippingIfFreeItem": true,
+        "isSpecialDelivery": false,
+        "exclusivity": "None"
+      },
+      "rmsType": "R",
+      "rmsDeptID": 49,
+      "rmsClassID": 1,
+      "rmsSubclassID": 8,
+      "rmsShortDescription": "HAIER ESA408N",
+      "rmsLongDescription": "HAIER ESA408N 8000 BTU AIR CONDTIONER",
+      "rmsSkuType": "MERCH",
+      "skuOwner": "S",
+      "manufacturerName": "HAIER",
+      "firstReceiptDate": "2015-05-06T14:47:01Z",
+      "lastReceiptDate": "2015-06-29T14:06:10Z",
+      "rmsDivision": 2,
+      "rmsGroupNo": 24,
+      "supplierID": 84855,
+      "regiIndicator": "N",
+      "isServiceApplicable": false,
+      "pimSKUStatus": "Offline",
+      "bestBuyOnly": false,
+      "_links": {
+        "self": {
+          "href": "catalog/products/10362263/details"
+        },
+        "product": {
+          "href": "catalog/products/10362263"
+        }
+      }
+    },
+    "headers": {
+      "Content-Type": "application/vnd.bestbuy.productdetails+json",
+      "Last-Modified": "Sat, 21 Oct 2017 00:52:19 GMT"
+    }
+  },
+  "catalog/products/10071133/details": {
+    "status": 200,
+    "body": {
+      "displayTemplate": "Hardgood",
+      "name": {
+        "en-CA": "Brother Black Ink (LC41BK2PKS) - 2 Pack",
+        "fr-CA": "Cartouche d'encre noire de Brother (LC41BK2PKS) - Paquet de 2"
+      },
+      "brandName": "BROTHER",
+      "make": "BROTHER",
+      "modelNumber": "LC41BK2PKS",
+      "manufacturer": "BROT",
+      "manufacturerPartNumber": "93322J",
+      "isRefurbished": false,
+      "esrbRating": false,
+      "isFrenchCompliant": true,
+      "hasFrenchContent": true,
+      "isGiftCard": false,
+      "isVisible": false,
+      "isPurchasable": false,
+      "isDiscountable": true,
+      "displayStartDate": "2009-08-25T07:08:00Z",
+      "searchStartDate": "2009-08-25T07:08:00Z",
+      "webStoreSku": "0926INGFS10071133",
+      "shortDescription": {
+        "en-CA": "Black Ink cartridge for the LC41BK and yields approximately 1000 pages.",
+        "fr-CA": "Chaque cartouche d'encre noire LC41BK offre un rendement d'environ 1 000 pages."
+      },
+      "seoText": {
+        "en-CA": "brother-black-ink-lc41bk2pks-2-pack",
+        "fr-CA": "cartouche-d-encre-noire-de-brother-lc41bk2pks-paquet-de-2"
+      },
+      "upc": [],
+      "dimensionsAndWeight": {
+        "inBox": {
+          "height": 5,
+          "length": 9,
+          "width": 17,
+          "weight": 0.05
+        },
+        "outOfBox": {
+          "height": 8.7,
+          "length": 3.65,
+          "width": 6.5,
+          "weight": 0.05
+        },
+        "linearUom": "cm",
+        "weightUom": "kg"
+      },
+      "warranty": {
+        "manufacturerWarranty": "NO",
+        "warrantyCarryInLabourDays": 0,
+        "warrantyOnSiteLabourDays": 0,
+        "fullPartsWarranty": 365,
+        "isManufacturerWarranty": true
+      },
+      "fulfillment": {
+        "fulfillmentType": "VD",
+        "isShippable": true,
+        "hasFreeShipping": true,
+        "freeShippingIfFreeItem": true,
+        "isSpecialDelivery": false,
+        "exclusivity": "Web"
+      },
+      "rmsType": "R",
+      "rmsDeptID": 44,
+      "rmsClassID": 2,
+      "rmsSubclassID": 3,
+      "rmsShortDescription": "BROTHER LC41BK 2PACK",
+      "rmsLongDescription": "BROTHER VDF LC41BK 2-PACK BLACK INK",
+      "rmsSkuType": "MERCH",
+      "skuOwner": "B",
+      "isDeliverable": false,
+      "impartInfoRequired": false,
+      "serialNumberIsRequired": false,
+      "isAccessory": true,
+      "preOrderDays": 4,
+      "manufacturerName": "BROTHER",
+      "vendorProcessingTime": 0,
+      "supplierPackSize": 1,
+      "innerPackSize": 1,
+      "firstReceiptDate": "2006-04-12T14:03:31Z",
+      "lastReceiptDate": "2013-02-07T15:08:20Z",
+      "storeOrderMultiple": "I",
+      "warrantyFlag": "N",
+      "rmsDivision": 1,
+      "rmsGroupNo": 14,
+      "nonInventorySKUType": "N",
+      "supplierID": 296068,
+      "regiIndicator": "N",
+      "isServiceApplicable": false,
+      "pimSKUStatus": "Offline",
+      "contentAggregator": "SellPoints",
+      "bestBuyOnly": false,
+      "id": "10071133",
+      "_links": {
+        "self": {
+          "href": "catalog/products/10071133/details"
+        },
+        "product": {
+          "href": "catalog/products/10071133"
+        }
+      }
+    },
+    "headers": {
+      "Content-Type": "application/vnd.bestbuy.productdetails+json",
+      "Last-Modified": "Tue, 20 Mar 2018 22:11:22 GMT"
+    }
+  }
+}
