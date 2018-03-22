@@ -354,7 +354,7 @@ public abstract class OrderMapper {
     @Mappings({
             @Mapping(target = "creditCards", source = "creditCards"),
             @Mapping(target = "giftCards", source = "giftCards"),
-            @Mapping(target = "payPal", ignore = true) // TODO - Figure out how to get value -- might need to call Payment Service
+            @Mapping(target = "payPals", ignore = true) // TODO - Figure out how to get value -- might need to call Payment Service
     })
     protected abstract PaymentDetails mapPaymentDetails(PaymentMethodInfo paymentDetailsToMap);
 

@@ -21,7 +21,7 @@ public class PaymentDetails {
     /**
      * PayPal details
      */
-    private PayPal payPal;
+    private List<PayPal> payPals;
 
 
     public List<CreditCard> getCreditCards() {
@@ -40,12 +40,12 @@ public class PaymentDetails {
         this.giftCards = giftCards;
     }
 
-    public PayPal getPayPal() {
-        return payPal;
+    public List<PayPal> getPayPals() {
+        return payPals;
     }
 
-    public void setPayPal(PayPal payPal) {
-        this.payPal = payPal;
+    public void setPayPals(List<PayPal> payPals) {
+        this.payPals = payPals;
     }
 
 
