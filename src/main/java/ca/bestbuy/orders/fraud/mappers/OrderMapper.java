@@ -385,7 +385,7 @@ public abstract class OrderMapper {
 
     @Mappings({
             @Mapping(target="requestID",source="payPalAdditionalInfo.payPalOrderId"),
-            @Mapping(target="email",ignore=true), //todo: get from Billing Address?
+            @Mapping(target="email",source="payPalAdditionalInfo.payPalEmail"),
             @Mapping(target="verifiedStatus",source="payPalAdditionalInfo.payPalVerifiedStatus"),
             @Mapping(target="totalAuthorizedAmount",ignore=true), //we will not be sending this
             @Mapping(target="status",ignore=true) //todo: map based on whether PayPalInfo.active is true or false

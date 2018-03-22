@@ -817,6 +817,11 @@
           "type": "string",
           "description": "PayPal verified status (from PayPal)",
           "allowEmptyValue": true
+        },
+        "payPalEmail": {
+          "type": "string",
+          "description": "PayPal email (from PayPal)",
+          "allowEmptyValue": true
         }
       },
       "title": "PayPalAdditionalInfo"
