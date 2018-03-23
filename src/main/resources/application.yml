@@ -83,13 +83,13 @@ client:
     connection:
       url: http://localhost:8080/orderdetails
       endpoint: /v1/fsorders
-      keystore-path: classpath:/secure/rs.cer
+      keystore-path: classpath:/secure/BBY-S-OMSCA-DEV.pfx
       keystore-password: mccp123
       keystore-type: PKCS12
       key-alias: ~
       key-password: mccp123
       truststore-path: classpath:/secure/fsvrTrustore
-      truststore-password:oidPayment
+      truststore-password: oidPayment
       truststore-type: JKS
       tls-enabled: true
 
