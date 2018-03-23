@@ -55,7 +55,7 @@ public class OrderDetailsClientImpl implements OrderDetailsClient {
 
 
     @Override
-    public Order getOrderDetails(String fsOrderId) {
+    public Order getOrderDetails(String orderNumber) {
 
         String orderDetailsServiceUrl = config.getOrderDetailsServiceUrl();
         String getOrderDetailsEndpoint = config.getGetOrderDetailsEndpoint();
@@ -66,7 +66,7 @@ public class OrderDetailsClientImpl implements OrderDetailsClient {
 
         String url = orderDetailsServiceUrl + getOrderDetailsEndpoint + "/";
 
-        ResponseEntity<String> response = restTemplate.getForEntity(url + fsOrderId, String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(url + orderNumber, String.class);
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JodaModule());

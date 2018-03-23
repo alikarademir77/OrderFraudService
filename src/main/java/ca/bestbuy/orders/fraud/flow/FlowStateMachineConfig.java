@@ -231,6 +231,7 @@ public class FlowStateMachineConfig
 	@Bean
 	public Action<FlowStates, FlowEvents> requestOutdatedAcion() {
 		return new Action<FlowStates, FlowEvents>() {
+			@SuppressWarnings({ "unchecked" })
 			@Override
 			public void execute(StateContext<FlowStates, FlowEvents> context) {
 				MessagingEvent messagingEvent = (MessagingEvent) context.getMessageHeader(KEYS.MESSAGING_KEY);

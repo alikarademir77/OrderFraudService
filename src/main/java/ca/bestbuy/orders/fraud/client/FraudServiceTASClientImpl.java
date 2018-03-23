@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBElement;
 
-import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
 import org.springframework.ws.client.WebServiceIOException;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.soap.client.SoapFaultClientException;
@@ -17,6 +16,7 @@ import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderActionCode
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderRequest;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ObjectFactory;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssesmentResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,8 +62,7 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
     }
 
     @Override
-    public FraudAssessmentResult doFraudCheck(Order order) {
-
+    public FraudAssesmentResult doFraudCheck(Order order) {
 
         //Map the request
         ManageOrderRequest request = new ManageOrderRequest();
@@ -82,13 +81,10 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
 
             //map response to FraudAssessmentResult object
             ManageOrderResponse response = jaxbResponse.getValue();
-            FraudAssessmentResult fraudAssessmentResult = tasResponseXMLMapper.mapManageOrderResult(response);
+            FraudAssesmentResult fraudAssessmentResult = tasResponseXMLMapper.mapManageOrderResult(response);
             return fraudAssessmentResult;
 
-
-
             //todo: handle error Action Codes like BANKDOWN or SYSERROR
-
         }catch(SoapFaultClientException sfce){
             //todo: handle this during flow implementation
             log.error("An error occurred while sending request to TAS: FAULT CODE is " + sfce.getFaultCode() + " and FAULT STRING is " + sfce.getFaultStringOrReason());
