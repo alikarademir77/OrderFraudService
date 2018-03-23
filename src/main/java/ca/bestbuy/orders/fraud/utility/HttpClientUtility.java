@@ -109,10 +109,6 @@ public class HttpClientUtility {
             throw new IllegalStateException("Keystore password must not be null");
         }
 
-        if (keyAlias == null || keyAlias.isEmpty()) {
-            throw new IllegalStateException("Key alias must not be null");
-        }
-
         if (keyPassword == null) {
             throw new IllegalStateException("Key password must not be null");
         }
@@ -134,21 +130,22 @@ public class HttpClientUtility {
 
         try {
 
-            return SSLContextBuilder.create()
-                // Load keystore
-                .loadKeyMaterial(keystore.getFile(), keystorePassword.toCharArray(), keyPassword.toCharArray(), (map, socket) -> keyAlias)
-                // Load trust store
-                .loadTrustMaterial(truststore.getFile(), truststorePassword.toCharArray()).build();
+            SSLContextBuilder sslContextBuilder = SSLContextBuilder.create();
+            if(keyAlias == null) {
+                sslContextBuilder.loadKeyMaterial(keystore.getFile(), keystorePassword.toCharArray(), keyPassword.toCharArray());
+            } else {
+                sslContextBuilder.loadKeyMaterial(keystore.getFile(), keystorePassword.toCharArray(), keyPassword.toCharArray(), (map, socket) -> keyAlias);
+            }
+
+            sslContextBuilder.loadTrustMaterial(truststore.getFile(), truststorePassword.toCharArray());
+
+            return sslContextBuilder.build();
 
         } catch (NoSuchAlgorithmException | KeyStoreException | IOException | CertificateException | UnrecoverableKeyException | KeyManagementException e) {
             throw new IllegalStateException(
                 "Could not load keystore and/or trust store. Please ensure all relevant configurations are correctly set.", e);
         }
     }
-
-
-
-
 
 
 }
