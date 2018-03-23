@@ -288,12 +288,26 @@
 	</dependencyManagement>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<!-- don't copy certificate files as they get modified -->
+					<exclude>**/secure/**</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<includes>
+					<!-- copy certificate files without modifying them -->
+					<include>**/secure/**</include>
+				</includes>
+			</resource>
+		</resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
