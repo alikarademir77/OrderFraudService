@@ -4,7 +4,7 @@ spring:
 
   cloud:
     config:
-      enabled: true
+      enabled: false
       # Openshift Config server url
       uri: http://config-service-ecomm-orders-team.dev-ocp.ca.bestbuy.com
       # Git branch to use for the backing config server configurations git repository

@@ -98,7 +98,10 @@ public class FlowStateMachineConfig
 				.source(FlowStates.INITIAL_REQUEST).target(FlowStates.READY_FOR_REPLY)
 				.and()
 			.withExternal()
-				.source(FlowStates.READY_FOR_REPLY).target(FlowStates.READY);
+				.source(FlowStates.READY_FOR_REPLY).target(FlowStates.READY)
+				.and()
+			.withExternal()
+				.source(FlowStates.REQUEST_OUTDATED).target(FlowStates.READY);
 	}
 	
 	public Guard<FlowStates, FlowEvents> requestOutdatedGuard() {
