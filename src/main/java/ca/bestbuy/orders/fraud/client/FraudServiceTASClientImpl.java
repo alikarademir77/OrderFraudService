@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBElement;
 
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
 import org.springframework.ws.client.WebServiceIOException;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.soap.client.SoapFaultClientException;
@@ -16,7 +17,6 @@ import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderActionCode
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderRequest;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ObjectFactory;
-import ca.bestbuy.orders.fraud.model.internal.FraudResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,7 +62,7 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
     }
 
     @Override
-    public FraudResult doFraudCheck(Order order) {
+    public FraudAssessmentResult doFraudCheck(Order order) {
 
 
         //Map the request
@@ -80,10 +80,14 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
             JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) webServiceTemplate.marshalSendAndReceive(jaxbRequest, new SoapActionCallback(fraudCheckOperation));
             log.info("Response received from TAS:" + convertToXMLString(jaxbResponse));
 
-            //map response to FraudResult object
+            //map response to FraudAssessmentResult object
             ManageOrderResponse response = jaxbResponse.getValue();
-            FraudResult fraudResult = tasResponseXMLMapper.mapManageOrderResult(response);
-            return fraudResult;
+            FraudAssessmentResult fraudAssessmentResult = tasResponseXMLMapper.mapManageOrderResult(response);
+            return fraudAssessmentResult;
+
+
+
+            //todo: handle error Action Codes like BANKDOWN or SYSERROR
 
         }catch(SoapFaultClientException sfce){
             //todo: handle this during flow implementation

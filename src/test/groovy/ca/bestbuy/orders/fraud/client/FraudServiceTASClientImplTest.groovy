@@ -2,7 +2,7 @@ package ca.bestbuy.orders.fraud.client
 
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper
-import ca.bestbuy.orders.fraud.model.internal.FraudResult
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult
 import ca.bestbuy.orders.fraud.model.internal.Item
 import ca.bestbuy.orders.fraud.model.internal.Order
 import org.mapstruct.factory.Mappers
@@ -66,17 +66,15 @@ class FraudServiceTASClientImplTest extends Specification {
 
         when:
 
-        FraudResult result = client.doFraudCheck(order)
+        FraudAssessmentResult result = client.doFraudCheck(order)
 
         then:
 
         result != null
-        result.getActionCode() == "SUCCESS"
-        result.getReasonCode() == "ACCEPT"
-        result.getTransactionId() == "1234"
-        result.getTotalScore() == "1875"
+        result.getFraudResponseStatus() == FraudAssessmentResult.FraudResponseStatusCodes.ACCEPTED
+        result.getOrderNumber() == "1234"
+        result.getTotalFraudScore() == "1875"
         result.getRecommendationCode() == "1:Allow"
-        result.getRemarks() == "AT:  12/16/17 11:49:04 AM EST BUSINESS PROCESS:  1 SCORE:  1,875 USER:  test@accertify.com RESOLUTION:  Allow"
 
         mockServer.verify()
 

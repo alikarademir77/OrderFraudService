@@ -6,7 +6,7 @@ import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ResponseData
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Transaction
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.TransactionResults
-import ca.bestbuy.orders.fraud.model.internal.FraudResult
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult
 import org.mapstruct.factory.Mappers
 import spock.lang.Shared
 import spock.lang.Specification
@@ -54,21 +54,51 @@ class TASResponseXMLMapperTest extends Specification{
 
         when:
 
-        FraudResult fraudResult = xmlMapper.mapManageOrderResult(manageOrderResponse)
+        FraudAssessmentResult fraudResult = xmlMapper.mapManageOrderResult(manageOrderResponse)
 
         then:
 
-        fraudResult.getFraudResponseStatus() == manageOrderResponse.getActionCode().toString()
+        fraudResult.getFraudResponseStatus().toString() == "ACCEPTED"
         fraudResult.getOrderNumber() == transactionResults.getTransactionId()
         fraudResult.getTotalFraudScore() == transactionResults.getTotalScore()
         fraudResult.getRecommendationCode() == transactionResults.getRecommendationCode()
         fraudResult.getRequestVersion() == transactionResults.getResponseData().getResponseVersion()
-        //todo: fraudResult.getAccertifyUser()
-        //todo: qfraudResult.getAccertifyUserActionTime()
 
+    }
+
+
+    def "test FraudResponseStatus mapper"(){
+
+        given:
+        ManageOrderResponse manageOrderResponse1 = new ManageOrderResponse()
+        manageOrderResponse1.setActionCode(ActionCode.SUCCESS)
+
+        ManageOrderResponse manageOrderResponse2 = new ManageOrderResponse()
+        manageOrderResponse2.setActionCode(ActionCode.CALLBANK)
+
+        ManageOrderResponse manageOrderResponse3 = new ManageOrderResponse()
+        manageOrderResponse3.setActionCode(ActionCode.SOFTDECLINE)
+
+        ManageOrderResponse manageOrderResponse4 = new ManageOrderResponse()
+        manageOrderResponse4.setActionCode(ActionCode.DECLINED)
+
+
+        when:
+        FraudAssessmentResult fraudResult1 = xmlMapper.mapManageOrderResult(manageOrderResponse1)
+        FraudAssessmentResult fraudResult2 = xmlMapper.mapManageOrderResult(manageOrderResponse2)
+        FraudAssessmentResult fraudResult3 = xmlMapper.mapManageOrderResult(manageOrderResponse3)
+        FraudAssessmentResult fraudResult4 = xmlMapper.mapManageOrderResult(manageOrderResponse4)
+
+        then:
+
+        fraudResult1.getFraudResponseStatus().toString() == "ACCEPTED"
+        fraudResult2.getFraudResponseStatus().toString() == "PENDING_REVIEW"
+        fraudResult3.getFraudResponseStatus().toString() == "SOFT_DECLINE"
+        fraudResult4.getFraudResponseStatus().toString() == "HARD_DECLINE"
 
 
 
     }
+
 
 }
