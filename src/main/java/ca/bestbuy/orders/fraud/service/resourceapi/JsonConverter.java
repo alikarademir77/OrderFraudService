@@ -70,11 +70,11 @@ public class JsonConverter {
         int status = responseJsonNode.path(id).path("status").asInt();
         if(status == 200){
             String sku = responseJsonNode.path(id).path("body").path("id").asText();
-            String depatmentId = "" + responseJsonNode.path(id).path("body").path("rmsDeptID").asInt();
+            String departmentId = "" + responseJsonNode.path(id).path("body").path("rmsDeptID").asInt();
             String classId = "" + responseJsonNode.path(id).path("body").path("rmsClassID").asInt();
             String subClassId = "" + responseJsonNode.path(id).path("body").path("rmsSubclassID").asInt();
             productDetail.setSku(sku);
-            productDetail.setDepartment(depatmentId);
+            productDetail.setDepartment(departmentId);
             productDetail.setItemClass(classId);
             productDetail.setItemSubClass(subClassId);
         }else{
