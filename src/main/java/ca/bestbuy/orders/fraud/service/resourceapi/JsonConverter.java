@@ -10,8 +10,10 @@ import ca.bestbuy.orders.fraud.model.client.resourceapi.data.ResourceApiItem;
 import ca.bestbuy.orders.fraud.model.client.resourceapi.data.ResourceApiRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
+@Slf4j
 public class JsonConverter {
 
     private String accept="application/vnd.bestbuy.productdetails+json";
@@ -39,26 +41,51 @@ public class JsonConverter {
         return resourceApiRequest;
     }
 
-    public ProductDetail toProductDetail(String jsonResult) {
+    public List<ProductDetail> toProductDetail(List<String> listOfIds,String jsonResult) {
+
+        if(jsonResult == null || jsonResult.trim().equals("")){
+            throw new IllegalArgumentException("Response from resource service is empty");
+        }
 
         ObjectMapper objectMapper = new ObjectMapper();
-        ProductDetail productDetail = new ProductDetail();
+        List<ProductDetail> listOfProductDetail = new ArrayList<>();
         try {
             JsonNode responseJsonNode = objectMapper.readTree(jsonResult);
-            String sku = responseJsonNode.path("catalog/products/10362263/details").path("body").path("id").asText();
-            String depatmentId = "" + responseJsonNode.path("catalog/products/10362263/details").path("body").path("rmsDeptID").asInt();
-            String classId = "" + responseJsonNode.path("catalog/products/10362263/details").path("body").path("rmsClassID").asInt();
-            String subClassId = "" + responseJsonNode.path("catalog/products/10362263/details").path("body").path("rmsSubclassID").asInt();
+            for (String id:listOfIds){
+                ProductDetail productDetail = getProductDetail(id,responseJsonNode);
+                listOfProductDetail.add(productDetail);
+            }
+        } catch (IOException e) {
+            log.error("Response is not valid " + jsonResult , e);
+            throw new IllegalArgumentException("Respons is not JSON format", e);
+        }
+
+        return listOfProductDetail;
+
+    }
+
+    private ProductDetail getProductDetail(String id,JsonNode responseJsonNode){
+
+        ProductDetail productDetail = new ProductDetail();
+        int status = responseJsonNode.path(id).path("status").asInt();
+        if(status == 200){
+            String sku = responseJsonNode.path(id).path("body").path("id").asText();
+            String depatmentId = "" + responseJsonNode.path(id).path("body").path("rmsDeptID").asInt();
+            String classId = "" + responseJsonNode.path(id).path("body").path("rmsClassID").asInt();
+            String subClassId = "" + responseJsonNode.path(id).path("body").path("rmsSubclassID").asInt();
             productDetail.setSku(sku);
             productDetail.setDepartment(depatmentId);
             productDetail.setItemClass(classId);
             productDetail.setItemSubClass(subClassId);
+        }else{
+            String errorMessage = responseJsonNode.path(id).path("body").asText();
+            log.info("Error  for id :" + id + "error message :" + errorMessage);
 
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
+
         return productDetail;
+
 
     }
 }
