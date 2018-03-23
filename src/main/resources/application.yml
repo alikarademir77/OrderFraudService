@@ -79,6 +79,21 @@ client:
       truststore-password: ~
       truststore-type: JKS
       tls-enabled: false
+  resource-service:
+    connection:
+      url: http://localhost:8080/orderdetails
+      endpoint: /v1/fsorders
+      keystore-path: classpath:/secure/rs.cer
+      keystore-password: mccp123
+      keystore-type: PKCS12
+      key-alias: ~
+      key-password: mccp123
+      truststore-path: classpath:/secure/fsvrTrustore
+      truststore-password:oidPayment
+      truststore-type: JKS
+      tls-enabled: true
+
+
 
   tas:
     connection:
