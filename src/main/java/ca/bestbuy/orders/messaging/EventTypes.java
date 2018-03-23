@@ -8,5 +8,5 @@ package ca.bestbuy.orders.messaging;
  *
  */
 public enum EventTypes {
-	FraudCheck;
+	FraudCheck, OrderCancel;
 }

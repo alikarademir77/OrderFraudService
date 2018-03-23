@@ -36,6 +36,7 @@
 		<spring-boot-admin-starter-client.version>1.5.7</spring-boot-admin-starter-client.version>
 		<oracle.version>12.1.0.1</oracle.version>
 		<hikariCP.version>2.7.8</hikariCP.version>
+		<spring-statemachine.version>1.1.1.RELEASE</spring-statemachine.version>
 	</properties>
 
 	<dependencies>
@@ -62,6 +63,18 @@
 			<version>${logging-lib.version}</version>
 		</dependency>
 
+		<dependency>
+            <groupId>org.springframework.statemachine</groupId>
+            <artifactId>spring-statemachine-core</artifactId>
+            <version>${spring-statemachine.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.statemachine</groupId>
+            <artifactId>spring-statemachine-test</artifactId>
+            <version>${spring-statemachine.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-sleuth</artifactId>
@@ -256,6 +269,7 @@
 
 	<dependencyManagement>
 		<dependencies>
+		
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
@@ -401,7 +415,6 @@
 					</schemas>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</pluginManagement>
 </build>

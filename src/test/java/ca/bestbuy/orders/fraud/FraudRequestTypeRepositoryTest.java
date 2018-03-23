@@ -55,7 +55,7 @@ public class FraudRequestTypeRepositoryTest {
 	@Transactional
 	public void testFindAll(){
 		Iterable<FraudRequestType> it = typeRepository.findAll();
-		List<FraudRequestType.RequestTypes> allTypesList  = Arrays.asList(FraudRequestType.RequestTypes.values());
+		List<FraudRequestType.RequestTypeCodes> allTypesList  = Arrays.asList(FraudRequestType.RequestTypeCodes.values());
 
 		for(FraudRequestType type:it){
 			assertTrue(allTypesList.contains(type.getRequestTypeCode()));
@@ -65,9 +65,9 @@ public class FraudRequestTypeRepositoryTest {
 	@Test
 	@Transactional
 	public void testFindOne(){
-		FraudRequestType fraudRequestType = typeRepository.findOne(FraudRequestType.RequestTypes.ORDER_CANCEL);
+		FraudRequestType fraudRequestType = typeRepository.findOne(FraudRequestType.RequestTypeCodes.ORDER_CANCEL);
 		
-		assertEquals(FraudRequestType.RequestTypes.ORDER_CANCEL,fraudRequestType.getRequestTypeCode());
+		assertEquals(FraudRequestType.RequestTypeCodes.ORDER_CANCEL,fraudRequestType.getRequestTypeCode());
 		
 	}
 	

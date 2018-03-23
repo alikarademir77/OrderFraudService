@@ -52,6 +52,6 @@ public interface FraudRequestRepository extends OrderFraudBaseRepository<FraudRe
 	 */
 	 @Query("select fr from FraudRequest fr where fr.orderNumber= :orderNumber and fr.requestVersion >= :requestVersion order by fr.requestVersion desc")
 	Iterable<FraudRequest> findByOrderNumberAndRequestVersionGTE(@Param("orderNumber") BigDecimal orderNumber,
-			@Param("requestVersion") BigDecimal requestVersion);
+			@Param("requestVersion") Long requestVersion);
 
 }

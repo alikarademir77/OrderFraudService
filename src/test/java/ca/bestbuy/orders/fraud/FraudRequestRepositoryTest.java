@@ -13,8 +13,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
-import ca.bestbuy.orders.fraud.client.FraudServiceTASClientConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
+import ca.bestbuy.orders.fraud.client.FraudServiceTASClientConfig;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClientConfig;
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
@@ -72,7 +72,7 @@ public class FraudRequestRepositoryTest {
 		FraudRequest request = createAndSaveFraudRequest(orderNumber, requestVersion);
 		
 		FraudRequest result = fraudRequestRepository.findOne(request.getFraudRequestId());
-		assert(result.getFraudRequestType().getRequestTypeCode()==FraudRequestType.RequestTypes.FRAUD_CHECK);
+		assert(result.getFraudRequestType().getRequestTypeCode()==FraudRequestType.RequestTypeCodes.FRAUD_CHECK);
 		assert(result.getFraudRequestStatusHistory().size()>0);
 	}
 	
@@ -104,7 +104,7 @@ public class FraudRequestRepositoryTest {
 		assertNotNull(requestRetrieved);
 		assertTrue(requestRetrieved.getFraudRequestId() == fraudRequestId);
 
-		Iterable<FraudRequest> requestsRetrieved2 =fraudRequestRepository.findByOrderNumberAndRequestVersionGTE(new BigDecimal(orderNumber), new BigDecimal(3l));
+		Iterable<FraudRequest> requestsRetrieved2 =fraudRequestRepository.findByOrderNumberAndRequestVersionGTE(new BigDecimal(orderNumber), 3l);
 		List<Long> requestVersionsExpected = Arrays.asList(new Long[]{3l,4l,5l});
 		for(FraudRequest request:requestsRetrieved2){
 			assertTrue(request.getOrderNumber().toString().equals(orderNumber));
@@ -147,7 +147,7 @@ public class FraudRequestRepositoryTest {
 	@Test
 	@Transactional
 	public void testStatusUpdate(){
-		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypes.FRAUD_CHECK);
+		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypeCodes.FRAUD_CHECK);
 		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.DECISION_MADE);
 
 		String userName = "order_fraud_test";
@@ -201,7 +201,7 @@ public class FraudRequestRepositoryTest {
 
 	//private
 	private FraudRequest createAndSaveFraudRequest(String orderNumber, long requestVersion) {
-		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypes.FRAUD_CHECK);
+		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypeCodes.FRAUD_CHECK);
 		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.INITIAL_REQUEST);
 
 		String userName = "order_fraud_test";

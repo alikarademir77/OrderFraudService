@@ -140,7 +140,7 @@ public class FraudRequestStatusHistoryRepositoryTest {
 
 	// private
 	private FraudRequest createAndSaveFraudRequest(String orderNumber, long requestVersion) {
-		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypes.FRAUD_CHECK);
+		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypeCodes.FRAUD_CHECK);
 		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.INITIAL_REQUEST);
 
 		String userName = "order_fraud_test";

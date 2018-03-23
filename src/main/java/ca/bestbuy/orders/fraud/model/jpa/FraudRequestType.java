@@ -9,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import ca.bestbuy.orders.messaging.EventTypes;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,7 @@ public class FraudRequestType extends OrderFraudBaseEntity {
 	@Id
 	@Column(name = "REQUEST_TYPE_CODE")
 	@Enumerated(EnumType.STRING)
-	private RequestTypes requestTypeCode;
+	private RequestTypeCodes requestTypeCode;
 
 	@Column(name = "REQUEST_TYPE_DESCRIPTION")
 	private String requestTypeDescription;
@@ -44,7 +45,22 @@ public class FraudRequestType extends OrderFraudBaseEntity {
 	public FraudRequestType() {
 	}
 
-	public static enum RequestTypes {
-		FRAUD_CHECK, ORDER_CANCEL;
+	public static enum RequestTypeCodes {
+		
+		FRAUD_CHECK(EventTypes.FraudCheck), ORDER_CANCEL(EventTypes.OrderCancel);
+		
+		private final EventTypes eventType;
+		private RequestTypeCodes(EventTypes eventType){
+			this.eventType = eventType;
+		}
+		
+		public static RequestTypeCodes findByEventType(EventTypes eventType){
+			for(RequestTypeCodes curr : values()){
+				if(curr.eventType == eventType){
+					return curr;
+				}
+			}
+			return null;
+		}
 	}
 }
