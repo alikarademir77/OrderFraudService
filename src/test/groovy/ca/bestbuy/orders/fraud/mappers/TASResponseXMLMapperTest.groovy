@@ -37,7 +37,7 @@ class TASResponseXMLMapperTest extends Specification{
         transactionResults.setRemarks("remarks");
 
         ResponseData responseData = new ResponseData()
-        responseData.setResponseVersion("1")
+        responseData.setResponseVersion(1)
 
         Transaction transaction = new Transaction();
         transaction.setReasonCode("reasonCode")
@@ -58,25 +58,14 @@ class TASResponseXMLMapperTest extends Specification{
 
         then:
 
-        fraudResult.getActionCode() == manageOrderResponse.getActionCode().toString()
-        fraudResult.getErrorDescription() == manageOrderResponse.getErrorDescription()
-        fraudResult.getTransactionId() == transactionResults.getTransactionId()
-        fraudResult.getCrossReference() == transactionResults.getCrossReference()
-        fraudResult.getRulesTripped() == transactionResults.getRulesTripped()
-        fraudResult.getTotalScore() == transactionResults.getTotalScore()
+        fraudResult.getFraudResponseStatus() == manageOrderResponse.getActionCode().toString()
+        fraudResult.getOrderNumber() == transactionResults.getTransactionId()
+        fraudResult.getTotalFraudScore() == transactionResults.getTotalScore()
         fraudResult.getRecommendationCode() == transactionResults.getRecommendationCode()
-        fraudResult.getRemarks() == transactionResults.getRemarks()
-        fraudResult.getVersion() == transactionResults.getResponseData().getResponseVersion()
-        fraudResult.getReasonCode() == transactionResults.getResponseData().getTransaction().getReasonCode()
-        fraudResult.getReasonDescription() == transactionResults.getResponseData().getTransaction().getReasonDescription()
-        if(fraudResult.getTransactionDetails().size() == transactionDetails.getTransactionDetail().size()) {
-            for (int i = 0; i < fraudResult.getTransactionDetails().size(); i++){
-                String transactionDetailToMap = transactionDetails.getTransactionDetail().get(i)
-                fraudResult.getTransactionDetails().get(i).toString() == transactionDetailToMap
-            }
-        }else{
-            assert false
-        }
+        fraudResult.getRequestVersion() == transactionResults.getResponseData().getResponseVersion()
+        //todo: fraudResult.getAccertifyUser()
+        //todo: qfraudResult.getAccertifyUserActionTime()
+
 
 
 

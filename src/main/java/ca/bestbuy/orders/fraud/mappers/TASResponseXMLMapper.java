@@ -13,18 +13,13 @@ public abstract class TASResponseXMLMapper {
 
 
     @Mappings({
-            @Mapping(target="actionCode", source="actionCode"),
-            @Mapping(target="errorDescription", source="errorDescription"),
-            @Mapping(target="transactionId", source="transactionResults.transactionId"),
-            @Mapping(target="version", source="transactionResults.responseData.responseVersion"),
-            @Mapping(target="crossReference", source="transactionResults.crossReference"),
-            @Mapping(target="rulesTripped", source="transactionResults.rulesTripped"),
-            @Mapping(target="totalScore", source="transactionResults.totalScore"),
+            @Mapping(target="fraudResponseStatus", source="actionCode"),
+            @Mapping(target="orderNumber", source="transactionResults.transactionId"),
+            @Mapping(target="requestVersion", source="transactionResults.responseData.responseVersion"),
+            @Mapping(target="totalFraudScore", source="transactionResults.totalScore"),
             @Mapping(target="recommendationCode", source="transactionResults.recommendationCode"),
-            @Mapping(target="remarks", source="transactionResults.remarks"),
-            @Mapping(target="reasonCode", source="transactionResults.responseData.transaction.reasonCode"),
-            @Mapping(target="reasonDescription", source="transactionResults.responseData.transaction.reasonDescription"),
-            @Mapping(target="transactionDetails", source="transactionResults.responseData.transaction.transactionDetails.transactionDetail")
+            @Mapping(target="accertifyUser", ignore=true),
+            @Mapping(target="accertifyUserActionTime", ignore=true),
     })
     public abstract FraudResult mapManageOrderResult(ManageOrderResponse manageOrderResponseToMap);
 
