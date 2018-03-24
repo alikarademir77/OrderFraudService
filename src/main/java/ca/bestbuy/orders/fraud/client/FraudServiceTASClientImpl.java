@@ -72,16 +72,20 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
 
         ObjectFactory  objectFactory = new ObjectFactory();
         JAXBElement<ManageOrderRequest> jaxbRequest = objectFactory.createManageOrderRequest(request);
-        log.info("Request sent to TAS:" + convertToXMLString(jaxbRequest));
+        String requestAsXMLString = convertToXMLString(jaxbRequest);
+        log.info("Request sent to TAS:" + requestAsXMLString);
 
         try {
             //Send request to TAS and receive response
             JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) webServiceTemplate.marshalSendAndReceive(jaxbRequest, new SoapActionCallback(fraudCheckOperation));
-            log.info("Response received from TAS:" + convertToXMLString(jaxbResponse));
+            String responseAsXMLString = convertToXMLString(jaxbResponse);
+            log.info("Response received from TAS:" + responseAsXMLString);
 
             //map response to FraudAssessmentResult object
             ManageOrderResponse response = jaxbResponse.getValue();
             FraudAssesmentResult fraudAssessmentResult = tasResponseXMLMapper.mapManageOrderResult(response);
+            fraudAssessmentResult.setTasRequest(requestAsXMLString);
+            fraudAssessmentResult.setTasResponse(responseAsXMLString);
             return fraudAssessmentResult;
 
             //todo: handle error Action Codes like BANKDOWN or SYSERROR

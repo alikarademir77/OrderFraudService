@@ -66,12 +66,12 @@ class FraudServiceTASClientImplTest extends Specification {
 
         when:
 
-        FraudAssessmentResult result = client.doFraudCheck(order)
+        FraudAssesmentResult result = client.doFraudCheck(order)
 
         then:
 
         result != null
-        result.getFraudResponseStatus() == FraudAssessmentResult.FraudResponseStatusCodes.ACCEPTED
+        result.getFraudResponseStatus() == FraudAssesmentResult.FraudResponseStatusCodes.ACCEPTED
         result.getOrderNumber() == "1234"
         result.getTotalFraudScore() == "1875"
         result.getRecommendationCode() == "1:Allow"
