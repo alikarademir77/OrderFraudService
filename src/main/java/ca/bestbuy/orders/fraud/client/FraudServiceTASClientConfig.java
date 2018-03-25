@@ -47,18 +47,18 @@ public class FraudServiceTASClientConfig {
     }
 
 
-    private int connectionTimeout;
+    private Integer connectionTimeout;
 
     @Value("${client.tas.connection.timeout.connection}")
-    protected void setConnectionTimeout(int connectionTimeout) {
+    protected void setConnectionTimeout(Integer connectionTimeout) {
         this.connectionTimeout = connectionTimeout;
     }
 
 
-    private int requestTimeout;
+    private Integer requestTimeout;
 
     @Value("${client.tas.connection.timeout.request}")
-    protected void setRequestTimeout(int requestTimeout) {
+    protected void setRequestTimeout(Integer requestTimeout) {
         this.requestTimeout = requestTimeout;
     }
 
