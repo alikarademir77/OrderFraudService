@@ -62,10 +62,11 @@
 			<version>${logging-lib.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
-		</dependency>
+		<!--TODO - Commenting this out as it is causing issues with junit tests. Will need to look into this further.-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.cloud</groupId>-->
+			<!--<artifactId>spring-cloud-starter-sleuth</artifactId>-->
+		<!--</dependency>-->
 
 		<!--Spring Cloud Stream -->
 		<dependency>

@@ -1,86 +1,204 @@
 package ca.bestbuy.orders.fraud.client;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
+
+import ca.bestbuy.orders.fraud.mappers.OrderMapper;
+import ca.bestbuy.orders.fraud.utility.HttpClientBuilderUtility;
+import ca.bestbuy.orders.fraud.utility.KeystoreConfig;
+import ca.bestbuy.orders.fraud.utility.TimeoutConfig;
+import ca.bestbuy.orders.fraud.utility.TruststoreConfig;
 
 @Configuration
 public class OrderDetailsClientConfig {
 
-    @Value("${client.order-details.connection.url}")
-    private String orderDetailsServiceUrl;
 
-    @Value("${client.order-details.connection.getOrderDetailsEndpoint}")
+    private String url;
+
+    @Value("${client.order-details.connection.url}")
+    protected void setUrl(String url) {
+        if (url == null) {
+            throw new IllegalArgumentException("client.order-details.connection.url cannot be null");
+        }
+        this.url = url;
+    }
+
+
     private String getOrderDetailsEndpoint;
 
-    @Value("${client.order-details.connection.keystore-path}")
-    private String keystorePath;
+    @Value("${client.order-details.connection.getOrderDetailsEndpoint}")
+    protected void setGetOrderDetailsEndpoint(String getOrderDetailsEndpoint) {
 
-    @Value("${client.order-details.connection.keystore-type}")
-    private String keystoreType;
+        if (getOrderDetailsEndpoint == null) {
+            throw new IllegalArgumentException("client.order-details.connection.getOrderDetailsEndpoint");
+        }
 
-    @Value("${client.order-details.connection.key-alias}")
+        this.getOrderDetailsEndpoint = getOrderDetailsEndpoint;
+    }
+
+
+    private Resource keystore;
+
+    @Value("${client.order-details.connection.ssl.keystore}")
+    protected void setKeystore(Resource keystore) {
+        this.keystore = keystore;
+    }
+
+
     private String keyAlias;
 
-    @Value("${client.order-details.connection.keystore-password}")
+    @Value("${client.order-details.connection.ssl.key-alias}")
+    protected void setKeyAlias(String keyAlias) {
+        this.keyAlias = keyAlias;
+    }
+
+
     private String keystorePassword;
 
-    @Value("${client.order-details.connection.key-password}")
+    @Value("${client.order-details.connection.ssl.keystore-password}")
+    protected void setKeystorePassword(String keystorePassword) {
+        this.keystorePassword = keystorePassword;
+    }
+
+
     private String keyPassword;
 
-    @Value("${client.order-details.connection.truststore-path}")
-    private String truststorePath;
+    @Value("${client.order-details.connection.ssl.key-password}")
+    protected void setKeyPassword(String keyPassword) {
+        this.keyPassword = keyPassword;
+    }
 
-    @Value("${client.order-details.connection.truststore-type}")
-    private String truststoreType;
 
-    @Value("${client.order-details.connection.truststore-password}")
+    @Value("${client.order-details.connection.ssl.truststore}")
+    private Resource truststore;
+
+    protected void setTruststore(Resource truststore) {
+        this.truststore = truststore;
+    }
+
+
+    @Value("${client.order-details.connection.ssl.truststore-password}")
     private String truststorePassword;
 
-    @Value("${client.order-details.connection.tls-enabled}")
-    private Boolean tlsEnabled;
-
-
-    public String getOrderDetailsServiceUrl() {
-        return orderDetailsServiceUrl;
+    protected void setTruststorePassword(String truststorePassword) {
+        this.truststorePassword = truststorePassword;
     }
 
-    public String getGetOrderDetailsEndpoint() {
-        return getOrderDetailsEndpoint;
+
+    @Value("${client.order-details.connection.ssl.enabled}")
+    private Boolean sslEnabled;
+
+    protected void setSslEnabled(Boolean sslEnabled) {
+        if (sslEnabled == null) {
+            throw new IllegalArgumentException("client.order-details.connection.ssl.enabled cannot be null");
+        }
+        this.sslEnabled = sslEnabled;
     }
 
-    public String getKeystorePath() {
-        return keystorePath;
+
+    private Boolean verifyHostName;
+
+    @Value("${client.order-details.connection.ssl.verify-hostname:true}")
+    protected void setVerifyHostName(Boolean verifyHostName) {
+        if (verifyHostName == null) {
+            this.verifyHostName = true;
+        } else {
+            this.verifyHostName = verifyHostName;
+        }
     }
 
-    public String getKeystoreType() {
-        return keystoreType;
+
+    private Integer connectionTimeout;
+
+    @Value("${client.order-details.connection.timeout.connection}")
+    protected void setConnectionTimeout(Integer connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
     }
 
-    public String getKeyAlias() {
-        return keyAlias;
+
+    private Integer requestTimeout;
+
+    @Value("${client.order-details.connection.timeout.request}")
+    protected void setRequestTimeout(Integer requestTimeout) {
+        this.requestTimeout = requestTimeout;
     }
 
-    public String getKeystorePassword() {
-        return keystorePassword;
+
+    @Bean
+    public OrderDetailsClient orderDetailsClient(OrderMapper orderMapper, RestTemplate restTemplate) {
+        OrderDetailsClientImpl orderDetailsClient = new OrderDetailsClientImpl(orderMapper, restTemplate);
+        orderDetailsClient.setOrderDetailsServiceBaseUrl(url);
+        orderDetailsClient.setGetOrderDetailsEndpoint(getOrderDetailsEndpoint);
+        return orderDetailsClient;
     }
 
-    public String getKeyPassword() {
-        return keyPassword;
+
+    @Bean
+    protected RestTemplate restTemplate() {
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(createHttpClient()));
     }
 
-    public String getTruststorePath() {
-        return truststorePath;
+
+    protected HttpClient createHttpClient() {
+
+        HttpClientBuilder builder = HttpClientBuilder.create();
+
+        // Set timeouts
+        TimeoutConfig timeoutConfig = new TimeoutConfig(connectionTimeout, requestTimeout);
+        HttpClientBuilderUtility.configureTimeouts(builder, timeoutConfig);
+
+        if (sslEnabled) {
+
+            validateSSLConfigurations();
+
+            KeystoreConfig keystoreConfig = new KeystoreConfig(keystore, keystorePassword, keyAlias, keyPassword);
+            TruststoreConfig truststoreConfig = new TruststoreConfig(truststore, truststorePassword);
+            HttpClientBuilderUtility.configureSSL(builder, keystoreConfig, truststoreConfig, verifyHostName);
+        }
+
+        return builder.build();
     }
 
-    public String getTruststoreType() {
-        return truststoreType;
+
+    private void validateSSLConfigurations() {
+
+        if(keystore == null) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.keystore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+        }
+
+        // UrlResource if using a prefix of 'file:'
+        // ClassPathResource if using a prefix of 'classpath:'
+        if (!(keystore instanceof UrlResource) && !(keystore instanceof ClassPathResource)) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.keystore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+        }
+
+        if(keystorePassword == null) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.keystore-password' is set.");
+        }
+
+        if(truststore == null) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.truststore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+        }
+
+        // UrlResource if using a prefix of 'file:'
+        // ClassPathResource if using a prefix of 'classpath:'
+        if (!(truststore instanceof UrlResource) && !(truststore instanceof ClassPathResource)) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.truststore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+        }
+
+        if(truststorePassword == null) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.truststore-password' is set.");
+        }
+
     }
 
-    public String getTruststorePassword() {
-        return truststorePassword;
-    }
 
-    public Boolean getTlsEnabled() {
-        return tlsEnabled;
-    }
 }
