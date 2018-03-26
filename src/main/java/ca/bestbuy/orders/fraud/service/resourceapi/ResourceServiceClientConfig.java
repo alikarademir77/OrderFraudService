@@ -31,5 +31,4 @@ public class ResourceServiceClientConfig {
     @Value("${client.resource-service.connection.tls-enabled}")
     @Getter private Boolean tlsEnabled;
 
-
 }
