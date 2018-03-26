@@ -1,4 +1,4 @@
-package ca.bestbuy.orders.fraud.flow;
+package ca.bestbuy.orders.fraud.flow.action;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
 import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
 import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
+import ca.bestbuy.orders.fraud.flow.FlowEvents;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
+import ca.bestbuy.orders.fraud.flow.FlowStates;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 import ca.bestbuy.orders.messaging.MessagingEvent;
 
 @Component
@@ -48,7 +48,6 @@ public class CreateInitialRequestAcion implements Action<FlowStates, FlowEvents>
 
 		FraudRequestType.RequestTypeCodes requestTypeCode = FraudRequestType.RequestTypeCodes.findByEventType(event.getType());
 		FraudRequestType fraudRequestType = typeRepository.findOne(requestTypeCode);
-		FraudStatus status = statusRepository.findOne(FraudStatusCodes.INITIAL_REQUEST);
 
 		FraudRequest request = new FraudRequest();
 

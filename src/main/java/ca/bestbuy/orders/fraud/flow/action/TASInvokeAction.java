@@ -1,4 +1,4 @@
-package ca.bestbuy.orders.fraud.flow;
+package ca.bestbuy.orders.fraud.flow.action;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -17,14 +17,15 @@ import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
 import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
 import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
+import ca.bestbuy.orders.fraud.flow.FlowEvents;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
+import ca.bestbuy.orders.fraud.flow.FlowStates;
 import ca.bestbuy.orders.fraud.model.internal.FraudAssesmentResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatusEvents;
+import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusEvents;
 import ca.bestbuy.orders.messaging.MessagingEvent;
 
 /**
@@ -82,7 +83,6 @@ public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 			statusHistory.setUpdateDate(now);
 			statusHistory.setUpdateUser(userName);
 				
-			FraudStatus fraudStatus = null;
 			if(fraudResponseStatusCode == FraudAssesmentResult.FraudResponseStatusCodes.PENDING_REVIEW){
 				statusHistory.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.PENDING_REVIEW_RECEIVED);
 			}else if (decisionMadeResponseStatusCodes().contains(fraudResponseStatusCode)){

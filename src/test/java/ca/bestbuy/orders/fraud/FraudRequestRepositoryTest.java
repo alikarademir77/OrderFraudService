@@ -35,7 +35,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatusEvents;
+import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusEvents;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
@@ -150,7 +150,6 @@ public class FraudRequestRepositoryTest {
 	@Transactional
 	public void testStatusUpdate(){
 		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypeCodes.FRAUD_CHECK);
-		FraudStatus status = statusRepository.findOne(FraudStatusCodes.FINAL_DECISION);
 
 		String userName = "order_fraud_test";
 		Date now = new Date();

@@ -23,6 +23,9 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
 
+import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusEvents;
+import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusStateMachineConfig;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,33 +47,33 @@ import lombok.experimental.Accessors;
 @Access(AccessType.FIELD)
 @Table(name = "FRAUD_RQST_STATUS_HSTRY", schema="ORDER_FRAUD")
 @Accessors(chain=true)
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper=true, exclude={"fraudRequestStatusHistoryDetail"})
 @ToString(callSuper=true, exclude={"fraudRequestStatusHistoryDetail"})
 public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 
-	@Getter
-	@Setter
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator")
 	@Column(name = "FRAUD_RQST_STATUS_HSTRY_ID")
 	private long fraudRequestStatusHistoryId;
 
 	//bi-directional many-to-one association to FraudRequestStatusHistoryDetail
-	@Getter
-	@Setter
 	@OneToOne(mappedBy="fraudRequestStatusHistory", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	private FraudRequestStatusHistoryDetail fraudRequestStatusHistoryDetail;
 
 	//bi-directional many-to-one association to FraudRequest
-	@Getter
-	@Setter
 	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="FRAUD_RQST_ID")
 	private FraudRequest fraudRequest;
 
+	// The getter/setter for the field is declared as package access level so
+	// FraudRequestStatusHistoryEntityListener can set it in prePersist event
+	@Getter(AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "FRAUD_STATUS_CODE")
-	FraudStatusCodes fraudStatusCode;//The field is declared as package access level so FraudRequestStatusHistoryEntityListener can set it in prePersist event
+	private FraudStatusCodes fraudStatusCode;
 
 	@Getter
 	@Transient
@@ -81,7 +84,7 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 		AnnotationConfigApplicationContext context = null;
 		try{
 			context = new AnnotationConfigApplicationContext(FraudStatusStateMachineConfig.class);
-			StateMachineFactory<FraudStatusCodes, FraudStatusEvents> factory = context.getBean(StateMachineFactory.class);
+			StateMachineFactory<FraudStatusCodes, FraudStatusEvents> factory = context.getBean("FraudStatusStateMachine", StateMachineFactory.class);
 			fraudStatusStateMachine = factory.getStateMachine("FraudRequestStatusHistorySM");
 			fraudStatusStateMachine.start();
 		}finally {

@@ -1,11 +1,14 @@
 /**
  * 
  */
-package ca.bestbuy.orders.fraud.flow;
+package ca.bestbuy.orders.fraud.flow.action;
 
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
+
+import ca.bestbuy.orders.fraud.flow.FlowEvents;
+import ca.bestbuy.orders.fraud.flow.FlowStates;
 
 /**
  * @author akaradem

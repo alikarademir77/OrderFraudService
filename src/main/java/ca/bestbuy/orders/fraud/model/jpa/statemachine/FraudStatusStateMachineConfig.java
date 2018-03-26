@@ -1,4 +1,4 @@
-package ca.bestbuy.orders.fraud.model.jpa;
+package ca.bestbuy.orders.fraud.model.jpa.statemachine;
 
 import java.util.EnumSet;
 
@@ -8,12 +8,14 @@ import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
 
+import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
+
 /**
  * @author akaradem
  *
  */
 @Configuration
-@EnableStateMachineFactory
+@EnableStateMachineFactory(name="FraudStatusStateMachine")
 public class FraudStatusStateMachineConfig
 		extends EnumStateMachineConfigurerAdapter<FraudStatusCodes, FraudStatusEvents> {
 	

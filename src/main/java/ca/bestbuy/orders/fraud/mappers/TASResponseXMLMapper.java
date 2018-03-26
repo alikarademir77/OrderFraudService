@@ -36,8 +36,8 @@ public abstract class TASResponseXMLMapper {
             mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssesmentResult.FraudResponseStatusCodes.ACCEPTED);
         }else if(manageOrderResponseToMap.getActionCode().equals(ActionCode.CALLBANK)) {
             mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssesmentResult.FraudResponseStatusCodes.PENDING_REVIEW);
-//        }else if(manageOrderResponseToMap.getActionCode().equals(ActionCode.SOFTDECLINE)) {
-//            mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssesmentResult.FraudResponseStatusCodes.SOFT_DECLINE);
+        }else if(manageOrderResponseToMap.getActionCode().equals(ActionCode.SOFTDECLINE)) {
+            mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssesmentResult.FraudResponseStatusCodes.SOFT_DECLINE);
         }else if(manageOrderResponseToMap.getActionCode().equals(ActionCode.DECLINED)) {
             mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssesmentResult.FraudResponseStatusCodes.HARD_DECLINE);
         }

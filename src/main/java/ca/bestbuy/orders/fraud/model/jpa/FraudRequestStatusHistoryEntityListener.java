@@ -12,6 +12,8 @@ import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.access.StateMachineAccess;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
 
+import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusEvents;
+
 /**
  * @author akaradem
  *
@@ -20,13 +22,13 @@ public class FraudRequestStatusHistoryEntityListener {
 	@PostLoad
 	public void postLoad(FraudRequestStatusHistory entity) {
 		StateMachine<FraudStatusCodes, FraudStatusEvents> stateMachine = entity.getFraudStatusStateMachine();
-		handleState(entity.fraudStatusCode, stateMachine);
+		handleState(entity.getFraudStatusCode(), stateMachine);
 	}
 
 	 @PrePersist 
 	 public void onPrePersist(FraudRequestStatusHistory entity) {
 		 StateMachine<FraudStatusCodes, FraudStatusEvents> stateMachine = entity.getFraudStatusStateMachine();
-		 entity.fraudStatusCode = stateMachine.getState().getId();
+		 entity.setFraudStatusCode(stateMachine.getState().getId()) ;
 	 };
 
 	private void handleState(FraudStatusCodes state, StateMachine<FraudStatusCodes, FraudStatusEvents> stateMachine) {
