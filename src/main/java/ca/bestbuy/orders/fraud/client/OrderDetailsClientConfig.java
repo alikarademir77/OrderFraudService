@@ -1,21 +1,18 @@
 package ca.bestbuy.orders.fraud.client;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import ca.bestbuy.orders.fraud.mappers.OrderMapper;
-import ca.bestbuy.orders.fraud.utility.HttpClientBuilderUtility;
 import ca.bestbuy.orders.fraud.utility.KeystoreConfig;
 import ca.bestbuy.orders.fraud.utility.TimeoutConfig;
 import ca.bestbuy.orders.fraud.utility.TruststoreConfig;
+import ca.bestbuy.orders.fraud.utility.WebClientUtility;
 
 @Configuration
 public class OrderDetailsClientConfig {
@@ -143,28 +140,17 @@ public class OrderDetailsClientConfig {
 
     @Bean
     protected RestTemplate restTemplate() {
-        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(createHttpClient()));
-    }
 
-
-    protected HttpClient createHttpClient() {
-
-        HttpClientBuilder builder = HttpClientBuilder.create();
-
-        // Set timeouts
         TimeoutConfig timeoutConfig = new TimeoutConfig(connectionTimeout, requestTimeout);
-        HttpClientBuilderUtility.configureTimeouts(builder, timeoutConfig);
 
-        if (sslEnabled) {
-
+        if(sslEnabled) {
             validateSSLConfigurations();
-
             KeystoreConfig keystoreConfig = new KeystoreConfig(keystore, keystorePassword, keyAlias, keyPassword);
             TruststoreConfig truststoreConfig = new TruststoreConfig(truststore, truststorePassword);
-            HttpClientBuilderUtility.configureSSL(builder, keystoreConfig, truststoreConfig, verifyHostName);
+            return WebClientUtility.createRestTemplateWithSSL(timeoutConfig, keystoreConfig, truststoreConfig, verifyHostName);
+        } else {
+            return WebClientUtility.createRestTemplate(timeoutConfig);
         }
-
-        return builder.build();
     }
 
 

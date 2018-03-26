@@ -16,10 +16,10 @@ import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper;
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
-import ca.bestbuy.orders.fraud.utility.HttpClientBuilderUtility;
 import ca.bestbuy.orders.fraud.utility.KeystoreConfig;
 import ca.bestbuy.orders.fraud.utility.TimeoutConfig;
 import ca.bestbuy.orders.fraud.utility.TruststoreConfig;
+import ca.bestbuy.orders.fraud.utility.WebClientUtility;
 
 
 @Configuration
@@ -178,7 +178,7 @@ public class FraudServiceTASClientConfig {
 
         // Set timeouts
         TimeoutConfig timeoutConfig = new TimeoutConfig(connectionTimeout, requestTimeout);
-        HttpClientBuilderUtility.configureTimeouts(builder, timeoutConfig);
+        WebClientUtility.configureTimeouts(builder, timeoutConfig);
 
         // Removing http content length header because header is already set, otherwise we get an exception about content length header already existing
         builder.addInterceptorFirst((HttpRequestInterceptor) (httpRequest, httpContext) -> httpRequest.removeHeaders(HTTP.CONTENT_LEN));
@@ -190,7 +190,7 @@ public class FraudServiceTASClientConfig {
 
             KeystoreConfig keystoreConfig = new KeystoreConfig(keystore, keystorePassword, keyAlias, keyPassword);
             TruststoreConfig truststoreConfig = new TruststoreConfig(truststore, truststorePassword);
-            HttpClientBuilderUtility.configureSSL(builder, keystoreConfig, truststoreConfig, verifyHostName);
+            WebClientUtility.configureSSL(builder, keystoreConfig, truststoreConfig, verifyHostName);
         }
 
         return builder.build();

@@ -3,14 +3,14 @@ package ca.bestbuy.orders.fraud.utility
 import org.apache.http.impl.client.HttpClientBuilder
 import spock.lang.Specification
 
-class HttpClientBuilderUtilityConfigureTimeoutsTest extends Specification {
+class WebClientUtilityConfigureTimeoutsTest extends Specification {
 
 
     def "Test configureTimeouts() when builder passed in is null"() {
 
         when:
 
-        HttpClientBuilderUtility.configureTimeouts(null, new TimeoutConfig(null, null))
+        WebClientUtility.configureTimeouts(null, new TimeoutConfig(null, null))
 
         then:
 
@@ -22,7 +22,7 @@ class HttpClientBuilderUtilityConfigureTimeoutsTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureTimeouts(HttpClientBuilder.create(), null)
+        WebClientUtility.configureTimeouts(HttpClientBuilder.create(), null)
 
         then:
 
@@ -35,7 +35,7 @@ class HttpClientBuilderUtilityConfigureTimeoutsTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureTimeouts(HttpClientBuilder.create(), new TimeoutConfig(1000, 2000))
+        WebClientUtility.configureTimeouts(HttpClientBuilder.create(), new TimeoutConfig(1000, 2000))
 
         then:
 
@@ -48,7 +48,7 @@ class HttpClientBuilderUtilityConfigureTimeoutsTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureTimeouts(HttpClientBuilder.create(), new TimeoutConfig(null, null))
+        WebClientUtility.configureTimeouts(HttpClientBuilder.create(), new TimeoutConfig(null, null))
 
         then:
 

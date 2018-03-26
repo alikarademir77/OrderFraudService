@@ -82,7 +82,7 @@ class OrderDetailsClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
@@ -100,7 +100,7 @@ class OrderDetailsClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
@@ -118,7 +118,7 @@ class OrderDetailsClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
@@ -136,7 +136,7 @@ class OrderDetailsClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
@@ -154,7 +154,7 @@ class OrderDetailsClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
@@ -172,7 +172,7 @@ class OrderDetailsClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
@@ -189,7 +189,7 @@ class OrderDetailsClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 

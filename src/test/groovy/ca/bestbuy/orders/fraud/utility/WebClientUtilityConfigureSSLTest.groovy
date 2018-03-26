@@ -6,7 +6,7 @@ import org.springframework.core.io.Resource
 import org.springframework.web.context.support.ServletContextResource
 import spock.lang.Specification
 
-class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
+class WebClientUtilityConfigureSSLTest extends Specification {
 
 
     def "Test configureSSL() when builder passed in is null"() {
@@ -18,7 +18,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(null, keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(null, keystoreConfig, truststoreConfig, false)
 
         then:
 
@@ -35,7 +35,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), null, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), null, truststoreConfig, false)
 
 
         then:
@@ -54,7 +54,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -72,7 +72,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, null, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, null, false)
 
         then:
 
@@ -90,7 +90,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -109,7 +109,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -128,7 +128,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -147,7 +147,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -166,7 +166,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -186,7 +186,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -205,7 +205,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -224,7 +224,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -242,7 +242,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -260,7 +260,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:
@@ -278,7 +278,7 @@ class HttpClientBuilderUtilityConfigureSSLTest extends Specification {
 
         when:
 
-        HttpClientBuilderUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
+        WebClientUtility.configureSSL(HttpClientBuilder.create(), keystoreConfig, truststoreConfig, false)
 
 
         then:

@@ -17,14 +17,31 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
 /**
- * A utility class for configuring HttpClientBuilder
+ * A utility class for creating web clients (REST, SOAP)
  */
-public final class HttpClientBuilderUtility {
+public final class WebClientUtility {
 
     // Private constructor so we cannot instantiate this class
-    private HttpClientBuilderUtility() {
+    private WebClientUtility() {
+    }
+
+
+    public static RestTemplate createRestTemplate(TimeoutConfig timeoutConfig) {
+        HttpClientBuilder builder = HttpClientBuilder.create();
+        configureTimeouts(builder, timeoutConfig);
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(builder.build()));
+    }
+
+
+    public static RestTemplate createRestTemplateWithSSL(TimeoutConfig timeoutConfig, KeystoreConfig keystoreConfig, TruststoreConfig truststoreConfig, boolean verifyHostname) {
+        HttpClientBuilder builder = HttpClientBuilder.create();
+        configureTimeouts(builder, timeoutConfig);
+        configureSSL(builder, keystoreConfig, truststoreConfig, verifyHostname);
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(builder.build()));
     }
 
 
