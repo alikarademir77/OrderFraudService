@@ -25,7 +25,7 @@ import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClientConfig;
 import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
-import ca.bestbuy.orders.fraud.service.resourceapi.ResourceServiceClientConfig;
+import ca.bestbuy.orders.fraud.client.ResourceApiClientConfig;
 
 /**
  * @author akaradem
@@ -44,7 +44,7 @@ public class FraudRequestTypeRepositoryTest {
 	OrderDetailsClient orderDetailsClient;
 
 	@MockBean
-	private ResourceServiceClientConfig resourceServiceClientConfig;
+	private ResourceApiClientConfig resourceApiClientConfig;
 
 	@MockBean
 	private FraudServiceTASClientConfig fraudServiceTASClientConfig;

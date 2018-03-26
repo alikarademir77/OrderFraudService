@@ -34,7 +34,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
-import ca.bestbuy.orders.fraud.service.resourceapi.ResourceServiceClientConfig;
+import ca.bestbuy.orders.fraud.client.ResourceApiClientConfig;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
@@ -49,7 +49,7 @@ public class FraudRequestRepositoryTest {
 	OrderDetailsClient orderDetailsClient;
 
 	@MockBean
-	private ResourceServiceClientConfig resourceServiceClientConfig;
+	private ResourceApiClientConfig resourceApiClientConfig;
 
 	@MockBean
 	private FraudServiceTASClientConfig fraudServiceTASClientConfig;

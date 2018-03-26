@@ -1,12 +1,13 @@
 package ca.bestbuy.orders.fraud.service.resourceapi
 
-import ca.bestbuy.orders.fraud.model.client.resourceapi.ProductDetail
-import ca.bestbuy.orders.fraud.model.client.resourceapi.data.ResourceApiItem
-import ca.bestbuy.orders.fraud.model.client.resourceapi.data.ResourceApiRequest
+import ca.bestbuy.orders.fraud.mappers.ResourceApiJsonConverter
+import ca.bestbuy.orders.fraud.model.client.resourcesapi.ProductDetail
+import ca.bestbuy.orders.fraud.model.client.resourcesapi.ResourceApiItem
+import ca.bestbuy.orders.fraud.model.client.resourcesapi.ResourceApiRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
-class JsonConverterTest extends Specification{
+class ResourceApiJsonConverterTest extends Specification{
 
     def "Test success for convert list of sku to resourceApiRequest"() {
 
@@ -16,7 +17,7 @@ class JsonConverterTest extends Specification{
         skus = new ArrayList<>()
         skus.add("12345678")
         skus.add("23456789")
-        JsonConverter jsonConverter = new JsonConverter()
+        ResourceApiJsonConverter jsonConverter = new ResourceApiJsonConverter()
         when:
 
         ResourceApiRequest result= jsonConverter.toResourceApiRequest(skus)
@@ -44,7 +45,7 @@ class JsonConverterTest extends Specification{
         skus.add("12345678")
         skus.add("23456789")
 
-        JsonConverter jsonConverter = new JsonConverter()
+        ResourceApiJsonConverter jsonConverter = new ResourceApiJsonConverter()
 
         when:
 
@@ -63,7 +64,7 @@ class JsonConverterTest extends Specification{
         given:
 
         List<String> sku = new ArrayList<>()
-        JsonConverter jsonConverter = new JsonConverter()
+        ResourceApiJsonConverter jsonConverter = new ResourceApiJsonConverter()
 
         when:
 
@@ -82,7 +83,7 @@ class JsonConverterTest extends Specification{
         skus.add("10362263")
 
         String response = new File("src/test/resources/resourceapi/resource-api-response-with-one-notfound.json").text
-        JsonConverter jsonConverter = new JsonConverter()
+        ResourceApiJsonConverter jsonConverter = new ResourceApiJsonConverter()
 
         when:
 
@@ -100,7 +101,7 @@ class JsonConverterTest extends Specification{
         given:
 
         String response = new File("src/test/resources/resourceapi/resource-api-response-with-one-notfound.json").text
-        JsonConverter jsonConverter = new JsonConverter()
+        ResourceApiJsonConverter jsonConverter = new ResourceApiJsonConverter()
         List<String> skus = new ArrayList<>()
         skus.add("10362264")
 
@@ -120,7 +121,7 @@ class JsonConverterTest extends Specification{
         List<String> skus = new ArrayList<>()
         skus.add("10362264")
         String response = ""
-        JsonConverter jsonConverter = new JsonConverter()
+        ResourceApiJsonConverter jsonConverter = new ResourceApiJsonConverter()
 
         when:
 
@@ -139,7 +140,7 @@ class JsonConverterTest extends Specification{
         List<String> skus = new ArrayList<>()
         skus.add("10362264")
         String response = "abc"
-        JsonConverter jsonConverter = new JsonConverter()
+        ResourceApiJsonConverter jsonConverter = new ResourceApiJsonConverter()
 
         when:
 

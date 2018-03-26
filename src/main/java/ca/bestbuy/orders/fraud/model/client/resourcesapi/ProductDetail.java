@@ -1,4 +1,4 @@
-package ca.bestbuy.orders.fraud.model.client.resourceapi;
+package ca.bestbuy.orders.fraud.model.client.resourcesapi;
 
 import lombok.Getter;
 import lombok.Setter;

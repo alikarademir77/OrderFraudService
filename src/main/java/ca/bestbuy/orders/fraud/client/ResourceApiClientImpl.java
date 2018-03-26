@@ -1,22 +1,19 @@
-package ca.bestbuy.orders.fraud.service.resourceapi;
+package ca.bestbuy.orders.fraud.client;
 
-import ca.bestbuy.orders.fraud.model.client.resourceapi.data.ResourceApiRequest;
+import ca.bestbuy.orders.fraud.model.client.resourcesapi.ResourceApiRequest;
 import ca.bestbuy.orders.fraud.utility.HttpClientUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.MalformedURLException;
-
 @Service
-public class ResourceApiCaller {
+public class ResourceApiClientImpl {
 
     @Autowired
-    ResourceServiceClientConfig config;
+    ResourceApiClientConfig config;
 
-    public String callForData(ResourceApiRequest request) {
+    public String getData(ResourceApiRequest request) {
 
         RestTemplate restTemplate=getRestTemplate();
 
@@ -27,9 +24,11 @@ public class ResourceApiCaller {
             throw new IllegalStateException("The URL or endpoint for resource Service is null or empty. Please double check the following properties in the configuration - 'client.resource-service.connection.url' and 'client.resource-service.endpoint'");
         }
 
-        String url = resourceServiceUrl + resourceServiceEndPoint;
+        String url = new StringBuilder()
+            .append(resourceServiceUrl)
+            .append(resourceServiceEndPoint).toString();
 
-        String responseStr = restTemplate.postForObject(url,request,String.class);
+        String responseStr = restTemplate.postForObject(url, request, String.class);
 
         return responseStr;
     }
