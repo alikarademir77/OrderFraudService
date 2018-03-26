@@ -79,14 +79,15 @@ client:
       truststore-password: ~
       truststore-type: JKS
       tls-enabled: false
+
   resource-service:
     connection:
       url: https://di-bbyca-resourceservice-corp.ca.bestbuy.com
       endpoint: /aggregator
-      keystore-path: file:/Users/kundsing/projects/order-fraud-service/src/main/resources/secure/oms-client.pfx
+      keystore-path: classpath:secure/oms-client.pfx
       keystore-password: mccp123
       key-password: mccp123
-      truststore-path: file:/Users/kundsing/projects/order-fraud-service/src/main/resources/secure/cacerts
+      truststore-path: classpath:secure/cacerts
       truststore-password: changeit
       tls-enabled: true
 

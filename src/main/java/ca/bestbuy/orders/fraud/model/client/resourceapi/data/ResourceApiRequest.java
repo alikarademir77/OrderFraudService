@@ -6,15 +6,9 @@ import lombok.Setter;
 
 import java.util.List;
 
-/**
- * Created by kundsing on 2018-03-22.
- */
+@Setter @Getter
 public class ResourceApiRequest {
 
-
-
     @JsonProperty("requests")
-    @Getter
-    @Setter
-    List<ResourceApiItem> resourceApiItemList;
+    private List<ResourceApiItem> resourceApiItemList;
 }

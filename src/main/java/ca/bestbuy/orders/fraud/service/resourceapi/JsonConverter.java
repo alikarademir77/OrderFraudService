@@ -2,7 +2,9 @@ package ca.bestbuy.orders.fraud.service.resourceapi;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ca.bestbuy.orders.fraud.model.client.resourceapi.ProductDetail;
 import ca.bestbuy.orders.fraud.model.client.resourceapi.data.RequestHeaders;
@@ -12,13 +14,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 @Slf4j
+@Service
 public class JsonConverter {
-
-    @Autowired
-    ResourceServiceClientConfig config;
 
     private String accept="application/vnd.bestbuy.productdetails+json";
 
@@ -37,7 +38,7 @@ public class JsonConverter {
             requestHeaders.setAccept(accept);
             ResourceApiItem resourceApiItem = new ResourceApiItem();
             resourceApiItem.setHeaders(requestHeaders);
-            resourceApiItem.setId("catalog/products/"+sku +"/details");
+            resourceApiItem.setId(formResourceApiIdBySku(sku));
             resourceApiItemList.add(resourceApiItem);
         }
         resourceApiRequest.setResourceApiItemList(resourceApiItemList);
@@ -45,26 +46,29 @@ public class JsonConverter {
         return resourceApiRequest;
     }
 
-    public List<ProductDetail> toProductDetail(List<String> listOfIds,String jsonResult) {
+    public Map<String,ProductDetail> toProductDetail(List<String> skuList,String jsonResult) {
 
         if(jsonResult == null || jsonResult.trim().equals("")){
             throw new IllegalArgumentException("Response from resource service is empty");
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
-        List<ProductDetail> listOfProductDetail = new ArrayList<>();
+        Map<String, ProductDetail> productDetailMap = new HashMap<>();
         try {
             JsonNode responseJsonNode = objectMapper.readTree(jsonResult);
-            for (String id:listOfIds){
-                ProductDetail productDetail = getProductDetail(id,responseJsonNode);
-                listOfProductDetail.add(productDetail);
+            for (String sku : skuList){
+                ProductDetail productDetail = getProductDetail(formResourceApiIdBySku(sku),responseJsonNode);
+                System.out.println("+++++++++++++++++++++++++++++++++ ");
+                if (productDetail.getSku() != null) {
+                    productDetailMap.put(sku, productDetail);
+                }
             }
         } catch (IOException e) {
             log.error("Response is not valid " + jsonResult , e);
-            throw new IllegalArgumentException("Respons is not JSON format", e);
+            throw new IllegalArgumentException("Response is not JSON format", e);
         }
 
-        return listOfProductDetail;
+        return productDetailMap;
 
     }
 
@@ -86,10 +90,10 @@ public class JsonConverter {
             log.info("Error  for id :" + id + "error message :" + errorMessage);
 
         }
-
-
         return productDetail;
+    }
 
-
+    private String formResourceApiIdBySku(String sku) {
+        return new StringBuilder().append("catalog/products/").append(sku).append("/details").toString();
     }
 }

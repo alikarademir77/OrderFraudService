@@ -39,6 +39,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.service.resourceapi.ResourceServiceClientConfig;
 
 /**
  * @author akaradem
@@ -55,6 +56,9 @@ public class FraudRequestStatusHistoryRepositoryTest {
 
 	@MockBean
 	OrderDetailsClient orderDetailsClient;
+
+	@MockBean
+	private ResourceServiceClientConfig resourceServiceClientConfig;
 
 	@MockBean
 	private FraudServiceTASClientConfig fraudServiceTASClientConfig;

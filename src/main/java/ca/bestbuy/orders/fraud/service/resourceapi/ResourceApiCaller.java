@@ -15,6 +15,7 @@ public class ResourceApiCaller {
 
     @Autowired
     ResourceServiceClientConfig config;
+
     public String callForData(ResourceApiRequest request) {
 
         RestTemplate restTemplate=getRestTemplate();
@@ -36,15 +37,14 @@ public class ResourceApiCaller {
     public RestTemplate getRestTemplate(){
 
         HttpClientUtility httpClientUtility = new HttpClientUtility();
-        try {
-            httpClientUtility.setKeystore(new UrlResource(config.getKeystorePath()));
-            httpClientUtility.setTruststore(new UrlResource(config.getTruststorePath()));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+
+        httpClientUtility.setKeystore(config.getKeystorePath());
+        httpClientUtility.setTruststore(config.getTruststorePath());
+
         httpClientUtility.setKeystorePassword(config.getKeystorePassword());
         httpClientUtility.setKeyPassword(config.getKeyPassword());
         httpClientUtility.setTruststorePassword(config.getTruststorePassword());
+
         return new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClientUtility.createHttpClient(config.getTlsEnabled(),false)));
     }
 }

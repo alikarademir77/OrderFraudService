@@ -5,13 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter @Setter
 public class ResourceApiItem {
 
     @JsonProperty("id")
-    @Getter @Setter String id;
+    private String id;
 
     @JsonProperty("headers")
-    @Getter @Setter RequestHeaders headers;
+    private RequestHeaders headers;
 
 
 }
