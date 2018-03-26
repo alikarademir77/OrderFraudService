@@ -13,12 +13,22 @@ import java.net.MalformedURLException;
 @Service
 public class ResourceApiCaller {
 
-
+    @Autowired
+    ResourceServiceClientConfig config;
     public String callForData(ResourceApiRequest request) {
 
         RestTemplate restTemplate=getRestTemplate();
 
-        String responseStr = restTemplate.postForObject("https://di-bbyca-resourceservice-corp.ca.bestbuy.com/aggregator",request,String.class);
+        String resourceServiceUrl = config.getServiceUrl();
+        String resourceServiceEndPoint = config.getEndpoint();
+
+        if(resourceServiceUrl == null || resourceServiceUrl.isEmpty() || resourceServiceEndPoint == null || resourceServiceEndPoint.isEmpty()) {
+            throw new IllegalStateException("The URL or endpoint for resource Service is null or empty. Please double check the following properties in the configuration - 'client.resource-service.connection.url' and 'client.resource-service.endpoint'");
+        }
+
+        String url = resourceServiceUrl + resourceServiceEndPoint;
+
+        String responseStr = restTemplate.postForObject(url,request,String.class);
 
         return responseStr;
     }
@@ -27,14 +37,14 @@ public class ResourceApiCaller {
 
         HttpClientUtility httpClientUtility = new HttpClientUtility();
         try {
-            httpClientUtility.setKeystore(new UrlResource("file:/Users/kundsing/projects/order-fraud-service/src/main/resources/secure/oms-client.pfx"));
-            httpClientUtility.setTruststore(new UrlResource("file:/Users/kundsing/projects/order-fraud-service/src/main/resources/secure/cacerts"));
+            httpClientUtility.setKeystore(new UrlResource(config.getKeystorePath()));
+            httpClientUtility.setTruststore(new UrlResource(config.getTruststorePath()));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        httpClientUtility.setKeystorePassword("mccp123");
-        httpClientUtility.setKeyPassword("mccp123");
-        httpClientUtility.setTruststorePassword("changeit");
-        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClientUtility.createHttpClient(true,false)));
+        httpClientUtility.setKeystorePassword(config.getKeystorePassword());
+        httpClientUtility.setKeyPassword(config.getKeyPassword());
+        httpClientUtility.setTruststorePassword(config.getTruststorePassword());
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClientUtility.createHttpClient(config.getTlsEnabled(),false)));
     }
 }

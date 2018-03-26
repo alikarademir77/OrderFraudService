@@ -81,16 +81,13 @@ client:
       tls-enabled: false
   resource-service:
     connection:
-      url: http://localhost:8080/orderdetails
-      endpoint: /v1/fsorders
-      keystore-path: classpath:/secure/BBY-S-OMSCA-DEV.pfx
+      url: https://di-bbyca-resourceservice-corp.ca.bestbuy.com
+      endpoint: /aggregator
+      keystore-path: file:/Users/kundsing/projects/order-fraud-service/src/main/resources/secure/oms-client.pfx
       keystore-password: mccp123
-      keystore-type: PKCS12
-      key-alias: ~
       key-password: mccp123
-      truststore-path: classpath:/secure/fsvrTrustore
-      truststore-password: oidPayment
-      truststore-type: JKS
+      truststore-path: file:/Users/kundsing/projects/order-fraud-service/src/main/resources/secure/cacerts
+      truststore-password: changeit
       tls-enabled: true
 
 

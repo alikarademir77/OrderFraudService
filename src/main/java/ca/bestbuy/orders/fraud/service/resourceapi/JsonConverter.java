@@ -11,10 +11,14 @@ import ca.bestbuy.orders.fraud.model.client.resourceapi.data.ResourceApiRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 @Slf4j
 public class JsonConverter {
+
+    @Autowired
+    ResourceServiceClientConfig config;
 
     private String accept="application/vnd.bestbuy.productdetails+json";
 
