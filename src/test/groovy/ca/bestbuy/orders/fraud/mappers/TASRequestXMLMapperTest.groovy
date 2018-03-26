@@ -630,12 +630,16 @@ class TASRequestXMLMapperTest extends Specification {
 
     }
 
+
     void doExtraPaymentMethodsAssertions(PaymentMethods paymentMethods, PaymentDetails paymentDetails) {
 
 
         int numOfCreditCardPayments = paymentDetails.getCreditCards().size()
         int numOfGiftCardPayments = paymentDetails.getGiftCards().size()
         int numOfPayPalPayments = paymentDetails.getPayPals().size()
+
+        int giftCardsEndIndex = numOfCreditCardPayments+numOfGiftCardPayments
+        int payPalEndIndex = numOfCreditCardPayments+numOfGiftCardPayments+numOfPayPalPayments
 
         List<CaPaymentMethod> paymentMethodsList = paymentMethods.getPaymentMethod()
         List<PaymentDetails.CreditCard> creditCardsList = paymentDetails.getCreditCards()
@@ -645,6 +649,8 @@ class TASRequestXMLMapperTest extends Specification {
         int giftCardPaymentIndex;
         int payPalPaymentIndex;
 
+
+        //Iterate through the payment method list and verify that the credit card payment methods have been mapped
         for(creditCardPaymentIndex = 0; creditCardPaymentIndex < numOfCreditCardPayments; creditCardPaymentIndex++){
             assert paymentMethodsList.get(creditCardPaymentIndex).getPaymentMethodType() == PaymentMethodType.CREDITCARD
             assert paymentMethodsList.get(creditCardPaymentIndex).getCreditCard().getCreditCardType() == creditCardsList.get(creditCardPaymentIndex).creditCardType
@@ -662,27 +668,36 @@ class TASRequestXMLMapperTest extends Specification {
 
         }
 
-        for(giftCardPaymentIndex = creditCardPaymentIndex;  giftCardPaymentIndex < (numOfCreditCardPayments+numOfGiftCardPayments); giftCardPaymentIndex++){
+        //Iterate through the payment method list, starting with the index we left off at in the credit card iteration,
+        //and verify that the gift card payment methods have been mapped
+        for(giftCardPaymentIndex = creditCardPaymentIndex;  giftCardPaymentIndex < giftCardsEndIndex; giftCardPaymentIndex++){
+
+            //this is the gift card index in the list we mapped from.
+            int giftCardIndexInGiftCardList = giftCardPaymentIndex-numOfCreditCardPayments
 
             assert paymentMethodsList.get(giftCardPaymentIndex).getPaymentMethodType() == PaymentMethodType.GIFTCARD
-            assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard().getGiftCardNumber() == giftCardList.get(giftCardPaymentIndex-numOfCreditCardPayments).giftCardNumber
-            assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard().getTotalGiftCardAuthAmount() == giftCardList.get(giftCardPaymentIndex-numOfCreditCardPayments).totalAuthorizedAmount.toString()
+            assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard().getGiftCardNumber() == giftCardList.get(giftCardIndexInGiftCardList).giftCardNumber
+            assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard().getTotalGiftCardAuthAmount() == giftCardList.get(giftCardIndexInGiftCardList).totalAuthorizedAmount.toString()
 
 
             assert paymentMethodsList.get(giftCardPaymentIndex).getCreditCard() == null
             assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals() == null
         }
 
-        for(payPalPaymentIndex = giftCardPaymentIndex; payPalPaymentIndex < (numOfCreditCardPayments+numOfGiftCardPayments+numOfPayPalPayments); payPalPaymentIndex++) {
+        //Iterate through the payment method list and verify that the pay pal payment methods have been mapped
+        for(payPalPaymentIndex = giftCardPaymentIndex; payPalPaymentIndex < payPalEndIndex; payPalPaymentIndex++) {
 
-            assert paymentMethodsList.get(giftCardPaymentIndex).getPaymentMethodType() == PaymentMethodType.PAYPAL
-            assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalEmail() == payPalList.get(payPalPaymentIndex-(numOfGiftCardPayments+numOfCreditCardPayments)).email
-            assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalRequestId() == payPalList.get(payPalPaymentIndex-(numOfGiftCardPayments+numOfCreditCardPayments)).requestID
-            assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalStatus() == payPalList.get(payPalPaymentIndex-(numOfGiftCardPayments+numOfCreditCardPayments)).verifiedStatus
-            assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getTotalPaypalAuthAmt() == payPalList.get(payPalPaymentIndex-(numOfGiftCardPayments+numOfCreditCardPayments)).totalAuthorizedAmount.toString()
+            //this is the paypal index in the list we mapped from.
+            int payPalIndexInPayPalList = payPalPaymentIndex-giftCardsEndIndex
 
-            assert paymentMethodsList.get(giftCardPaymentIndex).getCreditCard() == null
-            assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard() == null
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaymentMethodType() == PaymentMethodType.PAYPAL
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalEmail() == payPalList.get(payPalIndexInPayPalList).email
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalRequestId() == payPalList.get(payPalIndexInPayPalList).requestID
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalStatus() == payPalList.get(payPalIndexInPayPalList).verifiedStatus
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getTotalPaypalAuthAmt() == payPalList.get(payPalIndexInPayPalList).totalAuthorizedAmount.toString()
+
+            assert paymentMethodsList.get(payPalPaymentIndex).getCreditCard() == null
+            assert paymentMethodsList.get(payPalPaymentIndex).getGiftCard() == null
         }
 
 
