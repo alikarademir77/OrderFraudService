@@ -26,8 +26,7 @@ class WebClientUtilityConfigureTimeoutsTest extends Specification {
 
         then:
 
-        final IllegalArgumentException exception = thrown()
-        exception.message.contains("TimeoutConfig")
+        noExceptionThrown()
     }
 
 

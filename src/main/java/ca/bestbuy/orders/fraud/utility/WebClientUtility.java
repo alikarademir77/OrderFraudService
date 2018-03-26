@@ -30,6 +30,11 @@ public final class WebClientUtility {
     }
 
 
+    /**
+     * Create RestTemplate with no SSL configured
+     *
+     * @param timeoutConfig @Nullable Configuration that contains timeouts if desired
+     */
     public static RestTemplate createRestTemplate(TimeoutConfig timeoutConfig) {
         HttpClientBuilder builder = HttpClientBuilder.create();
         configureTimeouts(builder, timeoutConfig);
@@ -37,6 +42,14 @@ public final class WebClientUtility {
     }
 
 
+    /**
+     * Create RestTemplate with no SSL configured
+     *
+     * @param timeoutConfig @Nullable Configuration that contains timeouts
+     * @param keystoreConfig @NotNull Configuration that contains keystore-related configurations
+     * @param truststoreConfig @NotNull Configuration that contains truststore-related configurations
+     * @param verifyHostname Flag to indicate if hostname verification should be enabled
+     */
     public static RestTemplate createRestTemplateWithSSL(TimeoutConfig timeoutConfig, KeystoreConfig keystoreConfig, TruststoreConfig truststoreConfig, boolean verifyHostname) {
         HttpClientBuilder builder = HttpClientBuilder.create();
         configureTimeouts(builder, timeoutConfig);
@@ -50,8 +63,8 @@ public final class WebClientUtility {
      * <p>
      * NOTE: If your HttpClientBuilder already has a DefaultRequestConfig set, this method will overwrite it
      *
-     * @param builder HttpClientBuilder to configure timeouts on
-     * @param timeoutConfig Configuration that contains timeouts
+     * @param builder @NotNull HttpClientBuilder to configure timeouts on
+     * @param timeoutConfig @Nullable Configuration that contains timeouts
      * @return The input HttpClientBuilder provided with timeouts configured
      */
     public static HttpClientBuilder configureTimeouts(HttpClientBuilder builder, TimeoutConfig timeoutConfig) {
@@ -60,28 +73,27 @@ public final class WebClientUtility {
             throw new IllegalArgumentException("HttpClientBuilder provided must not be null");
         }
 
-        if (timeoutConfig == null) {
-            throw new IllegalArgumentException("TimeoutConfig provided must not be null");
+        if (timeoutConfig != null) {
+
+            // Get timeouts from config
+            Integer connectionTimeout = timeoutConfig.getConnectionTimeout();
+            Integer requestTimeout = timeoutConfig.getRequestTimeout();
+
+            RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
+
+            // Set connection timeout if set
+            if (connectionTimeout != null) {
+                requestConfigBuilder.setConnectTimeout(connectionTimeout);
+            }
+
+            // Set request timeout if set
+            if (requestTimeout != null) {
+                requestConfigBuilder.setSocketTimeout(requestTimeout);
+            }
+
+            // Add to builder
+            builder.setDefaultRequestConfig(requestConfigBuilder.build());
         }
-
-        // Get timeouts from config
-        Integer connectionTimeout = timeoutConfig.getConnectionTimeout();
-        Integer requestTimeout = timeoutConfig.getRequestTimeout();
-
-        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
-
-        // Set connection timeout if set
-        if (connectionTimeout != null) {
-            requestConfigBuilder.setConnectTimeout(connectionTimeout);
-        }
-
-        // Set request timeout if set
-        if (requestTimeout != null) {
-            requestConfigBuilder.setSocketTimeout(requestTimeout);
-        }
-
-        // Add to builder
-        builder.setDefaultRequestConfig(requestConfigBuilder.build());
 
         return builder;
     }
@@ -90,9 +102,9 @@ public final class WebClientUtility {
     /**
      * Configures SSL on an HTTPClientBuilder as specified in the keystore/truststore configuration objects provided
      *
-     * @param builder HttpClientBuilder to configure SSL on
-     * @param keystoreConfig Configuration that contains keystore-related configurations
-     * @param truststoreConfig Configuration that contains truststore-related configurations
+     * @param builder @NotNull HttpClientBuilder to configure SSL on
+     * @param keystoreConfig @NotNull Configuration that contains keystore-related configurations
+     * @param truststoreConfig @NotNull Configuration that contains truststore-related configurations
      * @param verifyHostname Flag to indicate if hostname verification should be enabled
      * @return The input HttpClientBuilder provided with SSL configured
      */
@@ -181,7 +193,7 @@ public final class WebClientUtility {
      */
     private static void validateTruststoreConfig(TruststoreConfig truststoreConfig) {
 
-        if(truststoreConfig == null) {
+        if (truststoreConfig == null) {
             throw new IllegalArgumentException("TruststoreConfig must not be null");
         }
 
