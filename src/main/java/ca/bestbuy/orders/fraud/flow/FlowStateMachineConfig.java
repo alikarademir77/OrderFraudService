@@ -28,7 +28,7 @@ import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
 import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
 import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 import ca.bestbuy.orders.messaging.MessagingEvent;
 import lombok.extern.slf4j.Slf4j;
 
@@ -150,7 +150,7 @@ public class FlowStateMachineConfig
 				if ((existenceCheckResultObj != null) 
 						&& (existenceCheckResultObj.getOrderNumber().equals(orderNumber))
 						&& (existenceCheckResultObj.getRequestVersion().longValue() == requestVersion.longValue())
-						&& (existenceCheckResultObj.getFraudStatus().getFraudStatusCode()==FraudStatus.FraudStatusCodes.INITIAL_REQUEST)) {
+						&& (existenceCheckResultObj.getFraudStatusStateMachine().getState().getId()==FraudStatusCodes.INITIAL_REQUEST)) {
 					
 					return true;
 				}
@@ -178,7 +178,7 @@ public class FlowStateMachineConfig
 				if ((existenceCheckResultObj != null) 
 						&& (existenceCheckResultObj.getOrderNumber().equals(orderNumber))
 						&& (existenceCheckResultObj.getRequestVersion().longValue() == requestVersion.longValue())
-						&& readyForReplyStatusCodes().contains(existenceCheckResultObj.getFraudStatus().getFraudStatusCode())) {
+						&& readyForReplyStatusCodes().contains(existenceCheckResultObj.getFraudStatusStateMachine().getState().getId())) {
 					
 					return true;
 				}
@@ -254,10 +254,10 @@ public class FlowStateMachineConfig
 	}
 		
 	
-	private List<FraudStatus.FraudStatusCodes> readyForReplyStatusCodes() {
-		return Arrays.asList(new FraudStatus.FraudStatusCodes[]{
-				FraudStatus.FraudStatusCodes.DECISION_MADE,
-				FraudStatus.FraudStatusCodes.PENDING_REVIEW
+	private List<FraudStatusCodes> readyForReplyStatusCodes() {
+		return Arrays.asList(new FraudStatusCodes[]{
+				FraudStatusCodes.FINAL_DECISION,
+				FraudStatusCodes.PENDING_REVIEW
 		});
 	}
 

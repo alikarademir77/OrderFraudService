@@ -20,6 +20,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 import ca.bestbuy.orders.messaging.MessagingEvent;
 
 @Component
@@ -47,13 +48,12 @@ public class CreateInitialRequestAcion implements Action<FlowStates, FlowEvents>
 
 		FraudRequestType.RequestTypeCodes requestTypeCode = FraudRequestType.RequestTypeCodes.findByEventType(event.getType());
 		FraudRequestType fraudRequestType = typeRepository.findOne(requestTypeCode);
-		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.INITIAL_REQUEST);
+		FraudStatus status = statusRepository.findOne(FraudStatusCodes.INITIAL_REQUEST);
 
 		FraudRequest request = new FraudRequest();
 
 		Date now = new Date();
 		request.setFraudRequestType(fraudRequestType)
-				.setFraudStatus(status)
 				.setEventDate(event.getMessageCreationDate())
 				.setOrderNumber(new BigDecimal(event.getOrderNumber()))
 				.setRequestVersion(Long.valueOf(event.getRequestVersion()))
@@ -65,7 +65,6 @@ public class CreateInitialRequestAcion implements Action<FlowStates, FlowEvents>
 		FraudRequestStatusHistory history = new FraudRequestStatusHistory();
 		
 		history.setFraudRequest(request)
-				.setFraudStatus(status)
 				.setCreateDate(now)
 				.setCreateUser(userName)
 				.setUpdateDate(now)

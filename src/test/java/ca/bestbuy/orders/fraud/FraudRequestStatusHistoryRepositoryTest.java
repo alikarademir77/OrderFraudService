@@ -11,11 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
-import ca.bestbuy.orders.fraud.client.FraudServiceTASClientConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +25,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
+import ca.bestbuy.orders.fraud.client.FraudServiceTASClientConfig;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClientConfig;
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
@@ -39,6 +37,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 
 /**
  * @author akaradem
@@ -74,7 +73,7 @@ public class FraudRequestStatusHistoryRepositoryTest {
 	@Autowired
 	FraudRequestRepository fraudRequestRepository;
 
-	// @Test
+	@Test
 	@Transactional
 	public void testFraudRequestStatusHistoryRetrieval() {
 		String orderNumber = "123456";
@@ -141,14 +140,13 @@ public class FraudRequestStatusHistoryRepositoryTest {
 	// private
 	private FraudRequest createAndSaveFraudRequest(String orderNumber, long requestVersion) {
 		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypeCodes.FRAUD_CHECK);
-		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.INITIAL_REQUEST);
+		FraudStatus status = statusRepository.findOne(FraudStatusCodes.INITIAL_REQUEST);
 
 		String userName = "order_fraud_test";
 		Date now = new Date();
 
 		FraudRequest request = new FraudRequest();
 		request.setFraudRequestType(fraudCheckType)
-				.setFraudStatus(status)
 				.setEventDate(now)
 				.setOrderNumber(new BigDecimal(orderNumber))
 				.setRequestVersion(requestVersion)
@@ -160,7 +158,6 @@ public class FraudRequestStatusHistoryRepositoryTest {
 		FraudRequestStatusHistory history = new FraudRequestStatusHistory();
 
 		history.setFraudRequest(request)
-				.setFraudStatus(status)
 				.setCreateDate(now)
 				.setCreateUser(userName)
 				.setUpdateDate(now)

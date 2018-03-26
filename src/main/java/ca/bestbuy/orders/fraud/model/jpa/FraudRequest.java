@@ -10,6 +10,9 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +24,11 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.config.StateMachineFactory;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,6 +44,7 @@ import lombok.experimental.Accessors;
  * The persistent class for the FRAUDREQUEST database table.
  * 
  */
+@EntityListeners(FraudRequestEntityListener.class)
 @SuppressWarnings("serial")
 @TableGenerator(name = "orderFraudIdGenerator", schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUD_RQST_ID")
 @Entity
@@ -67,16 +76,31 @@ public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 	@JoinColumn(name="REQUEST_TYPE_CODE")
 	private FraudRequestType fraudRequestType;
 
-	//uni-directional many-to-one association to FraudStatus
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="FRAUD_STATUS_CODE")
-	private FraudStatus fraudStatus;
-
 	//bi-directional many-to-one association to FraudRquestHistory
 	@OneToMany(mappedBy="fraudRequest", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	private List<FraudRequestStatusHistory> fraudRequestStatusHistory;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "FRAUD_STATUS_CODE")
+	FraudStatusCodes fraudStatusCode;//The field is declared as package access level so FraudRequestStatusHistoryEntityListener can set it in prePersist event
+
+	@Getter
+	@Transient
+    private StateMachine<FraudStatusCodes, FraudStatusEvents> fraudStatusStateMachine;
+
 	public FraudRequest() {
+		AnnotationConfigApplicationContext context = null;
+		try{
+			context = new AnnotationConfigApplicationContext(FraudStatusStateMachineConfig.class);
+			StateMachineFactory<FraudStatusCodes, FraudStatusEvents> factory = context.getBean(StateMachineFactory.class);
+			fraudStatusStateMachine = factory.getStateMachine("FraudRequestSM");
+			fraudStatusStateMachine.start();
+		}finally {
+			if(context!=null){
+				context.close();
+			}
+		}
+
 	}
 
 	public FraudRequestStatusHistory addFraudRequestStatusHistory(FraudRequestStatusHistory fraudRequestStatusHistory) {

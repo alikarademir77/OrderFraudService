@@ -33,6 +33,7 @@ import ca.bestbuy.orders.fraud.flow.FlowEvents;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig;
 import ca.bestbuy.orders.fraud.flow.FlowStates;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.MessagingEvent;
 
@@ -68,7 +69,7 @@ public class FraudStatusRepositoryTest {
 	@Transactional
 	public void testFindAll(){
 		Iterable<FraudStatus> it = fraudStatusRepository.findAll();
-		List<FraudStatus.FraudStatusCodes> allStatusList  = Arrays.asList(FraudStatus.FraudStatusCodes.values());
+		List<FraudStatusCodes> allStatusList  = Arrays.asList(FraudStatusCodes.values());
 
 		for(FraudStatus status:it){
 			assertTrue(allStatusList.contains(status.getFraudStatusCode()));
@@ -78,9 +79,9 @@ public class FraudStatusRepositoryTest {
 	//@Test
 	@Transactional
 	public void testFindOne(){
-		FraudStatus fraudStatus = fraudStatusRepository.findOne(FraudStatus.FraudStatusCodes.PENDING_REVIEW);
+		FraudStatus fraudStatus = fraudStatusRepository.findOne(FraudStatusCodes.PENDING_REVIEW);
 		
-		assertEquals(FraudStatus.FraudStatusCodes.PENDING_REVIEW,fraudStatus.getFraudStatusCode());
+		assertEquals(FraudStatusCodes.PENDING_REVIEW,fraudStatus.getFraudStatusCode());
 		
 	}
 

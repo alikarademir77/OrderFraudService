@@ -24,6 +24,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.model.jpa.FraudStatusEvents;
 import ca.bestbuy.orders.messaging.MessagingEvent;
 
 /**
@@ -83,13 +84,12 @@ public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 				
 			FraudStatus fraudStatus = null;
 			if(fraudResponseStatusCode == FraudAssesmentResult.FraudResponseStatusCodes.PENDING_REVIEW){
-				fraudStatus = statusRepository.findOne(FraudStatus.FraudStatusCodes.PENDING_REVIEW);
+				statusHistory.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.PENDING_REVIEW_RECEIVED);
 			}else if (decisionMadeResponseStatusCodes().contains(fraudResponseStatusCode)){
-				fraudStatus = statusRepository.findOne(FraudStatus.FraudStatusCodes.DECISION_MADE);
+				statusHistory.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.FINAL_DECISION_RECEIVED);
 			}else {
 				//TODO: Throw Exception
 			}
-			statusHistory.setFraudStatus(fraudStatus);
 			fraudRequest.getFraudRequestStatusHistory().add(statusHistory);
 			fraudRequestRepository.save(fraudRequest);
 			

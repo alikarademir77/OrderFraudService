@@ -35,7 +35,7 @@ public class OrderFraudServiceApplication {
 
 	@Autowired
 	private MessageConsumingService consumingService;
-
+	
 	public static void main(String[] args) {
 
 		SpringApplication.run(OrderFraudServiceApplication.class, args);
