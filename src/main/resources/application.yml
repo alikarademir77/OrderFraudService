@@ -9,6 +9,7 @@ spring:
     active: dev
 
 ---
+#### DEVELOPMENT ####
 
 spring:
   profiles: dev
@@ -19,7 +20,6 @@ spring:
     username: guest
     password: guest
     virtual-host: orders
-
   cloud:
     stream:
       bindings:
@@ -27,7 +27,7 @@ spring:
           destination: fraudInbound
           group: fraudInboundConsumersGroup
           consumer:
-            concurrency:  20
+            concurrency: 20
             maxAttempts: 1
         fraudOutbound:
           destination: fraudOutbound
@@ -35,13 +35,13 @@ spring:
         bindings:
           fraudInbound:
             consumer:
-              autoBindDlq:  true
+              autoBindDlq: true
               dlqTtl: 10000
               republishToDlq: true
               #Using default exchange so dlqDeadLetterExchange is assigned to empty string
               dlqDeadLetterExchange:
       default:
-        contentType:  application/json
+        contentType: application/json
 
 ###
 #   Database Settings
@@ -65,20 +65,48 @@ spring:
 messaging:
   errorRetryCount: 3
 
+
+logging:
+  level:
+    ca.bestbuy: DEBUG
+    # ROOT: WARN means that any logging context not matching a context described above will be filtered to level WARN
+    ROOT: INFO
+
+# Configuration for any services that Order Fraud Service will need to call
 client:
   order-details:
     connection:
-      url: http://localhost:8080/orderdetails
-      getOrderDetailsEndpoint: /v1/fsorders
-      keystore-path: ~
-      keystore-password: ~
-      keystore-type: ~
-      key-alias: ~
-      key-password: ~
-      truststore-path: ~
-      truststore-password: ~
-      truststore-type: JKS
-      tls-enabled: false
+      # REQUIRED
+      url: dummyUrl
+      # REQUIRED - REST endpoint for getOrderDetails
+      getOrderDetailsEndpoint: dummy
+      timeout:
+        # Timeout for establishing a connection (in milliseconds)
+        connection: ~
+        # Timeout for waiting for response after request is sent (in milliseconds)
+        request: ~
+      ssl:
+        # REQUIRED - Indicates whether SSL is enabled (true/false)
+        enabled: false
+        # Indicates whether hostname verification should be enabled (true/false, default: true)
+        verify-hostname: ~
+        # REQUIRED (only if ssl.enabled = true) - Path to keystore (JKS or PKCS#12)
+        # - If specifying a system file, add prefix with 'file:'
+        # - If specifying a classpath file, add prefix with 'classpath:'
+        keystore: ~
+        # REQUIRED (only if ssl.enabled = true)
+        keystore-password: ~
+        # OPTIONAL - Alias of key-entry
+        key-alias: ~
+        # OPTIONAL - Password of key
+        # Note: If not set, will use keystore-password as key-password
+        key-password: ~
+        # REQUIRED (only if ssl.enabled = true) - Path to truststore (JKS or PKCS#12)
+        # - If specifying a system file, add prefix with 'file:'
+        # - If specifying a classpath file, add prefix with 'classpath:'
+        truststore: ~
+        # REQUIRED (only if ssl.enabled = true)
+        truststore-password: ~
 
   resource-service:
     connection:
@@ -91,39 +119,48 @@ client:
       truststore-password: changeit
       tls-enabled: true
 
-
-
   tas:
     connection:
+      # REQUIRED
       url: dummyUrl
-      fraudCheckOperation: fraudMockService
-      hostname: dummyHost
-      connectionTimeout: 10000
-      readTimeout: 15000
+      # REQUIRED - SOAP action callback for fraudCheck operation
+      fraudcheck-soap-action-callback: fraudMockService
+      timeout:
+        # Timeout for establishing a connection (in milliseconds)
+        connection: ~
+        # Timeout for waiting for response after request is sent (in milliseconds)
+        request: ~
       ssl:
-        verify-hostname: false
-        key-alias: ~
-        keystore-path: ~
+        # REQUIRED - Indicates whether SSL is enabled (true/false)
+        enabled: false
+        # Indicates whether hostname verification should be enabled (true/false, default: true)
+        verify-hostname: ~
+        # REQUIRED (only if ssl.enabled = true) - Path to keystore (JKS or PKCS#12)
+        # - If specifying a system file, add prefix with 'file:'
+        # - If specifying a classpath file, add prefix with 'classpath:'
+        keystore: ~
+        # REQUIRED (only if ssl.enabled = true)
         keystore-password: ~
-        keystore-type: JKS
-        truststore-path: ~
+        # OPTIONAL - Alias of key-entry
+        key-alias: ~
+        # OPTIONAL - Password of key
+        # Note: If not set, will use keystore-password as key-password
+        key-password: ~
+        # REQUIRED (only if ssl.enabled = true) - Path to truststore (JKS or PKCS#12)
+        # - If specifying a system file, add prefix with 'file:'
+        # - If specifying a classpath file, add prefix with 'classpath:'
+        truststore: ~
+        # REQUIRED (only if ssl.enabled = true)
         truststore-password: ~
-        truststore-type: JKS
-        tls-enabled: false
-
-logging:
-  level:
-    ca.bestbuy: DEBUG
-    # ROOT: WARN means that any logging context not matching a context described above will be filtered to level WARN
-    ROOT: INFO
-
 ---
+#### UNIT TEST ####
+
+spring:
+  profiles: unittest
 
 ###
 #   Unittest Database Settings
 ###
-spring:
-  profiles: unittest
   datasource:
     url: jdbc:h2:mem:order-fraud;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     platform: h2
@@ -141,7 +178,6 @@ spring:
         show_sql: true
         use_sql_comments: true
         format_sql: true
-
 ###
 #   Unittest H2 Settings
 ###

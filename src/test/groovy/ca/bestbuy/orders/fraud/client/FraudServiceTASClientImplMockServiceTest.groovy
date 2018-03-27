@@ -16,7 +16,7 @@ import spock.lang.Specification
 
 import javax.xml.transform.Source
 
-class FraudServiceTASClientImplTest extends Specification {
+class FraudServiceTASClientImplMockServiceTest extends Specification {
 
 
     MockWebServiceServer mockServer
@@ -28,14 +28,14 @@ class FraudServiceTASClientImplTest extends Specification {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller()
         marshaller.setContextPath("ca.bestbuy.orders.fraud.model.client.accertify.wsdl")
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate()
-        webServiceTemplate.setDefaultUri("defaultURI")
         webServiceTemplate.setMarshaller(marshaller)
         webServiceTemplate.setUnmarshaller(marshaller)
 
-        client = new FraudServiceTASClientImpl(Mappers.getMapper(TASRequestXMLMapper.class), Mappers.getMapper(TASResponseXMLMapper.class), webServiceTemplate, "...")
+        client = new FraudServiceTASClientImpl(Mappers.getMapper(TASRequestXMLMapper.class), Mappers.getMapper(TASResponseXMLMapper.class), webServiceTemplate)
+        client.setTasBaseUrl("url")
+        client.setFraudcheckSOAPActionCallback("callback")
 
         mockServer = MockWebServiceServer.createServer(webServiceTemplate)
-
     }
 
 
@@ -83,7 +83,7 @@ class FraudServiceTASClientImplTest extends Specification {
     }
 
 
-    private Order createTestOrder() {
+    private static Order createTestOrder() {
         Order fraudOrder = new Order();
 
         List<Item> itemList = new ArrayList<>();
@@ -105,7 +105,6 @@ class FraudServiceTASClientImplTest extends Specification {
         fraudOrder.setItems(itemList)
 
         return fraudOrder
-
     }
 
 
