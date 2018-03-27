@@ -102,7 +102,6 @@ public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 			StateMachineFactory<FraudStatusCodes, FraudStatusEvents> factory = context.getBean("FraudStatusStateMachine", StateMachineFactory.class);
 			fraudStatusStateMachine = factory.getStateMachine("FraudRequestSM");
 			fraudStatusStateMachine.addStateListener(new StateMachineEventListener(this));
-			fraudStatusStateMachine.start();
 		}finally {
 			if(context!=null){
 				context.close();

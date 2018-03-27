@@ -58,7 +58,9 @@ public class FlowStateMachineConfig
 	@Override
 	public void configure(StateMachineConfigurationConfigurer<FlowStates, FlowEvents> config)
 			throws Exception {
-		config.withConfiguration().autoStartup(true);
+		config.
+			withConfiguration().
+				autoStartup(true);
 	}
 	
 	@Override

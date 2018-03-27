@@ -86,7 +86,6 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 			StateMachineFactory<FraudStatusCodes, FraudStatusEvents> factory = context.getBean("FraudStatusStateMachine", StateMachineFactory.class);
 			fraudStatusStateMachine = factory.getStateMachine("FraudRequestStatusHistorySM");
 			fraudStatusStateMachine.addStateListener(new StateMachineEventListener(this));
-			fraudStatusStateMachine.start();
 		}finally {
 			if(context!=null){
 				context.close();
