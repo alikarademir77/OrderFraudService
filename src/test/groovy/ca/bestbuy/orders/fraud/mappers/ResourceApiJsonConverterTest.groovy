@@ -75,14 +75,15 @@ class ResourceApiJsonConverterTest extends Specification{
         IllegalArgumentException ex = thrown()
         ex.message ==  "skuList cann't be empty"
     }
-    def "Test product detail for success department class subclass"() {
+    def "Test product detail (2 skus) for success department class subclass"() {
 
         given:
 
         List<String> skus = new ArrayList<>()
         skus.add("10362263")
+        skus.add("10071133")
 
-        String response = new File("src/test/resources/resourceapi/resource-api-response-with-one-notfound.json").text
+        String response = new File("src/test/resources/resourceapi/resource-api-response-with-2-product.json").text
         ResourceApiJsonConverter jsonConverter = new ResourceApiJsonConverter()
 
         when:
@@ -95,6 +96,11 @@ class ResourceApiJsonConverterTest extends Specification{
         result.get("10362263").department == "49"
         result.get("10362263").itemClass == "1"
         result.get("10362263").itemSubClass == "8"
+
+        result.get("10071133").sku == "10071133"
+        result.get("10071133").department == "44"
+        result.get("10071133").itemClass == "2"
+        result.get("10071133").itemSubClass == "3"
     }
     def "Test product detail department class subclass for sku not found"() {
 
