@@ -9,19 +9,10 @@ public class TruststoreConfig {
 
 
     /**
-     * @param truststore @NotNull Truststore
-     * @param truststorePassword @NotNull Password for truststore
+     * @param truststore Truststore
+     * @param truststorePassword Password for truststore
      */
     public TruststoreConfig(Resource truststore, String truststorePassword) {
-
-        if (truststore == null) {
-            throw new IllegalArgumentException("truststore provided cannot be null");
-        }
-
-        if (truststorePassword == null) {
-            throw new IllegalArgumentException("truststorePassword provided cannot be null");
-        }
-
         this.truststore = truststore;
         this.truststorePassword = truststorePassword;
     }

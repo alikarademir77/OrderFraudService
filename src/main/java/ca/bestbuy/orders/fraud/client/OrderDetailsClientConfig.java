@@ -15,7 +15,7 @@ import ca.bestbuy.orders.fraud.utility.TruststoreConfig;
 import ca.bestbuy.orders.fraud.utility.WebClientUtility;
 
 @Configuration
-public class OrderDetailsClientConfig {
+public class OrderDetailsClientConfig implements WebClientConfig {
 
 
     private String url;
@@ -140,51 +140,78 @@ public class OrderDetailsClientConfig {
 
     @Bean
     protected RestTemplate restTemplate() {
-
-        TimeoutConfig timeoutConfig = new TimeoutConfig(connectionTimeout, requestTimeout);
-
-        if(sslEnabled) {
+        if (sslEnabled) {
+            // We do some validation here on SSL configurations
             validateSSLConfigurations();
-            KeystoreConfig keystoreConfig = new KeystoreConfig(keystore, keystorePassword, keyAlias, keyPassword);
-            TruststoreConfig truststoreConfig = new TruststoreConfig(truststore, truststorePassword);
-            return WebClientUtility.createRestTemplateWithSSL(timeoutConfig, keystoreConfig, truststoreConfig, verifyHostName);
-        } else {
-            return WebClientUtility.createRestTemplate(timeoutConfig);
         }
+        return WebClientUtility.createRestTemplate(this);
+    }
+
+
+    @Override
+    public KeystoreConfig getKeystoreConfig() {
+        return new KeystoreConfig(keystore, keystorePassword, keyAlias, keyPassword);
+    }
+
+    @Override
+    public TruststoreConfig getTruststoreConfig() {
+        return new TruststoreConfig(truststore, truststorePassword);
+    }
+
+    @Override
+    public TimeoutConfig getTimeoutConfig() {
+        return new TimeoutConfig(requestTimeout, connectionTimeout);
+    }
+
+    @Override
+    public Boolean verifyHostname() {
+        return verifyHostName;
+    }
+
+    @Override
+    public Boolean sslEnabled() {
+        return sslEnabled;
     }
 
 
     private void validateSSLConfigurations() {
 
-        if(keystore == null) {
-            throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.keystore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+        if (keystore == null) {
+            throw new IllegalStateException(
+                "Please ensure that the configuration value for 'client.order-details.connection.ssl.keystore' is set. If reading from file system, use a prefix of 'file:'. If "
+                    + "reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
         }
 
         // UrlResource if using a prefix of 'file:'
         // ClassPathResource if using a prefix of 'classpath:'
         if (!(keystore instanceof UrlResource) && !(keystore instanceof ClassPathResource)) {
-            throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.keystore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+            throw new IllegalStateException(
+                "Please ensure that the configuration value for 'client.order-details.connection.ssl.keystore' is set. If reading from file system, use a prefix of 'file:'. If "
+                    + "reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
         }
 
-        if(keystorePassword == null) {
+        if (keystorePassword == null) {
             throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.keystore-password' is set.");
         }
 
-        if(truststore == null) {
-            throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.truststore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+        if (truststore == null) {
+            throw new IllegalStateException(
+                "Please ensure that the configuration value for 'client.order-details.connection.ssl.truststore' is set. If reading from file system, use a prefix of 'file:'. If"
+                    + " reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
         }
 
         // UrlResource if using a prefix of 'file:'
         // ClassPathResource if using a prefix of 'classpath:'
         if (!(truststore instanceof UrlResource) && !(truststore instanceof ClassPathResource)) {
-            throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.truststore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+            throw new IllegalStateException(
+                "Please ensure that the configuration value for 'client.order-details.connection.ssl.truststore' is set. If reading from file system, use a prefix of 'file:'. If"
+                    + " reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
         }
 
-        if(truststorePassword == null) {
+        if (truststorePassword == null) {
             throw new IllegalStateException("Please ensure that the configuration value for 'client.order-details.connection.ssl.truststore-password' is set.");
         }
 
     }
-
 
 }

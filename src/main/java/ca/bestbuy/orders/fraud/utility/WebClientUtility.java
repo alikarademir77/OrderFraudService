@@ -20,8 +20,10 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import ca.bestbuy.orders.fraud.client.WebClientConfig;
+
 /**
- * A utility class for creating web clients (REST, SOAP)
+ * A utility class for assisting with creating web clients
  */
 public final class WebClientUtility {
 
@@ -30,12 +32,41 @@ public final class WebClientUtility {
     }
 
 
+    public static RestTemplate createRestTemplate(WebClientConfig config) {
+
+        if (config == null) {
+            throw new IllegalArgumentException("WebClientConfig provided must not be null");
+        }
+
+        // Get timeout config
+        TimeoutConfig timeoutConfig = config.getTimeoutConfig();
+
+        // Get SSL enabled configuration
+        Boolean sslEnabled = config.sslEnabled() == null ? true : config.sslEnabled();
+
+        if (sslEnabled) {
+            // Get keystore configuration
+            KeystoreConfig keystoreConfig = config.getKeystoreConfig();
+            // Get truststore configuration
+            TruststoreConfig truststoreConfig = config.getTruststoreConfig();
+            // Get verify host name configuration
+            Boolean verifyHostname = config.verifyHostname() == null ? true : config.verifyHostname();
+
+            // Create RestTemplate with SSL
+            return createRestTemplateWithSSL(timeoutConfig, keystoreConfig, truststoreConfig, verifyHostname);
+        } else {
+            // Create RestTemplate with no SSL
+            return createRestTemplateWithNoSSL(timeoutConfig);
+        }
+    }
+
+
     /**
      * Create RestTemplate with no SSL configured
      *
      * @param timeoutConfig @Nullable Configuration that contains timeouts if desired
      */
-    public static RestTemplate createRestTemplate(TimeoutConfig timeoutConfig) {
+    protected static RestTemplate createRestTemplateWithNoSSL(TimeoutConfig timeoutConfig) {
         HttpClientBuilder builder = HttpClientBuilder.create();
         configureTimeouts(builder, timeoutConfig);
         return new RestTemplate(new HttpComponentsClientHttpRequestFactory(builder.build()));
@@ -50,7 +81,7 @@ public final class WebClientUtility {
      * @param truststoreConfig @NotNull Configuration that contains truststore-related configurations
      * @param verifyHostname Flag to indicate if hostname verification should be enabled
      */
-    public static RestTemplate createRestTemplateWithSSL(TimeoutConfig timeoutConfig, KeystoreConfig keystoreConfig, TruststoreConfig truststoreConfig, boolean verifyHostname) {
+    protected static RestTemplate createRestTemplateWithSSL(TimeoutConfig timeoutConfig, KeystoreConfig keystoreConfig, TruststoreConfig truststoreConfig, boolean verifyHostname) {
         HttpClientBuilder builder = HttpClientBuilder.create();
         configureTimeouts(builder, timeoutConfig);
         configureSSL(builder, keystoreConfig, truststoreConfig, verifyHostname);
