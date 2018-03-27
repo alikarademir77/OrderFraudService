@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
+import ca.bestbuy.orders.fraud.dao.FraudRequestStatusHistoryRepository;
 import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
 import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
 import ca.bestbuy.orders.fraud.flow.FlowEvents;
@@ -35,9 +37,8 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
 @Component
 public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 
-
-	//TODO Consider getting value from configuration
-	private String userName = "order_fraud_user";
+	@Value("${spring.datasource.username}")
+	private String userName;
 	
 	@Autowired
 	OrderDetailsClient orderDetailsClient;
@@ -46,6 +47,9 @@ public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 
 	@Autowired	
 	FraudRequestRepository fraudRequestRepository;
+	@Autowired	
+	FraudRequestStatusHistoryRepository StatusHistoryRepository;
+	
 	@Autowired
 	FraudStatusRepository statusRepository;
 	@Autowired
@@ -59,54 +63,67 @@ public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 		String orderNumber = messagingEvent.getOrderNumber();
 		String requestVersion = messagingEvent.getRequestVersion();
 		
-		
 		//TODO: Add Error Handling
 		Order orderDetails = orderDetailsClient.getOrderDetails(orderNumber);
+		
 		//TODO: Call Resource Service to populate item SKU Category details
 		
 		FraudAssesmentResult fraudAssesmentResult = fraudServiceTASClient.doFraudCheck(orderDetails);
-		
-		Iterable<FraudRequest> fraudRequestIt = 
-				fraudRequestRepository.findByOrderNumberAndRequestVersion(new BigDecimal(orderNumber), Long.valueOf(requestVersion, 10));
+		//TODO: Validate that response and request has same order number and request version
 				
-				//ByOrderNumberAndRequestVersion();
-		
-		if((fraudAssesmentResult!=null) && (fraudRequestIt!=null) && (fraudRequestIt.iterator().hasNext())){
-			FraudRequest fraudRequest =  fraudRequestIt.iterator().next();
-			FraudAssesmentResult.FraudResponseStatusCodes fraudResponseStatusCode = fraudAssesmentResult.getFraudResponseStatus();
+		if(fraudAssesmentResult!=null){
 
-			Date now = new Date();
-			//Set Status History
-			FraudRequestStatusHistory statusHistory = new FraudRequestStatusHistory();
-			statusHistory.setCreateDate(now);
-			statusHistory.setCreateUser(userName);
-			statusHistory.setUpdateDate(now);
-			statusHistory.setUpdateUser(userName);
-				
-			if(fraudResponseStatusCode == FraudAssesmentResult.FraudResponseStatusCodes.PENDING_REVIEW){
-				statusHistory.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.PENDING_REVIEW_RECEIVED);
-			}else if (decisionMadeResponseStatusCodes().contains(fraudResponseStatusCode)){
-				statusHistory.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.FINAL_DECISION_RECEIVED);
-			}else {
-				//TODO: Throw Exception
+			Iterable<FraudRequest> fraudRequestIt = 
+					fraudRequestRepository.findByOrderNumberAndRequestVersion(new BigDecimal(orderNumber), Long.valueOf(requestVersion, 10));
+			
+			if((fraudRequestIt!=null) && (fraudRequestIt.iterator().hasNext())){
+				FraudRequest fraudRequest =  fraudRequestIt.iterator().next();
+				persistInvocationResult(fraudAssesmentResult, fraudRequest);
 			}
-			fraudRequest.getFraudRequestStatusHistory().add(statusHistory);
-			fraudRequestRepository.save(fraudRequest);
-			
-			//Set FraudRequestStatusHistoryDetail
-			FraudRequestStatusHistoryDetail statusHistoryDetail = new FraudRequestStatusHistoryDetail();
-			statusHistoryDetail.setCreateDate(now);
-			statusHistoryDetail.setCreateUser(userName);
-			statusHistoryDetail.setFraudRequestStatusHistory(statusHistory);
-			statusHistoryDetail.setFraudRequestStatusHistoryId(statusHistory.getFraudRequestStatusHistoryId());
-			statusHistoryDetail.setTasRequest(fraudAssesmentResult.getTasRequest());
-			statusHistoryDetail.setTasResponse(fraudAssesmentResult.getTasResponse());
-			statusHistoryDetail.setUpdateDate(now);
-			statusHistoryDetail.setUpdateUser(userName);
-			
-			statusHistory.setFraudRequestStatusHistoryDetail(statusHistoryDetail);
-			fraudRequestRepository.save(fraudRequest);
+		
 		}
+	}
+
+	private void persistInvocationResult(FraudAssesmentResult fraudAssesmentResult, FraudRequest fraudRequest) {
+		FraudAssesmentResult.FraudResponseStatusCodes fraudResponseStatusCode = fraudAssesmentResult.getFraudResponseStatus();
+
+		Date now = new Date();
+		//Set Status History
+		FraudRequestStatusHistory statusHistory = new FraudRequestStatusHistory();
+		statusHistory.setCreateDate(now);
+		statusHistory.setCreateUser(userName);
+		statusHistory.setUpdateDate(now);
+		statusHistory.setUpdateUser(userName);
+		statusHistory.setFraudRequest(fraudRequest);
+		
+		if(fraudResponseStatusCode == FraudAssesmentResult.FraudResponseStatusCodes.PENDING_REVIEW){
+			statusHistory.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.PENDING_REVIEW_RECEIVED);
+			fraudRequest.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.PENDING_REVIEW_RECEIVED);
+		}else if (decisionMadeResponseStatusCodes().contains(fraudResponseStatusCode)){
+			statusHistory.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.FINAL_DECISION_RECEIVED);
+			fraudRequest.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.FINAL_DECISION_RECEIVED);
+		}else {
+			//TODO: Throw Exception
+		}
+		fraudRequest.getFraudRequestStatusHistory().add(statusHistory);
+		
+		//Set FraudRequestStatusHistoryDetail
+		FraudRequestStatusHistoryDetail statusHistoryDetail = new FraudRequestStatusHistoryDetail();
+		statusHistoryDetail.setCreateDate(now);
+		statusHistoryDetail.setCreateUser(userName);
+		statusHistoryDetail.setFraudRequestStatusHistory(statusHistory);
+		statusHistoryDetail.setFraudResponseStatusCode(fraudResponseStatusCode);
+		statusHistoryDetail.setTotalFraudScore(fraudAssesmentResult.getTotalFraudScore());
+		statusHistoryDetail.setRecommendationCode(fraudAssesmentResult.getRecommendationCode());
+		statusHistoryDetail.setAccertifyUser(fraudAssesmentResult.getAccertifyUser());
+		statusHistoryDetail.setAccertifyUserActionTime(fraudAssesmentResult.getAccertifyUserActionTime());
+		statusHistoryDetail.setTasRequest(fraudAssesmentResult.getTasRequest());
+		statusHistoryDetail.setTasResponse(fraudAssesmentResult.getTasResponse());
+		statusHistoryDetail.setUpdateDate(now);
+		statusHistoryDetail.setUpdateUser(userName);
+		
+		statusHistory.setFraudRequestStatusHistoryDetail(statusHistoryDetail);
+		fraudRequestRepository.save(fraudRequest);
 	}
 	
 	private List<FraudAssesmentResult.FraudResponseStatusCodes> decisionMadeResponseStatusCodes(){
@@ -117,4 +134,38 @@ public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 		});
 	}
 
+	//TODO: Remove
+//	private Order createTestOrder(){
+//
+//	    Order fraudOrder = new Order();
+//
+//
+//	    List<ShippingOrder> shippingOrders = new ArrayList<>();
+//	    ShippingOrder shippingOrder = new ShippingOrder();
+//	    shippingOrder.setTotalAuthorizedAmount(new BigDecimal(1500));
+//	    shippingOrders.add(shippingOrder);
+//	    fraudOrder.setShippingOrders(shippingOrders);
+//	    
+//	    List<Item> itemList = new ArrayList<>();
+//
+//	    Item item= new Item();
+//	    item.setFsoLineID("fsolineid");
+//	    item.setName("name");
+//	    item.setCategory("category");
+//	    item.setItemUnitPrice(new BigDecimal("9000"));
+//	    item.setItemQuantity(1);
+//	    item.setItemTax(new BigDecimal("0"));
+//	    item.setItemTotalDiscount(new BigDecimal("0"));
+//	    item.setStaffDiscount(new BigDecimal("0"));
+//	    item.setItemStatus("OPEN");
+//	    item.setItemSkuNumber("sku");
+//	    item.setItemSkuDescription("desc");
+//	    item.setPostCaptureDiscount(new BigDecimal("0"));
+//
+//	    itemList.add(item);
+//	    fraudOrder.setItems(itemList);
+//
+//	    return fraudOrder;
+//
+//	}
 }

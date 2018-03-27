@@ -5,7 +5,6 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -15,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PostLoad;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
@@ -22,6 +22,8 @@ import javax.persistence.Transient;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
+import org.springframework.statemachine.listener.StateMachineListenerAdapter;
+import org.springframework.statemachine.state.State;
 
 import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusEvents;
 import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusStateMachineConfig;
@@ -40,9 +42,8 @@ import lombok.experimental.Accessors;
  * The persistent class for the FRAUDREQUESTHISTORY database table.
  * 
  */
-@EntityListeners(FraudRequestStatusHistoryEntityListener.class)
 @SuppressWarnings("serial")
-@TableGenerator(name = "orderFraudIdGenerator",  schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUD_RQST_STATUS_HSTRY_ID")
+@TableGenerator(name = "orderFraudIdGenerator",  schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUD_RQST_STATUS_HSTRY_ID", allocationSize=10)
 @Entity
 @Access(AccessType.FIELD)
 @Table(name = "FRAUD_RQST_STATUS_HSTRY", schema="ORDER_FRAUD")
@@ -67,10 +68,8 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 	@JoinColumn(name="FRAUD_RQST_ID")
 	private FraudRequest fraudRequest;
 
-	// The getter/setter for the field is declared as package access level so
-	// FraudRequestStatusHistoryEntityListener can set it in prePersist event
-	@Getter(AccessLevel.PACKAGE)
-	@Setter(AccessLevel.PACKAGE)
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "FRAUD_STATUS_CODE")
 	private FraudStatusCodes fraudStatusCode;
@@ -86,11 +85,30 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 			context = new AnnotationConfigApplicationContext(FraudStatusStateMachineConfig.class);
 			StateMachineFactory<FraudStatusCodes, FraudStatusEvents> factory = context.getBean("FraudStatusStateMachine", StateMachineFactory.class);
 			fraudStatusStateMachine = factory.getStateMachine("FraudRequestStatusHistorySM");
+			fraudStatusStateMachine.addStateListener(new StateMachineEventListener(this));
 			fraudStatusStateMachine.start();
 		}finally {
 			if(context!=null){
 				context.close();
 			}
+		}
+	}
+	
+	@PostLoad
+	public void postLoad() {
+		StateMachine<FraudStatusCodes, FraudStatusEvents> stateMachine = this.getFraudStatusStateMachine();
+		handleStateForFraudStatus(this.getFraudStatusCode(), stateMachine);
+	}
+	
+	private static class StateMachineEventListener extends StateMachineListenerAdapter<FraudStatusCodes, FraudStatusEvents> {
+		
+		private final FraudRequestStatusHistory entity;
+		public StateMachineEventListener(FraudRequestStatusHistory entity){
+			this.entity = entity;
+		}
+		@Override
+		public void stateEntered(State<FraudStatusCodes, FraudStatusEvents> state) {
+			entity.fraudStatusCode = state.getId();
 		}
 	}
 

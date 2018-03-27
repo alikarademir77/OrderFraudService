@@ -36,8 +36,6 @@ import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 
 /**
  * @author akaradem
@@ -113,15 +111,18 @@ public class FraudRequestStatusHistoryRepositoryTest {
 		Long requestVersion = 1l;
 
 		FraudRequest fraudRequest = createAndSaveFraudRequest(orderNumber, requestVersion);
-
+		FraudRequestStatusHistory statusHistory = fraudRequest.getFraudRequestStatusHistory().get(0);
+		
 		Thread thread = new Thread(new Runnable() {
 			@Transactional
 			@Override
 			public void run() {
-				Iterable<FraudRequest> it = fraudRequestRepository.findByOrderNumber(new BigDecimal(orderNumber));
-				FraudRequest request = it.iterator().next();
-				request.setRequestVersion(request.getRequestVersion() + 1L);
-				request = fraudRequestRepository.save(request);
+				Iterable<FraudRequestStatusHistory> it = fraudRequestStatusHistoryRepository
+						.findByFraudRequestOrderNumber(new BigDecimal(orderNumber),
+								new Sort(Direction.DESC, "createDate"));
+				FraudRequestStatusHistory statusHistoryRetrieved = it.iterator().next();
+				statusHistoryRetrieved.setCreateUser("Another User");
+				statusHistoryRetrieved = fraudRequestStatusHistoryRepository.save(statusHistoryRetrieved);
 			}
 		});
 
@@ -131,16 +132,14 @@ public class FraudRequestStatusHistoryRepositoryTest {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-		fraudRequest.setRequestVersion(fraudRequest.getRequestVersion().longValue() + 1L);
+		statusHistory.setCreateUser("New User");
 		
 		// this should throw the ObjectOptimisticLockingFailureException
-		fraudRequestRepository.save(fraudRequest);
+		statusHistory = fraudRequestStatusHistoryRepository.save(statusHistory);
 	}
 
-	// private
 	private FraudRequest createAndSaveFraudRequest(String orderNumber, long requestVersion) {
 		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypeCodes.FRAUD_CHECK);
-		FraudStatus status = statusRepository.findOne(FraudStatusCodes.INITIAL_REQUEST);
 
 		String userName = "order_fraud_test";
 		Date now = new Date();
@@ -154,9 +153,8 @@ public class FraudRequestStatusHistoryRepositoryTest {
 				.setCreateUser(userName)
 				.setUpdateDate(now)
 				.setUpdateUser(userName);
-
+		
 		FraudRequestStatusHistory history = new FraudRequestStatusHistory();
-
 		history.setFraudRequest(request)
 				.setCreateDate(now)
 				.setCreateUser(userName)
@@ -164,11 +162,12 @@ public class FraudRequestStatusHistoryRepositoryTest {
 				.setUpdateUser(userName);
 		List<FraudRequestStatusHistory> historyList = new ArrayList<>();
 		historyList.add(history);
-
+		
 		request.setFraudRequestStatusHistory(historyList);
-
+		
 		request = fraudRequestRepository.save(request);
 		return request;
 	}
+
 
 }

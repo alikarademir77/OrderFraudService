@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
@@ -26,8 +27,8 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
 @Component
 public class CreateInitialRequestAcion implements Action<FlowStates, FlowEvents> {
 
-	//TODO Consider getting value from configuration
-	private String userName = "order_fraud_user";
+	@Value("${spring.datasource.username}")
+	private String userName;
 	
 	@Autowired	
 	FraudRequestRepository fraudRequestRepository;

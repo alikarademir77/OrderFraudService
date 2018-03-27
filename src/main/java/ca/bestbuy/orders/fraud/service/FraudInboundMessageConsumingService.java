@@ -8,8 +8,6 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
 import ca.bestbuy.orders.fraud.dao.FraudRequestStatusHistoryRepository;
@@ -50,7 +48,6 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 	 * @see ca.bestbuy.orders.messaging.MessageConsumingService#consumeMessage(ca.bestbuy.orders.messaging.MessagingEvent)
 	 */
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED)
 	public void consumeMessage(MessagingEvent event) {
 		
 		if(EventTypes.FraudCheck.equals(event.getType())){

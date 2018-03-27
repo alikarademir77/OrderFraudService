@@ -5,6 +5,7 @@ package ca.bestbuy.orders.fraud.model.jpa;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -12,6 +13,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.access.StateMachineAccess;
+import org.springframework.statemachine.support.DefaultStateMachineContext;
+
+import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusEvents;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,4 +59,12 @@ public class OrderFraudBaseEntity implements Serializable {
 		
 	}
 	
+	protected void handleStateForFraudStatus(FraudStatusCodes state, StateMachine<FraudStatusCodes, FraudStatusEvents> stateMachine) {
+		stateMachine.stop();
+		List<StateMachineAccess<FraudStatusCodes, FraudStatusEvents>> withAllRegions = stateMachine.getStateMachineAccessor().withAllRegions();
+		for (StateMachineAccess<FraudStatusCodes, FraudStatusEvents> a : withAllRegions) {
+			a.resetStateMachine(new DefaultStateMachineContext<FraudStatusCodes, FraudStatusEvents>(state, null, null, null));
+		}
+		stateMachine.start();
+	}
 }

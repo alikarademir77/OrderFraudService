@@ -18,6 +18,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,14 +35,13 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusEvents;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
 @ActiveProfiles({"dev","unittest"})
-//@DirtiesContext
+@DirtiesContext
 public class FraudRequestRepositoryTest {
 
 	@MockBean
@@ -64,7 +65,7 @@ public class FraudRequestRepositoryTest {
 	@Autowired
 	FraudRequestRepository fraudRequestRepository;
 	
-	//@Test
+	@Test
 	@Transactional
 	public void testInitialRequestCreation(){
 		
@@ -78,7 +79,7 @@ public class FraudRequestRepositoryTest {
 		assert(result.getFraudRequestStatusHistory().size()>0);
 	}
 	
-	//@Test
+	@Test
 	@Transactional
 	public void testFraudRequestRetrieval(){
 		String orderNumber = "123456";
@@ -115,37 +116,6 @@ public class FraudRequestRepositoryTest {
 		}
 	}
 
-//	@Test
-	public void testVersionUpdate() {
-
-		testCreateForUpdate();
-		testUpdate();
-	}
-	
-	@Transactional
-	public void testCreateForUpdate() {
-		String orderNumber = "123456";
-
-		List<Long> requestVersions = Arrays.asList(new Long[] { 1l });
-		FraudRequest request = null;
-		for (Long nextVersion : requestVersions) {
-			request = createAndSaveFraudRequest(orderNumber, nextVersion);
-		}
-	}
-	
-	@Transactional
-	public void testUpdate() {
-		String orderNumber = "123456";
-
-		long requestVersions = 1L;
-		Iterable<FraudRequest> it = fraudRequestRepository.findByOrderNumber(new BigDecimal(orderNumber));
-		FraudRequest request = it.iterator().next();
-		request.setCreateDate(new Date());
-
-		request = fraudRequestRepository.save(request);
-	}
-	
-	
 	@Test
 	@Transactional
 	public void testStatusUpdate(){
@@ -168,22 +138,19 @@ public class FraudRequestRepositoryTest {
 		FraudRequestStatusHistory history = new FraudRequestStatusHistory();
 		
 		history.setFraudRequest(request)
-				//.setFraudStatus(status)
 				.setCreateDate(now)
 				.setCreateUser(userName)
 				.setUpdateDate(now)
 				.setUpdateUser(userName);
 
+		history.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.FINAL_DECISION_RECEIVED);
+
 		List<FraudRequestStatusHistory> historyList = new ArrayList<>();
 		historyList.add(history);
 		request.setFraudRequestStatusHistory(historyList);
-		request = fraudRequestRepository.save(request);
-
-		request = fraudRequestRepository.findOne(request.getFraudRequestId());
 		
 		FraudRequestStatusHistoryDetail historyDetail = new FraudRequestStatusHistoryDetail();
-		historyDetail.setFraudRequestStatusHistoryId(history.getFraudRequestStatusHistoryId())
-					 .setFraudRequestStatusHistory(history)
+		historyDetail.setFraudRequestStatusHistory(history)
 					 .setTasRequest("Test TAS Request")
 					 .setTasResponse("Test TAS Response")
 					 .setCreateDate(now)
@@ -197,14 +164,45 @@ public class FraudRequestRepositoryTest {
 		
 		FraudRequest result = fraudRequestRepository.findOne(request.getFraudRequestId());
 		assertEquals(result.getFraudStatusStateMachine().getState().getId(),FraudStatusCodes.FINAL_DECISION);
+
 		assertEquals(result.getFraudRequestStatusHistory().size(),1);
-		assertEquals(result.getFraudRequestStatusHistory().get(0).getFraudRequestStatusHistoryDetail().getFraudRequestStatusHistoryId(),result.getFraudRequestStatusHistory().get(0).getFraudRequestStatusHistoryId());
+		FraudRequestStatusHistory historyRetrieved =  result.getFraudRequestStatusHistory().get(0);
+		assertEquals(historyRetrieved.getFraudStatusStateMachine().getState().getId(),FraudStatusCodes.FINAL_DECISION);
+		assertNotNull(historyRetrieved.getFraudRequestStatusHistoryDetail());
 	}
 
-	//private
+	@Test(expected = ObjectOptimisticLockingFailureException.class)
+	public void testFraudRequestConcurrentUpdate() {
+		String orderNumber = "123456";
+		Long requestVersion = 1l;
+
+		FraudRequest fraudRequest = createAndSaveFraudRequest(orderNumber, requestVersion);
+
+		Thread thread = new Thread(new Runnable() {
+			@Transactional
+			@Override
+			public void run() {
+				Iterable<FraudRequest> it = fraudRequestRepository.findByOrderNumber(new BigDecimal(orderNumber));
+				FraudRequest request = it.iterator().next();
+				request.setRequestVersion(request.getRequestVersion() + 1L);
+				request = fraudRequestRepository.save(request);
+			}
+		});
+
+		try {
+			thread.start();
+			thread.join();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		fraudRequest.setRequestVersion(fraudRequest.getRequestVersion().longValue() + 1L);
+		
+		// this should throw the ObjectOptimisticLockingFailureException
+		fraudRequestRepository.save(fraudRequest);
+	}	
+	
 	private FraudRequest createAndSaveFraudRequest(String orderNumber, long requestVersion) {
 		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypeCodes.FRAUD_CHECK);
-		FraudStatus status = statusRepository.findOne(FraudStatusCodes.INITIAL_REQUEST);
 
 		String userName = "order_fraud_test";
 		Date now = new Date();
@@ -221,7 +219,6 @@ public class FraudRequestRepositoryTest {
 		
 		FraudRequestStatusHistory history = new FraudRequestStatusHistory();
 		history.setFraudRequest(request)
-				//.setFraudStatus(status)
 				.setCreateDate(now)
 				.setCreateUser(userName)
 				.setUpdateDate(now)
