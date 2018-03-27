@@ -32,6 +32,9 @@ public final class WebClientUtility {
     }
 
 
+    /**
+     * Creates a RestTemplate based on the configuration object provided
+     */
     public static RestTemplate createRestTemplate(WebClientConfig config) {
 
         if (config == null) {
