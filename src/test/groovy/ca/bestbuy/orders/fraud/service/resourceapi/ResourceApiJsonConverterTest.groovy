@@ -111,7 +111,8 @@ class ResourceApiJsonConverterTest extends Specification{
 
         then:
 
-        result.isEmpty() == true
+        IllegalArgumentException ex = thrown()
+        ex.message.contains("Error for id :catalog/products/10362264/details")
 
     }
     def "Test exception for product detail with empty response"() {
@@ -153,5 +154,24 @@ class ResourceApiJsonConverterTest extends Specification{
 
     }
 
+    def "Test exception for product detail with missing data"() {
+        given:
+
+        List<String> skus = new ArrayList<>()
+        skus.add("10362263")
+
+        String response = new File("src/test/resources/resourceapi/resource-api-response-with-missing-data.json").text
+        ResourceApiJsonConverter jsonConverter = new ResourceApiJsonConverter()
+
+        when:
+
+        Map<String, ProductDetail> result= jsonConverter.toProductDetail(skus,response)
+
+        then:
+
+        IllegalArgumentException ex = thrown()
+        ex.message == "sku / departmentId / classId / subClassId can not be null"
+
+    }
 
 }

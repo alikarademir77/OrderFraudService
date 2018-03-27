@@ -1,10 +1,13 @@
 package ca.bestbuy.orders.fraud.mappers;
 
+import static org.bouncycastle.asn1.x500.style.RFC4519Style.c;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import ca.bestbuy.orders.fraud.model.client.resourcesapi.ProductDetail;
 import ca.bestbuy.orders.fraud.model.client.resourcesapi.RequestHeaders;
@@ -14,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -48,7 +52,7 @@ public class ResourceApiJsonConverter {
 
     public Map<String,ProductDetail> toProductDetail(List<String> skuList,String jsonResult) {
 
-        if(jsonResult == null || jsonResult.trim().equals("")){
+        if(StringUtils.isBlank(jsonResult)){
             throw new IllegalArgumentException("Response from resource service is empty");
         }
 
@@ -71,22 +75,29 @@ public class ResourceApiJsonConverter {
 
     }
 
-    private ProductDetail getProductDetail(String id,JsonNode responseJsonNode){
+    private ProductDetail getProductDetail(String id, JsonNode responseJsonNode){
 
         ProductDetail productDetail = new ProductDetail();
         int status = responseJsonNode.path(id).path("status").asInt();
         if(status == 200){
-            String sku = responseJsonNode.path(id).path("body").path("id").asText();
-            String departmentId = "" + responseJsonNode.path(id).path("body").path("rmsDeptID").asInt();
-            String classId = "" + responseJsonNode.path(id).path("body").path("rmsClassID").asInt();
-            String subClassId = "" + responseJsonNode.path(id).path("body").path("rmsSubclassID").asInt();
+            JsonNode bodyNode = responseJsonNode.path(id).path("body");
+            String sku = bodyNode.path("id").asText();
+            String departmentId = Integer.toString(bodyNode.path("rmsDeptID").asInt());
+            String classId = Integer.toString(bodyNode.path("rmsClassID").asInt());
+            String subClassId = Integer.toString(bodyNode.path("rmsSubclassID").asInt());
+
+            //Json parse will give 0 for missing field
+            if (Stream.of(sku, departmentId, classId, subClassId).anyMatch(x -> (StringUtils.isBlank(x) || x.equals("0")))) {
+                throw new IllegalArgumentException("sku / departmentId / classId / subClassId can not be null");
+            }
             productDetail.setSku(sku);
             productDetail.setDepartment(departmentId);
             productDetail.setItemClass(classId);
             productDetail.setItemSubClass(subClassId);
         }else{
             String errorMessage = responseJsonNode.path(id).path("body").asText();
-            log.info("Error  for id :" + id + "error message :" + errorMessage);
+            log.info("Error for id :" + id + " error message :" + errorMessage);
+            throw new IllegalArgumentException("Error for id :" + id + " error message : " + errorMessage);
 
         }
         return productDetail;

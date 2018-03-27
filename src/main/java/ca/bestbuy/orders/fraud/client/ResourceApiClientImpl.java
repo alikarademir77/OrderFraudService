@@ -15,7 +15,7 @@ public class ResourceApiClientImpl {
 
     public String getData(ResourceApiRequest request) {
 
-        RestTemplate restTemplate=getRestTemplate();
+        RestTemplate restTemplate = getRestTemplate();
 
         String resourceServiceUrl = config.getServiceUrl();
         String resourceServiceEndPoint = config.getEndpoint();
