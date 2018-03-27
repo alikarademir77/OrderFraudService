@@ -36,22 +36,7 @@ import ca.bestbuy.orders.fraud.client.ResourceApiClientConfig;
 @ActiveProfiles({"dev","unittest"})
 @DirtiesContext
 public class FraudStatusRepositoryTest {
-	
-	@MockBean
-	private OrderDetailsClientConfig orderDetailsClientConfig;
-	
-	@MockBean
-	OrderDetailsClient orderDetailsClient;
 
-	@MockBean
-	private ResourceApiClientConfig resourceApiClientConfig;
-
-	@MockBean
-	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
-
-	@MockBean
-	private FraudServiceTASClient fraudServiceTASClient;
-	
 	@Autowired
 	FraudStatusRepository fraudStatusRepository;
 	

@@ -42,21 +42,6 @@ import ca.bestbuy.orders.fraud.client.ResourceApiClientConfig;
 //@DirtiesContext
 public class FraudRequestRepositoryTest {
 
-	@MockBean
-	private OrderDetailsClientConfig orderDetailsClientConfig;
-	
-	@MockBean
-	OrderDetailsClient orderDetailsClient;
-
-	@MockBean
-	private ResourceApiClientConfig resourceApiClientConfig;
-
-	@MockBean
-	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
-
-	@MockBean
-	private FraudServiceTASClient fraudServiceTASClient;
-	
 	@Autowired
 	FraudStatusRepository statusRepository;
 	

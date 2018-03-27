@@ -108,16 +108,20 @@ client:
         # REQUIRED (only if ssl.enabled = true)
         truststore-password: ~
 
-  resource-service:
+  resource-api:
     connection:
       url: https://di-bbyca-resourceservice-corp.ca.bestbuy.com
       endpoint: /aggregator
-      keystore-path: classpath:secure/oms-client.pfx
+      keystore: classpath:secure/oms-client.pfx
       keystore-password: mccp123
-      key-password: mccp123
-      truststore-path: classpath:secure/cacerts
+      truststore: classpath:secure/cacerts
       truststore-password: changeit
       tls-enabled: true
+      timeout:
+        # Timeout for establishing a connection (in milliseconds)
+        connection: ~
+        # Timeout for waiting for response after request is sent (in milliseconds)
+        request: ~
 
   tas:
     connection:

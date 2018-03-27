@@ -45,7 +45,7 @@ public class OrderFraudServiceMessageConsumptionTest {
 
 	@Autowired 
 	private OrderFraudChannels channels;
-	
+
 	@MockBean
 	private MessageConsumingService<MessagingEvent> messageConsumingService;
 
@@ -54,15 +54,9 @@ public class OrderFraudServiceMessageConsumptionTest {
 
 	@MockBean
 	private OrderDetailsClientConfig orderDetailsClientConfig;
-	
-	@MockBean
-	OrderDetailsClient orderDetailsClient;
 
 	@MockBean
 	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
-
-	@MockBean
-	private FraudServiceTASClient fraudServiceTASClient;
 	    
     @Test
     public void contextLoadsAndWiring() {
