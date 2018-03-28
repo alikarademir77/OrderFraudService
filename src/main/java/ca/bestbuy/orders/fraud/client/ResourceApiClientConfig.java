@@ -23,22 +23,22 @@ public class ResourceApiClientConfig implements WebClientConfig {
     @Value("${client.resource-api.connection.endpoint}")
     private String endpoint;
 
-    @Value("${client.resource-api.connection.keystore}")
+    @Value("${client.resource-api.connection.ssl.keystore}")
     private Resource keystore;
 
-    @Value("${client.resource-api.connection.keystore-password}")
+    @Value("${client.resource-api.connection.ssl.keystore-password}")
     private String keystorePassword;
 
-    @Value("${client.resource-api.connection.truststore}")
+    @Value("${client.resource-api.connection.ssl.truststore}")
     private Resource truststore;
 
-    @Value("${client.resource-api.connection.truststore-password}")
+    @Value("${client.resource-api.connection.ssl.truststore-password}")
     private String truststorePassword;
 
-    @Value("${client.resource-api.connection.tls-enabled}")
+    @Value("${client.resource-api.connection.ssl.enabled}")
     private Boolean tlsEnabled;
 
-    @Value("${client.resource-api.connection.verify-host:true}")
+    @Value("${client.resource-api.connection.ssl.verify-host:true}")
     private Boolean verifyHostName;
 
     @Value("${client.resource-api.connection.timeout.connection}")

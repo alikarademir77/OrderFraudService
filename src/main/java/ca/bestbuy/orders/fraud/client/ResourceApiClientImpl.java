@@ -16,14 +16,14 @@ public class ResourceApiClientImpl {
 
     public String getData(ResourceApiRequest request) {
 
-        RestTemplate restTemplate = config.restTemplate();
-
         String resourceServiceUrl = config.getServiceUrl();
         String resourceServiceEndPoint = config.getEndpoint();
 
         if(StringUtils.isBlank(resourceServiceUrl) || StringUtils.isBlank(resourceServiceEndPoint)) {
             throw new IllegalStateException("The URL or endpoint for resource Service is null or empty. Please double check the following properties in the configuration - 'client.resource-api.connection.url' and 'client.resource-api.endpoint'");
         }
+
+        RestTemplate restTemplate = config.restTemplate();
 
         String url = new StringBuilder()
             .append(resourceServiceUrl)
