@@ -5,6 +5,7 @@ import ca.bestbuy.orders.fraud.model.client.resourcesapi.ResourceApiRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -28,7 +29,12 @@ public class ResourceApiClientImpl {
             .append(resourceServiceUrl)
             .append(resourceServiceEndPoint).toString();
 
-        String responseStr = restTemplate.postForObject(url, request, String.class);
+        String responseStr = null;
+        try {
+            responseStr = restTemplate.postForObject(url, request, String.class);
+        } catch (HttpServerErrorException e) {
+            throw new IllegalArgumentException("Resource API server error", e);
+        }
 
         return responseStr;
     }

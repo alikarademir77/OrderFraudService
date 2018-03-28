@@ -30,12 +30,10 @@ class ResourceApiClientImplTest extends Specification {
         String response = new File("src/test/resources/resourceapi/resource-api-response-with-one-notfound.json").text
 
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(ExpectedCount.manyTimes(),
+        server.expect(ExpectedCount.once(),
                 MockRestRequestMatchers.requestTo("/resource/api/endpoint"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
                 .andRespond(MockRestResponseCreators.withSuccess(response, MediaType.APPLICATION_JSON));
-
-
 
         when:
 
@@ -50,6 +48,34 @@ class ResourceApiClientImplTest extends Specification {
         objectMapper.readTree(jsonResponse)
                 .path("catalog/products/10362263/details")
                 .path("body").path("id").asText() == "10362263"
+    }
+
+    def "test to make API call and response 500 " () {
+        given:
+
+        ResourceApiRequest resourceApiRequest = new ResourceApiRequest()
+        ResourceApiClientImpl resourceApiClient = new ResourceApiClientImpl()
+
+        RestTemplate restTemplate = new RestTemplate()
+        config.serviceUrl >> "/resource/api"
+        config.endpoint >> "/endpoint"
+        config.restTemplate() >> restTemplate
+        resourceApiClient.config = config
+
+        MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+        server.expect(ExpectedCount.once(),
+                MockRestRequestMatchers.requestTo("/resource/api/endpoint"))
+                .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+                .andRespond(MockRestResponseCreators.withServerError());
+
+        when:
+
+        resourceApiClient.getData(resourceApiRequest)
+
+        then:
+
+        IllegalArgumentException ex = thrown()
+        ex.message == "Resource API server error"
     }
 
 }
