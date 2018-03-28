@@ -117,8 +117,11 @@ class ResourceApiJsonConverterTest extends Specification{
 
         then:
 
-        IllegalArgumentException ex = thrown()
-        ex.message.contains("Error for id :catalog/products/10362264/details")
+        result.get("10362264") != null
+        result.get("10362264").department == null
+        result.get("10362264").itemClass == null
+        result.get("10362264").itemSubClass == null
+        result.get("10362264").sku == "10362264"
 
     }
     def "Test exception for product detail with empty response"() {
@@ -175,8 +178,11 @@ class ResourceApiJsonConverterTest extends Specification{
 
         then:
 
-        IllegalArgumentException ex = thrown()
-        ex.message == "sku / departmentId / classId / subClassId can not be null"
+        result.get("10362263") != null
+        result.get("10362263").department == "49"
+        result.get("10362263").itemClass == null
+        result.get("10362263").itemSubClass == "8"
+        result.get("10362263").sku == "10362263"
 
     }
 

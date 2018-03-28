@@ -63,9 +63,8 @@ public class ResourceApiJsonConverter {
             JsonNode responseJsonNode = objectMapper.readTree(jsonResult);
             for (String sku : skuList){
                 ProductDetail productDetail = getProductDetail(formResourceApiIdBySku(sku),responseJsonNode);
-                if (productDetail.getSku() != null) {
-                    productDetailMap.put(sku, productDetail);
-                }
+                productDetail.setSku(sku);
+                productDetailMap.put(sku, productDetail);
             }
         } catch (IOException e) {
             log.error("Response is not valid " + jsonResult , e);
@@ -78,27 +77,31 @@ public class ResourceApiJsonConverter {
 
     private ProductDetail getProductDetail(String id, JsonNode responseJsonNode){
 
+        //If resource API is up, but the sku is not in the response, we will return null data
+        //without throwing exceptions
         ProductDetail productDetail = new ProductDetail();
         int status = responseJsonNode.path(id).path("status").asInt();
-        if(status == 200){
+        if (status == 200) {
             JsonNode bodyNode = responseJsonNode.path(id).path("body");
-            String sku = bodyNode.path("id").asText();
-            String departmentId = Integer.toString(bodyNode.path("rmsDeptID").asInt());
-            String classId = Integer.toString(bodyNode.path("rmsClassID").asInt());
-            String subClassId = Integer.toString(bodyNode.path("rmsSubclassID").asInt());
-
-            //Json parse will give 0 for missing field
-            if (Stream.of(sku, departmentId, classId, subClassId).anyMatch(x -> (StringUtils.isBlank(x) || x.equals("0")))) {
-                throw new IllegalArgumentException("sku / departmentId / classId / subClassId can not be null");
+            if (bodyNode.has("rmsDeptID")) {
+                String departmentId = Integer.toString(bodyNode.path("rmsDeptID").asInt());
+                productDetail.setDepartment(departmentId);
             }
-            productDetail.setSku(sku);
-            productDetail.setDepartment(departmentId);
-            productDetail.setItemClass(classId);
-            productDetail.setItemSubClass(subClassId);
-        }else{
+
+            if (bodyNode.has("rmsClassID")) {
+                String classId = Integer.toString(bodyNode.path("rmsClassID").asInt());
+                productDetail.setItemClass(classId);
+            }
+
+            if (bodyNode.has("rmsSubclassID")) {
+                String subClassId = Integer.toString(bodyNode.path("rmsSubclassID").asInt());
+                productDetail.setItemSubClass(subClassId);
+            }
+
+        } else {
+
             String errorMessage = responseJsonNode.path(id).path("body").asText();
             log.info("Error for id :" + id + " error message :" + errorMessage);
-            throw new IllegalArgumentException("Error for id :" + id + " error message : " + errorMessage);
 
         }
         return productDetail;
