@@ -1,4 +1,4 @@
-package ca.bestbuy.orders.fraud.client
+package ca.bestbuy.orders.fraud.client.paymentservice
 
 import ca.bestbuy.orders.fraud.client.paymentservice.PaymentServiceClientImpl
 import ca.bestbuy.orders.fraud.mappers.PaymentServiceResponseMapper

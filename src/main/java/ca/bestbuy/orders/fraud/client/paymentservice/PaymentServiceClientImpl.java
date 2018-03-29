@@ -1,9 +1,11 @@
 package ca.bestbuy.orders.fraud.client.paymentservice;
 
 import ca.bestbuy.orders.fraud.mappers.PaymentServiceResponseMapper;
+import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.ErrorDetails;
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.GetPayPalPaymentDetailsRequest;
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.GetPayPalPaymentDetailsResponse;
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.ObjectFactory;
+import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.Status;
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,7 @@ public class PaymentServiceClientImpl implements PaymentServiceClient {
 
 
     @Override
-    public PaymentDetails.PayPal.PayPalAdditionalInfo getPayPalAdditionalInfo(String paymentServiceReferenceId) {
+    public PaymentDetails.PayPal.PayPalAdditionalInfo getPayPalAdditionalInfo(String paymentServiceReferenceId) throws PaymentServiceException {
 
         ObjectFactory objectFactory = new ObjectFactory();
 
@@ -71,22 +73,63 @@ public class PaymentServiceClientImpl implements PaymentServiceClient {
         try {
             // Send request to Payment Service and receive response
             JAXBElement<GetPayPalPaymentDetailsResponse> response = (JAXBElement<GetPayPalPaymentDetailsResponse>) webServiceTemplate.marshalSendAndReceive(jaxbRequest, new SoapActionCallback(SOAP_ACTION_CALLBACK));
-            log.info("Response received from Payment Service:" + convertToXMLString(response));
+
+            if(response == null || response.getValue() == null || response.getValue().getStatus() == null) {
+
+                String errorResponse = "Received an unexpected response from Payment Service. Response was either null or did not contain any value.";
+
+                log.error(errorResponse);
+                throw new UnexpectedResponseException(errorResponse);
+            }
+
+            Status responseStatus = response.getValue().getStatus();
+            if(responseStatus == Status.SUCCESS) {
+                log.info("Response received from Payment Service: " + convertToXMLString(response));
+            }
+            else if(responseStatus == Status.FAILED) {
+
+                log.error("Error response received from Payment Service: " + convertToXMLString(response));
+
+                ErrorDetails errorDetails = response.getValue().getErrorDetails();
+                String errorCode = null;
+                String errorSubcode = null;
+                String errorDescription = null;
+                if(errorDetails != null) {
+                    errorCode = errorDetails.getErrorCode();
+                    errorSubcode = errorDetails.getErrorSubCode();
+                    errorDescription = errorDetails.getErrorDescription();
+                }
+
+                throw new PaymentServiceException("Received an error while making a call to Payment Service.", errorCode, errorSubcode, errorDescription);
+
+            }
+            else {
+
+                // This will be for any other statuses we receive (as we don't expect them)
+
+                String errorResponse = "Unexpected response received from Payment Service. Response status was not 'SUCCESS' or 'FAILURE'";
+
+                log.error(errorResponse + ": " + convertToXMLString(response));
+                throw new UnexpectedResponseException(errorResponse);
+            }
 
             // Map response to PayPalAdditionalInfo object
             PaymentDetails.PayPal.PayPalAdditionalInfo payPalAdditionalInfo = mapper.mapPayPalAdditionalInfo(response.getValue().getPaymentDetails());
             return payPalAdditionalInfo;
 
         } catch (SoapFaultClientException sfce) {
-            //todo: figure out how to handle this
-            log.error("An error occurred while sending request to Payment Service: FAULT CODE is " + sfce.getFaultCode() + " and FAULT STRING is " + sfce.getFaultStringOrReason());
-            throw sfce;
-        } catch (WebServiceIOException wse) {
-            //todo: figure out how to handle this
-            log.error("A connection error occurred while communicating with Payment Service: " + wse.getMessage());
-            throw wse;
-        }
+            // This will only be thrown for any SOAP faults
 
+            log.error("Received a soap fault while sending a request to Payment Service: FAULT CODE is " + sfce.getFaultCode() + " and FAULT STRING is " + sfce.getFaultStringOrReason());
+            throw sfce;
+
+        } catch (WebServiceIOException wse) {
+            // This should only be thrown in cases of timeouts
+
+            String errorMessage = "A connection error occurred while communicating with Payment Service";
+            log.error(errorMessage + ": " + wse.getMessage());
+            throw new ConnectionException(errorMessage, wse);
+        }
 
     }
 

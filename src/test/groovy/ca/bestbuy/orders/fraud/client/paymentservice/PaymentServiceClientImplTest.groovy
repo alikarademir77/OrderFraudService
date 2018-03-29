@@ -1,6 +1,8 @@
-package ca.bestbuy.orders.fraud.client
+package ca.bestbuy.orders.fraud.client.paymentservice
 
 import ca.bestbuy.orders.fraud.client.paymentservice.PaymentServiceClientImpl
+import ca.bestbuy.orders.fraud.client.paymentservice.PaymentServiceException
+import ca.bestbuy.orders.fraud.client.paymentservice.UnexpectedResponseException
 import ca.bestbuy.orders.fraud.mappers.PaymentServiceResponseMapper
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails
 import org.mapstruct.factory.Mappers
@@ -10,7 +12,6 @@ import org.springframework.ws.test.client.MockWebServiceServer
 import org.springframework.ws.test.client.RequestMatchers
 import org.springframework.ws.test.client.ResponseCreators
 import org.springframework.xml.transform.StringSource
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import javax.xml.transform.Source
@@ -109,5 +110,69 @@ class PaymentServiceClientImplTest extends Specification {
         mockServer.verify()
 
     }
+
+
+    def "Test error response from Payment Service"() {
+
+        given:
+
+        Source responsePayload = new StringSource(
+                "<GetPaymentDetailsResponse xsi:type=\"GetPayPalPaymentDetailsResponse\" xmlns=\"http://mccp.services.bby.com/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n" +
+                        "<Status>Failed</Status>\n" +
+                        "         <ErrorDetails>\n" +
+                        "            <ErrorCode>4001</ErrorCode>\n" +
+                        "            <ErrorDescription>it's all keval's fault</ErrorDescription>\n" +
+                        "         </ErrorDetails>\n" +
+                        "         <TransactionProcessedDateTime>2018-03-27T22:47:08.2790791Z</TransactionProcessedDateTime>" +
+                        "      </GetPaymentDetailsResponse>")
+
+        mockServer.expect(RequestMatchers.anything())
+                .andRespond(ResponseCreators.withPayload(responsePayload))
+
+        when:
+
+        PaymentDetails.PayPal.PayPalAdditionalInfo result = client.getPayPalAdditionalInfo("1234")
+
+        then:
+
+        thrown PaymentServiceException
+
+        mockServer.verify()
+
+    }
+
+
+
+    def "Test unexpected status in Payment Service response"() {
+
+        given:
+
+        Source responsePayload = new StringSource(
+                "<GetPaymentDetailsResponse xsi:type=\"GetPayPalPaymentDetailsResponse\" xmlns=\"http://mccp.services.bby.com/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n" +
+                        "<Status>Declined</Status>\n" +
+                        "         <ErrorDetails>\n" +
+                        "            <ErrorCode>4001</ErrorCode>\n" +
+                        "            <ErrorDescription>it's all keval's fault</ErrorDescription>\n" +
+                        "         </ErrorDetails>\n" +
+                        "         <TransactionProcessedDateTime>2018-03-27T22:47:08.2790791Z</TransactionProcessedDateTime>" +
+                        "      </GetPaymentDetailsResponse>")
+
+        mockServer.expect(RequestMatchers.anything())
+                .andRespond(ResponseCreators.withPayload(responsePayload))
+
+        when:
+
+        PaymentDetails.PayPal.PayPalAdditionalInfo result = client.getPayPalAdditionalInfo("1234")
+
+        then:
+
+        thrown UnexpectedResponseException
+
+        mockServer.verify()
+
+    }
+
+
+
 
 }
