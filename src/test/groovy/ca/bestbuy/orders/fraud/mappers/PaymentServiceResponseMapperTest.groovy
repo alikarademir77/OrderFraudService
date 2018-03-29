@@ -1,6 +1,6 @@
 package ca.bestbuy.orders.fraud.mappers
 
-import ca.bestbuy.orders.fraud.client.paymentservice.MissingInformationException
+import ca.bestbuy.orders.fraud.client.paymentservice.NoActivePaypalException
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.ArrayOfPayPalOrder
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.OrderStatus
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.PayPalOrder
@@ -78,7 +78,7 @@ class PaymentServiceResponseMapperTest extends Specification{
 
         then:
 
-        thrown MissingInformationException
+        thrown NoActivePaypalException
 
 
     }
@@ -106,7 +106,7 @@ class PaymentServiceResponseMapperTest extends Specification{
 
         then:
 
-        thrown MissingInformationException
+        thrown NoActivePaypalException
 
 
     }

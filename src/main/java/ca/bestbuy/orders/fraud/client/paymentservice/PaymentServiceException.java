@@ -1,6 +1,6 @@
 package ca.bestbuy.orders.fraud.client.paymentservice;
 
-public class PaymentServiceException extends Exception {
+public class PaymentServiceException extends RuntimeException {
 
     private String errorCode;
     private String errorSubCode;

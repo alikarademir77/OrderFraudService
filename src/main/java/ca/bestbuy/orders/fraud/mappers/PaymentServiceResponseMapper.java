@@ -2,7 +2,7 @@ package ca.bestbuy.orders.fraud.mappers;
 
 
 
-import ca.bestbuy.orders.fraud.client.paymentservice.MissingInformationException;
+import ca.bestbuy.orders.fraud.client.paymentservice.NoActivePaypalException;
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.OrderStatus;
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.PayPalOrder;
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.PayPalPayment;
@@ -29,7 +29,7 @@ public abstract class PaymentServiceResponseMapper {
 
 
     @AfterMapping
-    public void mapPayPalAdditionalInfo_PayPalOrderId(PayPalPayment payPalPayment, @MappingTarget PaymentDetails.PayPal.PayPalAdditionalInfo payPalAdditionalInfoToMap) throws MissingInformationException{
+    public void mapPayPalAdditionalInfo_PayPalOrderId(PayPalPayment payPalPayment, @MappingTarget PaymentDetails.PayPal.PayPalAdditionalInfo payPalAdditionalInfoToMap) throws NoActivePaypalException {
 
         List<PayPalOrder> payPalOrderList = payPalPayment.getPayPalOrders().getPayPalOrder();
         Boolean activeOrderFound = false;
@@ -45,7 +45,7 @@ public abstract class PaymentServiceResponseMapper {
         }
 
         if(!activeOrderFound){
-            throw new MissingInformationException("There was no ACTIVE PayPal Order found");
+            throw new NoActivePaypalException("There was no ACTIVE PayPal Order found");
         }
 
     }

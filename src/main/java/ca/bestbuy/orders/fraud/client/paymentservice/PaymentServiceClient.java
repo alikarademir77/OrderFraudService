@@ -6,7 +6,7 @@ import ca.bestbuy.orders.fraud.model.internal.PaymentDetails;
 public interface PaymentServiceClient {
 
 
-    PaymentDetails.PayPal.PayPalAdditionalInfo getPayPalAdditionalInfo(String paymentServiceReferenceId) throws PaymentServiceException;
+    PaymentDetails.PayPal.PayPalAdditionalInfo getPayPalAdditionalInfo(String paymentServiceReferenceId) throws PaymentServiceException, ConnectionException, UnexpectedResponseException, NoActivePaypalException;
 
 
 }

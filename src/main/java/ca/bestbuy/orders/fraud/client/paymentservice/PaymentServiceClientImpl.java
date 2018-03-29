@@ -57,7 +57,7 @@ public class PaymentServiceClientImpl implements PaymentServiceClient {
 
 
     @Override
-    public PaymentDetails.PayPal.PayPalAdditionalInfo getPayPalAdditionalInfo(String paymentServiceReferenceId) throws PaymentServiceException {
+    public PaymentDetails.PayPal.PayPalAdditionalInfo getPayPalAdditionalInfo(String paymentServiceReferenceId) throws PaymentServiceException, ConnectionException, UnexpectedResponseException, NoActivePaypalException {
 
         ObjectFactory objectFactory = new ObjectFactory();
 
@@ -129,7 +129,7 @@ public class PaymentServiceClientImpl implements PaymentServiceClient {
             String errorMessage = "A connection error occurred while communicating with Payment Service";
             log.error(errorMessage + ": " + wse.getMessage());
             throw new ConnectionException(errorMessage, wse);
-        } catch (MissingInformationException mie){
+        } catch (NoActivePaypalException mie){
             // This will only be thrown in cases of no active paypal orders being found
 
             String errorMessage = "An error occurred while mapping PayPal Additional Information";
