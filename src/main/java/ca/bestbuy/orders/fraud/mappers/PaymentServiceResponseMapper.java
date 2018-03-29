@@ -20,7 +20,6 @@ public abstract class PaymentServiceResponseMapper {
 
 
     @Mappings({
-//            @Mapping(target = "payPalBillingAgreementId", source = "billingAggrementId"),
             @Mapping(target = "payPalOrderId", ignore = true), //handled by custom mapper mapPayPalAdditionalInfo_PayPalOrderId()
             @Mapping(target = "verifiedStatus", source = "payerStatus"),
             @Mapping(target = "email", source = "payerEmail")

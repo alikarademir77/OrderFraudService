@@ -100,7 +100,6 @@ class PaymentServiceClientImplTest extends Specification {
         then:
 
         result != null
-//        result.getPayPalBillingAgreementId() == "B-835266756X914233C"
         result.email == "tests_101@yahoo.com"
         result.verifiedStatus.equalsIgnoreCase("Verified")
 

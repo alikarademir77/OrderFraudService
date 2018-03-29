@@ -46,7 +46,6 @@ class PaymentServiceResponseMapperTest extends Specification{
 
         then:
 
-      //  payPalAdditionalInfo.getPayPalBillingAgreementId() == payPalPaymentToMap.getBillingAggrementId()
         payPalAdditionalInfo.email == payPalPaymentToMap.getPayerEmail()
         payPalAdditionalInfo.verifiedStatus == payPalPaymentToMap.getPayerStatus().toString()
         payPalAdditionalInfo.payPalOrderId == "2"
