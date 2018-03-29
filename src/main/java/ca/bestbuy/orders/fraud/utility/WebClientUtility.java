@@ -9,16 +9,22 @@ import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLContext;
 
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.oxm.Marshaller;
+import org.springframework.oxm.Unmarshaller;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
 import ca.bestbuy.orders.fraud.client.WebClientConfig;
 
@@ -29,6 +35,45 @@ public final class WebClientUtility {
 
     // Private constructor so we cannot instantiate this class
     private WebClientUtility() {
+    }
+
+
+    /**
+     * Creates a WebServiceTemplate based on the configuration object and the marshallers provided
+     */
+    public static WebServiceTemplate createWebServiceTemplate(WebClientConfig config, Marshaller marshaller, Unmarshaller unmarshaller) {
+
+        if (config == null) {
+            throw new IllegalArgumentException("WebClientConfig provided must not be null");
+        }
+
+        // Get timeout config
+        TimeoutConfig timeoutConfig = config.getTimeoutConfig();
+
+        // Get SSL enabled configuration
+        Boolean sslEnabled = config.sslEnabled() == null ? true : config.sslEnabled();
+
+        WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+        webServiceTemplate.setMarshaller(marshaller);
+        webServiceTemplate.setUnmarshaller(unmarshaller);
+
+        HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+        configureTimeouts(httpClientBuilder, timeoutConfig);
+
+        // Removing http content length header because header is already set, otherwise we get an exception about content length header already existing
+        httpClientBuilder.addInterceptorFirst((HttpRequestInterceptor) (httpRequest, httpContext) -> httpRequest.removeHeaders(HTTP.CONTENT_LEN));
+
+        if (sslEnabled) {
+            // Get verify host name configuration
+            Boolean verifyHostname = config.verifyHostname() == null ? true : config.verifyHostname();
+
+            configureSSL(httpClientBuilder, config.getKeystoreConfig(), config.getTruststoreConfig(), verifyHostname);
+
+        }
+
+        webServiceTemplate.setMessageSender(new HttpComponentsMessageSender(httpClientBuilder.build()));
+
+        return webServiceTemplate;
     }
 
 
@@ -47,48 +92,18 @@ public final class WebClientUtility {
         // Get SSL enabled configuration
         Boolean sslEnabled = config.sslEnabled() == null ? true : config.sslEnabled();
 
+        HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+        configureTimeouts(httpClientBuilder, timeoutConfig);
+
         if (sslEnabled) {
-            // Get keystore configuration
-            KeystoreConfig keystoreConfig = config.getKeystoreConfig();
-            // Get truststore configuration
-            TruststoreConfig truststoreConfig = config.getTruststoreConfig();
             // Get verify host name configuration
             Boolean verifyHostname = config.verifyHostname() == null ? true : config.verifyHostname();
 
-            // Create RestTemplate with SSL
-            return createRestTemplateWithSSL(timeoutConfig, keystoreConfig, truststoreConfig, verifyHostname);
-        } else {
-            // Create RestTemplate with no SSL
-            return createRestTemplateWithNoSSL(timeoutConfig);
+            configureSSL(httpClientBuilder, config.getKeystoreConfig(), config.getTruststoreConfig(), verifyHostname);
+
         }
-    }
 
-
-    /**
-     * Create RestTemplate with no SSL configured
-     *
-     * @param timeoutConfig @Nullable Configuration that contains timeouts if desired
-     */
-    protected static RestTemplate createRestTemplateWithNoSSL(TimeoutConfig timeoutConfig) {
-        HttpClientBuilder builder = HttpClientBuilder.create();
-        configureTimeouts(builder, timeoutConfig);
-        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(builder.build()));
-    }
-
-
-    /**
-     * Create RestTemplate with no SSL configured
-     *
-     * @param timeoutConfig @Nullable Configuration that contains timeouts
-     * @param keystoreConfig @NotNull Configuration that contains keystore-related configurations
-     * @param truststoreConfig @NotNull Configuration that contains truststore-related configurations
-     * @param verifyHostname Flag to indicate if hostname verification should be enabled
-     */
-    protected static RestTemplate createRestTemplateWithSSL(TimeoutConfig timeoutConfig, KeystoreConfig keystoreConfig, TruststoreConfig truststoreConfig, boolean verifyHostname) {
-        HttpClientBuilder builder = HttpClientBuilder.create();
-        configureTimeouts(builder, timeoutConfig);
-        configureSSL(builder, keystoreConfig, truststoreConfig, verifyHostname);
-        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(builder.build()));
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClientBuilder.build()));
     }
 
 

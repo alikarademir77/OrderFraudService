@@ -83,7 +83,7 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.sslEnabled()
 
         then:
 
@@ -101,7 +101,7 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.sslEnabled()
 
         then:
 
@@ -119,7 +119,7 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.sslEnabled()
 
         then:
 
@@ -137,7 +137,7 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.sslEnabled()
 
         then:
 
@@ -155,7 +155,7 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.sslEnabled()
 
         then:
 
@@ -173,7 +173,7 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.sslEnabled()
 
         then:
 
@@ -190,7 +190,7 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         when:
 
-        config.createHttpClient()
+        config.sslEnabled()
 
         then:
 

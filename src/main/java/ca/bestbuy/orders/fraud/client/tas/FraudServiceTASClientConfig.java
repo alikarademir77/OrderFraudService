@@ -1,9 +1,5 @@
 package ca.bestbuy.orders.fraud.client.tas;
 
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +8,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.client.core.WebServiceTemplate;
-import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
+import ca.bestbuy.orders.fraud.client.WebClientConfig;
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper;
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
 import ca.bestbuy.orders.fraud.utility.KeystoreConfig;
@@ -23,7 +19,7 @@ import ca.bestbuy.orders.fraud.utility.WebClientUtility;
 
 
 @Configuration
-public class FraudServiceTASClientConfig {
+public class FraudServiceTASClientConfig implements WebClientConfig {
 
     private String url;
 
@@ -144,11 +140,8 @@ public class FraudServiceTASClientConfig {
 
 
     @Bean
-    protected WebServiceTemplate webServiceTemplate(HttpComponentsMessageSender httpComponentsMessageSender, Jaxb2Marshaller marshaller) {
-        WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-        webServiceTemplate.setMarshaller(marshaller);
-        webServiceTemplate.setUnmarshaller(marshaller);
-        webServiceTemplate.setMessageSender(httpComponentsMessageSender);
+    protected WebServiceTemplate webServiceTemplate(Jaxb2Marshaller marshaller) {
+        WebServiceTemplate webServiceTemplate = WebClientUtility.createWebServiceTemplate(this, marshaller, marshaller);
         return webServiceTemplate;
     }
 
@@ -156,44 +149,8 @@ public class FraudServiceTASClientConfig {
     @Bean
     protected Jaxb2Marshaller marshaller() {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-        // this package must match the package in the <generatePackage> specified in
-        // pom.xml
         marshaller.setContextPath("ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl");
         return marshaller;
-    }
-
-
-    @Bean
-    protected HttpComponentsMessageSender httpComponentsMessageSender() {
-
-        HttpComponentsMessageSender httpComponentsMessageSender = new HttpComponentsMessageSender();
-        httpComponentsMessageSender.setHttpClient(createHttpClient());
-        return httpComponentsMessageSender;
-    }
-
-
-    protected HttpClient createHttpClient() {
-
-        HttpClientBuilder builder = HttpClientBuilder.create();
-
-        // Set timeouts
-        TimeoutConfig timeoutConfig = new TimeoutConfig(connectionTimeout, requestTimeout);
-        WebClientUtility.configureTimeouts(builder, timeoutConfig);
-
-        // Removing http content length header because header is already set, otherwise we get an exception about content length header already existing
-        builder.addInterceptorFirst((HttpRequestInterceptor) (httpRequest, httpContext) -> httpRequest.removeHeaders(HTTP.CONTENT_LEN));
-
-        if (sslEnabled) {
-
-            // Validate SSL Configurations
-            validateSSLConfigurations();
-
-            KeystoreConfig keystoreConfig = new KeystoreConfig(keystore, keystorePassword, keyAlias, keyPassword);
-            TruststoreConfig truststoreConfig = new TruststoreConfig(truststore, truststorePassword);
-            WebClientUtility.configureSSL(builder, keystoreConfig, truststoreConfig, verifyHostName);
-        }
-
-        return builder.build();
     }
 
 
@@ -229,4 +186,32 @@ public class FraudServiceTASClientConfig {
 
     }
 
+    @Override
+    public KeystoreConfig getKeystoreConfig() {
+        return new KeystoreConfig(keystore, keystorePassword, keyAlias, keyPassword);
+    }
+
+    @Override
+    public TruststoreConfig getTruststoreConfig() {
+        return new TruststoreConfig(truststore, truststorePassword);
+    }
+
+    @Override
+    public TimeoutConfig getTimeoutConfig() {
+        return new TimeoutConfig(connectionTimeout, requestTimeout);
+    }
+
+    @Override
+    public Boolean verifyHostname() {
+        return verifyHostName;
+    }
+
+    @Override
+    public Boolean sslEnabled() {
+        if(sslEnabled) {
+            validateSSLConfigurations();
+        }
+
+        return sslEnabled;
+    }
 }

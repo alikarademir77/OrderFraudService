@@ -1,5 +1,7 @@
 package ca.bestbuy.orders.fraud.utility
 
+import org.springframework.oxm.Marshaller
+import org.springframework.oxm.Unmarshaller
 import spock.lang.Specification
 
 class WebClientUtilityTest extends Specification {
@@ -10,6 +12,18 @@ class WebClientUtilityTest extends Specification {
         when:
 
         WebClientUtility.createRestTemplate(null)
+
+        then:
+
+        thrown IllegalArgumentException
+    }
+
+
+    def "Test createWebServiceTemplate() with null config"() {
+
+        when:
+
+        WebClientUtility.createWebServiceTemplate(null, Stub(Marshaller.class), Stub(Unmarshaller.class))
 
         then:
 

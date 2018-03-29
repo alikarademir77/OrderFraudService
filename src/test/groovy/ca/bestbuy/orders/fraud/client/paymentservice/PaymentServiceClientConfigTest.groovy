@@ -65,7 +65,7 @@ class PaymentServiceClientConfigTest extends Specification {
 
         when:
 
-        config.httpComponentsMessageSender()
+        config.sslEnabled()
 
         then:
 
@@ -83,7 +83,7 @@ class PaymentServiceClientConfigTest extends Specification {
 
         when:
 
-        config.httpComponentsMessageSender()
+        config.sslEnabled()
 
         then:
 
@@ -101,7 +101,7 @@ class PaymentServiceClientConfigTest extends Specification {
 
         when:
 
-        config.httpComponentsMessageSender()
+        config.sslEnabled()
 
         then:
 
@@ -119,7 +119,7 @@ class PaymentServiceClientConfigTest extends Specification {
 
         when:
 
-        config.httpComponentsMessageSender()
+        config.sslEnabled()
 
         then:
 
@@ -137,7 +137,7 @@ class PaymentServiceClientConfigTest extends Specification {
 
         when:
 
-        config.httpComponentsMessageSender()
+        config.sslEnabled()
 
         then:
 
@@ -155,7 +155,7 @@ class PaymentServiceClientConfigTest extends Specification {
 
         when:
 
-        config.httpComponentsMessageSender()
+        config.sslEnabled()
 
         then:
 
@@ -172,7 +172,7 @@ class PaymentServiceClientConfigTest extends Specification {
 
         when:
 
-        config.httpComponentsMessageSender()
+        config.sslEnabled()
 
         then:
 
