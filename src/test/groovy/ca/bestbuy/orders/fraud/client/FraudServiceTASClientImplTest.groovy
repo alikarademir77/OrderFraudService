@@ -3,6 +3,7 @@ package ca.bestbuy.orders.fraud.client
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper
 import ca.bestbuy.orders.fraud.model.internal.FraudAssesmentResult
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest
 import ca.bestbuy.orders.fraud.model.internal.Item
 import ca.bestbuy.orders.fraud.model.internal.Order
 import org.mapstruct.factory.Mappers
@@ -44,6 +45,7 @@ class FraudServiceTASClientImplTest extends Specification {
         given:
 
         Order order = createTestOrder()
+        FraudAssessmentRequest fraudAssessmentRequest = new FraudAssessmentRequest(1234, order)
 
         Source responsePayload = new StringSource(
                 "<ten:ManageOrderResult xmlns:ten=\"http://bestbuy.com/TenderAuth\">\n" +
@@ -66,7 +68,7 @@ class FraudServiceTASClientImplTest extends Specification {
 
         when:
 
-        FraudAssesmentResult result = client.doFraudCheck(order)
+        FraudAssesmentResult result = client.doFraudCheck(fraudAssessmentRequest)
 
         then:
 

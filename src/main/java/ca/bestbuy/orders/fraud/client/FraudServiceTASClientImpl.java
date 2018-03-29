@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBElement;
 
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
 import org.springframework.ws.client.WebServiceIOException;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.soap.client.SoapFaultClientException;
@@ -62,13 +63,16 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
     }
 
     @Override
-    public FraudAssesmentResult doFraudCheck(Order order) {
+    public FraudAssesmentResult doFraudCheck(FraudAssessmentRequest fraudAssessmentRequest) {
 
         //Map the request
         ManageOrderRequest request = new ManageOrderRequest();
+        Order order = fraudAssessmentRequest.getOrder();
         request.setIxTranType(ManageOrderActionCode.FRAUDCHECK);
         request.setTransactionData(tasRequestXMLMapper.mapTransactionData(order));
-
+        if(request.getTransactionData() != null) {
+            request.getTransactionData().setRequestVersion(fraudAssessmentRequest.getRequestVersion());
+        }
 
         ObjectFactory  objectFactory = new ObjectFactory();
         JAXBElement<ManageOrderRequest> jaxbRequest = objectFactory.createManageOrderRequest(request);

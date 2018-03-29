@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.statemachine.StateContext;
@@ -67,8 +68,12 @@ public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 		Order orderDetails = orderDetailsClient.getOrderDetails(orderNumber);
 		
 		//TODO: Call Resource Service to populate item SKU Category details
-		
-		FraudAssesmentResult fraudAssesmentResult = fraudServiceTASClient.doFraudCheck(orderDetails);
+
+		//store the requestVersion and the order details in a FraudAssessmentRequest object
+		FraudAssessmentRequest fraudAssessmentRequest = new FraudAssessmentRequest(Integer.parseInt(requestVersion), orderDetails);
+
+
+		FraudAssesmentResult fraudAssesmentResult = fraudServiceTASClient.doFraudCheck(fraudAssessmentRequest);
 		//TODO: Validate that response and request has same order number and request version
 				
 		if(fraudAssesmentResult!=null){

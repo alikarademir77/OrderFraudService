@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
@@ -171,7 +172,7 @@ public class TASInvokeActionTest {
 		createInitialRequestAcion.execute(context);
 		
 		when(orderDetailsClientMock.getOrderDetails(orderNumber)).thenReturn(new Order());		
-		when(fraudServiceTASClientMock.doFraudCheck(any(Order.class))).thenReturn(
+		when(fraudServiceTASClientMock.doFraudCheck(any(FraudAssessmentRequest.class))).thenReturn(
 				(new FraudAssesmentResult())
 					.setOrderNumber(orderNumber)
 					.setRequestVersion(requestVersion)

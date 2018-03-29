@@ -62,7 +62,7 @@ class TASResponseXMLMapperTest extends Specification{
         fraudResult.getOrderNumber() == transactionResults.getTransactionId()
         fraudResult.getTotalFraudScore() == transactionResults.getTotalScore()
         fraudResult.getRecommendationCode() == transactionResults.getRecommendationCode()
-        fraudResult.getRequestVersion() == transactionResults.getResponseData().getResponseVersion()
+        fraudResult.getRequestVersion() == transactionResults.getResponseData().getResponseVersion().toLong()
 
     }
 
