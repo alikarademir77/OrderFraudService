@@ -16,6 +16,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
 import ca.bestbuy.orders.fraud.client.FraudServiceTASClientConfig;
+import ca.bestbuy.orders.fraud.client.paymentservice.PaymentServiceClient;
+import ca.bestbuy.orders.fraud.client.paymentservice.PaymentServiceClientConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,12 @@ public class FraudRequestStatusHistoryRepositoryTest {
 
 	@MockBean
 	private FraudServiceTASClient fraudServiceTASClient;
+
+	@MockBean
+	private PaymentServiceClientConfig paymentServiceClientConfig;
+
+	@MockBean
+	private PaymentServiceClient paymentServiceClient;
 
 	@Autowired
 	FraudStatusRepository statusRepository;
