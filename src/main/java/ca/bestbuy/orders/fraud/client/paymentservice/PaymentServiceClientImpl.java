@@ -1,5 +1,16 @@
 package ca.bestbuy.orders.fraud.client.paymentservice;
 
+import java.io.IOException;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
+
+import org.springframework.ws.client.WebServiceIOException;
+import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.ws.soap.client.SoapFaultClientException;
+import org.springframework.ws.soap.client.core.SoapActionCallback;
+import org.springframework.xml.transform.StringResult;
+
 import ca.bestbuy.orders.fraud.mappers.PaymentServiceResponseMapper;
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.ErrorDetails;
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.GetPayPalPaymentDetailsRequest;
@@ -8,43 +19,23 @@ import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.Object
 import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.Status;
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.ws.client.WebServiceIOException;
-import org.springframework.ws.client.core.WebServiceTemplate;
-import org.springframework.ws.soap.client.SoapFaultClientException;
-import org.springframework.ws.soap.client.core.SoapActionCallback;
-import org.springframework.xml.transform.StringResult;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
-import java.io.IOException;
 
 @Slf4j
-@Component
 public class PaymentServiceClientImpl implements PaymentServiceClient {
 
     private WebServiceTemplate webServiceTemplate;
     private PaymentServiceResponseMapper mapper;
+    private String paymentServiceBaseUrl;
 
     private static final String QNAME_NAMESPACE = "http://mccp.services.bby.com/";
     private static final String QNAME_LOCALPART = "GetPaymentDetailsRequest";
     private static final String SOAP_ACTION_CALLBACK = "http://mccp.services.bby.com/GetPaymentDetails";
 
 
-    @Autowired
     public PaymentServiceClientImpl(WebServiceTemplate webServiceTemplate, PaymentServiceResponseMapper mapper) {
 
         if (webServiceTemplate == null) {
             throw new IllegalArgumentException("WebServiceTemplate provided to PaymentServiceClientImpl must not be null");
-        }
-
-        if (webServiceTemplate.getMarshaller() == null || webServiceTemplate.getUnmarshaller() == null) {
-            throw new IllegalArgumentException("WebServiceTemplate provided to PaymentServiceClientImpl must have a marshaller and unmarshaller set");
-        }
-
-        if (webServiceTemplate.getDefaultUri() == null || webServiceTemplate.getDefaultUri().isEmpty()) {
-            throw new IllegalArgumentException("WebServiceTemplate provided to PaymentServiceClientImpl must have a default uri set");
         }
 
         if (mapper == null) {
@@ -56,8 +47,21 @@ public class PaymentServiceClientImpl implements PaymentServiceClient {
     }
 
 
+    public void setPaymentServiceBaseUrl(String paymentServiceBaseUrl) {
+        this.paymentServiceBaseUrl = paymentServiceBaseUrl;
+    }
+
+
     @Override
     public PaymentDetails.PayPal.PayPalAdditionalInfo getPayPalAdditionalInfo(String paymentServiceReferenceId) throws PaymentServiceException, ConnectionException, UnexpectedResponseException, NoActivePaypalException {
+
+        if(paymentServiceReferenceId == null || paymentServiceReferenceId.isEmpty()) {
+            throw new IllegalArgumentException("Payment service reference ID provided cannot be null");
+        }
+
+        if(paymentServiceBaseUrl == null || paymentServiceBaseUrl.isEmpty()) {
+            throw new IllegalStateException("PaymentServiceBaseUrl must not be null or empty. Please ensure this is set on the client object before invoking getPayPalAdditionalInfo()");
+        }
 
         ObjectFactory objectFactory = new ObjectFactory();
 
@@ -72,7 +76,7 @@ public class PaymentServiceClientImpl implements PaymentServiceClient {
 
         try {
             // Send request to Payment Service and receive response
-            JAXBElement<GetPayPalPaymentDetailsResponse> response = (JAXBElement<GetPayPalPaymentDetailsResponse>) webServiceTemplate.marshalSendAndReceive(jaxbRequest, new SoapActionCallback(SOAP_ACTION_CALLBACK));
+            JAXBElement<GetPayPalPaymentDetailsResponse> response = (JAXBElement<GetPayPalPaymentDetailsResponse>) webServiceTemplate.marshalSendAndReceive(paymentServiceBaseUrl, jaxbRequest, new SoapActionCallback(SOAP_ACTION_CALLBACK));
 
             if(response == null || response.getValue() == null || response.getValue().getStatus() == null) {
 

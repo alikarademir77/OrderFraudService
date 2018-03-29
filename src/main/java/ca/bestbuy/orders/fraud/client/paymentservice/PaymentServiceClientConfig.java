@@ -1,10 +1,6 @@
 package ca.bestbuy.orders.fraud.client.paymentservice;
 
 
-import ca.bestbuy.orders.fraud.utility.KeystoreConfig;
-import ca.bestbuy.orders.fraud.utility.TimeoutConfig;
-import ca.bestbuy.orders.fraud.utility.TruststoreConfig;
-import ca.bestbuy.orders.fraud.utility.WebClientUtility;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -18,6 +14,12 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.transport.http.HttpComponentsMessageSender;
+
+import ca.bestbuy.orders.fraud.mappers.PaymentServiceResponseMapper;
+import ca.bestbuy.orders.fraud.utility.KeystoreConfig;
+import ca.bestbuy.orders.fraud.utility.TimeoutConfig;
+import ca.bestbuy.orders.fraud.utility.TruststoreConfig;
+import ca.bestbuy.orders.fraud.utility.WebClientUtility;
 
 @Configuration
 public class PaymentServiceClientConfig {
@@ -124,9 +126,16 @@ public class PaymentServiceClientConfig {
 
 
     @Bean
+    public PaymentServiceClient paymentServiceClient(PaymentServiceResponseMapper mapper, WebServiceTemplate webServiceTemplate) {
+        PaymentServiceClientImpl client = new PaymentServiceClientImpl(webServiceTemplate, mapper);
+        client.setPaymentServiceBaseUrl(url);
+        return client;
+    }
+
+
+    @Bean
     protected WebServiceTemplate webServiceTemplate(HttpComponentsMessageSender httpComponentsMessageSender, Jaxb2Marshaller marshaller) {
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-        webServiceTemplate.setDefaultUri(url);
         webServiceTemplate.setMarshaller(marshaller);
         webServiceTemplate.setUnmarshaller(marshaller);
         webServiceTemplate.setMessageSender(httpComponentsMessageSender);
