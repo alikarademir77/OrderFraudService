@@ -1,6 +1,6 @@
 package ca.bestbuy.orders.fraud.mappers;
 
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderResponse;
 import ca.bestbuy.orders.fraud.model.internal.FraudResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

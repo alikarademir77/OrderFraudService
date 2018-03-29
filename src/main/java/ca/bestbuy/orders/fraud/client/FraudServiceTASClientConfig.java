@@ -158,7 +158,7 @@ public class FraudServiceTASClientConfig {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
         // this package must match the package in the <generatePackage> specified in
         // pom.xml
-        marshaller.setContextPath("ca.bestbuy.orders.fraud.model.client.accertify.wsdl");
+        marshaller.setContextPath("ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl");
         return marshaller;
     }
 

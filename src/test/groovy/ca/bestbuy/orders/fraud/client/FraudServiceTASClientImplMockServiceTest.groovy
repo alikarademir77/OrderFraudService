@@ -26,7 +26,7 @@ class FraudServiceTASClientImplMockServiceTest extends Specification {
     def setup() {
 
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller()
-        marshaller.setContextPath("ca.bestbuy.orders.fraud.model.client.accertify.wsdl")
+        marshaller.setContextPath("ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl")
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate()
         webServiceTemplate.setMarshaller(marshaller)
         webServiceTemplate.setUnmarshaller(marshaller)

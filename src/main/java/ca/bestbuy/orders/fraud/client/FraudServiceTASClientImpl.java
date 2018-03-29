@@ -12,10 +12,10 @@ import org.springframework.xml.transform.StringResult;
 
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper;
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderActionCode;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderRequest;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ObjectFactory;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderActionCode;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderRequest;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderResponse;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ObjectFactory;
 import ca.bestbuy.orders.fraud.model.internal.FraudResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import lombok.extern.slf4j.Slf4j;

@@ -1,15 +1,15 @@
 package ca.bestbuy.orders.fraud.mappers
 
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.AddressDetails
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.CaPaymentMethod
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ChargeBack
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ItemStatus
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethodType
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethods
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PurchaseOrderStatus
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.SalesChannels
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.TransactionData
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.TransactionType
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.AddressDetails
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.CaPaymentMethod
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ChargeBack
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ItemStatus
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethodType
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethods
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PurchaseOrderStatus
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.SalesChannels
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionData
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionType
 import ca.bestbuy.orders.fraud.model.internal.Address
 import ca.bestbuy.orders.fraud.model.internal.Chargeback
 import ca.bestbuy.orders.fraud.model.internal.Item
@@ -164,7 +164,7 @@ class TASRequestXMLMapperTest extends Specification {
         when:
 
         TransactionData mappedTransactionData = xmlMapper.mapTransactionData(orderToMap)
-        List<ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ShippingOrder> mappedShippingOrders = mappedTransactionData.getShippingOrders().getShippingOrder()
+        List<ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ShippingOrder> mappedShippingOrders = mappedTransactionData.getShippingOrders().getShippingOrder()
 
         then:
 
@@ -183,7 +183,7 @@ class TASRequestXMLMapperTest extends Specification {
 
     }
 
-    void doShippingOrder_PurchaseOrderDetailsAssertions(ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ShippingOrder shippingOrder, List<PurchaseOrder> purchaseOrdersToMap) {
+    void doShippingOrder_PurchaseOrderDetailsAssertions(ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ShippingOrder shippingOrder, List<PurchaseOrder> purchaseOrdersToMap) {
         for(PurchaseOrder purchaseOrder : purchaseOrdersToMap){
 
             if(shippingOrder.getShippingOrderId().equals(purchaseOrder.getShippingOrderRefID())){
@@ -218,7 +218,7 @@ class TASRequestXMLMapperTest extends Specification {
 
         when:
         TransactionData mappedTransactionData = xmlMapper.mapTransactionData(orderToMap)
-        List<ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Item> mappedItems = mappedTransactionData.getItems().getItem()
+        List<ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Item> mappedItems = mappedTransactionData.getItems().getItem()
 
         then:
         for(int i = 0; i < mappedItems.size() ; i++){
@@ -603,15 +603,21 @@ class TASRequestXMLMapperTest extends Specification {
 
         PaymentDetails.PayPal payPal= new PaymentDetails.PayPal();
         payPal.totalAuthorizedAmount = 100
-        payPal.email = "email"
-        payPal.requestID = "requestId"
-        payPal.verifiedStatus = "status"
+        payPal.status = "ACTIVE"
+        payPal.paymentServiceInternalRefId = "refId"
+        PaymentDetails.PayPal.PayPalAdditionalInfo payPalInfo= new PaymentDetails.PayPal.PayPalAdditionalInfo()
+
+        payPalInfo.email = "email"
+        payPalInfo.payPalOrderId = "requestId"
+        payPalInfo.verifiedStatus = "status"
+
+        payPal.payPalAdditionalInfo = payPalInfo
 
         return payPal
 
     }
 
-    void doItemShippingOrderIdAssertion(ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Item item, List<ShippingOrder> shippingOrders) {
+    void doItemShippingOrderIdAssertion(ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Item item, List<ShippingOrder> shippingOrders) {
 
         for(int i = 0; i < shippingOrders.size(); i++){
             List<ShippingOrderLine> shippingOrderLinesToMap = shippingOrders.get(i).getShippingOrderLines()
@@ -691,10 +697,9 @@ class TASRequestXMLMapperTest extends Specification {
             int payPalIndexInPayPalList = payPalPaymentIndex-giftCardsEndIndex
 
             assert paymentMethodsList.get(payPalPaymentIndex).getPaymentMethodType() == PaymentMethodType.PAYPAL
-            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalEmail() == payPalList.get(payPalIndexInPayPalList).email
-            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalRequestId() == payPalList.get(payPalIndexInPayPalList).requestID
-            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalStatus() == payPalList.get(payPalIndexInPayPalList).verifiedStatus
-            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getTotalPaypalAuthAmt() == payPalList.get(payPalIndexInPayPalList).totalAuthorizedAmount.toString()
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalEmail() == payPalList.get(payPalIndexInPayPalList).payPalAdditionalInfo.email
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalRequestId() == payPalList.get(payPalIndexInPayPalList).payPalAdditionalInfo.payPalOrderId
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalStatus() == payPalList.get(payPalIndexInPayPalList).payPalAdditionalInfo.verifiedStatus
 
             assert paymentMethodsList.get(payPalPaymentIndex).getCreditCard() == null
             assert paymentMethodsList.get(payPalPaymentIndex).getGiftCard() == null

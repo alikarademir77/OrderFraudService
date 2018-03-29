@@ -783,11 +783,6 @@
           "type": "string",
           "allowEmptyValue": false
         },
-        "payPalAdditionalInfo": {
-          "allowEmptyValue": true,
-          "description": "Additional PayPal information if requested",
-          "$ref": "#/definitions/PayPalAdditionalInfo"
-        },
         "payPalInternalRefId": {
           "type": "string",
           "description": "The internal PayPal reference ID to be used in calls to Payment Service",
@@ -799,32 +794,6 @@
         }
       },
       "title": "PayPalInfo"
-    },
-    "PayPalAdditionalInfo": {
-      "type": "object",
-      "properties": {
-        "payPalBillingAgreementId": {
-          "type": "string",
-          "description": "PayPal billing agreement ID (from PayPal)",
-          "allowEmptyValue": true
-        },
-        "payPalOrderId": {
-          "type": "string",
-          "description": "PayPal order ID (from PayPal)",
-          "allowEmptyValue": true
-        },
-        "payPalVerifiedStatus": {
-          "type": "string",
-          "description": "PayPal verified status (from PayPal)",
-          "allowEmptyValue": true
-        },
-        "payPalEmail": {
-          "type": "string",
-          "description": "PayPal email (from PayPal)",
-          "allowEmptyValue": true
-        }
-      },
-      "title": "PayPalAdditionalInfo"
     },
     "PaymentInfo": {
       "type": "object",

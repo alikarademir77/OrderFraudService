@@ -100,18 +100,31 @@ public class PaymentDetails {
      */
     public static class PayPal {
 
-        public String requestID;
-
-        public String email;
-
-        public String verifiedStatus;
+        public PayPalAdditionalInfo payPalAdditionalInfo;
 
         public BigDecimal totalAuthorizedAmount;
+
+        public String paymentServiceInternalRefId;
 
         /**
          * ACTIVE or DEACTIVE
          */
         public String status;
+
+
+
+        public static class PayPalAdditionalInfo{
+
+            public String payPalOrderId;
+
+            public String email;
+
+            public String verifiedStatus;
+        }
+
+
+
+
 
     }
 

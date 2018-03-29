@@ -2,8 +2,8 @@ package ca.bestbuy.orders.fraud.mappers;
 
 import java.math.BigDecimal;
 import java.util.List;
+import ca.bestbuy.orders.fraud.model.client.generated.orderdetails.swagger.*;
 
-import ca.bestbuy.orders.fraud.model.client.orderdetails.PayPalInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -11,19 +11,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 
-import ca.bestbuy.orders.fraud.model.client.orderdetails.CreditCardInfo;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.Discount;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.FSOrder;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.FSOrderLine;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.GiftCardInfo;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.ItemCharge;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.ItemChargeDiscount;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.PaymentMethodInfo;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.PurchaseOrder;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingCharge;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingOrderLine;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.Surcharge;
-import ca.bestbuy.orders.fraud.model.client.orderdetails.Tax;
 import ca.bestbuy.orders.fraud.model.internal.Address;
 import ca.bestbuy.orders.fraud.model.internal.Item;
 import ca.bestbuy.orders.fraud.model.internal.Order;
@@ -156,11 +143,11 @@ public abstract class OrderMapper {
             @Mapping(target = "shippingOrderLines", source = "shippingOrderLines"),
             @Mapping(target = "chargebacks", ignore = true) // TODO - Figure out how to get value
     })
-    protected abstract ShippingOrder mapShippingOrder(ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingOrder shippingOrderToMap);
+    protected abstract ShippingOrder mapShippingOrder(ca.bestbuy.orders.fraud.model.client.generated.orderdetails.swagger.ShippingOrder shippingOrderToMap);
 
 
     @AfterMapping
-    protected void mapShippingOrder_ShippingChargesAndTax(ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingOrder shippingOrderToMap, @MappingTarget ShippingOrder mappedShippingOrder) {
+    protected void mapShippingOrder_ShippingChargesAndTax(ca.bestbuy.orders.fraud.model.client.generated.orderdetails.swagger.ShippingOrder shippingOrderToMap, @MappingTarget ShippingOrder mappedShippingOrder) {
 
         BigDecimal totalShippingCharge = new BigDecimal(0.0);
         BigDecimal totalShippingChargeTax = new BigDecimal(0.0);
@@ -384,11 +371,8 @@ public abstract class OrderMapper {
 
 
     @Mappings({
-            @Mapping(target="requestID",source="payPalAdditionalInfo.payPalOrderId"),
-            @Mapping(target="email",source="payPalAdditionalInfo.payPalEmail"),
-            @Mapping(target="verifiedStatus",source="payPalAdditionalInfo.payPalVerifiedStatus"),
-            @Mapping(target="totalAuthorizedAmount",ignore=true), //we will not be sending this
-            @Mapping(target="status",ignore=true) //todo: map based on whether PayPalInfo.active is true or false
+            @Mapping(target="status",source="active"), //todo: map based on whether PayPalInfo.active is true or false
+            @Mapping(target = "paymentServiceInternalRefId", source="payPalInternalRefId")
     })
     protected abstract PaymentDetails.PayPal mapPayPal(PayPalInfo payPalToMap);
 
@@ -406,7 +390,7 @@ public abstract class OrderMapper {
             @Mapping(target = "phoneNumber", source = "phone"),
             @Mapping(target = "secondaryPhoneNumber", source = "phone2")
     })
-    protected abstract Address mapAddress(ca.bestbuy.orders.fraud.model.client.orderdetails.Address addressToMap);
+    protected abstract Address mapAddress(ca.bestbuy.orders.fraud.model.client.generated.orderdetails.swagger.Address addressToMap);
 
 
 }

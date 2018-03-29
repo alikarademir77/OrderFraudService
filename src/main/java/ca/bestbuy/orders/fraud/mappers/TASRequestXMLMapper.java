@@ -16,20 +16,20 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.ObjectFactory;
 
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.AddressDetails;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.CaPaymentMethod;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ChargeBack;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ChargeBacks;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.CreditCard;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.GiftCard;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Item;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethodStatus;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethodType;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethods;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Paypal;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PurchaseOrderStatus;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ShippingOrder;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.TransactionData;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.AddressDetails;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.CaPaymentMethod;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ChargeBack;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ChargeBacks;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.CreditCard;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.GiftCard;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Item;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethodStatus;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethodType;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethods;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Paypal;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PurchaseOrderStatus;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ShippingOrder;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionData;
 import ca.bestbuy.orders.fraud.model.internal.Address;
 import ca.bestbuy.orders.fraud.model.internal.Chargeback;
 import ca.bestbuy.orders.fraud.model.internal.Order;
@@ -289,16 +289,15 @@ public abstract class TASRequestXMLMapper {
                 CaPaymentMethod mappedPayPalPaymentMethod = new CaPaymentMethod();
                 Paypal mappedPayPal = new Paypal();
 
-                //todo: (requires order details change) need to identify active payment method
-                mappedPayPalPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.INACTIVE);
+                mappedPayPalPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.valueOf(payPalToMap.status));
                 mappedPayPalPaymentMethod.setPaymentMethodType(PaymentMethodType.PAYPAL);
 
-                mappedPayPal.setPaypalRequestId(payPalToMap.requestID);
-                mappedPayPal.setPaypalStatus(payPalToMap.verifiedStatus);
-                mappedPayPal.setPaypalEmail(payPalToMap.email);
+                if(payPalToMap.payPalAdditionalInfo != null) {
+                    mappedPayPal.setPaypalRequestId(payPalToMap.payPalAdditionalInfo.payPalOrderId);
+                    mappedPayPal.setPaypalStatus(payPalToMap.payPalAdditionalInfo.verifiedStatus);
+                    mappedPayPal.setPaypalEmail(payPalToMap.payPalAdditionalInfo.email);
+                }
 
-                //todo: (requires order details change) need to get total gift card amount in internal domain object -- should be same as total credit card amt
-                mappedPayPal.setTotalPaypalAuthAmt(payPalToMap.totalAuthorizedAmount.toString());
 
                 mappedPayPalPaymentMethod.setPaypals(mappedPayPal);
                 mappedPaymentMethods.getPaymentMethod().add(mappedPayPalPaymentMethod);
