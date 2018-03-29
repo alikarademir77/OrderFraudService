@@ -1,4 +1,4 @@
-package ca.bestbuy.orders.fraud.client;
+package ca.bestbuy.orders.fraud.client.orderdetails;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.web.client.RestTemplate;
 
+import ca.bestbuy.orders.fraud.client.WebClientConfig;
 import ca.bestbuy.orders.fraud.mappers.OrderMapper;
 import ca.bestbuy.orders.fraud.utility.KeystoreConfig;
 import ca.bestbuy.orders.fraud.utility.TimeoutConfig;

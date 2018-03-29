@@ -1,4 +1,4 @@
-package ca.bestbuy.orders.fraud.client;
+package ca.bestbuy.orders.fraud.client.tas;
 
 import java.io.IOException;
 

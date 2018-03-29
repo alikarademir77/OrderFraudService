@@ -1,4 +1,4 @@
-package ca.bestbuy.orders.fraud.client;
+package ca.bestbuy.orders.fraud.client.orderdetails;
 
 import ca.bestbuy.orders.fraud.model.internal.Order;
 

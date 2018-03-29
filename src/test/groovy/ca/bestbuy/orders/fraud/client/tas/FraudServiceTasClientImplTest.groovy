@@ -1,4 +1,4 @@
-package ca.bestbuy.orders.fraud.client
+package ca.bestbuy.orders.fraud.client.tas
 
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper

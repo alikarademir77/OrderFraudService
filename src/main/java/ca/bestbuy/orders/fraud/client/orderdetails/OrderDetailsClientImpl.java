@@ -1,15 +1,15 @@
-package ca.bestbuy.orders.fraud.client;
+package ca.bestbuy.orders.fraud.client.orderdetails;
 
 import java.io.IOException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import ca.bestbuy.orders.fraud.model.client.generated.orderdetails.swagger.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 import ca.bestbuy.orders.fraud.mappers.OrderMapper;
+import ca.bestbuy.orders.fraud.model.client.generated.orderdetails.swagger.FSOrder;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import lombok.extern.slf4j.Slf4j;
 

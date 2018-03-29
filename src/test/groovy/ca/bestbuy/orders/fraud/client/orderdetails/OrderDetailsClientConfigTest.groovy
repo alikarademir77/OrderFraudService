@@ -1,17 +1,16 @@
-package ca.bestbuy.orders.fraud.client
+package ca.bestbuy.orders.fraud.client.orderdetails
 
 import org.springframework.core.io.ClassPathResource
 import org.springframework.web.context.support.ServletContextResource
 import spock.lang.Specification
 
-class FraudServiceTASClientConfigTest extends Specification {
-
+class OrderDetailsClientConfigTest extends Specification {
 
     def "Test that exception is thrown if url configuration is not set"() {
 
         given:
 
-        FraudServiceTASClientConfig config = new FraudServiceTASClientConfig()
+        OrderDetailsClientConfig config = new OrderDetailsClientConfig()
 
         when:
 
@@ -23,15 +22,15 @@ class FraudServiceTASClientConfigTest extends Specification {
     }
 
 
-    def "Test that exception is thrown if fraudCheckSOAPActionCallback configuration is not set"() {
+    def "Test that exception is thrown if getOrderDetailsEndpoint configuration is not set"() {
 
         given:
 
-        FraudServiceTASClientConfig config = new FraudServiceTASClientConfig()
+        OrderDetailsClientConfig config = new OrderDetailsClientConfig()
 
         when:
 
-        config.setFraudCheckSOAPActionCallback(null)
+        config.setGetOrderDetailsEndpoint(null)
 
         then:
 
@@ -44,7 +43,7 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         given:
 
-        FraudServiceTASClientConfig config = new FraudServiceTASClientConfig()
+        OrderDetailsClientConfig config = new OrderDetailsClientConfig()
 
         when:
 
@@ -61,7 +60,7 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         given:
 
-        FraudServiceTASClientConfig config = new FraudServiceTASClientConfig()
+        OrderDetailsClientConfig config = new OrderDetailsClientConfig()
 
         when:
 
@@ -78,17 +77,17 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         setup:
 
-        FraudServiceTASClientConfig config = createValidConfig_SSLEnabled()
+        OrderDetailsClientConfig config = createValidConfig_SSLEnabled()
         config.setKeystore(null)
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
         final IllegalStateException exception = thrown()
-        exception.message.contains("client.tas.connection.ssl.keystore")
+        exception.message.contains("client.order-details.connection.ssl.keystore")
     }
 
 
@@ -96,17 +95,17 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         setup:
 
-        FraudServiceTASClientConfig config = createValidConfig_SSLEnabled()
+        OrderDetailsClientConfig config = createValidConfig_SSLEnabled()
         config.setKeystore(Stub(ServletContextResource.class))
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
         final IllegalStateException exception = thrown()
-        exception.message.contains("client.tas.connection.ssl.keystore")
+        exception.message.contains("client.order-details.connection.ssl.keystore")
     }
 
 
@@ -114,17 +113,17 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         setup:
 
-        FraudServiceTASClientConfig config = createValidConfig_SSLEnabled()
+        OrderDetailsClientConfig config = createValidConfig_SSLEnabled()
         config.setKeystorePassword(null)
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
         final IllegalStateException exception = thrown()
-        exception.message.contains("client.tas.connection.ssl.keystore-password")
+        exception.message.contains("client.order-details.connection.ssl.keystore-password")
     }
 
 
@@ -132,17 +131,17 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         setup:
 
-        FraudServiceTASClientConfig config = createValidConfig_SSLEnabled()
+        OrderDetailsClientConfig config = createValidConfig_SSLEnabled()
         config.setTruststore(null)
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
         final IllegalStateException exception = thrown()
-        exception.message.contains("client.tas.connection.ssl.truststore")
+        exception.message.contains("client.order-details.connection.ssl.truststore")
     }
 
 
@@ -150,17 +149,17 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         setup:
 
-        FraudServiceTASClientConfig config = createValidConfig_SSLEnabled()
+        OrderDetailsClientConfig config = createValidConfig_SSLEnabled()
         config.setTruststore(Stub(ServletContextResource.class))
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
         final IllegalStateException exception = thrown()
-        exception.message.contains("client.tas.connection.ssl.truststore")
+        exception.message.contains("client.order-details.connection.ssl.truststore")
     }
 
 
@@ -168,17 +167,17 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         setup:
 
-        FraudServiceTASClientConfig config = createValidConfig_SSLEnabled()
+        OrderDetailsClientConfig config = createValidConfig_SSLEnabled()
         config.setTruststorePassword(null)
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
         final IllegalStateException exception = thrown()
-        exception.message.contains("client.tas.connection.ssl.truststore-password")
+        exception.message.contains("client.order-details.connection.ssl.truststore-password")
     }
 
 
@@ -186,11 +185,11 @@ class FraudServiceTASClientConfigTest extends Specification {
 
         setup:
 
-        FraudServiceTASClientConfig config = createValidConfig_SSLEnabled()
+        OrderDetailsClientConfig config = createValidConfig_SSLEnabled()
 
         when:
 
-        config.createHttpClient()
+        config.restTemplate()
 
         then:
 
@@ -198,11 +197,11 @@ class FraudServiceTASClientConfigTest extends Specification {
     }
 
 
-    private static FraudServiceTASClientConfig createValidConfig_SSLEnabled() {
-        FraudServiceTASClientConfig config = new FraudServiceTASClientConfig()
+    private static OrderDetailsClientConfig createValidConfig_SSLEnabled() {
+        OrderDetailsClientConfig config = new OrderDetailsClientConfig()
         config.setSslEnabled(true)
         config.setUrl("url")
-        config.setFraudCheckSOAPActionCallback("callback")
+        config.setGetOrderDetailsEndpoint("endpoint")
         config.setRequestTimeout(1000)
         config.setConnectionTimeout(10000)
         config.setVerifyHostName(true)
@@ -212,10 +211,6 @@ class FraudServiceTASClientConfigTest extends Specification {
         config.setTruststorePassword("password")
         return config
     }
-
-
-
-
 
 
 }
