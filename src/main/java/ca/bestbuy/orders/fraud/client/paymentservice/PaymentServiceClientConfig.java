@@ -120,7 +120,7 @@ public class PaymentServiceClientConfig {
     }
 
 
-    private static final String MARSHALLER_CONTEXT_PATH = "com.bbyc.orders.orderdetails.model.client.generated.paymentservice.wsdl";
+    private static final String MARSHALLER_CONTEXT_PATH = "ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl";
 
 
     @Bean
