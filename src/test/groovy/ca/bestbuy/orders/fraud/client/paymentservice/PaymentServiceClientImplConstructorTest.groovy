@@ -1,6 +1,5 @@
 package ca.bestbuy.orders.fraud.client.paymentservice
 
-import ca.bestbuy.orders.fraud.client.paymentservice.PaymentServiceClientImpl
 import ca.bestbuy.orders.fraud.mappers.PaymentServiceResponseMapper
 import org.springframework.oxm.Marshaller
 import org.springframework.oxm.Unmarshaller

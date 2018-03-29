@@ -129,6 +129,13 @@ public class PaymentServiceClientImpl implements PaymentServiceClient {
             String errorMessage = "A connection error occurred while communicating with Payment Service";
             log.error(errorMessage + ": " + wse.getMessage());
             throw new ConnectionException(errorMessage, wse);
+        } catch (MissingInformationException mie){
+            // This will only be thrown in cases of no active paypal orders being found
+
+            String errorMessage = "An error occurred while mapping PayPal Additional Information";
+            log.error(errorMessage + ": " + mie.getMessage());
+            throw mie;
+
         }
 
     }

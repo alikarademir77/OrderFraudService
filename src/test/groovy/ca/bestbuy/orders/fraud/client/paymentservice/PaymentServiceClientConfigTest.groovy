@@ -1,6 +1,5 @@
 package ca.bestbuy.orders.fraud.client.paymentservice
 
-import ca.bestbuy.orders.fraud.client.paymentservice.PaymentServiceClientConfig
 import org.springframework.core.io.ClassPathResource
 import org.springframework.web.context.support.ServletContextResource
 import spock.lang.Specification

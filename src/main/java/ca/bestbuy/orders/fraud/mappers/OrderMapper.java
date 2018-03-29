@@ -371,7 +371,7 @@ public abstract class OrderMapper {
 
 
     @Mappings({
-            @Mapping(target="status",source="active"), //todo: map based on whether PayPalInfo.active is true or false
+            @Mapping(target="status",source="active"),
             @Mapping(target = "paymentServiceInternalRefId", source="payPalInternalRefId")
     })
     protected abstract PaymentDetails.PayPal mapPayPal(PayPalInfo payPalToMap);

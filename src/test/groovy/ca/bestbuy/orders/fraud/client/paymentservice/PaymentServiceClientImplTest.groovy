@@ -1,8 +1,5 @@
 package ca.bestbuy.orders.fraud.client.paymentservice
 
-import ca.bestbuy.orders.fraud.client.paymentservice.PaymentServiceClientImpl
-import ca.bestbuy.orders.fraud.client.paymentservice.PaymentServiceException
-import ca.bestbuy.orders.fraud.client.paymentservice.UnexpectedResponseException
 import ca.bestbuy.orders.fraud.mappers.PaymentServiceResponseMapper
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails
 import org.mapstruct.factory.Mappers

@@ -328,7 +328,7 @@ public abstract class TASRequestXMLMapper {
             for (int i = 0; i < orderToMap.getShippingOrders().size(); i++) {
                 ca.bestbuy.orders.fraud.model.internal.ShippingOrder shippingOrderToMap = orderToMap.getShippingOrders().get(i);
 
-                if(shippingOrderToMap.getChargebacks() != null || !(shippingOrderToMap.getChargebacks().isEmpty())) {
+                if(shippingOrderToMap.getChargebacks() != null && !(shippingOrderToMap.getChargebacks().isEmpty())) {
                     //iterate through the shipping order's list of chargebacks
                     for (int j = 0; j < shippingOrderToMap.getChargebacks().size(); j++) {
                         //for each internal chargeback object, map a accertify.wsdl.Chargeback object

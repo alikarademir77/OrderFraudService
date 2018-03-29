@@ -247,6 +247,7 @@ class OrderMapperTest extends Specification {
         PaymentMethodInfo paymentMethodInfoToMap = new PaymentMethodInfo()
         paymentMethodInfoToMap.setCreditCards(Arrays.asList(new CreditCardInfo(), new CreditCardInfo()))
         paymentMethodInfoToMap.setGiftCards(Arrays.asList(new GiftCardInfo()))
+        paymentMethodInfoToMap.setPayPal(Arrays.asList(new PayPalInfo(), new PayPalInfo(), new PayPalInfo()))
 
         when: "OrderMapper.mapCreditCard() is invoked on the FS Order CreditCardInfo object"
 
@@ -256,8 +257,7 @@ class OrderMapperTest extends Specification {
 
         mappedPaymentDetails.getCreditCards().size() == paymentMethodInfoToMap.getCreditCards().size()
         mappedPaymentDetails.getGiftCards().size() == paymentMethodInfoToMap.getGiftCards().size()
-
-        // TODO - Map payPal
+        mappedPaymentDetails.getPayPals().size() == paymentMethodInfoToMap.getPayPal().size()
     }
 
 
