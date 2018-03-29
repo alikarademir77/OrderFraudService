@@ -1,0 +1,106 @@
+package ca.bestbuy.orders.fraud.client.paymentservice;
+
+import ca.bestbuy.orders.fraud.mappers.PaymentServiceResponseMapper;
+import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.GetPayPalPaymentDetailsRequest;
+import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.GetPayPalPaymentDetailsResponse;
+import ca.bestbuy.orders.fraud.model.client.generated.paymentservice.wsdl.ObjectFactory;
+import ca.bestbuy.orders.fraud.model.internal.PaymentDetails;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.ws.client.WebServiceIOException;
+import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.ws.soap.client.SoapFaultClientException;
+import org.springframework.ws.soap.client.core.SoapActionCallback;
+import org.springframework.xml.transform.StringResult;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
+import java.io.IOException;
+
+@Slf4j
+@Component
+public class PaymentServiceClientImpl implements PaymentServiceClient {
+
+    private WebServiceTemplate webServiceTemplate;
+    private PaymentServiceResponseMapper mapper;
+
+    private static final String QNAME_NAMESPACE = "http://mccp.services.bby.com/";
+    private static final String QNAME_LOCALPART = "GetPaymentDetailsRequest";
+    private static final String SOAP_ACTION_CALLBACK = "http://mccp.services.bby.com/GetPaymentDetails";
+
+
+    @Autowired
+    public PaymentServiceClientImpl(WebServiceTemplate webServiceTemplate, PaymentServiceResponseMapper mapper) {
+
+        if (webServiceTemplate == null) {
+            throw new IllegalArgumentException("WebServiceTemplate provided to PaymentServiceClientImpl must not be null");
+        }
+
+        if (webServiceTemplate.getMarshaller() == null || webServiceTemplate.getUnmarshaller() == null) {
+            throw new IllegalArgumentException("WebServiceTemplate provided to PaymentServiceClientImpl must have a marshaller and unmarshaller set");
+        }
+
+        if (webServiceTemplate.getDefaultUri() == null || webServiceTemplate.getDefaultUri().isEmpty()) {
+            throw new IllegalArgumentException("WebServiceTemplate provided to PaymentServiceClientImpl must have a default uri set");
+        }
+
+        if (mapper == null) {
+            throw new IllegalArgumentException("PaymentServiceResponseMapper provided to PaymentServiceClientImpl must not be null");
+        }
+
+        this.webServiceTemplate = webServiceTemplate;
+        this.mapper = mapper;
+    }
+
+
+    @Override
+    public PaymentDetails.PayPal.PayPalAdditionalInfo getPayPalAdditionalInfo(String paymentServiceReferenceId) {
+
+        ObjectFactory objectFactory = new ObjectFactory();
+
+        GetPayPalPaymentDetailsRequest request = objectFactory.createGetPayPalPaymentDetailsRequest();
+        request.setRequestedBy("Order Details Service");
+        request.setPaymentId(paymentServiceReferenceId);
+        request.setIncludeDetails(true);
+
+        QName qname = new QName(QNAME_NAMESPACE, QNAME_LOCALPART);
+        JAXBElement<GetPayPalPaymentDetailsRequest> jaxbRequest = new JAXBElement<>(qname, GetPayPalPaymentDetailsRequest.class, request);
+        log.info("Request sent to Payment Service:" + convertToXMLString(jaxbRequest));
+
+        try {
+            // Send request to Payment Service and receive response
+            JAXBElement<GetPayPalPaymentDetailsResponse> response = (JAXBElement<GetPayPalPaymentDetailsResponse>) webServiceTemplate.marshalSendAndReceive(jaxbRequest, new SoapActionCallback(SOAP_ACTION_CALLBACK));
+            log.info("Response received from Payment Service:" + convertToXMLString(response));
+
+            // Map response to PayPalAdditionalInfo object
+            PaymentDetails.PayPal.PayPalAdditionalInfo payPalAdditionalInfo = mapper.mapPayPalAdditionalInfo(response.getValue().getPaymentDetails());
+            return payPalAdditionalInfo;
+
+        } catch (SoapFaultClientException sfce) {
+            //todo: figure out how to handle this
+            log.error("An error occurred while sending request to Payment Service: FAULT CODE is " + sfce.getFaultCode() + " and FAULT STRING is " + sfce.getFaultStringOrReason());
+            throw sfce;
+        } catch (WebServiceIOException wse) {
+            //todo: figure out how to handle this
+            log.error("A connection error occurred while communicating with Payment Service: " + wse.getMessage());
+            throw wse;
+        }
+
+
+    }
+
+
+    private String convertToXMLString(JAXBElement jaxbElement) {
+
+        StringResult output = new StringResult();
+        try {
+            webServiceTemplate.getMarshaller().marshal(jaxbElement, output);
+        } catch (IOException e) {
+            throw new IllegalStateException("Error while marshalling Payment Service request/response for logging purposes", e);
+        }
+
+        return output.toString();
+    }
+
+}
