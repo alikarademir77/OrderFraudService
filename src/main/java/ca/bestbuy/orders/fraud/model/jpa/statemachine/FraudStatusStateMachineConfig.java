@@ -3,6 +3,7 @@ package ca.bestbuy.orders.fraud.model.jpa.statemachine;
 import java.util.EnumSet;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
@@ -16,6 +17,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
  *
  */
 @Configuration
+@Scope(scopeName="prototype")
 @EnableStateMachineFactory(name="FraudStatusStateMachine")
 public class FraudStatusStateMachineConfig
 		extends EnumStateMachineConfigurerAdapter<FraudStatusCodes, FraudStatusEvents> {

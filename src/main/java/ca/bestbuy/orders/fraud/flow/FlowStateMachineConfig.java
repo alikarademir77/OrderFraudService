@@ -29,7 +29,7 @@ import ca.bestbuy.orders.fraud.flow.guard.RequestOutdatedGuard;
  *
  */
 @Configuration
-@EnableStateMachine
+@EnableStateMachine(name="FlowStateMachine")
 public class FlowStateMachineConfig
 		extends EnumStateMachineConfigurerAdapter<FlowStates, FlowEvents> {
 

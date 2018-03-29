@@ -3,9 +3,7 @@
  */
 package ca.bestbuy.orders.fraud.model.jpa.statemachine;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -30,9 +28,6 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 @DirtiesContext
 public class FraudStatusStateMachineTest {
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-    
 	@Test
 	public void testFraudStatusStateMachinePendingReviwSuccess() throws Exception{
 		StateMachine<FraudStatusCodes, FraudStatusEvents> statusStateMachine = buildMachine();

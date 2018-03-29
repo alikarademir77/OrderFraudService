@@ -47,29 +47,35 @@ import lombok.experimental.Accessors;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name = "FRAUD_RQST_STATUS_HSTRY", schema="ORDER_FRAUD")
-@Accessors(chain=true)
-@Getter
-@Setter
 @EqualsAndHashCode(callSuper=true, exclude={"fraudRequestStatusHistoryDetail"})
 @ToString(callSuper=true, exclude={"fraudRequestStatusHistoryDetail"})
 public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 
+	@Accessors(chain=true)
+	@Getter
+	@Setter
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator")
 	@Column(name = "FRAUD_RQST_STATUS_HSTRY_ID")
 	private long fraudRequestStatusHistoryId;
 
+	@Accessors(chain=true)
+	@Getter
+	@Setter
 	//bi-directional many-to-one association to FraudRequestStatusHistoryDetail
 	@OneToOne(mappedBy="fraudRequestStatusHistory", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	private FraudRequestStatusHistoryDetail fraudRequestStatusHistoryDetail;
 
+	@Accessors(chain=true)
+	@Getter
+	@Setter
 	//bi-directional many-to-one association to FraudRequest
 	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="FRAUD_RQST_ID")
 	private FraudRequest fraudRequest;
 
+	@Access(AccessType.PROPERTY)
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "FRAUD_STATUS_CODE")
 	private FraudStatusCodes fraudStatusCode;
@@ -85,6 +91,7 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 			context = new AnnotationConfigApplicationContext(FraudStatusStateMachineConfig.class);
 			StateMachineFactory<FraudStatusCodes, FraudStatusEvents> factory = context.getBean("FraudStatusStateMachine", StateMachineFactory.class);
 			fraudStatusStateMachine = factory.getStateMachine("FraudRequestStatusHistorySM");
+			this.fraudStatusCode = fraudStatusStateMachine.getState().getId();
 			fraudStatusStateMachine.addStateListener(new StateMachineEventListener(this));
 		}finally {
 			if(context!=null){
@@ -111,4 +118,15 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 		}
 	}
 
+	@SuppressWarnings("unused")
+	//Used by Spring Framework
+	private void setFraudStatusCode(FraudStatusCodes fraudStatusCode) {
+		if((fraudStatusCode!=null)&&(this.getFraudStatusStateMachine().getState().getId()!=fraudStatusCode)){
+			handleStateForFraudStatus(this.getFraudStatusCode(), this.getFraudStatusStateMachine());
+		}
+		this.fraudStatusCode = fraudStatusCode;
+	}
+
+	
+	
 }

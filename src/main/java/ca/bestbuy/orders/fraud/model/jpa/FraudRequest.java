@@ -54,38 +54,52 @@ import lombok.experimental.Accessors;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name = "FRAUD_RQST", schema="ORDER_FRAUD")
-@Accessors(chain=true)
-@Getter
-@Setter
 @EqualsAndHashCode(callSuper=true, exclude={"fraudRequestStatusHistory"})
 @ToString(callSuper=true, exclude={"fraudRequestStatusHistory"})
 public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 
+	@Accessors(chain=true)
+	@Getter
+	@Setter
 	@Id @GeneratedValue(strategy=GenerationType.TABLE, generator="orderFraudIdGenerator" )
 	@Column(name = "FRAUD_RQST_ID")
 	private long fraudRequestId;
 
+	@Accessors(chain=true)
+	@Getter
+	@Setter
 	@Temporal(TemporalType.DATE)
 	@Column(name = "EVENT_DATE")
 	private Date eventDate;
 
+	@Accessors(chain=true)
+	@Getter
+	@Setter
 	@Column(name = "ORDER_NUMBER")
 	private BigDecimal orderNumber;
 
+	@Accessors(chain=true)
+	@Getter
+	@Setter
 	@Column(name = "REQUEST_VERSION")
 	private Long requestVersion;
 
+	@Accessors(chain=true)
+	@Getter
+	@Setter
 	//uni-directional many-to-one association to FraudRequestType
 	@ManyToOne(cascade={CascadeType.REFRESH}, fetch=FetchType.EAGER)
 	@JoinColumn(name="REQUEST_TYPE_CODE")
 	private FraudRequestType fraudRequestType;
 
+	@Accessors(chain=true)
+	@Getter
+	@Setter
 	//bi-directional many-to-one association to FraudRquestHistory
 	@OneToMany(mappedBy="fraudRequest", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	private List<FraudRequestStatusHistory> fraudRequestStatusHistory;
 
 	@Getter(AccessLevel.PRIVATE)
-	@Setter(AccessLevel.PRIVATE)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "FRAUD_STATUS_CODE")
 	private FraudStatusCodes fraudStatusCode;
@@ -101,6 +115,7 @@ public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 			context = new AnnotationConfigApplicationContext(FraudStatusStateMachineConfig.class);
 			StateMachineFactory<FraudStatusCodes, FraudStatusEvents> factory = context.getBean("FraudStatusStateMachine", StateMachineFactory.class);
 			fraudStatusStateMachine = factory.getStateMachine("FraudRequestSM");
+			this.fraudStatusCode = fraudStatusStateMachine.getState().getId();
 			fraudStatusStateMachine.addStateListener(new StateMachineEventListener(this));
 		}finally {
 			if(context!=null){
@@ -140,6 +155,15 @@ public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 		public void stateEntered(State<FraudStatusCodes, FraudStatusEvents> state) {
 			entity.fraudStatusCode = state.getId();
 		}
+	}
+
+	@SuppressWarnings("unused")
+	//Used by Spring Framework
+	private void setFraudStatusCode(FraudStatusCodes fraudStatusCode) {
+		if((fraudStatusCode!=null)&&(this.getFraudStatusStateMachine().getState().getId()!=fraudStatusCode)){
+			handleStateForFraudStatus(this.getFraudStatusCode(), this.getFraudStatusStateMachine());
+		}		
+		this.fraudStatusCode = fraudStatusCode;
 	}
 	
 }

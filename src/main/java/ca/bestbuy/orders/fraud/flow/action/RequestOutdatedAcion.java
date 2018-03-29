@@ -35,8 +35,19 @@ public class RequestOutdatedAcion implements Action<FlowStates, FlowEvents> {
 		List<FraudRequest> existenceCheckResultList = (List<FraudRequest>)context.getExtendedState().getVariables().get(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT);
 		FraudRequest existenceCheckResultObj = existenceCheckResultList.get(0);
 		
-		log.info("Ignoring fraud request with order number={} and requestVersion={}, as a newer version({}) of request for same order exists in DB", orderNumber, requestVersion, String.valueOf(existenceCheckResultObj.getRequestVersion()));
+		logMessage(orderNumber, requestVersion, String.valueOf(existenceCheckResultObj.getRequestVersion()));
 		
+	}
+
+	/**
+	 * Used to help with testing
+	 * 
+	 * @param orderNumber
+	 * @param requestVersion
+	 * @param existenceCheckResultObj
+	 */
+	void logMessage(String orderNumber, String requestVersion, String foundRequestVersion) {
+		log.info("Ignoring fraud request with order number={} and requestVersion={}, as a newer version({}) of request for same order exists in DB", orderNumber, requestVersion, foundRequestVersion);
 	}
 
 

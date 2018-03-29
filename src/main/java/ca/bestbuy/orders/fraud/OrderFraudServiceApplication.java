@@ -31,10 +31,7 @@ public class OrderFraudServiceApplication {
 	private Long errorRetryCount; 
 
 	@Autowired
-	private OrderFraudChannels channels;
-
-	@Autowired
-	private MessageConsumingService consumingService;
+	private MessageConsumingService<MessagingEvent> consumingService;
 	
 	public static void main(String[] args) {
 

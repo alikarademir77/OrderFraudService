@@ -9,10 +9,6 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 
-import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
-import ca.bestbuy.orders.fraud.dao.FraudRequestStatusHistoryRepository;
-import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
-import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
 import ca.bestbuy.orders.fraud.flow.FlowEvents;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig;
 import ca.bestbuy.orders.fraud.flow.FlowStates;
@@ -26,20 +22,6 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
  */
 @Service
 public class FraudInboundMessageConsumingService implements MessageConsumingService <MessagingEvent>{
-	
-	@Autowired
-	FraudRequestRepository fraudRequestRepository;
-	
-	@Autowired
-	FraudRequestStatusHistoryRepository historyRepository;
-
-	
-	@Autowired
-	FraudStatusRepository statusRepository;
-
-	
-	@Autowired
-	FraudRequestTypeRepository typeRepository;
 	
 	@Autowired
 	StateMachine<FlowStates, FlowEvents> flowStateMachine;
