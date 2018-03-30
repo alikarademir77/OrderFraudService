@@ -578,6 +578,7 @@ class TASRequestXMLMapperTest extends Specification {
         PaymentDetails.CreditCard creditCard = new PaymentDetails.CreditCard();
 
         creditCard.billingAddress = createAnAddress()
+        creditCard.status = "ACTIVE"
         creditCard.creditCard3dSecureValue = "3dssecurevalue"
         creditCard.creditCardAvsResponse = "avsresponse"
         creditCard.creditCardCvvResponse = "cvvresponse"
@@ -593,6 +594,7 @@ class TASRequestXMLMapperTest extends Specification {
 
         PaymentDetails.GiftCard giftCard = new PaymentDetails.GiftCard();
         giftCard.giftCardNumber = "giftCardNumber"
+        giftCard.status = "ACTIVE"
         giftCard.totalAuthorizedAmount = 100
         return giftCard
 
@@ -667,7 +669,6 @@ class TASRequestXMLMapperTest extends Specification {
             assert paymentMethodsList.get(creditCardPaymentIndex).getCreditCard().getCreditCardAvsResponse() == creditCardsList.get(creditCardPaymentIndex).creditCardAvsResponse
             assert paymentMethodsList.get(creditCardPaymentIndex).getCreditCard().getCreditCardCvvResponse() == creditCardsList.get(creditCardPaymentIndex).creditCardCvvResponse
             assert paymentMethodsList.get(creditCardPaymentIndex).getCreditCard().getCreditCard3DSecureValue() == creditCardsList.get(creditCardPaymentIndex).creditCard3dSecureValue
-            assert paymentMethodsList.get(creditCardPaymentIndex).getCreditCard().getTotalCreditCardAuthAmount() == creditCardsList.get(creditCardPaymentIndex).totalAuthorizedAmount.toString()
 
             assert paymentMethodsList.get(creditCardPaymentIndex).getGiftCard() == null
             assert paymentMethodsList.get(creditCardPaymentIndex).getPaypals() == null
@@ -683,7 +684,6 @@ class TASRequestXMLMapperTest extends Specification {
 
             assert paymentMethodsList.get(giftCardPaymentIndex).getPaymentMethodType() == PaymentMethodType.GIFTCARD
             assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard().getGiftCardNumber() == giftCardList.get(giftCardIndexInGiftCardList).giftCardNumber
-            assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard().getTotalGiftCardAuthAmount() == giftCardList.get(giftCardIndexInGiftCardList).totalAuthorizedAmount.toString()
 
 
             assert paymentMethodsList.get(giftCardPaymentIndex).getCreditCard() == null

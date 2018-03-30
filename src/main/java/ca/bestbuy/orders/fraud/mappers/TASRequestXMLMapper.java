@@ -232,10 +232,10 @@ public abstract class TASRequestXMLMapper {
                 CaPaymentMethod mappedCreditCardPaymentMethod = new CaPaymentMethod();
                 CreditCard mappedCreditCard = new CreditCard();
 
-                //todo: (requires order details change) hardcoded for now as our internal payment details object is currently not storing the payment method status
-                //todo: (requires order details change) in the future, use the following instead of hardcoding:
-                //todo: (requires order details change) mappedCreditCardPaymentMethod.setPaymentMethodStatus(creditCardToMap.status);
-                mappedCreditCardPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.INACTIVE);
+
+                if(creditCardToMap.status != null) {
+                    mappedCreditCardPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.valueOf(creditCardToMap.status));
+                }
                 mappedCreditCardPaymentMethod.setPaymentMethodType(PaymentMethodType.CREDITCARD);
 
                 mappedCreditCard.setBillingAddress(setBillingAddressForCreditCardMapping(creditCardToMap));
@@ -248,9 +248,6 @@ public abstract class TASRequestXMLMapper {
                 mappedCreditCard.setCreditCardAvsResponse(creditCardToMap.creditCardAvsResponse);
                 mappedCreditCard.setCreditCardCvvResponse(creditCardToMap.creditCardCvvResponse);
                 mappedCreditCard.setCreditCard3DSecureValue(creditCardToMap.creditCard3dSecureValue);
-
-                //todo: (requires order details change) needs to be mapped in internal domain object
-                mappedCreditCard.setTotalCreditCardAuthAmount(creditCardToMap.totalAuthorizedAmount.toString());
 
                 mappedCreditCardPaymentMethod.setCreditCard(mappedCreditCard);
                 mappedPaymentMethods.getPaymentMethod().add(mappedCreditCardPaymentMethod);
@@ -265,17 +262,15 @@ public abstract class TASRequestXMLMapper {
                 CaPaymentMethod mappedGiftCardPaymentMethod = new CaPaymentMethod();
                 GiftCard mappedGiftCard = new GiftCard();
 
-                //todo: (requires order details change) need to identify active payment method
-                mappedGiftCardPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.INACTIVE);
+                if(giftCardToMap.status != null) {
+                    mappedGiftCardPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.valueOf(giftCardToMap.status));
+                }
                 mappedGiftCardPaymentMethod.setPaymentMethodType(PaymentMethodType.GIFTCARD);
 
                 mappedGiftCard.setGiftCardNumber(giftCardToMap.giftCardNumber);
 
                 //not used currently -- will be null for now
                 mappedGiftCard.setGiftCardDigital(null);
-
-                //todo: (requires order details change) need to get total gift card amount in internal domain object -- should be same as total credit card amt
-                mappedGiftCard.setTotalGiftCardAuthAmount(giftCardToMap.totalAuthorizedAmount.toString());
 
                 mappedGiftCardPaymentMethod.setGiftCard(mappedGiftCard);
                 mappedPaymentMethods.getPaymentMethod().add(mappedGiftCardPaymentMethod);
@@ -289,7 +284,10 @@ public abstract class TASRequestXMLMapper {
                 CaPaymentMethod mappedPayPalPaymentMethod = new CaPaymentMethod();
                 Paypal mappedPayPal = new Paypal();
 
-                mappedPayPalPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.valueOf(payPalToMap.status));
+
+                if(payPalToMap.status != null) {
+                    mappedPayPalPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.valueOf(payPalToMap.status));
+                }
                 mappedPayPalPaymentMethod.setPaymentMethodType(PaymentMethodType.PAYPAL);
 
                 if(payPalToMap.payPalAdditionalInfo != null) {
