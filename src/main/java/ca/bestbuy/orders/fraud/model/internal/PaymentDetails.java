@@ -21,7 +21,7 @@ public class PaymentDetails {
     /**
      * PayPal details
      */
-    private PayPal payPal;
+    private List<PayPal> payPals;
 
 
     public List<CreditCard> getCreditCards() {
@@ -40,12 +40,12 @@ public class PaymentDetails {
         this.giftCards = giftCards;
     }
 
-    public PayPal getPayPal() {
-        return payPal;
+    public List<PayPal> getPayPals() {
+        return payPals;
     }
 
-    public void setPayPal(PayPal payPal) {
-        this.payPal = payPal;
+    public void setPayPals(List<PayPal> payPals) {
+        this.payPals = payPals;
     }
 
 
@@ -100,18 +100,31 @@ public class PaymentDetails {
      */
     public static class PayPal {
 
-        public String requestID;
-
-        public String email;
-
-        public String verifiedStatus;
+        public PayPalAdditionalInfo payPalAdditionalInfo;
 
         public BigDecimal totalAuthorizedAmount;
+
+        public String paymentServiceInternalRefId;
 
         /**
          * ACTIVE or DEACTIVE
          */
         public String status;
+
+
+
+        public static class PayPalAdditionalInfo{
+
+            public String payPalOrderId;
+
+            public String email;
+
+            public String verifiedStatus;
+        }
+
+
+
+
 
     }
 

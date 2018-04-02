@@ -1,6 +1,6 @@
 package ca.bestbuy.orders.fraud.mappers
 
-import ca.bestbuy.orders.fraud.model.client.orderdetails.*
+import ca.bestbuy.orders.fraud.model.client.generated.orderdetails.swagger.*
 import ca.bestbuy.orders.fraud.model.internal.Item
 import ca.bestbuy.orders.fraud.model.internal.Order
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails
@@ -247,6 +247,7 @@ class OrderMapperTest extends Specification {
         PaymentMethodInfo paymentMethodInfoToMap = new PaymentMethodInfo()
         paymentMethodInfoToMap.setCreditCards(Arrays.asList(new CreditCardInfo(), new CreditCardInfo()))
         paymentMethodInfoToMap.setGiftCards(Arrays.asList(new GiftCardInfo()))
+        paymentMethodInfoToMap.setPayPal(Arrays.asList(new PayPalInfo(), new PayPalInfo(), new PayPalInfo()))
 
         when: "OrderMapper.mapCreditCard() is invoked on the FS Order CreditCardInfo object"
 
@@ -256,8 +257,7 @@ class OrderMapperTest extends Specification {
 
         mappedPaymentDetails.getCreditCards().size() == paymentMethodInfoToMap.getCreditCards().size()
         mappedPaymentDetails.getGiftCards().size() == paymentMethodInfoToMap.getGiftCards().size()
-
-        // TODO - Map payPal
+        mappedPaymentDetails.getPayPals().size() == paymentMethodInfoToMap.getPayPal().size()
     }
 
 
@@ -424,6 +424,25 @@ class OrderMapperTest extends Specification {
         then: "GiftCard object returned should be mapped correctly"
 
         mappedGiftCard.giftCardNumber == giftCardToMap.getGiftCardNumber()
+    }
+
+    def "Test Pay Pal Mapper"(){
+        given:
+
+        PayPalInfo payPalToMap = new PayPalInfo()
+        payPalToMap.setActive(true)
+        payPalToMap.setPayPalInternalRefId("internalRefId")
+
+
+        when:
+
+        PaymentDetails.PayPal mappedPayPal = orderDetailsMapper.mapPayPal(payPalToMap)
+
+
+        then:
+
+        mappedPayPal.paymentServiceInternalRefId == payPalToMap.getPayPalInternalRefId()
+        mappedPayPal.status == payPalToMap.getActive().toString()
     }
 
 

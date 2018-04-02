@@ -1,15 +1,15 @@
 package ca.bestbuy.orders.fraud.mappers
 
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.AddressDetails
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.CaPaymentMethod
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ChargeBack
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ItemStatus
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethodType
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethods
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PurchaseOrderStatus
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.SalesChannels
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.TransactionData
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.TransactionType
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.AddressDetails
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.CaPaymentMethod
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ChargeBack
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ItemStatus
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethodType
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethods
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PurchaseOrderStatus
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.SalesChannels
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionData
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionType
 import ca.bestbuy.orders.fraud.model.internal.Address
 import ca.bestbuy.orders.fraud.model.internal.Chargeback
 import ca.bestbuy.orders.fraud.model.internal.Item
@@ -28,7 +28,6 @@ import spock.lang.Specification
 
 import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
-
 
 class TASRequestXMLMapperTest extends Specification {
 
@@ -87,11 +86,12 @@ class TASRequestXMLMapperTest extends Specification {
         giftCards.add(createAGiftCard())
 
         //create a paypal payment
-        PaymentDetails.PayPal paypal = createAPaypal()
+        List<PaymentDetails.PayPal> paypals = new ArrayList<>()
+        paypals.add(createAPaypal())
 
         paymentDetails.setCreditCards(creditCards)
         paymentDetails.setGiftCards(giftCards)
-        paymentDetails.setPayPal(paypal)
+        paymentDetails.setPayPals(paypals)
 
         order.setPaymentDetails(paymentDetails);
 
@@ -111,9 +111,10 @@ class TASRequestXMLMapperTest extends Specification {
         then:
 
         int amtOfPaypalPayments = 0;
-        if(order.getPaymentDetails() != null && order.getPaymentDetails().getPayPal() != null){
-            amtOfPaypalPayments = 1;
+        if(order.getPaymentDetails() != null  && order.getPaymentDetails().getPayPals() != null){
+            amtOfPaypalPayments = order.getPaymentDetails().getPayPals().size();
         }
+
 
 
         mappedTxnData.getTransactionId() == order.getFsOrderID()
@@ -130,6 +131,7 @@ class TASRequestXMLMapperTest extends Specification {
         mappedTxnData.getMember().getMemberId() == order.getRewardZoneID()
         mappedTxnData.getShippingOrders().getShippingOrder().size() == order.getShippingOrders().size()
         mappedTxnData.getItems().getItem().size() == order.getItems().size()
+        mappedTxnData.getBillingDetails().getCurrencyCode() == "CAD"
 
         doExtraPaymentMethodsAssertions(mappedTxnData.getPaymentMethods(), order.getPaymentDetails())
         doChargebacksMapperAssertions(mappedTxnData, order.getShippingOrders())
@@ -161,7 +163,7 @@ class TASRequestXMLMapperTest extends Specification {
         when:
 
         TransactionData mappedTransactionData = xmlMapper.mapTransactionData(orderToMap)
-        List<ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ShippingOrder> mappedShippingOrders = mappedTransactionData.getShippingOrders().getShippingOrder()
+        List<ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ShippingOrder> mappedShippingOrders = mappedTransactionData.getShippingOrders().getShippingOrder()
 
         then:
 
@@ -180,7 +182,7 @@ class TASRequestXMLMapperTest extends Specification {
 
     }
 
-    void doShippingOrder_PurchaseOrderDetailsAssertions(ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ShippingOrder shippingOrder, List<PurchaseOrder> purchaseOrdersToMap) {
+    void doShippingOrder_PurchaseOrderDetailsAssertions(ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ShippingOrder shippingOrder, List<PurchaseOrder> purchaseOrdersToMap) {
         for(PurchaseOrder purchaseOrder : purchaseOrdersToMap){
 
             if(shippingOrder.getShippingOrderId().equals(purchaseOrder.getShippingOrderRefID())){
@@ -215,7 +217,7 @@ class TASRequestXMLMapperTest extends Specification {
 
         when:
         TransactionData mappedTransactionData = xmlMapper.mapTransactionData(orderToMap)
-        List<ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Item> mappedItems = mappedTransactionData.getItems().getItem()
+        List<ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Item> mappedItems = mappedTransactionData.getItems().getItem()
 
         then:
         for(int i = 0; i < mappedItems.size() ; i++){
@@ -299,11 +301,12 @@ class TASRequestXMLMapperTest extends Specification {
 
 
         //create a paypal payment
-        PaymentDetails.PayPal paypal = createAPaypal()
+        List<PaymentDetails.PayPal> paypals = new ArrayList<>()
 
         paymentDetails.setCreditCards(creditCards)
         paymentDetails.setGiftCards(giftCards)
-        paymentDetails.setPayPal(paypal)
+        paymentDetails.setPayPals(paypals)
+
 
         order.setPaymentDetails(paymentDetails);
 
@@ -319,13 +322,9 @@ class TASRequestXMLMapperTest extends Specification {
 
         }
 
+        int amtOfPaypalPayments = order.getPaymentDetails().getPayPals().size()
+
         then:
-
-        int amtOfPaypalPayments = 0;
-        if(order.getPaymentDetails() != null && order.getPaymentDetails().getPayPal() != null){
-            amtOfPaypalPayments = 1;
-        }
-
 
         mappedTxnData.getTransactionId() == order.getFsOrderID()
         mappedTxnData.getWebOrderId() == order.getWebOrderRefID()
@@ -341,6 +340,8 @@ class TASRequestXMLMapperTest extends Specification {
         mappedTxnData.getMember().getMemberId() == order.getRewardZoneID()
         mappedTxnData.getShippingOrders().getShippingOrder().size() == order.getShippingOrders().size()
         mappedTxnData.getItems().getItem().size() == order.getItems().size()
+        mappedTxnData.getBillingDetails().getCurrencyCode() == "CAD"
+
 
         doExtraPaymentMethodsAssertions(mappedTxnData.getPaymentMethods(), order.getPaymentDetails())
         doChargebacksMapperAssertions(mappedTxnData, order.getShippingOrders())
@@ -383,11 +384,12 @@ class TASRequestXMLMapperTest extends Specification {
 
 
         //create a paypal payment
-        PaymentDetails.PayPal paypal = null
+        List<PaymentDetails.PayPal> paypals = null
 
         paymentDetails.setCreditCards(creditCards)
         paymentDetails.setGiftCards(giftCards)
-        paymentDetails.setPayPal(paypal)
+        paymentDetails.setPayPals(paypals)
+
 
         order.setPaymentDetails(paymentDetails);
 
@@ -415,6 +417,8 @@ class TASRequestXMLMapperTest extends Specification {
         mappedTxnData.getShippingOrders().getShippingOrder().isEmpty()
         mappedTxnData.getItems().getItem().isEmpty()
         mappedTxnData.getChargeBacks() == null
+        mappedTxnData.getBillingDetails().getCurrencyCode() == "CAD"
+
     }
 
 
@@ -569,6 +573,7 @@ class TASRequestXMLMapperTest extends Specification {
         PaymentDetails.CreditCard creditCard = new PaymentDetails.CreditCard();
 
         creditCard.billingAddress = createAnAddress()
+        creditCard.status = "ACTIVE"
         creditCard.creditCard3dSecureValue = "3dssecurevalue"
         creditCard.creditCardAvsResponse = "avsresponse"
         creditCard.creditCardCvvResponse = "cvvresponse"
@@ -584,6 +589,7 @@ class TASRequestXMLMapperTest extends Specification {
 
         PaymentDetails.GiftCard giftCard = new PaymentDetails.GiftCard();
         giftCard.giftCardNumber = "giftCardNumber"
+        giftCard.status = "ACTIVE"
         giftCard.totalAuthorizedAmount = 100
         return giftCard
 
@@ -594,15 +600,21 @@ class TASRequestXMLMapperTest extends Specification {
 
         PaymentDetails.PayPal payPal= new PaymentDetails.PayPal();
         payPal.totalAuthorizedAmount = 100
-        payPal.email = "email"
-        payPal.requestID = "requestId"
-        payPal.verifiedStatus = "status"
+        payPal.status = "ACTIVE"
+        payPal.paymentServiceInternalRefId = "refId"
+        PaymentDetails.PayPal.PayPalAdditionalInfo payPalInfo= new PaymentDetails.PayPal.PayPalAdditionalInfo()
+
+        payPalInfo.email = "email"
+        payPalInfo.payPalOrderId = "requestId"
+        payPalInfo.verifiedStatus = "status"
+
+        payPal.payPalAdditionalInfo = payPalInfo
 
         return payPal
 
     }
 
-    void doItemShippingOrderIdAssertion(ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Item item, List<ShippingOrder> shippingOrders) {
+    void doItemShippingOrderIdAssertion(ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Item item, List<ShippingOrder> shippingOrders) {
 
         for(int i = 0; i < shippingOrders.size(); i++){
             List<ShippingOrderLine> shippingOrderLinesToMap = shippingOrders.get(i).getShippingOrderLines()
@@ -621,19 +633,27 @@ class TASRequestXMLMapperTest extends Specification {
 
     }
 
+
     void doExtraPaymentMethodsAssertions(PaymentMethods paymentMethods, PaymentDetails paymentDetails) {
 
 
         int numOfCreditCardPayments = paymentDetails.getCreditCards().size()
         int numOfGiftCardPayments = paymentDetails.getGiftCards().size()
+        int numOfPayPalPayments = paymentDetails.getPayPals().size()
+
+        int giftCardsEndIndex = numOfCreditCardPayments+numOfGiftCardPayments
+        int payPalEndIndex = numOfCreditCardPayments+numOfGiftCardPayments+numOfPayPalPayments
 
         List<CaPaymentMethod> paymentMethodsList = paymentMethods.getPaymentMethod()
         List<PaymentDetails.CreditCard> creditCardsList = paymentDetails.getCreditCards()
         List<PaymentDetails.GiftCard> giftCardList = paymentDetails.getGiftCards()
-        PaymentDetails.PayPal payPal = paymentDetails.getPayPal()
+        List<PaymentDetails.PayPal> payPalList = paymentDetails.getPayPals()
         int creditCardPaymentIndex;
         int giftCardPaymentIndex;
+        int payPalPaymentIndex;
 
+
+        //Iterate through the payment method list and verify that the credit card payment methods have been mapped
         for(creditCardPaymentIndex = 0; creditCardPaymentIndex < numOfCreditCardPayments; creditCardPaymentIndex++){
             assert paymentMethodsList.get(creditCardPaymentIndex).getPaymentMethodType() == PaymentMethodType.CREDITCARD
             assert paymentMethodsList.get(creditCardPaymentIndex).getCreditCard().getCreditCardType() == creditCardsList.get(creditCardPaymentIndex).creditCardType
@@ -644,32 +664,41 @@ class TASRequestXMLMapperTest extends Specification {
             assert paymentMethodsList.get(creditCardPaymentIndex).getCreditCard().getCreditCardAvsResponse() == creditCardsList.get(creditCardPaymentIndex).creditCardAvsResponse
             assert paymentMethodsList.get(creditCardPaymentIndex).getCreditCard().getCreditCardCvvResponse() == creditCardsList.get(creditCardPaymentIndex).creditCardCvvResponse
             assert paymentMethodsList.get(creditCardPaymentIndex).getCreditCard().getCreditCard3DSecureValue() == creditCardsList.get(creditCardPaymentIndex).creditCard3dSecureValue
-            assert paymentMethodsList.get(creditCardPaymentIndex).getCreditCard().getTotalCreditCardAuthAmount() == creditCardsList.get(creditCardPaymentIndex).totalAuthorizedAmount.toString()
 
             assert paymentMethodsList.get(creditCardPaymentIndex).getGiftCard() == null
             assert paymentMethodsList.get(creditCardPaymentIndex).getPaypals() == null
 
         }
 
-        for(giftCardPaymentIndex = creditCardPaymentIndex;  giftCardPaymentIndex < (numOfCreditCardPayments+numOfGiftCardPayments); giftCardPaymentIndex++){
+        //Iterate through the payment method list, starting with the index we left off at in the credit card iteration,
+        //and verify that the gift card payment methods have been mapped
+        for(giftCardPaymentIndex = creditCardPaymentIndex;  giftCardPaymentIndex < giftCardsEndIndex; giftCardPaymentIndex++){
+
+            //this is the gift card index in the list we mapped from.
+            int giftCardIndexInGiftCardList = giftCardPaymentIndex-numOfCreditCardPayments
 
             assert paymentMethodsList.get(giftCardPaymentIndex).getPaymentMethodType() == PaymentMethodType.GIFTCARD
-            assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard().getGiftCardNumber() == giftCardList.get(giftCardPaymentIndex-numOfCreditCardPayments).giftCardNumber
-            assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard().getTotalGiftCardAuthAmount() == giftCardList.get(giftCardPaymentIndex-numOfCreditCardPayments).totalAuthorizedAmount.toString()
+            assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard().getGiftCardNumber() == giftCardList.get(giftCardIndexInGiftCardList).giftCardNumber
 
 
             assert paymentMethodsList.get(giftCardPaymentIndex).getCreditCard() == null
             assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals() == null
         }
 
-        assert paymentMethodsList.get(giftCardPaymentIndex).getPaymentMethodType() == PaymentMethodType.PAYPAL
-        assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalEmail() == payPal.email
-        assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalRequestId() == payPal.requestID
-        assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getPaypalStatus() == payPal.verifiedStatus
-        assert paymentMethodsList.get(giftCardPaymentIndex).getPaypals().getTotalPaypalAuthAmt() == payPal.totalAuthorizedAmount.toString()
+        //Iterate through the payment method list and verify that the pay pal payment methods have been mapped
+        for(payPalPaymentIndex = giftCardPaymentIndex; payPalPaymentIndex < payPalEndIndex; payPalPaymentIndex++) {
 
-        assert paymentMethodsList.get(giftCardPaymentIndex).getCreditCard() == null
-        assert paymentMethodsList.get(giftCardPaymentIndex).getGiftCard() == null
+            //this is the paypal index in the list we mapped from.
+            int payPalIndexInPayPalList = payPalPaymentIndex-giftCardsEndIndex
+
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaymentMethodType() == PaymentMethodType.PAYPAL
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalEmail() == payPalList.get(payPalIndexInPayPalList).payPalAdditionalInfo.email
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalRequestId() == payPalList.get(payPalIndexInPayPalList).payPalAdditionalInfo.payPalOrderId
+            assert paymentMethodsList.get(payPalPaymentIndex).getPaypals().getPaypalStatus() == payPalList.get(payPalIndexInPayPalList).payPalAdditionalInfo.verifiedStatus
+
+            assert paymentMethodsList.get(payPalPaymentIndex).getCreditCard() == null
+            assert paymentMethodsList.get(payPalPaymentIndex).getGiftCard() == null
+        }
 
 
     }

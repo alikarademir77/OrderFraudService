@@ -1,0 +1,1665 @@
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://mccp.services.bby.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  targetNamespace="http://mccp.services.bby.com/">
+    <wsdl:types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://mccp.services.bby.com/">
+            <s:element name="VBVProcessMessageRequest" type="tns:VBVProcessMessageRequest"/>
+            <s:complexType name="VBVProcessMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="VBVProcessRequest" type="tns:VBVProcessRequest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="VBVProcessRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="PAReqMsg" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Invoice" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="MerchantName" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="VBVProcessMessageResponse" type="tns:VBVProcessMessageResponse"/>
+            <s:complexType name="VBVProcessMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="VBVProcessResult" type="tns:VBVProcessResult"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorClass" type="tns:ErrorClass"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="VBVProcessResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="AlphaAuthenticationResult" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ACSVerificationID" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ECI" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AuthenticationStatusMsg" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="XId" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ErrorClass">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorDescription" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="VBVCheckMessageRequest" type="tns:VBVCheckMessageRequest"/>
+            <s:complexType name="VBVCheckMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="VBVCheckRequest" type="tns:VBVCheckRequest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="VBVCheckRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="MerchantName" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExpiryDate" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Invoice" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="VBVCheckMessageResponse" type="tns:VBVCheckMessageResponse"/>
+            <s:complexType name="VBVCheckMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="VBVCheckResult" type="tns:VBVCheckResult"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorClass" type="tns:ErrorClass"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="VBVCheckResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="AlphaAuthRequired" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ACSUrl" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PAReqMsg" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ECI" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GiftCardBalanceMessageRequest" type="tns:GiftCardBalanceMessageRequest"/>
+            <s:complexType name="GiftCardBalanceMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="GiftCardBalanceRequest" type="tns:GiftCardBalanceRequest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="GiftCardBalanceRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TermID" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="GiftCardNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CardType" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExpiryDate" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Pin" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GiftCardBalanceMessageResponse" type="tns:GiftCardBalanceMessageResponse"/>
+            <s:complexType name="GiftCardBalanceMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="GiftCardBalanceResponse" type="tns:GiftCardBalanceResponse"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorClass" type="tns:ErrorClass"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="GiftCardBalanceResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ActionCode" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Balance" type="s:int"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="PreviousBalance" type="s:int"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ResponseCode" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="ReverseTimedOutTranMessageRequest" type="tns:ReverseTimedOutTranMessageRequest"/>
+            <s:complexType name="ReverseTimedOutTranMessageRequest"/>
+            <s:element name="PLCCRefundMessageRequest" type="tns:PLCCRefundMessageRequest"/>
+            <s:complexType name="PLCCRefundMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="PLCCRefundRequest" type="tns:PLCCRefundRequest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="PLCCRefundRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:CreatePaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceNo" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="TraceId" type="s:int"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="TermIdGroup" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="CardExpiryDate" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="CreatePaymentRequest" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:decimal"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="PaymentRequest" abstract="true">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="RequestedBy" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CreatePayPalPaymentRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:CreatePaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="Account" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="MessageReferenceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayerId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="ShippingAddress" type="tns:Address"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="Address">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ApartmentNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AddressLine1" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AddressLine2" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="StateProvince" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="PLCCRefundMessageResponse" type="tns:PLCCRefundMessageResponse"/>
+            <s:complexType name="PLCCRefundMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="PLCCRefundResponse" type="tns:PLCCRefundResponse"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Error" type="tns:ErrorDetails"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="PLCCRefundResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TASResponse"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="TASResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:BaseTASResponseData">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="ResponseDescription" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="TransactionDate" type="s:dateTime"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Trace" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="BaseTASResponseData">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="ActionCode" type="tns:TASActionCode"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="IsoResponse" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="TASActionCode">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Success"/>
+                    <s:enumeration value="Declined"/>
+                    <s:enumeration value="Callbank"/>
+                    <s:enumeration value="Bankdown"/>
+                    <s:enumeration value="Unavail"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:complexType name="ErrorDetails">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorSubCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorDescription" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CCAuthorizationMessageRequest" type="tns:CCAuthorizationMessageRequest"/>
+            <s:complexType name="CCAuthorizationMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="AuthorizationRequest" type="tns:CCAuthorizationRequest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CCAuthorizationRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:CreatePaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceNo" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="TransactionType" type="tns:CCAuthorizationTransactionType"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="TermIDGroup" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="TerminalId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="CardExpiryDate" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="CardType" type="tns:CardType"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Cid" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Cavv" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="ExtECI" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="CustomerAddress" type="tns:Address"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="AvsResult" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:simpleType name="CCAuthorizationTransactionType">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Authorization"/>
+                    <s:enumeration value="PLCCAccountInquiry"/>
+                    <s:enumeration value="PLCCCapture"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:simpleType name="CardType">
+                <s:restriction base="s:string">
+                    <s:enumeration value="VISA"/>
+                    <s:enumeration value="MASTERCARD"/>
+                    <s:enumeration value="AMEX"/>
+                    <s:enumeration value="DCSPLCC"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="CCAuthorizationMessageResponse" type="tns:CCAuthorizationMessageResponse"/>
+            <s:complexType name="CCAuthorizationMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="AuthorizationResponse" type="tns:CCAuthorizationResponse"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Error" type="tns:ErrorDetails"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CCAuthorizationResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TASResponse">
+                        <s:sequence>
+                            <s:element minOccurs="1" maxOccurs="1" name="TransactionType" type="tns:CCAuthorizationTransactionType"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceNo" type="s:string"/>
+                            <s:element type="s:string" name="CardToken" maxOccurs="1" minOccurs="0"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="AvvResultCode" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="AvsResultCode" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="CvvResultCode" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="DowngradedECIValue" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GCTransactionMessageRequest" type="tns:GCTransactionMessageRequest"/>
+            <s:complexType name="GCTransactionMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="GCRequest" type="tns:GCTransactionRequest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="GCTransactionRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:CreatePaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceNo" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="TranType" type="tns:GCTransactionType"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="TermIDGroup" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="CardExpiryDate" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:simpleType name="GCTransactionType">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Credit"/>
+                    <s:enumeration value="Debit"/>
+                    <s:enumeration value="VoidRedeem"/>
+                    <s:enumeration value="VoidReload"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="GCTransactionMessageResponse" type="tns:GCTransactionMessageResponse"/>
+            <s:complexType name="GCTransactionMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionResponse" type="tns:GCTransactionResponse"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Error" type="tns:ErrorDetails"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="GCTransactionResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TASResponse">
+                        <s:sequence>
+                            <s:element minOccurs="1" maxOccurs="1" name="TransactionType" type="tns:GCTransactionType"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceNo" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="Balance" type="s:decimal"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="ActualAmount" type="s:decimal"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="VoidGCTransactionMessageRequest" type="tns:VoidGCTransactionMessageRequest"/>
+            <s:complexType name="VoidGCTransactionMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="VoidGCTransactionRequest" type="tns:VoidGCTransactionRequest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="VoidGCTransactionRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="VoidGCTransactionMessageResponse" type="tns:VoidGCTransactionMessageResponse"/>
+            <s:complexType name="VoidGCTransactionMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="VoidGCTransactionResponse" type="tns:VoidGCTransactionResponse"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Error" type="tns:ErrorDetails"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="VoidGCTransactionResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:BaseTASResponseData"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="VoidCCAuthorizationMessageRequest" type="tns:VoidCCAuthorizationMessageRequest"/>
+            <s:complexType name="VoidCCAuthorizationMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="VoidCCAuthorizationRequest" type="tns:VoidCCAuthorizationRequest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="VoidCCAuthorizationRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="VoidCCAuthorizationMessageResponse" type="tns:VoidCCAuthorizationMessageResponse"/>
+            <s:complexType name="VoidCCAuthorizationMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="VoidCCAuthorizationResponse" type="tns:VoidCCAuthorizationResponse"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Error" type="tns:ErrorDetails"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="VoidCCAuthorizationResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:BaseTASResponseData"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="CCAuthMessageRequest" type="tns:CCAuthMessageRequest"/>
+            <s:complexType name="CCAuthMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="CCAuthRequest" type="tns:CCAuthRequest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CCAuthRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionType" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CardType" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExpiryDate" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:int"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CVVCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CavvCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExtECI" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="TermID" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CustRefNo" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="RequestedBy" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Trace" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="TerminalID" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="WorkflowScenario" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PaymentClientReturnUrl" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Lang" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ClientID" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ClientAddressLine1" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ClientAddressState" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ClientAddressPostalCode" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CCAuthMessageResponse" type="tns:CCAuthMessageResponse"/>
+            <s:complexType name="CCAuthMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="CCAuthResponse" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorClass" type="tns:ErrorClass"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetPaymentTransactionMessageRequest" type="tns:GetPaymentTransactionMessageRequest"/>
+            <s:complexType name="GetPaymentTransactionMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TrasactionId" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetPaymentTransactionMessageResponse" type="tns:GetPaymentTransactionMessageResponse"/>
+            <s:complexType name="GetPaymentTransactionMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:int"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ClientId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="WorkflowScenario" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ClientReturnUrl" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Lang" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PaymentTransactions" type="tns:ArrayOfPaymentInfo"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorClass" type="tns:ErrorClass"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfPaymentInfo">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="PaymentInfo" nillable="true" type="tns:PaymentInfo"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="PaymentInfo">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:int"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="TransactionDate" type="s:dateTime"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="StoreId" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="TerminalId" type="s:int"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CreditCardPaymentInfo">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentInfo">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="CreditCardInfo" type="tns:CreditCardInfo"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="AuthorizationResponse" type="tns:AuthorizationResponse"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="CreditCardInfo">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="CreditCardType" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CreditCardNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExpirationDate" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="AuthorizationResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Approved" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ReasonCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AuthorizationCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CvvResponse" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="RegisterPayPalPaymentRequest" type="tns:RegisterPayPalPaymentRequest"/>
+            <s:complexType name="RegisterPayPalPaymentRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="Account" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Locale" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="MessageReferenceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="SuccessUrl" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="CancelUrl" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="OrderDetails" type="tns:Order"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="AllowShippingAddressChange" type="s:boolean"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="Order">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="OrderAmount" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="TaxAmount" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="ShippingAmount" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="SurchargeAmount" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ShippingAddress" type="tns:Address"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IsEstimatedOrderTotal" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="LineItems" type="tns:ArrayOfOrderLineItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfOrderLineItem">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="OrderLineItem" nillable="true" type="tns:OrderLineItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="OrderLineItem">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ItemId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Quantity" type="s:int"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="ItemAmount" type="s:decimal"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="RegisterPayPalPaymentResponse" type="tns:RegisterPayPalPaymentResponse"/>
+            <s:complexType name="RegisterPayPalPaymentResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="PaymentResponse" abstract="true">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="Status" type="tns:Status"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorDetails" type="tns:ErrorDetails"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="TransactionProcessedDateTime" type="s:dateTime"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="Status">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Success"/>
+                    <s:enumeration value="Failed"/>
+                    <s:enumeration value="Declined"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="GetRegisteredPayPalPaymentDetailsRequest" type="tns:GetRegisteredPayPalPaymentDetailsRequest"/>
+            <s:complexType name="GetRegisteredPayPalPaymentDetailsRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="Account" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GetRegisteredPayPalPaymentDetailsResponse" type="tns:GetRegisteredPayPalPaymentDetailsResponse"/>
+            <s:complexType name="GetRegisteredPayPalPaymentDetailsResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayerId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayerName" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayerEmail" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="PayerStatus" type="tns:PayerStatus"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="ShippingAddressStatus" type="tns:AddressStatus"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="ShippingAddress" type="tns:Address"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="BillingAddress" type="tns:Address"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:simpleType name="PayerStatus">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Verified"/>
+                    <s:enumeration value="Unverified"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:simpleType name="AddressStatus">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Unknown"/>
+                    <s:enumeration value="None"/>
+                    <s:enumeration value="Confirmed"/>
+                    <s:enumeration value="Unconfirmed"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="CreatePaymentRequest" type="tns:CreatePaymentRequest"/>
+            <s:element name="CreatePaymentResponse" type="tns:CreatePaymentResponse"/>
+            <s:complexType name="CreatePaymentResponse" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="CreatePayPalPaymentResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:CreatePaymentResponse"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="UpdatePaymentRequest" type="tns:UpdatePaymentRequest"/>
+            <s:complexType name="UpdatePaymentRequest" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentId" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:decimal"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="UpdatePayPalPaymentRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:UpdatePaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="MessageReferenceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="ShippingAddress" type="tns:Address"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="UpdatePaymentResponse" type="tns:UpdatePaymentResponse"/>
+            <s:complexType name="UpdatePaymentResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="UpdatePayPalPaymentResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:UpdatePaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="1" maxOccurs="1" name="ShippingAddressStatus" type="tns:AddressStatus"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="PayerStatus" type="tns:PayerStatus"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="AuthorizeFundsRequest" type="tns:AuthorizeFundsRequest"/>
+            <s:complexType name="AuthorizeFundsRequest" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentId" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:decimal"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="AuthorizePayPalFundsRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:AuthorizeFundsRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="ClientReferenceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="MessageReferenceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="AuthorizeFundsResponse" type="tns:AuthorizeFundsResponse"/>
+            <s:complexType name="AuthorizeFundsResponse" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="AuthorizePayPalFundsResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:AuthorizeFundsResponse"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="VoidAuthorizationRequest" type="tns:VoidAuthorizationRequest"/>
+            <s:complexType name="VoidAuthorizationRequest" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="VoidPayPalAuthorizationRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:VoidAuthorizationRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="AuthorizationTransactionId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="AuthorizationMessageReferenceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="VoidAuthorizationResponse" type="tns:VoidAuthorizationResponse"/>
+            <s:complexType name="VoidAuthorizationResponse" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="VoidPayPalAuthorizationResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:VoidAuthorizationResponse"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="CaptureFundsRequest" type="tns:CaptureFundsRequest"/>
+            <s:complexType name="CaptureFundsRequest" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="AuthorizationTransactionId" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:decimal"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="CapturePayPalFundsRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:CaptureFundsRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="ClientReferenceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="MessageReferenceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="CaptureFundsResponse" type="tns:CaptureFundsResponse"/>
+            <s:complexType name="CaptureFundsResponse" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="CapturePayPalFundsResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:CaptureFundsResponse"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="RefundRequest" type="tns:RefundRequest"/>
+            <s:complexType name="RefundRequest" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="CaptureTransactionId" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:decimal"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="RefundPayPalRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:RefundRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="MessageReferenceId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="RefundResponse" type="tns:RefundResponse"/>
+            <s:complexType name="RefundResponse" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="RefundPayPalResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:RefundResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayPalPayerId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayPalRefundId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayPalAuthorizationId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayPalOrderId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayPalCaptureId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="ClosePaymentRequest" type="tns:ClosePaymentRequest"/>
+            <s:complexType name="ClosePaymentRequest" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ClosePayPalPaymentRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:ClosePaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="ClosePaymentResponse" type="tns:ClosePaymentResponse"/>
+            <s:complexType name="ClosePaymentResponse" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ClosePayPalPaymentResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:ClosePaymentResponse"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="VoidPaymentRequest" type="tns:VoidPaymentRequest"/>
+            <s:complexType name="VoidPaymentRequest" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="VoidPayPalPaymentRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:VoidPaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="MessageReferenceId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="VoidPaymentResponse" type="tns:VoidPaymentResponse"/>
+            <s:complexType name="VoidPaymentResponse" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="VoidPayPalPaymentResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:VoidPaymentResponse"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GetTransactionDetailsRequest" type="tns:GetTransactionDetailsRequest"/>
+            <s:complexType name="GetTransactionDetailsRequest" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionIds" type="tns:ArrayOfString"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfString">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="GetPayPalTransactionDetailsRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:GetTransactionDetailsRequest"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GetTransactionDetailsResponse" type="tns:GetTransactionDetailsResponse"/>
+            <s:complexType name="GetTransactionDetailsResponse" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="GetPayPalTransactionDetailsResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:GetTransactionDetailsResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="Transactions" type="tns:ArrayOfPayPalTransaction"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfPayPalTransaction">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="PayPalTransaction" nillable="true" type="tns:PayPalTransaction"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="PayPalTransaction">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:Transaction">
+                        <s:sequence>
+                            <s:element minOccurs="1" maxOccurs="1" name="TransactionType" type="tns:TransactionType"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="TransactionStatus" type="tns:TransactionStatus"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="ClientReferenceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayPalTransactionId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="ErrorCode" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="PayPalProcessTime" type="s:dateTime"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayPalOrderId" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayPalPayerId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="Transaction" abstract="true">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ParentTransactionId" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AuditData" type="tns:AuditData"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="AuditData">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="CreatedBy" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="CreatedDate" type="s:dateTime"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="UpdatedBy" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="UpdatedDate" type="s:dateTime"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="TransactionType">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Authorization"/>
+                    <s:enumeration value="Capture"/>
+                    <s:enumeration value="Refund"/>
+                    <s:enumeration value="VoidAuthorization"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:simpleType name="TransactionStatus">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Success"/>
+                    <s:enumeration value="Failed"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="GetPaymentDetailsRequest" type="tns:GetPaymentDetailsRequest"/>
+            <s:complexType name="GetPaymentDetailsRequest" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="GetPayPalPaymentDetailsRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:GetPaymentDetailsRequest">
+                        <s:sequence>
+                            <s:element minOccurs="1" maxOccurs="1" name="IncludeDetails" type="s:boolean"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GetPaymentDetailsResponse" type="tns:GetPaymentDetailsResponse"/>
+            <s:complexType name="GetPaymentDetailsResponse" abstract="true">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="GetPayPalPaymentDetailsResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:GetPaymentDetailsResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentDetails" type="tns:PayPalPayment"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="PayPalPayment">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:Payment">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayerName" type="s:string"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayerEmail" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="PayerStatus" type="tns:PayerStatus"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="BillingAggrementId" type="s:string"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="CurrentShippingAddressStatus" type="tns:AddressStatus"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayPalOrders" type="tns:ArrayOfPayPalOrder"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="Payment" abstract="true">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="PayerId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AuditData" type="tns:AuditData"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfPayPalOrder">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="PayPalOrder" nillable="true" type="tns:PayPalOrder"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="PayPalOrder">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Id" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="OrderStatus" type="tns:OrderStatus"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PayPalOrderId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ShippingAddress" type="tns:Address"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="ShippingAddressStatus" type="tns:AddressStatus"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="TransactionDetails" type="tns:ArrayOfPayPalTransaction"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="OrderTransactionDetails" type="tns:ArrayOfPayPalOrderTransaction"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="OrderStatus">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Pending"/>
+                    <s:enumeration value="Active"/>
+                    <s:enumeration value="Closed"/>
+                    <s:enumeration value="Voided"/>
+                    <s:enumeration value="Failed"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:complexType name="ArrayOfPayPalOrderTransaction">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="PayPalOrderTransaction" nillable="true" type="tns:PayPalOrderTransaction"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="PayPalOrderTransaction">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Id" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="OrderTransactionType" type="tns:OrderTransactionType"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="TransactionStatus" type="tns:TransactionStatus"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="PayPalProcessTime" type="s:dateTime"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AuditData" type="tns:AuditData"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="OrderTransactionType">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Create"/>
+                    <s:enumeration value="Close"/>
+                    <s:enumeration value="Void"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="GetPayPalOrdersToVoidRequest" type="tns:GetPayPalOrdersToVoidRequest"/>
+            <s:complexType name="GetPayPalOrdersToVoidRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest"/>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GetPayPalOrdersToVoidResponse" type="tns:GetPayPalOrdersToVoidResponse"/>
+            <s:complexType name="GetPayPalOrdersToVoidResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="OrderIds" type="tns:ArrayOfString"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="VoidPayPalOrderRequest" type="tns:VoidPayPalOrderRequest"/>
+            <s:complexType name="VoidPayPalOrderRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="OrderId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="VoidPayPalOrderResponse" type="tns:VoidPayPalOrderResponse"/>
+            <s:complexType name="VoidPayPalOrderResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TransactionId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GetPaymentIdByPayPalOrderIdRequest" type="tns:GetPaymentIdByPayPalOrderIdRequest"/>
+            <s:complexType name="GetPaymentIdByPayPalOrderIdRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentRequest">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayPalOrderId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GetPaymentIdByPayPalOrderIdResponse" type="tns:GetPaymentIdByPayPalOrderIdResponse"/>
+            <s:complexType name="GetPaymentIdByPayPalOrderIdResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:PaymentResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentId" type="s:string"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="VerifyBinBlockMessageRequest" type="tns:VerifyBinBlockMessageRequest"/>
+            <s:complexType name="VerifyBinBlockMessageRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="CardType" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="VerifyBinBlockMessageResponse" type="tns:VerifyBinBlockMessageResponse"/>
+            <s:complexType name="VerifyBinBlockMessageResponse">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="CardIsBlocked" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </wsdl:types>
+    <wsdl:message name="ProcessVBVSoapIn">
+        <wsdl:part name="processVBVMessageRequest" element="tns:VBVProcessMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessVBVSoapOut">
+        <wsdl:part name="ProcessVBVResult" element="tns:VBVProcessMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CheckVBVSoapIn">
+        <wsdl:part name="vbvCheckMessageRequest" element="tns:VBVCheckMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="CheckVBVSoapOut">
+        <wsdl:part name="CheckVBVResult" element="tns:VBVCheckMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="LookupGiftCardBalanceSoapIn">
+        <wsdl:part name="GiftCardBalanceMessageRequest" element="tns:GiftCardBalanceMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="LookupGiftCardBalanceSoapOut">
+        <wsdl:part name="LookupGiftCardBalanceResult" element="tns:GiftCardBalanceMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ReverseTimedOutTransactionSoapIn">
+        <wsdl:part name="reversalRequest" element="tns:ReverseTimedOutTranMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="ReverseTimedOutTransactionSoapOut"/>
+    <wsdl:message name="PLCCRefundSoapIn">
+        <wsdl:part name="plccRefundRequest" element="tns:PLCCRefundMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="PLCCRefundSoapOut">
+        <wsdl:part name="PLCCRefundResult" element="tns:PLCCRefundMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CCAuthorizationSoapIn">
+        <wsdl:part name="authorizationRequest" element="tns:CCAuthorizationMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="CCAuthorizationSoapOut">
+        <wsdl:part name="CCAuthorizationResult" element="tns:CCAuthorizationMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GCTransactionSoapIn">
+        <wsdl:part name="authorizationRequest" element="tns:GCTransactionMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="GCTransactionSoapOut">
+        <wsdl:part name="GCTransactionResult" element="tns:GCTransactionMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="VoidGCTransactionSoapIn">
+        <wsdl:part name="gcReversalRequest" element="tns:VoidGCTransactionMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="VoidGCTransactionSoapOut">
+        <wsdl:part name="VoidGCTransactionResult" element="tns:VoidGCTransactionMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="VoidCCAuthorizationSoapIn">
+        <wsdl:part name="voidCCAuthRequest" element="tns:VoidCCAuthorizationMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="VoidCCAuthorizationSoapOut">
+        <wsdl:part name="VoidCCAuthorizationResult" element="tns:VoidCCAuthorizationMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CCAuthenticationSoapIn">
+        <wsdl:part name="cCAuthMessageRequest" element="tns:CCAuthMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="CCAuthenticationSoapOut">
+        <wsdl:part name="CCAuthenticationResult" element="tns:CCAuthMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetPaymentTransactionSoapIn">
+        <wsdl:part name="getPaymentTransactionMessageRequest" element="tns:GetPaymentTransactionMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="GetPaymentTransactionSoapOut">
+        <wsdl:part name="GetPaymentTransactionResult" element="tns:GetPaymentTransactionMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessReversalTransactionsSoapIn"/>
+    <wsdl:message name="ProcessReversalTransactionsSoapOut"/>
+    <wsdl:message name="RegisterPayPalPaymentSoapIn">
+        <wsdl:part name="registerPayPalPaymentRequest" element="tns:RegisterPayPalPaymentRequest"/>
+    </wsdl:message>
+    <wsdl:message name="RegisterPayPalPaymentSoapOut">
+        <wsdl:part name="RegisterPayPalPaymentResult" element="tns:RegisterPayPalPaymentResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetRegisteredPayPalPaymentDetailsSoapIn">
+        <wsdl:part name="getRegisteredPayPalPaymentDetailsRequest" element="tns:GetRegisteredPayPalPaymentDetailsRequest"/>
+    </wsdl:message>
+    <wsdl:message name="GetRegisteredPayPalPaymentDetailsSoapOut">
+        <wsdl:part name="GetRegisteredPayPalPaymentDetailsResult" element="tns:GetRegisteredPayPalPaymentDetailsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CreatePaymentSoapIn">
+        <wsdl:part name="createPaymentRequest" element="tns:CreatePaymentRequest"/>
+    </wsdl:message>
+    <wsdl:message name="CreatePaymentSoapOut">
+        <wsdl:part name="CreatePaymentResult" element="tns:CreatePaymentResponse"/>
+    </wsdl:message>
+    <wsdl:message name="UpdatePaymentSoapIn">
+        <wsdl:part name="updatePaymentRequest" element="tns:UpdatePaymentRequest"/>
+    </wsdl:message>
+    <wsdl:message name="UpdatePaymentSoapOut">
+        <wsdl:part name="UpdatePaymentResult" element="tns:UpdatePaymentResponse"/>
+    </wsdl:message>
+    <wsdl:message name="AuthorizeFundsSoapIn">
+        <wsdl:part name="authorizeFundsRequest" element="tns:AuthorizeFundsRequest"/>
+    </wsdl:message>
+    <wsdl:message name="AuthorizeFundsSoapOut">
+        <wsdl:part name="AuthorizeFundsResult" element="tns:AuthorizeFundsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="VoidAuthorizationSoapIn">
+        <wsdl:part name="voidAuthorizationRequest" element="tns:VoidAuthorizationRequest"/>
+    </wsdl:message>
+    <wsdl:message name="VoidAuthorizationSoapOut">
+        <wsdl:part name="VoidAuthorizationResult" element="tns:VoidAuthorizationResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CaptureFundsSoapIn">
+        <wsdl:part name="captureFundsRequest" element="tns:CaptureFundsRequest"/>
+    </wsdl:message>
+    <wsdl:message name="CaptureFundsSoapOut">
+        <wsdl:part name="CaptureFundsResult" element="tns:CaptureFundsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="RefundSoapIn">
+        <wsdl:part name="refundRequest" element="tns:RefundRequest"/>
+    </wsdl:message>
+    <wsdl:message name="RefundSoapOut">
+        <wsdl:part name="RefundResult" element="tns:RefundResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ClosePaymentSoapIn">
+        <wsdl:part name="closePaymentRequest" element="tns:ClosePaymentRequest"/>
+    </wsdl:message>
+    <wsdl:message name="ClosePaymentSoapOut">
+        <wsdl:part name="ClosePaymentResult" element="tns:ClosePaymentResponse"/>
+    </wsdl:message>
+    <wsdl:message name="VoidPaymentSoapIn">
+        <wsdl:part name="voidPaymentRequest" element="tns:VoidPaymentRequest"/>
+    </wsdl:message>
+    <wsdl:message name="VoidPaymentSoapOut">
+        <wsdl:part name="VoidPaymentResult" element="tns:VoidPaymentResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetTransactionDetailsSoapIn">
+        <wsdl:part name="getTransactionDetailsRequest" element="tns:GetTransactionDetailsRequest"/>
+    </wsdl:message>
+    <wsdl:message name="GetTransactionDetailsSoapOut">
+        <wsdl:part name="GetTransactionDetailsResult" element="tns:GetTransactionDetailsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetPaymentDetailsSoapIn">
+        <wsdl:part name="getPaymentDetailsRequest" element="tns:GetPaymentDetailsRequest"/>
+    </wsdl:message>
+    <wsdl:message name="GetPaymentDetailsSoapOut">
+        <wsdl:part name="GetPaymentDetailsResult" element="tns:GetPaymentDetailsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetPayPalOrdersToVoidSoapIn">
+        <wsdl:part name="getPayPalOrdersToVoidRequest" element="tns:GetPayPalOrdersToVoidRequest"/>
+    </wsdl:message>
+    <wsdl:message name="GetPayPalOrdersToVoidSoapOut">
+        <wsdl:part name="GetPayPalOrdersToVoidResult" element="tns:GetPayPalOrdersToVoidResponse"/>
+    </wsdl:message>
+    <wsdl:message name="VoidPayPalOrderSoapIn">
+        <wsdl:part name="voidPayPalOrderRequest" element="tns:VoidPayPalOrderRequest"/>
+    </wsdl:message>
+    <wsdl:message name="VoidPayPalOrderSoapOut">
+        <wsdl:part name="VoidPayPalOrderResult" element="tns:VoidPayPalOrderResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetPaymentIdByPayPalOrderIdSoapIn">
+        <wsdl:part name="getPaymentIdByOrderIdRequest" element="tns:GetPaymentIdByPayPalOrderIdRequest"/>
+    </wsdl:message>
+    <wsdl:message name="GetPaymentIdByPayPalOrderIdSoapOut">
+        <wsdl:part name="GetPaymentIdByPayPalOrderIdResult" element="tns:GetPaymentIdByPayPalOrderIdResponse"/>
+    </wsdl:message>
+    <wsdl:message name="VerifyIsBinBlockedSoapIn">
+        <wsdl:part name="getPaymentTransactionMessageRequest" element="tns:VerifyBinBlockMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="VerifyIsBinBlockedSoapOut">
+        <wsdl:part name="VerifyIsBinBlockedResult" element="tns:VerifyBinBlockMessageResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="PaymentService">
+        <wsdl:operation name="ProcessVBV">
+            <wsdl:input message="tns:ProcessVBVSoapIn"/>
+            <wsdl:output message="tns:ProcessVBVSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="CheckVBV">
+            <wsdl:input message="tns:CheckVBVSoapIn"/>
+            <wsdl:output message="tns:CheckVBVSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="LookupGiftCardBalance">
+            <wsdl:input message="tns:LookupGiftCardBalanceSoapIn"/>
+            <wsdl:output message="tns:LookupGiftCardBalanceSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="ReverseTimedOutTransaction">
+            <wsdl:input message="tns:ReverseTimedOutTransactionSoapIn"/>
+            <wsdl:output message="tns:ReverseTimedOutTransactionSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="PLCCRefund">
+            <wsdl:input message="tns:PLCCRefundSoapIn"/>
+            <wsdl:output message="tns:PLCCRefundSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="CCAuthorization">
+            <wsdl:input message="tns:CCAuthorizationSoapIn"/>
+            <wsdl:output message="tns:CCAuthorizationSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="GCTransaction">
+            <wsdl:input message="tns:GCTransactionSoapIn"/>
+            <wsdl:output message="tns:GCTransactionSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="VoidGCTransaction">
+            <wsdl:input message="tns:VoidGCTransactionSoapIn"/>
+            <wsdl:output message="tns:VoidGCTransactionSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="VoidCCAuthorization">
+            <wsdl:input message="tns:VoidCCAuthorizationSoapIn"/>
+            <wsdl:output message="tns:VoidCCAuthorizationSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="CCAuthentication">
+            <wsdl:input message="tns:CCAuthenticationSoapIn"/>
+            <wsdl:output message="tns:CCAuthenticationSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetPaymentTransaction">
+            <wsdl:input message="tns:GetPaymentTransactionSoapIn"/>
+            <wsdl:output message="tns:GetPaymentTransactionSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="ProcessReversalTransactions">
+            <wsdl:input message="tns:ProcessReversalTransactionsSoapIn"/>
+            <wsdl:output message="tns:ProcessReversalTransactionsSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="RegisterPayPalPayment">
+            <wsdl:input message="tns:RegisterPayPalPaymentSoapIn"/>
+            <wsdl:output message="tns:RegisterPayPalPaymentSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetRegisteredPayPalPaymentDetails">
+            <wsdl:input message="tns:GetRegisteredPayPalPaymentDetailsSoapIn"/>
+            <wsdl:output message="tns:GetRegisteredPayPalPaymentDetailsSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="CreatePayment">
+            <wsdl:input message="tns:CreatePaymentSoapIn"/>
+            <wsdl:output message="tns:CreatePaymentSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="UpdatePayment">
+            <wsdl:input message="tns:UpdatePaymentSoapIn"/>
+            <wsdl:output message="tns:UpdatePaymentSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="AuthorizeFunds">
+            <wsdl:input message="tns:AuthorizeFundsSoapIn"/>
+            <wsdl:output message="tns:AuthorizeFundsSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="VoidAuthorization">
+            <wsdl:input message="tns:VoidAuthorizationSoapIn"/>
+            <wsdl:output message="tns:VoidAuthorizationSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="CaptureFunds">
+            <wsdl:input message="tns:CaptureFundsSoapIn"/>
+            <wsdl:output message="tns:CaptureFundsSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="Refund">
+            <wsdl:input message="tns:RefundSoapIn"/>
+            <wsdl:output message="tns:RefundSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="ClosePayment">
+            <wsdl:input message="tns:ClosePaymentSoapIn"/>
+            <wsdl:output message="tns:ClosePaymentSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="VoidPayment">
+            <wsdl:input message="tns:VoidPaymentSoapIn"/>
+            <wsdl:output message="tns:VoidPaymentSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetTransactionDetails">
+            <wsdl:input message="tns:GetTransactionDetailsSoapIn"/>
+            <wsdl:output message="tns:GetTransactionDetailsSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetPaymentDetails">
+            <wsdl:input message="tns:GetPaymentDetailsSoapIn"/>
+            <wsdl:output message="tns:GetPaymentDetailsSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetPayPalOrdersToVoid">
+            <wsdl:input message="tns:GetPayPalOrdersToVoidSoapIn"/>
+            <wsdl:output message="tns:GetPayPalOrdersToVoidSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="VoidPayPalOrder">
+            <wsdl:input message="tns:VoidPayPalOrderSoapIn"/>
+            <wsdl:output message="tns:VoidPayPalOrderSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetPaymentIdByPayPalOrderId">
+            <wsdl:input message="tns:GetPaymentIdByPayPalOrderIdSoapIn"/>
+            <wsdl:output message="tns:GetPaymentIdByPayPalOrderIdSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="VerifyIsBinBlocked">
+            <wsdl:input message="tns:VerifyIsBinBlockedSoapIn"/>
+            <wsdl:output message="tns:VerifyIsBinBlockedSoapOut"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="PaymentService" type="tns:PaymentService">
+        <wsdl:documentation>
+            <wsi:Claim xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" conformsTo="http://ws-i.org/profiles/basic/1.1"/>
+        </wsdl:documentation>
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="ProcessVBV">
+            <soap:operation soapAction="http://mccp.services.bby.com/ProcessVBV" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CheckVBV">
+            <soap:operation soapAction="http://mccp.services.bby.com/VBVCheck" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="LookupGiftCardBalance">
+            <soap:operation soapAction="http://mccp.services.bby.com/LookupGiftCardBalance" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ReverseTimedOutTransaction">
+            <soap:operation soapAction="http://mccp.services.bby.com/ReverseTimedOutTransaction" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="PLCCRefund">
+            <soap:operation soapAction="http://mccp.services.bby.com/PLCCRefund" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CCAuthorization">
+            <soap:operation soapAction="http://mccp.services.bby.com/CCAuthorization" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GCTransaction">
+            <soap:operation soapAction="http://mccp.services.bby.com/GCTransaction" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="VoidGCTransaction">
+            <soap:operation soapAction="http://mccp.services.bby.com/VoidGCTransaction" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="VoidCCAuthorization">
+            <soap:operation soapAction="http://mccp.services.bby.com/VoidCCAuthorization" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CCAuthentication">
+            <soap:operation soapAction="http://mccp.services.bby.com/CCAuthentication" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetPaymentTransaction">
+            <soap:operation soapAction="http://mccp.services.bby.com/GetPaymentTransaction" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ProcessReversalTransactions">
+            <soap:operation soapAction="http://mccp.services.bby.com/ProcessReversalTransactions" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="RegisterPayPalPayment">
+            <soap:operation soapAction="http://mccp.services.bby.com/RegisterPayPalPayment" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetRegisteredPayPalPaymentDetails">
+            <soap:operation soapAction="http://mccp.services.bby.com/GetRegisteredPayPalPaymentDetails" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CreatePayment">
+            <soap:operation soapAction="http://mccp.services.bby.com/CreatePayment" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="UpdatePayment">
+            <soap:operation soapAction="http://mccp.services.bby.com/UpdatePayment" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="AuthorizeFunds">
+            <soap:operation soapAction="http://mccp.services.bby.com/AuthorizeFunds" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="VoidAuthorization">
+            <soap:operation soapAction="http://mccp.services.bby.com/VoidAuthorization" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CaptureFunds">
+            <soap:operation soapAction="http://mccp.services.bby.com/CaptureFunds" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Refund">
+            <soap:operation soapAction="http://mccp.services.bby.com/Refund" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ClosePayment">
+            <soap:operation soapAction="http://mccp.services.bby.com/ClosePayment" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="VoidPayment">
+            <soap:operation soapAction="http://mccp.services.bby.com/VoidPayment" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetTransactionDetails">
+            <soap:operation soapAction="http://mccp.services.bby.com/GetTransactionDetails" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetPaymentDetails">
+            <soap:operation soapAction="http://mccp.services.bby.com/GetPaymentDetails" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetPayPalOrdersToVoid">
+            <soap:operation soapAction="http://mccp.services.bby.com/GetPayPalOrdersToVoid" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="VoidPayPalOrder">
+            <soap:operation soapAction="http://mccp.services.bby.com/VoidPayPalOrder" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetPaymentIdByPayPalOrderId">
+            <soap:operation soapAction="http://mccp.services.bby.com/GetPaymentIdByPayPalOrderId" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="VerifyIsBinBlocked">
+            <soap:operation soapAction="http://mccp.services.bby.com/VerifyIsBinBlocked " style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="PaymentService">
+        <wsdl:port name="PaymentService" binding="tns:PaymentService">
+            <soap:address location="http://ci1-mccp-il-webservices.ca.bestbuy.com:18092/paymentservice.asmx"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

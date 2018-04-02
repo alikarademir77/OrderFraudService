@@ -158,6 +158,47 @@ client:
         truststore: ~
         # REQUIRED (only if ssl.enabled = true)
         truststore-password: ~
+
+
+
+
+  payment-service:
+    connection:
+      # Payment Service URL
+      # REQUIRED
+      url: dummyUrl
+      timeout:
+        # Timeout for establishing a connection (in milliseconds)
+        connection: ~
+        # Timeout for waiting for response after request is sent (in milliseconds)
+        request: ~
+      ssl:
+        # Indicates whether SSL is enabled (true/false)
+        # REQUIRED
+        enabled: false
+        # Indicates whether hostname verification should be enabled (true/false)
+        # Default: true
+        verify-hostname: ~
+
+        # NOTE - The following fields are required to be set if ssl.enabled is true
+
+        # Path to keystore (JKS or PKCS#12)
+        # - If specifying a system file, add prefix with 'file:'
+        # - If specifying a classpath file, add prefix with 'classpath:'
+        keystore: ~
+        # Keystore password
+        keystore-password: ~
+        # Alias to key
+        key-alias: ~
+        # Password of key
+        key-password: ~
+        # Path to the trust store (JKS)
+        # - If specifying a system file, add prefix with 'file:'
+        # - If specifying a classpath file, add prefix with 'classpath:'
+        truststore: ~
+        # Trust store password
+        truststore-password: ~
+
 ---
 #### UNIT TEST ####
 

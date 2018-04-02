@@ -771,6 +771,7 @@
       "properties": {
         "active": {
           "type": "boolean",
+          "description": "Indicates whether the PayPal account is an active method of payment or not",
           "example": false,
           "allowEmptyValue": false
         },
@@ -784,6 +785,7 @@
         },
         "payPalInternalRefId": {
           "type": "string",
+          "description": "The internal PayPal reference ID to be used in calls to Payment Service",
           "allowEmptyValue": false
         },
         "priority": {

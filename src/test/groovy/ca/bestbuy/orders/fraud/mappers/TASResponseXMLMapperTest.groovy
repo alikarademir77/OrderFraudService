@@ -1,11 +1,11 @@
 package ca.bestbuy.orders.fraud.mappers
 
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ActionCode
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ArrayOfString1
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ResponseData
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Transaction
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.TransactionResults
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ActionCode
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ArrayOfString1
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderResponse
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ResponseData
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Transaction
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionResults
 import ca.bestbuy.orders.fraud.model.internal.FraudResult
 import org.mapstruct.factory.Mappers
 import spock.lang.Shared

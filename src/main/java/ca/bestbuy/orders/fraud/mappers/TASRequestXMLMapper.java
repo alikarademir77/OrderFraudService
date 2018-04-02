@@ -16,20 +16,20 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.ObjectFactory;
 
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.AddressDetails;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.CaPaymentMethod;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ChargeBack;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ChargeBacks;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.CreditCard;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.GiftCard;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Item;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethodStatus;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethodType;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PaymentMethods;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Paypal;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.PurchaseOrderStatus;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ShippingOrder;
-import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.TransactionData;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.AddressDetails;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.CaPaymentMethod;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ChargeBack;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ChargeBacks;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.CreditCard;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.GiftCard;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Item;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethodStatus;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethodType;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethods;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Paypal;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PurchaseOrderStatus;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ShippingOrder;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionData;
 import ca.bestbuy.orders.fraud.model.internal.Address;
 import ca.bestbuy.orders.fraud.model.internal.Chargeback;
 import ca.bestbuy.orders.fraud.model.internal.Order;
@@ -60,7 +60,7 @@ public abstract class TASRequestXMLMapper {
             @Mapping(target = "salesChannel", source = "salesChannel"),
             @Mapping(target = "ipAddress", source = "ipAddress"),
             @Mapping(target = "orderMessage", source = "orderMessage"),
-            @Mapping(target = "billingDetails", ignore = true), //todo: (requires order details change) handle with a custom Billing Details mapper because we need to implement a check for ACTIVE payment method
+            @Mapping(target = "billingDetails.currencyCode", constant = "CAD"),
             @Mapping(target = "paymentMethods", ignore = true), //handled by mapTransactionData_PaymentMethods() custom mapping
             @Mapping(target = "member.memberId", source = "rewardZoneID"),
             @Mapping(target = "items.item", source = "items"),
@@ -232,10 +232,10 @@ public abstract class TASRequestXMLMapper {
                 CaPaymentMethod mappedCreditCardPaymentMethod = new CaPaymentMethod();
                 CreditCard mappedCreditCard = new CreditCard();
 
-                //todo: (requires order details change) hardcoded for now as our internal payment details object is currently not storing the payment method status
-                //todo: (requires order details change) in the future, use the following instead of hardcoding:
-                //todo: (requires order details change) mappedCreditCardPaymentMethod.setPaymentMethodStatus(creditCardToMap.status);
-                mappedCreditCardPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.INACTIVE);
+
+                if(creditCardToMap.status != null) {
+                    mappedCreditCardPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.valueOf(creditCardToMap.status));
+                }
                 mappedCreditCardPaymentMethod.setPaymentMethodType(PaymentMethodType.CREDITCARD);
 
                 mappedCreditCard.setBillingAddress(setBillingAddressForCreditCardMapping(creditCardToMap));
@@ -248,9 +248,6 @@ public abstract class TASRequestXMLMapper {
                 mappedCreditCard.setCreditCardAvsResponse(creditCardToMap.creditCardAvsResponse);
                 mappedCreditCard.setCreditCardCvvResponse(creditCardToMap.creditCardCvvResponse);
                 mappedCreditCard.setCreditCard3DSecureValue(creditCardToMap.creditCard3dSecureValue);
-
-                //todo: (requires order details change) needs to be mapped in internal domain object
-                mappedCreditCard.setTotalCreditCardAuthAmount(creditCardToMap.totalAuthorizedAmount.toString());
 
                 mappedCreditCardPaymentMethod.setCreditCard(mappedCreditCard);
                 mappedPaymentMethods.getPaymentMethod().add(mappedCreditCardPaymentMethod);
@@ -265,8 +262,9 @@ public abstract class TASRequestXMLMapper {
                 CaPaymentMethod mappedGiftCardPaymentMethod = new CaPaymentMethod();
                 GiftCard mappedGiftCard = new GiftCard();
 
-                //todo: (requires order details change) need to identify active payment method
-                mappedGiftCardPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.INACTIVE);
+                if(giftCardToMap.status != null) {
+                    mappedGiftCardPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.valueOf(giftCardToMap.status));
+                }
                 mappedGiftCardPaymentMethod.setPaymentMethodType(PaymentMethodType.GIFTCARD);
 
                 mappedGiftCard.setGiftCardNumber(giftCardToMap.giftCardNumber);
@@ -274,34 +272,35 @@ public abstract class TASRequestXMLMapper {
                 //not used currently -- will be null for now
                 mappedGiftCard.setGiftCardDigital(null);
 
-                //todo: (requires order details change) need to get total gift card amount in internal domain object -- should be same as total credit card amt
-                mappedGiftCard.setTotalGiftCardAuthAmount(giftCardToMap.totalAuthorizedAmount.toString());
-
                 mappedGiftCardPaymentMethod.setGiftCard(mappedGiftCard);
                 mappedPaymentMethods.getPaymentMethod().add(mappedGiftCardPaymentMethod);
 
             }
         }
 
-        //Map the paypal payment method
-        if (paymentDetailsToMap.getPayPal() != null) {
-            CaPaymentMethod mappedPaypalPaymentMethod = new CaPaymentMethod();
-            Paypal mappedPaypal = new Paypal();
+        if(paymentDetailsToMap.getPayPals() != null && !(paymentDetailsToMap.getGiftCards().isEmpty())){
 
-            //todo: (requires order details change) need to identify active payment method
-            mappedPaypalPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.INACTIVE);
-            mappedPaypalPaymentMethod.setPaymentMethodType(PaymentMethodType.PAYPAL);
-            mappedPaypal.setPaypalEmail(paymentDetailsToMap.getPayPal().email);
-            mappedPaypal.setPaypalRequestId(paymentDetailsToMap.getPayPal().requestID);
-            mappedPaypal.setPaypalStatus(paymentDetailsToMap.getPayPal().verifiedStatus);
+            for(PaymentDetails.PayPal payPalToMap : paymentDetailsToMap.getPayPals()){
+                CaPaymentMethod mappedPayPalPaymentMethod = new CaPaymentMethod();
+                Paypal mappedPayPal = new Paypal();
 
-            //todo: (requires order details change) needs to be mapped in internal domain object
-            if(paymentDetailsToMap.getPayPal().totalAuthorizedAmount != null) {
-                mappedPaypal.setTotalPaypalAuthAmt(paymentDetailsToMap.getPayPal().totalAuthorizedAmount.toString());
+
+                if(payPalToMap.status != null) {
+                    mappedPayPalPaymentMethod.setPaymentMethodStatus(PaymentMethodStatus.valueOf(payPalToMap.status));
+                }
+                mappedPayPalPaymentMethod.setPaymentMethodType(PaymentMethodType.PAYPAL);
+
+                if(payPalToMap.payPalAdditionalInfo != null) {
+                    mappedPayPal.setPaypalRequestId(payPalToMap.payPalAdditionalInfo.payPalOrderId);
+                    mappedPayPal.setPaypalStatus(payPalToMap.payPalAdditionalInfo.verifiedStatus);
+                    mappedPayPal.setPaypalEmail(payPalToMap.payPalAdditionalInfo.email);
+                }
+
+
+                mappedPayPalPaymentMethod.setPaypals(mappedPayPal);
+                mappedPaymentMethods.getPaymentMethod().add(mappedPayPalPaymentMethod);
             }
 
-            mappedPaypalPaymentMethod.setPaypals(mappedPaypal);
-            mappedPaymentMethods.getPaymentMethod().add(mappedPaypalPaymentMethod);
         }
 
         mappedTransactionData.setPaymentMethods(mappedPaymentMethods);
@@ -327,7 +326,7 @@ public abstract class TASRequestXMLMapper {
             for (int i = 0; i < orderToMap.getShippingOrders().size(); i++) {
                 ca.bestbuy.orders.fraud.model.internal.ShippingOrder shippingOrderToMap = orderToMap.getShippingOrders().get(i);
 
-                if(shippingOrderToMap.getChargebacks() != null || !(shippingOrderToMap.getChargebacks().isEmpty())) {
+                if(shippingOrderToMap.getChargebacks() != null && !(shippingOrderToMap.getChargebacks().isEmpty())) {
                     //iterate through the shipping order's list of chargebacks
                     for (int j = 0; j < shippingOrderToMap.getChargebacks().size(); j++) {
                         //for each internal chargeback object, map a accertify.wsdl.Chargeback object
