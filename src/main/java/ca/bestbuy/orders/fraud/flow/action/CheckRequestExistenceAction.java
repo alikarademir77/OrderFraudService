@@ -41,7 +41,7 @@ public class CheckRequestExistenceAction implements Action<FlowStates, FlowEvent
 		MessagingEvent messagingEvent = (MessagingEvent) context.getMessageHeader(KEYS.MESSAGING_KEY);
 
 		BigDecimal orderNumber = new BigDecimal(Long.valueOf(messagingEvent.getOrderNumber(), 10));
-		Long requestVersion = Long.valueOf(messagingEvent.getRequestVersion(), 10);
+		Long  requestVersion = Long.valueOf(messagingEvent.getRequestVersion(), 10);
 		
 		Iterable<FraudRequest> fraudRequestIt = fraudRequestRepository.findByOrderNumberAndRequestVersionGTE(orderNumber, requestVersion);
 		

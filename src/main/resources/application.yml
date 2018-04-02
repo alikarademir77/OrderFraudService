@@ -68,7 +68,7 @@ messaging:
 client:
   order-details:
     connection:
-      url: http://localhost:8080/orderdetails
+      url: http://192.168.99.1:1977/mockOrderDetails/orderdetails
       getOrderDetailsEndpoint: /v1/fsorders
       keystore-path: ~
       keystore-password: ~
@@ -82,9 +82,9 @@ client:
 
   tas:
     connection:
-      url: dummyUrl
+      url: http://192.168.99.1:8995/fraudMockService
       fraudCheckOperation: fraudMockService
-      hostname: dummyHost
+      hostname: 192.168.99.1
       connectionTimeout: 10000
       readTimeout: 15000
       ssl:

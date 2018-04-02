@@ -13,21 +13,32 @@
 
 package ca.bestbuy.orders.fraud.model.client.orderdetails;
 
+import java.util.Objects;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.ActualCarrier;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.Address;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.PaymentInfo;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.RequestedCarrier;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.ShipFromAddress;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingCharge;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.ShippingOrderLine;
+import ca.bestbuy.orders.fraud.model.client.orderdetails.Status;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 import org.joda.time.DateTime;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * ShippingOrder
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-02-21T17:00:44.098-08:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-04-02T11:45:53.709-07:00")
 public class ShippingOrder {
+  @JsonProperty("totalAuthorizedAmount")
+  private String totalAuthorizedAmount = null;
+
   @JsonProperty("actualCarrier")
   private ActualCarrier actualCarrier = null;
 
@@ -78,6 +89,24 @@ public class ShippingOrder {
 
   @JsonProperty("type")
   private String type = null;
+
+  public ShippingOrder totalAuthorizedAmount(String totalAuthorizedAmount) {
+    this.totalAuthorizedAmount = totalAuthorizedAmount;
+    return this;
+  }
+
+   /**
+   * Get totalAuthorizedAmount
+   * @return totalAuthorizedAmount
+  **/
+  @ApiModelProperty(value = "")
+  public String getTotalAuthorizedAmount() {
+    return totalAuthorizedAmount;
+  }
+
+  public void setTotalAuthorizedAmount(String totalAuthorizedAmount) {
+    this.totalAuthorizedAmount = totalAuthorizedAmount;
+  }
 
   public ShippingOrder actualCarrier(ActualCarrier actualCarrier) {
     this.actualCarrier = actualCarrier;
@@ -411,7 +440,8 @@ public class ShippingOrder {
       return false;
     }
     ShippingOrder shippingOrder = (ShippingOrder) o;
-    return Objects.equals(this.actualCarrier, shippingOrder.actualCarrier) &&
+    return Objects.equals(this.totalAuthorizedAmount, shippingOrder.totalAuthorizedAmount) &&
+        Objects.equals(this.actualCarrier, shippingOrder.actualCarrier) &&
         Objects.equals(this.fulfillmentMethod, shippingOrder.fulfillmentMethod) &&
         Objects.equals(this.fulfillmentPartner, shippingOrder.fulfillmentPartner) &&
         Objects.equals(this.globalContractRefId, shippingOrder.globalContractRefId) &&
@@ -432,7 +462,7 @@ public class ShippingOrder {
 
   @Override
   public int hashCode() {
-    return Objects.hash(actualCarrier, fulfillmentMethod, fulfillmentPartner, globalContractRefId, id, isCustomerInvoiceAvailable, paymentInfo, requestedCarrier, requestedDeliveryDate, shipFromAddress, shipToAddress, shipmentDate, shippingCharges, shippingOrderLines, status, storeToFulfillFrom, type);
+    return Objects.hash(totalAuthorizedAmount, actualCarrier, fulfillmentMethod, fulfillmentPartner, globalContractRefId, id, isCustomerInvoiceAvailable, paymentInfo, requestedCarrier, requestedDeliveryDate, shipFromAddress, shipToAddress, shipmentDate, shippingCharges, shippingOrderLines, status, storeToFulfillFrom, type);
   }
 
 
@@ -441,6 +471,7 @@ public class ShippingOrder {
     StringBuilder sb = new StringBuilder();
     sb.append("class ShippingOrder {\n");
     
+    sb.append("    totalAuthorizedAmount: ").append(toIndentedString(totalAuthorizedAmount)).append("\n");
     sb.append("    actualCarrier: ").append(toIndentedString(actualCarrier)).append("\n");
     sb.append("    fulfillmentMethod: ").append(toIndentedString(fulfillmentMethod)).append("\n");
     sb.append("    fulfillmentPartner: ").append(toIndentedString(fulfillmentPartner)).append("\n");
