@@ -1,0 +1,112 @@
+{
+  "catalog/products/10362263/details": {
+    "status": 200,
+    "body": {
+      "id": "10362263",
+      "displayTemplate": "Hardgood",
+      "name": {
+        "en-CA": "Haier 8000 BTU Window Air Conditioner (ESA408N)",
+        "fr-CA": "Climatiseur de fenêtre de 8000 BTU de Haier (ESA408N)"
+      },
+      "brandName": "HAIER",
+      "make": "N/A",
+      "modelNumber": "ESA408N",
+      "manufacturer": "HAIE",
+      "manufacturerPartNumber": "ESA408N",
+      "isRefurbished": false,
+      "esrbRating": false,
+      "isFrenchCompliant": true,
+      "hasFrenchContent": true,
+      "isGiftCard": false,
+      "isVisible": false,
+      "isPurchasable": false,
+      "isDiscountable": true,
+      "displayStartDate": "2015-03-02T17:41:46Z",
+      "searchStartDate": "2015-03-02T17:41:46Z",
+      "webStoreSku": "0926INGFS10362263",
+      "shortDescription": {
+        "en-CA": "Beat the heat with the 8,000BTU window air conditioner from Haier. This air conditioner cools rooms that are 250 to 350sq. ft. in size, and comes equipped with 3 cooling and fan speeds. An energy-saving mode and dehumidifier mode are also included for added convenience and versatility.",
+        "fr-CA": "Combattez la chaleur de l'été avec ce climatiseur de fenêtre de 8000 BTU de Haier. Ce climatiseur peut rafraîchir des pièces d'une superficie entre 250 à 350 pi² et est doté de 3 vitesses de refroidissement et de ventilation. Un mode d'économie d'énergie et un mode déshumidificateur sont aussi inclus pour plus de commodité et de polyvalence."
+      },
+      "longDescription": {
+        "en-CA": "<ul><li>Features 4-way air direction that cools rooms that are 250 to 350 square feet</li><li>Three cooling and fan speeds allow you to control temperature </li><li>Electronic controls and full function magnetic remote let you control air conditioner with ease </li><li>Reminder light turns on when filter needs to be cleaned </li><li>Includes an energy-saving mode and dehumidifier mode for added convenience and versatility </li><li>Easy access to washable filter for quick cleanup </li><li>Window install kit included for easy setup</li></ul>",
+        "fr-CA": "<ul><li>Circulation d'air à 4 directions qui permet de rafraîchir une pièce d'une superficie qui peut atteindre entre 250 et 350 pi²</li><li>Trois vitesses de refroidissement et de ventilation qui vous permettent de contrôler la température </li><li>Commandes électroniques et télécommande magnétique qui vous permettent de contrôler toutes les fonctions de votre climatiseur facilement </li><li>Voyant lumineux qui s'allume quand le filtre doit être nettoyé </li><li>Mode d'économie d'énergie et mode de déshumidification inclus pour plus de commodité et de polyvalence </li><li>Filtre lavable facile d'accès pour un nettoyage rapide </li><li>Trousse d'installation sur fenêtre incluse pour faciliter l'installation</li></ul>"
+      },
+      "seoText": {
+        "en-CA": "haier-8000-btu-window-air-conditioner-esa408n",
+        "fr-CA": "climatiseur-de-fenetre-de-8000-btu-de-haier-esa408n"
+      },
+      "isEnergyStarItem": true,
+      "upc": [
+        {
+          "value": "688057404233",
+          "isPrimary": true
+        }
+      ],
+      "dimensionsAndWeight": {
+        "inBox": {
+          "height": 42.6,
+          "length": 46,
+          "width": 53.8,
+          "weight": 26.78
+        },
+        "outOfBox": {
+          "height": 38.1,
+          "length": 36,
+          "width": 47.5,
+          "weight": 24.4
+        },
+        "linearUom": "cm",
+        "weightUom": "kg"
+      },
+      "warranty": {
+        "warrantyCarryInLabourDays": 0,
+        "warrantyOnSiteLabourDays": 0,
+        "fullPartsWarranty": 365
+      },
+      "fulfillment": {
+        "isShippable": true,
+        "hasFreeShipping": false,
+        "freeShippingIfFreeItem": true,
+        "isSpecialDelivery": false,
+        "exclusivity": "None"
+      },
+      "rmsType": "R",
+      "rmsDeptID": 49,
+      "rmsSubclassID": 8,
+      "rmsShortDescription": "HAIER ESA408N",
+      "rmsLongDescription": "HAIER ESA408N 8000 BTU AIR CONDTIONER",
+      "rmsSkuType": "MERCH",
+      "skuOwner": "S",
+      "manufacturerName": "HAIER",
+      "firstReceiptDate": "2015-05-06T14:47:01Z",
+      "lastReceiptDate": "2015-06-29T14:06:10Z",
+      "rmsDivision": 2,
+      "rmsGroupNo": 24,
+      "supplierID": 84855,
+      "regiIndicator": "N",
+      "isServiceApplicable": false,
+      "pimSKUStatus": "Offline",
+      "bestBuyOnly": false,
+      "_links": {
+        "self": {
+          "href": "catalog/products/10362263/details"
+        },
+        "product": {
+          "href": "catalog/products/10362263"
+        }
+      }
+    },
+    "headers": {
+      "Content-Type": "application/vnd.bestbuy.productdetails+json",
+      "Last-Modified": "Sat, 21 Oct 2017 00:52:19 GMT"
+    }
+  },
+  "catalog/products/10362264/details": {
+    "status": 404,
+    "body": "There was a problem retrieving the Couchbase document",
+    "headers": {
+      "Content-Type": "text/plain"
+    }
+  }
+}

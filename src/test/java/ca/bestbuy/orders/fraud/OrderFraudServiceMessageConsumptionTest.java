@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClientConfig;
+import ca.bestbuy.orders.fraud.client.ResourceApiClientConfig;
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.MessageConsumingService;
 import ca.bestbuy.orders.messaging.MessagingEvent;
@@ -44,21 +45,18 @@ public class OrderFraudServiceMessageConsumptionTest {
 
 	@Autowired 
 	private OrderFraudChannels channels;
-	
+
 	@MockBean
 	private MessageConsumingService<MessagingEvent> messageConsumingService;
 
 	@MockBean
-	private OrderDetailsClientConfig orderDetailsClientConfig;
-	
+	private ResourceApiClientConfig resourceApiClientConfig;
+
 	@MockBean
-	OrderDetailsClient orderDetailsClient;
+	private OrderDetailsClientConfig orderDetailsClientConfig;
 
 	@MockBean
 	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
-
-	@MockBean
-	private FraudServiceTASClient fraudServiceTASClient;
 	    
     @Test
     public void contextLoadsAndWiring() {

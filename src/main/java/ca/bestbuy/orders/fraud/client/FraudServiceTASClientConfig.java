@@ -1,35 +1,26 @@
 package ca.bestbuy.orders.fraud.client;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLContext;
-
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper;
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
+import ca.bestbuy.orders.fraud.utility.KeystoreConfig;
+import ca.bestbuy.orders.fraud.utility.TimeoutConfig;
+import ca.bestbuy.orders.fraud.utility.TruststoreConfig;
+import ca.bestbuy.orders.fraud.utility.WebClientUtility;
+
 
 @Configuration
 public class FraudServiceTASClientConfig {
@@ -45,39 +36,30 @@ public class FraudServiceTASClientConfig {
     }
 
 
-    private String fraudCheckOperation;
+    private String fraudCheckSOAPActionCallback;
 
-    @Value("${client.tas.connection.fraudCheckOperation}")
-    protected void setFraudCheckOperation(String fraudCheckOperation) {
-        if (fraudCheckOperation == null) {
-            throw new IllegalArgumentException("client.tas.connection.fraudCheckOperation cannot be null");
+    @Value("${client.tas.connection.fraudcheck-soap-action-callback}")
+    protected void setFraudCheckSOAPActionCallback(String fraudCheckSOAPActionCallback) {
+        if (fraudCheckSOAPActionCallback == null) {
+            throw new IllegalArgumentException("client.tas.connection.fraudcheck-soap-action-callback cannot be null");
         }
-        this.fraudCheckOperation = fraudCheckOperation;
+        this.fraudCheckSOAPActionCallback = fraudCheckSOAPActionCallback;
     }
 
-    private String hostname;
 
-    @Value("${client.tas.connection.hostname}")
-    protected void setHostname(String hostname) {
-        if (hostname == null) {
-            throw new IllegalArgumentException("client.tas.connection.hostname cannot be null");
-        }
-        this.hostname = hostname;
-    }
+    private Integer connectionTimeout;
 
-    private int connectionTimeout;
-
-    @Value("${client.tas.connection.connectionTimeout}")
-    public void setConnectionTimeout(int connectionTimeout) {
+    @Value("${client.tas.connection.timeout.connection}")
+    protected void setConnectionTimeout(Integer connectionTimeout) {
         this.connectionTimeout = connectionTimeout;
     }
 
 
-    private int readTimeout;
+    private Integer requestTimeout;
 
-    @Value("${client.tas.connection.readTimeout}")
-    public void setReadTimeout(int readTimeout) {
-        this.readTimeout = readTimeout;
+    @Value("${client.tas.connection.timeout.request}")
+    protected void setRequestTimeout(Integer requestTimeout) {
+        this.requestTimeout = requestTimeout;
     }
 
 
@@ -109,68 +91,54 @@ public class FraudServiceTASClientConfig {
     }
 
 
-    private Resource keyStore;
+    private Resource keystore;
 
-    @Value("${client.tas.connection.ssl.keystore-path}")
-    protected void setKeyStore(Resource keyStore) {
-        this.keyStore = keyStore;
+    @Value("${client.tas.connection.ssl.keystore}")
+    protected void setKeystore(Resource keystore) {
+        this.keystore = keystore;
     }
 
 
-    private String keyStorePassword;
+    private String keystorePassword;
 
     @Value("${client.tas.connection.ssl.keystore-password}")
-    protected void setKeyStorePassword(String keyStorePassword) {
-        this.keyStorePassword = keyStorePassword;
+    protected void setKeystorePassword(String keystorePassword) {
+        this.keystorePassword = keystorePassword;
     }
 
 
-    private String keyStoreType;
+    private Resource truststore;
 
-    @Value("${client.tas.connection.ssl.keystore-type}")
-    protected void setKeyStoreType(String keyStoreType) {
-        this.keyStoreType = keyStoreType;
+    @Value("${client.tas.connection.ssl.truststore}")
+    protected void setTruststore(Resource truststore) {
+        this.truststore = truststore;
     }
 
 
-    private Resource trustStore;
-
-    @Value("${client.tas.connection.ssl.truststore-path}")
-    protected void setTrustStore(Resource trustStore) {
-        this.trustStore = trustStore;
-    }
-
-
-    private String trustStorePassword;
+    private String truststorePassword;
 
     @Value("${client.tas.connection.ssl.truststore-password}")
-    protected void setTrustStorePassword(String trustStorePassword) {
-        this.trustStorePassword = trustStorePassword;
+    protected void setTruststorePassword(String truststorePassword) {
+        this.truststorePassword = truststorePassword;
     }
 
 
-    private String trustStoreType;
+    private Boolean sslEnabled;
 
-    @Value("${client.tas.connection.ssl.truststore-type}")
-    protected void setTrustStoreType(String trustStoreType) {
-        this.trustStoreType = trustStoreType;
-    }
-
-
-    private Boolean tlsEnabled;
-
-    @Value("${client.tas.connection.ssl.tls-enabled:true}")
-    protected void setTlsEnabled(Boolean tlsEnabled) {
-        if (tlsEnabled == null) {
-            throw new IllegalArgumentException("client.tas.connection.ssl.tls-enabled cannot be null");
+    @Value("${client.tas.connection.ssl.enabled:true}")
+    protected void setSslEnabled(Boolean sslEnabled) {
+        if (sslEnabled == null) {
+            throw new IllegalArgumentException("client.tas.connection.ssl.enabled cannot be null");
         }
-        this.tlsEnabled = tlsEnabled;
+        this.sslEnabled = sslEnabled;
     }
 
 
     @Bean
     public FraudServiceTASClient fraudServiceTASClient(TASRequestXMLMapper tasRequestXMLMapper, TASResponseXMLMapper tasResponseXMLMapper, WebServiceTemplate webServiceTemplate) {
-        FraudServiceTASClient fraudServiceTASClient = new FraudServiceTASClientImpl(tasRequestXMLMapper, tasResponseXMLMapper, webServiceTemplate, fraudCheckOperation);
+        FraudServiceTASClientImpl fraudServiceTASClient = new FraudServiceTASClientImpl(tasRequestXMLMapper, tasResponseXMLMapper, webServiceTemplate);
+        fraudServiceTASClient.setTasBaseUrl(url);
+        fraudServiceTASClient.setFraudcheckSOAPActionCallback(fraudCheckSOAPActionCallback);
         return fraudServiceTASClient;
     }
 
@@ -178,7 +146,6 @@ public class FraudServiceTASClientConfig {
     @Bean
     protected WebServiceTemplate webServiceTemplate(HttpComponentsMessageSender httpComponentsMessageSender, Jaxb2Marshaller marshaller) {
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-        webServiceTemplate.setDefaultUri(url);
         webServiceTemplate.setMarshaller(marshaller);
         webServiceTemplate.setUnmarshaller(marshaller);
         webServiceTemplate.setMessageSender(httpComponentsMessageSender);
@@ -197,93 +164,69 @@ public class FraudServiceTASClientConfig {
 
 
     @Bean
-    //Set up HTTPS configurations for 2-way SSL
     protected HttpComponentsMessageSender httpComponentsMessageSender() {
 
         HttpComponentsMessageSender httpComponentsMessageSender = new HttpComponentsMessageSender();
-        httpComponentsMessageSender.setHttpClient(httpClient());
+        httpComponentsMessageSender.setHttpClient(createHttpClient());
         return httpComponentsMessageSender;
     }
 
 
-    protected HttpClient httpClient() {
+    protected HttpClient createHttpClient() {
 
         HttpClientBuilder builder = HttpClientBuilder.create();
-        //setting timeouts
-        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(readTimeout).build();
-        builder = builder.setDefaultRequestConfig(requestConfig);
 
-        //removing http headers because headers are already set, otherwise we get an exception about content length header already existing
-        builder.addInterceptorFirst(new HttpRequestInterceptor() {
-            @Override
-            public void process(HttpRequest httpRequest, HttpContext httpContext) throws HttpException, IOException {
-                httpRequest.removeHeaders(HTTP.CONTENT_LEN);
-            }
-        });
-        if (tlsEnabled) {
-            builder = builder.setSSLSocketFactory(sslConnectionSocketFactory());
+        // Set timeouts
+        TimeoutConfig timeoutConfig = new TimeoutConfig(connectionTimeout, requestTimeout);
+        WebClientUtility.configureTimeouts(builder, timeoutConfig);
+
+        // Removing http content length header because header is already set, otherwise we get an exception about content length header already existing
+        builder.addInterceptorFirst((HttpRequestInterceptor) (httpRequest, httpContext) -> httpRequest.removeHeaders(HTTP.CONTENT_LEN));
+
+        if (sslEnabled) {
+
+            // Validate SSL Configurations
+            validateSSLConfigurations();
+
+            KeystoreConfig keystoreConfig = new KeystoreConfig(keystore, keystorePassword, keyAlias, keyPassword);
+            TruststoreConfig truststoreConfig = new TruststoreConfig(truststore, truststorePassword);
+            WebClientUtility.configureSSL(builder, keystoreConfig, truststoreConfig, verifyHostName);
         }
 
         return builder.build();
-
     }
 
-    protected SSLConnectionSocketFactory sslConnectionSocketFactory() {
 
-        if (verifyHostName) {
-            return new SSLConnectionSocketFactory(sslContext());
-        } else {
-            return new SSLConnectionSocketFactory(sslContext(), NoopHostnameVerifier.INSTANCE);
+    private void validateSSLConfigurations() {
+
+        if(keystore == null) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.tas.connection.ssl.keystore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+        }
+
+        // UrlResource if using a prefix of 'file:'
+        // ClassPathResource if using a prefix of 'classpath:'
+        if (!(keystore instanceof UrlResource) && !(keystore instanceof ClassPathResource)) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.tas.connection.ssl.keystore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+        }
+
+        if(keystorePassword == null) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.tas.connection.ssl.keystore-password' is set.");
+        }
+
+        if(truststore == null) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.tas.connection.ssl.truststore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+        }
+
+        // UrlResource if using a prefix of 'file:'
+        // ClassPathResource if using a prefix of 'classpath:'
+        if (!(truststore instanceof UrlResource) && !(truststore instanceof ClassPathResource)) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.tas.connection.ssl.truststore' is set. If reading from file system, use a prefix of 'file:'. If reading from the classpath, use a prefix of 'classpath:'. Only formats of JKS (.jks) and PKCS#12 (.pfx, .p12) are supported.");
+        }
+
+        if(truststorePassword == null) {
+            throw new IllegalStateException("Please ensure that the configuration value for 'client.tas.connection.ssl.truststore-password' is set.");
         }
 
     }
-
-    protected SSLContext sslContext() {
-
-        if (keyStore == null) {
-            throw new IllegalArgumentException(
-                " The value for 'client.tas.connection.ssl.keystore-path' was found to be null. Please ensure it is set correctly in the application configuration.");
-        }
-
-        if (keyStorePassword == null) {
-            throw new IllegalArgumentException(
-                " The value for 'client.tas.connection.ssl.keystore-password' was found to be null. Please ensure it is set correctly in the application configuration.");
-        }
-
-        if (keyStoreType == null || keyStoreType.isEmpty() || !keyStoreType.equals("JKS")) {
-            throw new IllegalArgumentException(
-                " The value for 'client.tas.connection.ssl.keystore-type' was found to be null, empty, or does not have a value of 'JKS'. Please ensure it is set correctly in "
-                    + "the application configuration.");
-        }
-
-        if (keyAlias == null || keyAlias.isEmpty()) {
-            throw new IllegalArgumentException(
-                " The value for 'client.tas.connection.ssl.key-alias' was found to be null or empty. Please ensure it is set correctly in the application configuration.");
-        }
-
-        if (keyPassword == null) {
-            throw new IllegalArgumentException(
-                " The value for 'client.tas.connection.ssl.key-password' was found to be null. Please ensure it is set correctly in the application configuration.");
-        }
-
-        if (trustStore == null) {
-            throw new IllegalArgumentException(
-                " The value for 'client.tas.connection.ssl.truststore-path' was found to be null. Please ensure it is set correctly in the application configuration.");
-        }
-
-        if (trustStorePassword == null) {
-            throw new IllegalArgumentException(
-                " The value for 'client.tas.connection.ssl.truststore-password' was found to be null. Please ensure it is set correctly in the application configuration.");
-        }
-
-        try {
-            return SSLContextBuilder.create().loadKeyMaterial(keyStore.getFile(), keyStorePassword.toCharArray(), keyPassword.toCharArray(),
-                (map, socket) -> keyAlias).loadTrustMaterial(trustStore.getFile(), trustStorePassword.toCharArray()).build();
-        } catch (NoSuchAlgorithmException | KeyStoreException | IOException | CertificateException | UnrecoverableKeyException | KeyManagementException e) {
-            throw new IllegalStateException("Could not load keystore and/or trust store for TAS Client. Please ensure all relevant application configurations are correctly set.",
-                e);
-        }
-    }
-
 
 }

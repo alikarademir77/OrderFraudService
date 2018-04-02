@@ -1,0 +1,15 @@
+{
+  "requests": [
+    {
+      "id": "catalog/products/10362263/details",
+      "headers": {
+        "Accept": "application/vnd.bestbuy.productdetails+json"
+      }
+    },
+    {
+      "id": "catalog/products/10362264/details",
+      "headers": {
+        "Accept": "application/vnd.bestbuy.productdetails+json"
+      }
+    }]
+}

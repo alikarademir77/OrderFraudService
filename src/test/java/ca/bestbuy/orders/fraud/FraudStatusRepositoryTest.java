@@ -25,6 +25,7 @@ import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClientConfig;
 import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.client.ResourceApiClientConfig;
 
 /**
  * @author akaradem
@@ -35,19 +36,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
 @ActiveProfiles({"dev","unittest"})
 @DirtiesContext
 public class FraudStatusRepositoryTest {
-	
-	@MockBean
-	private OrderDetailsClientConfig orderDetailsClientConfig;
-	
-	@MockBean
-	OrderDetailsClient orderDetailsClient;
 
-	@MockBean
-	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
-
-	@MockBean
-	private FraudServiceTASClient fraudServiceTASClient;
-	
 	@Autowired
 	FraudStatusRepository fraudStatusRepository;
 	

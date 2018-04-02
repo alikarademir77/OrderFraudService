@@ -27,69 +27,78 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
     private TASRequestXMLMapper tasRequestXMLMapper;
     private TASResponseXMLMapper tasResponseXMLMapper;
     private WebServiceTemplate webServiceTemplate;
-    private String fraudCheckOperation;
+    private String tasBaseUrl;
+    private String fraudcheckSOAPActionCallback;
 
-    public FraudServiceTASClientImpl(TASRequestXMLMapper tasRequestXMLMapper, TASResponseXMLMapper tasResponseXMLMapper, WebServiceTemplate webServiceTemplate, String fraudCheckOperation){
 
-        if(tasRequestXMLMapper == null) {
+    public FraudServiceTASClientImpl(TASRequestXMLMapper tasRequestXMLMapper, TASResponseXMLMapper tasResponseXMLMapper, WebServiceTemplate webServiceTemplate) {
+
+        if (tasRequestXMLMapper == null) {
             throw new IllegalArgumentException("TASRequestXMLMapper provided to FraudServiceTASClientImpl must not be null");
         }
 
-        if(tasResponseXMLMapper == null) {
+        if (tasResponseXMLMapper == null) {
             throw new IllegalArgumentException("TASResponseXMLMapper provided to FraudServiceTASClientImpl must not be null");
         }
 
-        if(webServiceTemplate == null) {
+        if (webServiceTemplate == null) {
             throw new IllegalArgumentException("WebServiceTemplate provided to FraudServiceTASClientImpl must not be null");
-        }
-
-        if(fraudCheckOperation == null || fraudCheckOperation.isEmpty()) {
-            throw new IllegalArgumentException("fraudCheckOperation provided to FraudServiceTASClientImpl must not be null");
-        }
-
-        if(webServiceTemplate.getMarshaller() == null || webServiceTemplate.getUnmarshaller() == null) {
-            throw new IllegalArgumentException("WebServiceTemplate provided to FraudServiceTASClientImpl must have a marshaller and unmarshaller set");
-        }
-
-        if(webServiceTemplate.getDefaultUri() == null || webServiceTemplate.getDefaultUri().isEmpty()) {
-            throw new IllegalArgumentException("WebServiceTemplate provided to FraudServiceTASClientImpl must have a default uri set");
         }
 
         this.tasRequestXMLMapper = tasRequestXMLMapper;
         this.tasResponseXMLMapper = tasResponseXMLMapper;
         this.webServiceTemplate = webServiceTemplate;
-        this.fraudCheckOperation = fraudCheckOperation;
+    }
+
+
+    public void setTasBaseUrl(String tasBaseUrl) {
+        this.tasBaseUrl = tasBaseUrl;
+    }
+
+    public void setFraudcheckSOAPActionCallback(String fraudcheckSOAPActionCallback) {
+        this.fraudcheckSOAPActionCallback = fraudcheckSOAPActionCallback;
     }
 
     @Override
     public FraudResult doFraudCheck(Order order) {
 
+        if (order == null) {
+            throw new IllegalArgumentException("Order passed in to doFraudCheck() must not be null");
+        }
+
+        if (tasBaseUrl == null || tasBaseUrl.isEmpty()) {
+            throw new IllegalStateException("TasBaseUrl must not be null or empty. Please ensure this is set on the client object before invoking doFraudCheck()");
+        }
+
+        if (fraudcheckSOAPActionCallback == null || fraudcheckSOAPActionCallback.isEmpty()) {
+            throw new IllegalStateException("FraudCheckSOAPActionCallback must not be null or empty. Please ensure this is set on the client object before invoking doFraudCheck()");
+        }
 
         //Map the request
         ManageOrderRequest request = new ManageOrderRequest();
         request.setIxTranType(ManageOrderActionCode.FRAUDCHECK);
         request.setTransactionData(tasRequestXMLMapper.mapTransactionData(order));
 
-
-        ObjectFactory  objectFactory = new ObjectFactory();
+        ObjectFactory objectFactory = new ObjectFactory();
         JAXBElement<ManageOrderRequest> jaxbRequest = objectFactory.createManageOrderRequest(request);
         log.info("Request sent to TAS:" + convertToXMLString(jaxbRequest));
 
         try {
-            //Send request to TAS and receive response
-            JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) webServiceTemplate.marshalSendAndReceive(jaxbRequest, new SoapActionCallback(fraudCheckOperation));
+            // Send request to TAS and receive response
+            JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) webServiceTemplate.marshalSendAndReceive(tasBaseUrl, jaxbRequest,
+                new SoapActionCallback(fraudcheckSOAPActionCallback));
             log.info("Response received from TAS:" + convertToXMLString(jaxbResponse));
 
-            //map response to FraudResult object
+            // Map response to FraudResult object
             ManageOrderResponse response = jaxbResponse.getValue();
             FraudResult fraudResult = tasResponseXMLMapper.mapManageOrderResult(response);
             return fraudResult;
 
-        }catch(SoapFaultClientException sfce){
+        } catch (SoapFaultClientException sfce) {
             //todo: handle this during flow implementation
             log.error("An error occurred while sending request to TAS: FAULT CODE is " + sfce.getFaultCode() + " and FAULT STRING is " + sfce.getFaultStringOrReason());
             throw sfce;
-        }catch(WebServiceIOException wse){
+        } catch (WebServiceIOException wse) {
             //todo: handle this during flow implementation
             log.error("A connection error occurred while communicating with TAS: " + wse.getMessage());
             throw wse;
@@ -97,6 +106,7 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
 
 
     }
+
 
     private String convertToXMLString(JAXBElement jaxbElement) {
 

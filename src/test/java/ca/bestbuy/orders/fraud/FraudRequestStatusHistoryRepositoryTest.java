@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
 import ca.bestbuy.orders.fraud.client.FraudServiceTASClientConfig;
@@ -39,6 +37,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.client.ResourceApiClientConfig;
 
 /**
  * @author akaradem
@@ -49,18 +48,6 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
 @ActiveProfiles({ "dev", "unittest" })
 @DirtiesContext
 public class FraudRequestStatusHistoryRepositoryTest {
-
-	@MockBean
-	private OrderDetailsClientConfig orderDetailsClientConfig;
-
-	@MockBean
-	OrderDetailsClient orderDetailsClient;
-
-	@MockBean
-	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
-
-	@MockBean
-	private FraudServiceTASClient fraudServiceTASClient;
 
 	@Autowired
 	FraudStatusRepository statusRepository;
