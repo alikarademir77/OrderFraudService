@@ -19,13 +19,14 @@ class ResourceApiClientImplTest extends Specification {
         given:
 
         ResourceApiRequest resourceApiRequest = new ResourceApiRequest()
-        ResourceApiClientImpl resourceApiClient = new ResourceApiClientImpl()
+
 
         RestTemplate restTemplate = new RestTemplate()
         config.serviceUrl >> "/resource/api"
         config.endpoint >> "/endpoint"
         config.restTemplate() >> restTemplate
-        resourceApiClient.config = config
+
+        ResourceApiClientImpl resourceApiClient = new ResourceApiClientImpl(config)
 
         String response = new File("src/test/resources/resourceapi/resource-api-response-with-one-notfound.json").text
 

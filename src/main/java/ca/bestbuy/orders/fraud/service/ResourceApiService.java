@@ -20,11 +20,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ResourceApiService {
 
-    @Autowired
     ResourceApiJsonConverter resourceApiJsonConverter;
 
-    @Autowired
     ResourceApiClientImpl resourceApiClientImpl;
+    public ResourceApiService(ResourceApiJsonConverter resourceApiJsonConverter,ResourceApiClientImpl resourceApiClientImpl){
+
+        this.resourceApiJsonConverter = resourceApiJsonConverter;
+
+        this.resourceApiClientImpl = resourceApiClientImpl;
+
+    }
 
     public Map<String, ProductDetail> getProductDetail(List<String> skuList) {
 

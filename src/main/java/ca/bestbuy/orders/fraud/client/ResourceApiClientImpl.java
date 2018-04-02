@@ -15,6 +15,11 @@ public class ResourceApiClientImpl {
     @Autowired
     ResourceApiClientConfig config;
 
+    public ResourceApiClientImpl(ResourceApiClientConfig config){
+
+        this.config = config;
+
+    }
     public String getData(ResourceApiRequest request) {
 
         String resourceServiceUrl = config.getServiceUrl();
