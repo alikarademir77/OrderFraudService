@@ -1,23 +1,7 @@
 package ca.bestbuy.orders.fraud.mappers
 
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.AddressDetails
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.CaPaymentMethod
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ChargeBack
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ItemStatus
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethodType
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PaymentMethods
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.PurchaseOrderStatus
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.SalesChannels
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionData
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionType
-import ca.bestbuy.orders.fraud.model.internal.Address
-import ca.bestbuy.orders.fraud.model.internal.Chargeback
-import ca.bestbuy.orders.fraud.model.internal.Item
-import ca.bestbuy.orders.fraud.model.internal.Order
-import ca.bestbuy.orders.fraud.model.internal.PaymentDetails
-import ca.bestbuy.orders.fraud.model.internal.PurchaseOrder
-import ca.bestbuy.orders.fraud.model.internal.ShippingOrder
-import ca.bestbuy.orders.fraud.model.internal.ShippingOrderLine
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.*
+import ca.bestbuy.orders.fraud.model.internal.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
@@ -28,7 +12,6 @@ import spock.lang.Specification
 
 import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
-
 
 class TASRequestXMLMapperTest extends Specification {
 
@@ -324,12 +307,7 @@ class TASRequestXMLMapperTest extends Specification {
         }
 
         then:
-
-        int amtOfPaypalPayments = 0;
-         if(order.getPaymentDetails() != null && order.getPaymentDetails().getPayPals() != null){
-            amtOfPaypalPayments = order.getPaymentDetails().getPayPals().size();
-        }
-
+        int amtOfPaypalPayments = order.getPaymentDetails().getPayPals().size()
 
         mappedTxnData.getTransactionId() == order.getFsOrderID()
         mappedTxnData.getWebOrderId() == order.getWebOrderRefID()
