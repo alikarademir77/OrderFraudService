@@ -118,12 +118,11 @@ client:
         # Timeout for waiting for response after request is sent (in milliseconds)
         request: ~
       ssl:
-        keystore: classpath:secure/oms-client.pfx
+        enabled: false
+        keystore: ~
         keystore-password: mccp123
-        truststore: classpath:secure/cacerts
+        truststore: ~
         truststore-password: changeit
-        enabled: true
-
 
   tas:
     connection:
