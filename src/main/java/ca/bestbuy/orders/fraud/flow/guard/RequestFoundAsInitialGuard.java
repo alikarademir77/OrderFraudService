@@ -25,6 +25,9 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
 @Component
 public class RequestFoundAsInitialGuard implements Guard<FlowStates, FlowEvents> {
 
+	/* (non-Javadoc)
+	 * @see org.springframework.statemachine.guard.Guard#evaluate(org.springframework.statemachine.StateContext)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean evaluate(StateContext<FlowStates, FlowEvents> context) {

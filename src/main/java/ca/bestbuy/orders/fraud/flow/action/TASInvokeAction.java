@@ -5,14 +5,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateContext;
-import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
@@ -21,9 +19,11 @@ import ca.bestbuy.orders.fraud.dao.FraudRequestStatusHistoryRepository;
 import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
 import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
 import ca.bestbuy.orders.fraud.flow.FlowEvents;
+import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
 import ca.bestbuy.orders.fraud.flow.FlowStates;
-import ca.bestbuy.orders.fraud.model.internal.FraudAssesmentResult;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
@@ -35,8 +35,8 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
  * @author akaradem
  *
  */
-@Component
-public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
+@Component 
+public class TASInvokeAction  extends ActionWithException<FlowStates, FlowEvents>  {
 
 	@Value("${spring.datasource.username}")
 	private String userName;
@@ -56,41 +56,87 @@ public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 	@Autowired
 	FraudRequestTypeRepository typeRepository;
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	/* (non-Javadoc)
+	 * @see ca.bestbuy.orders.fraud.flow.action.ActionWithException#doExecute(org.springframework.statemachine.StateContext)
+	 */
 	@Override
-	public void execute(StateContext<FlowStates, FlowEvents> context) {
+	protected void doExecute(StateContext<FlowStates, FlowEvents> context) throws Exception {
 		MessagingEvent messagingEvent = (MessagingEvent) context.getMessageHeader(KEYS.MESSAGING_KEY);
-
 		String orderNumber = messagingEvent.getOrderNumber();
 		String requestVersion = messagingEvent.getRequestVersion();
-		
-		//TODO: Add Error Handling
+
 		Order orderDetails = orderDetailsClient.getOrderDetails(orderNumber);
 		
-		//TODO: Call Resource Service to populate item SKU Category details
+		// TODO: Call Resource Service to populate item SKU Category details
+		// TODO: Call Payment Service to populate paypal details
 
 		//store the requestVersion and the order details in a FraudAssessmentRequest object
 		FraudAssessmentRequest fraudAssessmentRequest = new FraudAssessmentRequest(Integer.parseInt(requestVersion), orderDetails);
-
-
-		FraudAssesmentResult fraudAssesmentResult = fraudServiceTASClient.doFraudCheck(fraudAssessmentRequest);
+		FraudAssessmentResult fraudAssessmentResult = fraudServiceTASClient.doFraudCheck(fraudAssessmentRequest);
 		//TODO: Validate that response and request has same order number and request version
 				
-		if(fraudAssesmentResult!=null){
-
-			Iterable<FraudRequest> fraudRequestIt = 
-					fraudRequestRepository.findByOrderNumberAndRequestVersion(new BigDecimal(orderNumber), Long.valueOf(requestVersion, 10));
-			
-			if((fraudRequestIt!=null) && (fraudRequestIt.iterator().hasNext())){
-				FraudRequest fraudRequest =  fraudRequestIt.iterator().next();
-				persistInvocationResult(fraudAssesmentResult, fraudRequest);
-			}
-		
+		if(fraudAssessmentResult!=null){
+			// Validate that response and request has same order number and request version
+			validateAssesmentResult(orderNumber, requestVersion, fraudAssessmentResult);
+			processAssesmentResult(orderNumber, requestVersion, fraudAssessmentResult);
+			sendFraudCheckEvent(context, messagingEvent);
 		}
 	}
 
-	private void persistInvocationResult(FraudAssesmentResult fraudAssesmentResult, FraudRequest fraudRequest) {
-		FraudAssesmentResult.FraudResponseStatusCodes fraudResponseStatusCode = fraudAssesmentResult.getFraudResponseStatus();
+
+	/* (non-Javadoc)
+	 * @see ca.bestbuy.orders.fraud.flow.action.ActionWithException#getErrorEvent()
+	 */
+	@Override
+	protected FlowEvents getErrorEvent() {
+		return FlowEvents.SM_ERROR_EVENT;
+	}	
+
+	/**
+	 * @param orderNumber
+	 * @param requestVersion
+	 * @param fraudAssessmentResult
+	 */
+	private void processAssesmentResult(String orderNumber, String requestVersion,
+			FraudAssessmentResult fraudAssessmentResult) {
+		if (fraudAssessmentResult != null) {
+
+			Iterable<FraudRequest> fraudRequestIt = fraudRequestRepository
+					.findByOrderNumberAndRequestVersion(new BigDecimal(orderNumber), Long.valueOf(requestVersion, 10));
+
+			if ((fraudRequestIt != null) && (fraudRequestIt.iterator().hasNext())) {
+				FraudRequest fraudRequest = fraudRequestIt.iterator().next();
+				persistInvocationResult(fraudAssessmentResult, fraudRequest);
+			} else {
+				StringBuilder builder = (new StringBuilder())
+						.append("Failed to find fraud request record (order number=").append(orderNumber)
+						.append(" and request version=").append(requestVersion)
+						.append(") in DB for which TAS call is made!");
+
+				throw new IllegalStateException(builder.toString());
+			}
+		}
+	}
+
+	/**
+	 * @param context
+	 * @param messagingEvent
+	 */
+	private void sendFraudCheckEvent(StateContext<FlowStates, FlowEvents> context, MessagingEvent messagingEvent) {
+		Message<FlowEvents> message = MessageBuilder
+				.withPayload(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
+				.setHeader(FlowStateMachineConfig.KEYS.MESSAGING_KEY, messagingEvent)
+				.build();
+		
+		context.getStateMachine().sendEvent(message);
+	}
+
+	/**
+	 * @param fraudAssessmentResult
+	 * @param fraudRequest
+	 */
+	private void persistInvocationResult(FraudAssessmentResult fraudAssessmentResult, FraudRequest fraudRequest) {
+		FraudAssessmentResult.FraudResponseStatusCodes fraudResponseStatusCode = fraudAssessmentResult.getFraudResponseStatus();
 
 		Date now = new Date();
 		//Set Status History
@@ -101,14 +147,20 @@ public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 		statusHistory.setUpdateUser(userName);
 		statusHistory.setFraudRequest(fraudRequest);
 		
-		if(fraudResponseStatusCode == FraudAssesmentResult.FraudResponseStatusCodes.PENDING_REVIEW){
+		if(fraudResponseStatusCode == FraudAssessmentResult.FraudResponseStatusCodes.PENDING_REVIEW){
 			statusHistory.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.PENDING_REVIEW_RECEIVED);
 			fraudRequest.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.PENDING_REVIEW_RECEIVED);
 		}else if (decisionMadeResponseStatusCodes().contains(fraudResponseStatusCode)){
 			statusHistory.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.FINAL_DECISION_RECEIVED);
 			fraudRequest.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.FINAL_DECISION_RECEIVED);
 		}else {
-			//TODO: Throw Exception
+			StringBuilder builder = 
+			(new StringBuilder())
+				.append("Fraud response status(")
+				.append(fraudResponseStatusCode.name())
+				.append(") received from TAS is not recognized!");
+
+			throw new RuntimeException(builder.toString());
 		}
 		fraudRequest.getFraudRequestStatusHistory().add(statusHistory);
 		
@@ -118,12 +170,12 @@ public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 		statusHistoryDetail.setCreateUser(userName);
 		statusHistoryDetail.setFraudRequestStatusHistory(statusHistory);
 		statusHistoryDetail.setFraudResponseStatusCode(fraudResponseStatusCode);
-		statusHistoryDetail.setTotalFraudScore(fraudAssesmentResult.getTotalFraudScore());
-		statusHistoryDetail.setRecommendationCode(fraudAssesmentResult.getRecommendationCode());
-		statusHistoryDetail.setAccertifyUser(fraudAssesmentResult.getAccertifyUser());
-		statusHistoryDetail.setAccertifyUserActionTime(fraudAssesmentResult.getAccertifyUserActionTime());
-		statusHistoryDetail.setTasRequest(fraudAssesmentResult.getTasRequest());
-		statusHistoryDetail.setTasResponse(fraudAssesmentResult.getTasResponse());
+		statusHistoryDetail.setTotalFraudScore(fraudAssessmentResult.getTotalFraudScore());
+		statusHistoryDetail.setRecommendationCode(fraudAssessmentResult.getRecommendationCode());
+		statusHistoryDetail.setAccertifyUser(fraudAssessmentResult.getAccertifyUser());
+		statusHistoryDetail.setAccertifyUserActionTime(fraudAssessmentResult.getAccertifyUserActionTime());
+		statusHistoryDetail.setTasRequest(fraudAssessmentResult.getTasRequest());
+		statusHistoryDetail.setTasResponse(fraudAssessmentResult.getTasResponse());
 		statusHistoryDetail.setUpdateDate(now);
 		statusHistoryDetail.setUpdateUser(userName);
 		
@@ -131,46 +183,44 @@ public class TASInvokeAction implements Action<FlowStates, FlowEvents> {
 		fraudRequestRepository.save(fraudRequest);
 	}
 	
-	private List<FraudAssesmentResult.FraudResponseStatusCodes> decisionMadeResponseStatusCodes(){
-		return Arrays.asList(new FraudAssesmentResult.FraudResponseStatusCodes[]{
-				FraudAssesmentResult.FraudResponseStatusCodes.ACCEPTED,
-				FraudAssesmentResult.FraudResponseStatusCodes.HARD_DECLINE,
-				FraudAssesmentResult.FraudResponseStatusCodes.SOFT_DECLINE
+	private List<FraudAssessmentResult.FraudResponseStatusCodes> decisionMadeResponseStatusCodes(){
+		return Arrays.asList(new FraudAssessmentResult.FraudResponseStatusCodes[]{
+				FraudAssessmentResult.FraudResponseStatusCodes.ACCEPTED,
+				FraudAssessmentResult.FraudResponseStatusCodes.HARD_DECLINE,
+				FraudAssessmentResult.FraudResponseStatusCodes.SOFT_DECLINE
 		});
 	}
 
-	//TODO: Remove
-//	private Order createTestOrder(){
-//
-//	    Order fraudOrder = new Order();
-//
-//
-//	    List<ShippingOrder> shippingOrders = new ArrayList<>();
-//	    ShippingOrder shippingOrder = new ShippingOrder();
-//	    shippingOrder.setTotalAuthorizedAmount(new BigDecimal(1500));
-//	    shippingOrders.add(shippingOrder);
-//	    fraudOrder.setShippingOrders(shippingOrders);
-//	    
-//	    List<Item> itemList = new ArrayList<>();
-//
-//	    Item item= new Item();
-//	    item.setFsoLineID("fsolineid");
-//	    item.setName("name");
-//	    item.setCategory("category");
-//	    item.setItemUnitPrice(new BigDecimal("9000"));
-//	    item.setItemQuantity(1);
-//	    item.setItemTax(new BigDecimal("0"));
-//	    item.setItemTotalDiscount(new BigDecimal("0"));
-//	    item.setStaffDiscount(new BigDecimal("0"));
-//	    item.setItemStatus("OPEN");
-//	    item.setItemSkuNumber("sku");
-//	    item.setItemSkuDescription("desc");
-//	    item.setPostCaptureDiscount(new BigDecimal("0"));
-//
-//	    itemList.add(item);
-//	    fraudOrder.setItems(itemList);
-//
-//	    return fraudOrder;
-//
-//	}
+	private void validateAssesmentResult(String orderNumber, String requestVersion,
+			FraudAssessmentResult fraudAssessmentResult) {
+		if(fraudAssessmentResult == null){
+			StringBuilder builder = 
+			(new StringBuilder())
+				.append("Response received from TAS client for order number=")
+				.append(orderNumber)
+				.append(" and request version=")
+				.append(requestVersion)
+				.append("is null!");
+			
+			throw new RuntimeException(builder.toString());
+		}
+
+		if(!orderNumber.equalsIgnoreCase(fraudAssessmentResult.getOrderNumber()) || 
+				Long.valueOf(requestVersion).longValue() != (fraudAssessmentResult.getRequestVersion())){
+			StringBuilder builder = 
+			(new StringBuilder())
+				.append("Wrong response received from TAS client. Request order number=")
+				.append(orderNumber)
+				.append(" and request version=")
+				.append(requestVersion)
+				.append(". Response order number=")
+				.append(fraudAssessmentResult.getOrderNumber())
+				.append(" and request version=")
+				.append(fraudAssessmentResult.getRequestVersion());
+			
+			throw new RuntimeException(builder.toString());
+		}
+		
+	}
+
 }

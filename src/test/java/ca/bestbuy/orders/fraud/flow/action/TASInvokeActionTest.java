@@ -37,8 +37,8 @@ import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
 import ca.bestbuy.orders.fraud.flow.FlowEvents;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
 import ca.bestbuy.orders.fraud.flow.FlowStates;
-import ca.bestbuy.orders.fraud.model.internal.FraudAssesmentResult;
-import ca.bestbuy.orders.fraud.model.internal.FraudAssesmentResult.FraudResponseStatusCodes;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult.FraudResponseStatusCodes;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
@@ -173,7 +173,7 @@ public class TASInvokeActionTest {
 		
 		when(orderDetailsClientMock.getOrderDetails(orderNumber)).thenReturn(new Order());		
 		when(fraudServiceTASClientMock.doFraudCheck(any(FraudAssessmentRequest.class))).thenReturn(
-				(new FraudAssesmentResult())
+				(new FraudAssessmentResult())
 					.setOrderNumber(orderNumber)
 					.setRequestVersion(requestVersion)
 					.setRecommendationCode("recommendationCode")

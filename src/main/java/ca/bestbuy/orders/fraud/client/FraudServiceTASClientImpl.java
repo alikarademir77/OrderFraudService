@@ -17,7 +17,7 @@ import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderActionCode
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderRequest;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ObjectFactory;
-import ca.bestbuy.orders.fraud.model.internal.FraudAssesmentResult;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,7 +63,7 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
     }
 
     @Override
-    public FraudAssesmentResult doFraudCheck(FraudAssessmentRequest fraudAssessmentRequest) {
+    public FraudAssessmentResult doFraudCheck(FraudAssessmentRequest fraudAssessmentRequest) {
 
         //Map the request
         ManageOrderRequest request = new ManageOrderRequest();
@@ -87,7 +87,7 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
 
             //map response to FraudAssessmentResult object
             ManageOrderResponse response = jaxbResponse.getValue();
-            FraudAssesmentResult fraudAssessmentResult = tasResponseXMLMapper.mapManageOrderResult(response);
+            FraudAssessmentResult fraudAssessmentResult = tasResponseXMLMapper.mapManageOrderResult(response);
             fraudAssessmentResult.setTasRequest(requestAsXMLString);
             fraudAssessmentResult.setTasResponse(responseAsXMLString);
             return fraudAssessmentResult;

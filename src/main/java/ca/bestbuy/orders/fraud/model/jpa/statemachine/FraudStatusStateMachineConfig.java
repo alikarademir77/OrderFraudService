@@ -18,10 +18,13 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
  */
 @Configuration
 @Scope(scopeName="prototype")
-@EnableStateMachineFactory(name="FraudStatusStateMachine")
+@EnableStateMachineFactory(name="FraudStatusStateMachine", contextEvents=false)
 public class FraudStatusStateMachineConfig
 		extends EnumStateMachineConfigurerAdapter<FraudStatusCodes, FraudStatusEvents> {
 	
+	/* (non-Javadoc)
+	 * @see org.springframework.statemachine.config.AbstractStateMachineConfigurerAdapter#configure(org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer)
+	 */
 	@Override
 	public void configure(StateMachineConfigurationConfigurer<FraudStatusCodes, FraudStatusEvents> config)
 			throws Exception {
@@ -30,6 +33,9 @@ public class FraudStatusStateMachineConfig
 				autoStartup(true);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.springframework.statemachine.config.AbstractStateMachineConfigurerAdapter#configure(org.springframework.statemachine.config.builders.StateMachineStateConfigurer)
+	 */
 	@Override
 	public void configure(StateMachineStateConfigurer<FraudStatusCodes, FraudStatusEvents> states) throws Exception {
 		states.
@@ -38,6 +44,9 @@ public class FraudStatusStateMachineConfig
 				.states(EnumSet.allOf(FraudStatusCodes.class));
 	}
 
+	/* (non-Javadoc)
+	 * @see org.springframework.statemachine.config.AbstractStateMachineConfigurerAdapter#configure(org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer)
+	 */
 	@Override
 	public void configure(StateMachineTransitionConfigurer<FraudStatusCodes, FraudStatusEvents> transitions) throws Exception {
 		transitions

@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 
+/**
+ * @author akaradem
+ *
+ */
 @Repository
 public interface FraudRequestRepository extends OrderFraudBaseRepository<FraudRequest, Long> {
 

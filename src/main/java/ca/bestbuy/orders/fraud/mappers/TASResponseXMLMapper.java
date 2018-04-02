@@ -9,7 +9,7 @@ import org.mapstruct.ObjectFactory;
 
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ActionCode;
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse;
-import ca.bestbuy.orders.fraud.model.internal.FraudAssesmentResult;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
 
 
 @Mapper(uses = ObjectFactory.class, componentModel = "spring")
@@ -26,20 +26,20 @@ public abstract class TASResponseXMLMapper {
             @Mapping(target="accertifyUserActionTime", ignore=true),
     })
 
-    public abstract FraudAssesmentResult mapManageOrderResult(ManageOrderResponse manageOrderResponseToMap);
+    public abstract FraudAssessmentResult mapManageOrderResult(ManageOrderResponse manageOrderResponseToMap);
 
 
     @AfterMapping
-    public void mapManageOrderResult_FraudResponseStatus(ManageOrderResponse manageOrderResponseToMap, @MappingTarget FraudAssesmentResult mappedFraudAssessmentResult ){
+    public void mapManageOrderResult_FraudResponseStatus(ManageOrderResponse manageOrderResponseToMap, @MappingTarget FraudAssessmentResult mappedFraudAssessmentResult ){
 
         if(manageOrderResponseToMap.getActionCode().equals(ActionCode.SUCCESS)){
-            mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssesmentResult.FraudResponseStatusCodes.ACCEPTED);
+            mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssessmentResult.FraudResponseStatusCodes.ACCEPTED);
         }else if(manageOrderResponseToMap.getActionCode().equals(ActionCode.CALLBANK)) {
-            mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssesmentResult.FraudResponseStatusCodes.PENDING_REVIEW);
+            mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssessmentResult.FraudResponseStatusCodes.PENDING_REVIEW);
         }else if(manageOrderResponseToMap.getActionCode().equals(ActionCode.SOFTDECLINE)) {
-            mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssesmentResult.FraudResponseStatusCodes.SOFT_DECLINE);
+            mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssessmentResult.FraudResponseStatusCodes.SOFT_DECLINE);
         }else if(manageOrderResponseToMap.getActionCode().equals(ActionCode.DECLINED)) {
-            mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssesmentResult.FraudResponseStatusCodes.HARD_DECLINE);
+            mappedFraudAssessmentResult.setFraudResponseStatus(FraudAssessmentResult.FraudResponseStatusCodes.HARD_DECLINE);
         }
 
     }

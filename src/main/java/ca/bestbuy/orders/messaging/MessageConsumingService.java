@@ -9,6 +9,9 @@ package ca.bestbuy.orders.messaging;
  */
 public interface MessageConsumingService<T> {
 
-	public void consumeMessage(T event);
+	/**
+	 * @param event
+	 */
+	public void consumeMessage(T event) throws Exception ;
 	
 }

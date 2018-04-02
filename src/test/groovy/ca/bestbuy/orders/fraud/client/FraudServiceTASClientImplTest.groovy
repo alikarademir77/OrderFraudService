@@ -2,7 +2,7 @@ package ca.bestbuy.orders.fraud.client
 
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper
-import ca.bestbuy.orders.fraud.model.internal.FraudAssesmentResult
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult
 import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest
 import ca.bestbuy.orders.fraud.model.internal.Item
 import ca.bestbuy.orders.fraud.model.internal.Order

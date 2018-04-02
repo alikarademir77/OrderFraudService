@@ -17,6 +17,9 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
 @Component
 public class RequestOutdatedGuard implements Guard<FlowStates, FlowEvents> {
 
+	/* (non-Javadoc)
+	 * @see org.springframework.statemachine.guard.Guard#evaluate(org.springframework.statemachine.StateContext)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean evaluate(StateContext<FlowStates, FlowEvents> context) {
@@ -33,7 +36,7 @@ public class RequestOutdatedGuard implements Guard<FlowStates, FlowEvents> {
 		}
 		if ((existenceCheckResultObj != null)
 				&& (existenceCheckResultObj.getOrderNumber().equals(orderNumber))
-				&& (existenceCheckResultObj.getRequestVersion().longValue() > requestVersion.longValue())) {
+				&& (existenceCheckResultObj.getRequestVersion() > requestVersion)) {
 			
 			return true;
 		}

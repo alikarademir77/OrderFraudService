@@ -50,7 +50,7 @@ import lombok.experimental.Accessors;
  * 
  */
 @SuppressWarnings("serial")
-@TableGenerator(name = "orderFraudIdGenerator", schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUD_RQST_ID", allocationSize=10)
+@TableGenerator(name = "orderFraudIdGenerator", schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUD_RQST_ID", allocationSize=1)
 @Entity
 @Access(AccessType.FIELD)
 @Table(name = "FRAUD_RQST", schema="ORDER_FRAUD")
@@ -108,6 +108,9 @@ public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 	@Transient
     private StateMachine<FraudStatusCodes, FraudStatusEvents> fraudStatusStateMachine;
 
+	/**
+	 * 
+	 */
 	@SuppressWarnings("unchecked")
 	public FraudRequest() {
 		AnnotationConfigApplicationContext context = null;
@@ -125,6 +128,10 @@ public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 
 	}
 
+	/**
+	 * @param fraudRequestStatusHistory
+	 * @return
+	 */
 	public FraudRequestStatusHistory addFraudRequestStatusHistory(FraudRequestStatusHistory fraudRequestStatusHistory) {
 		getFraudRequestStatusHistory().add(fraudRequestStatusHistory);
 		fraudRequestStatusHistory.setFraudRequest(this);
@@ -132,6 +139,10 @@ public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 		return fraudRequestStatusHistory;
 	}
 
+	/**
+	 * @param fraudRequestStatusHistory
+	 * @return
+	 */
 	public FraudRequestStatusHistory removeFraudRequestStatusHistory(FraudRequestStatusHistory fraudRequestStatusHistory) {
 		getFraudRequestStatusHistory().remove(fraudRequestStatusHistory);
 		fraudRequestStatusHistory.setFraudRequest(null);
@@ -139,24 +150,40 @@ public class FraudRequest extends OrderFraudBaseEntity implements Serializable {
 		return fraudRequestStatusHistory;
 	}
 
+	/**
+	 * 
+	 */
 	@PostLoad
 	public void postLoad() {
 		StateMachine<FraudStatusCodes, FraudStatusEvents> stateMachine = this.getFraudStatusStateMachine();
 		handleStateForFraudStatus(this.getFraudStatusCode(), stateMachine);
 	}
 
+	/**
+	 * @author akaradem
+	 *
+	 */
 	private static class StateMachineEventListener extends StateMachineListenerAdapter<FraudStatusCodes, FraudStatusEvents> {
 		
 		private final FraudRequest entity;
+		/**
+		 * @param entity
+		 */
 		public StateMachineEventListener(FraudRequest entity){
 			this.entity = entity;
 		}
+		/* (non-Javadoc)
+		 * @see org.springframework.statemachine.listener.StateMachineListenerAdapter#stateEntered(org.springframework.statemachine.state.State)
+		 */
 		@Override
 		public void stateEntered(State<FraudStatusCodes, FraudStatusEvents> state) {
 			entity.fraudStatusCode = state.getId();
 		}
 	}
 
+	/**
+	 * @param fraudStatusCode
+	 */
 	@SuppressWarnings("unused")
 	//Used by Spring Framework
 	private void setFraudStatusCode(FraudStatusCodes fraudStatusCode) {

@@ -33,6 +33,9 @@ public class CheckRequestExistenceAction implements Action<FlowStates, FlowEvent
 	@Autowired	
 	FraudRequestRepository fraudRequestRepository;
 	
+	/* (non-Javadoc)
+	 * @see org.springframework.statemachine.action.Action#execute(org.springframework.statemachine.StateContext)
+	 */
 	@Override
 	public void execute(StateContext<FlowStates, FlowEvents> context) {
 		MessagingEvent messagingEvent = (MessagingEvent) context.getMessageHeader(KEYS.MESSAGING_KEY);
@@ -44,10 +47,6 @@ public class CheckRequestExistenceAction implements Action<FlowStates, FlowEvent
 		
 		List<FraudRequest> fraudRequestList = new ArrayList<>();
 		fraudRequestIt.forEach(fraudRequestList::add);
-		
-		FraudRequest key = new FraudRequest();
-		key.setOrderNumber(orderNumber);
-		key.setRequestVersion(requestVersion);
 		
 		FraudRequest fraudRequestWithMaxVersion =  null;
 		if(!CollectionUtils.isEmpty(fraudRequestList)){

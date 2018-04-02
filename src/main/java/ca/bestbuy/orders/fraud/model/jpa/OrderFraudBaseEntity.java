@@ -59,6 +59,10 @@ public class OrderFraudBaseEntity implements Serializable {
 		
 	}
 	
+	/**
+	 * @param state
+	 * @param stateMachine
+	 */
 	protected void handleStateForFraudStatus(FraudStatusCodes state, StateMachine<FraudStatusCodes, FraudStatusEvents> stateMachine) {
 		stateMachine.stop();
 		List<StateMachineAccess<FraudStatusCodes, FraudStatusEvents>> withAllRegions = stateMachine.getStateMachineAccessor().withAllRegions();

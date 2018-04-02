@@ -45,6 +45,10 @@ public class FraudRequestType extends OrderFraudBaseEntity {
 	public FraudRequestType() {
 	}
 
+	/**
+	 * @author akaradem
+	 *
+	 */
 	public static enum RequestTypeCodes {
 		
 		FRAUD_CHECK(EventTypes.FraudCheck), ORDER_CANCEL(EventTypes.OrderCancel);
@@ -54,6 +58,10 @@ public class FraudRequestType extends OrderFraudBaseEntity {
 			this.eventType = eventType;
 		}
 		
+		/**
+		 * @param eventType
+		 * @return
+		 */
 		public static RequestTypeCodes findByEventType(EventTypes eventType){
 			for(RequestTypeCodes curr : values()){
 				if(curr.eventType == eventType){

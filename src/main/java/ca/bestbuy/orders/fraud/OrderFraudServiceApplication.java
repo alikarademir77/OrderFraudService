@@ -39,8 +39,12 @@ public class OrderFraudServiceApplication {
 
 	}
 	
+	/**
+	 * @param event
+	 * @param death
+	 */
 	@StreamListener(OrderFraudChannels.INPUT)
-	public void receiveEvent(MessagingEvent event, @Header(name = "x-death", required = false) Map<?,?> death) {
+	public void receiveEvent(MessagingEvent event, @Header(name = "x-death", required = false) Map<?,?> death) throws Exception{
 		try{
 			consumingService.consumeMessage(event);
 		}catch(Exception ex){
@@ -57,6 +61,9 @@ public class OrderFraudServiceApplication {
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	@Bean
     public FilterRegistrationBean loggingContextBean() {
         FilterRegistrationBean frb = new FilterRegistrationBean();

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Accessors(chain=true)
 @Getter
 @Setter
-public class FraudAssesmentResult {
+public class FraudAssessmentResult {
 
     private FraudResponseStatusCodes fraudResponseStatus;
     private String orderNumber;
@@ -23,7 +23,7 @@ public class FraudAssesmentResult {
     private String tasRequest;
     private String tasResponse;
     
-    public FraudAssesmentResult(){}
+    public FraudAssessmentResult(){}
     //TODO: SystemError and BANKDOWN codes will be handled via exceptions returned
     public enum FraudResponseStatusCodes{
     	ACCEPTED, PENDING_REVIEW, SOFT_DECLINE, HARD_DECLINE 

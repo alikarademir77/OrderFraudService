@@ -26,6 +26,9 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
 @Component
 public class RequestFoundAsReadyForReplyGuard implements Guard<FlowStates, FlowEvents> {
 
+	/* (non-Javadoc)
+	 * @see org.springframework.statemachine.guard.Guard#evaluate(org.springframework.statemachine.StateContext)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean evaluate(StateContext<FlowStates, FlowEvents> context) {
@@ -50,10 +53,14 @@ public class RequestFoundAsReadyForReplyGuard implements Guard<FlowStates, FlowE
 		return false;
 	}
 
+	/**
+	 * @return
+	 */
 	private List<FraudStatusCodes> readyForReplyStatusCodes() {
 		return Arrays.asList(new FraudStatusCodes[]{
 				FraudStatusCodes.FINAL_DECISION,
-				FraudStatusCodes.PENDING_REVIEW
+				FraudStatusCodes.PENDING_REVIEW,
+				FraudStatusCodes.CANCELLED
 		});
 	}	
 };

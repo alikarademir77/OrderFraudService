@@ -6,7 +6,7 @@ import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ManageOrderResponse
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.ResponseData
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.Transaction
 import ca.bestbuy.orders.fraud.model.client.accertify.wsdl.TransactionResults
-import ca.bestbuy.orders.fraud.model.internal.FraudAssesmentResult
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult
 import org.mapstruct.factory.Mappers
 import spock.lang.Shared
 import spock.lang.Specification

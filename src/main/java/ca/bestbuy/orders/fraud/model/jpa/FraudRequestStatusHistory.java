@@ -43,7 +43,7 @@ import lombok.experimental.Accessors;
  * 
  */
 @SuppressWarnings("serial")
-@TableGenerator(name = "orderFraudIdGenerator",  schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUD_RQST_STATUS_HSTRY_ID", allocationSize=10)
+@TableGenerator(name = "orderFraudIdGenerator",  schema="ORDER_FRAUD", table = "ID_GENERATOR", pkColumnName = "GENERATED_NAME", valueColumnName = "GENERATED_VALUE", pkColumnValue="FRAUD_RQST_STATUS_HSTRY_ID", allocationSize=1)
 @Entity
 @Access(AccessType.FIELD)
 @Table(name = "FRAUD_RQST_STATUS_HSTRY", schema="ORDER_FRAUD")
@@ -84,6 +84,9 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 	@Transient
     private StateMachine<FraudStatusCodes, FraudStatusEvents> fraudStatusStateMachine;
 	
+	/**
+	 * 
+	 */
 	@SuppressWarnings("unchecked")
 	public FraudRequestStatusHistory() {
 		AnnotationConfigApplicationContext context = null;
@@ -100,12 +103,19 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	@PostLoad
 	public void postLoad() {
 		StateMachine<FraudStatusCodes, FraudStatusEvents> stateMachine = this.getFraudStatusStateMachine();
 		handleStateForFraudStatus(this.getFraudStatusCode(), stateMachine);
 	}
 	
+	/**
+	 * @author akaradem
+	 *
+	 */
 	private static class StateMachineEventListener extends StateMachineListenerAdapter<FraudStatusCodes, FraudStatusEvents> {
 		
 		private final FraudRequestStatusHistory entity;
@@ -118,6 +128,9 @@ public class FraudRequestStatusHistory extends OrderFraudBaseEntity {
 		}
 	}
 
+	/**
+	 * @param fraudStatusCode
+	 */
 	@SuppressWarnings("unused")
 	//Used by Spring Framework
 	private void setFraudStatusCode(FraudStatusCodes fraudStatusCode) {

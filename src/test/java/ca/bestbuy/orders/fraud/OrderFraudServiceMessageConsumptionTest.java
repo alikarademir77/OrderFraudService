@@ -69,7 +69,7 @@ public class OrderFraudServiceMessageConsumptionTest {
 	
 	
 	@Test
-    public void whenSendMessagingEventThenConsumingServiceShouldReceiveSameEvent() {
+    public void whenSendMessagingEventThenConsumingServiceShouldReceiveSameEvent() throws Exception {
 		Calendar currentTime = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		MessagingEvent event = new MessagingEvent(
 				EventTypes.FraudCheck,"FSOrder1234", null, "1", currentTime.getTime());

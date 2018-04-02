@@ -12,11 +12,13 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -24,6 +26,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.test.StateMachineTestPlan;
 import org.springframework.statemachine.test.StateMachineTestPlanBuilder;
 import org.springframework.test.annotation.DirtiesContext;
@@ -79,9 +82,17 @@ public class FlowStateMachineTest {
 	@SpyBean
 	RequestFoundAsReadyForReplyGuard requestFoundAsReadyForReplyGuardSpy;
 
-	
-	@Autowired 
+	@Autowired
+	@Qualifier("FlowStateMachine")
+ 	StateMachineFactory<FlowStates, FlowEvents> flowStateMachineFactory;
+
 	StateMachine<FlowStates, FlowEvents> flowStateMachine;
+
+	@Before
+	public void setUp(){
+		
+		flowStateMachine = flowStateMachineFactory.getStateMachine("FlowSM_"+Thread.currentThread().getId());
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Test
