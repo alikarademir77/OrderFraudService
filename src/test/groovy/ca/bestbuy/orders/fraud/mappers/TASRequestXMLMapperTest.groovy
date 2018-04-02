@@ -306,8 +306,9 @@ class TASRequestXMLMapperTest extends Specification {
 
         }
 
-        then:
         int amtOfPaypalPayments = order.getPaymentDetails().getPayPals().size()
+
+        then:
 
         mappedTxnData.getTransactionId() == order.getFsOrderID()
         mappedTxnData.getWebOrderId() == order.getWebOrderRefID()
