@@ -54,7 +54,7 @@ class TASResponseXMLMapperTest extends Specification{
 
         when:
 
-        FraudAssesmentResult fraudResult = xmlMapper.mapManageOrderResult(manageOrderResponse)
+        FraudAssessmentResult fraudResult = xmlMapper.mapManageOrderResult(manageOrderResponse)
 
         then:
 
@@ -84,10 +84,10 @@ class TASResponseXMLMapperTest extends Specification{
 
 
         when:
-        FraudAssesmentResult fraudResult1 = xmlMapper.mapManageOrderResult(manageOrderResponse1)
-        FraudAssesmentResult fraudResult2 = xmlMapper.mapManageOrderResult(manageOrderResponse2)
-        FraudAssesmentResult fraudResult3 = xmlMapper.mapManageOrderResult(manageOrderResponse3)
-        FraudAssesmentResult fraudResult4 = xmlMapper.mapManageOrderResult(manageOrderResponse4)
+        FraudAssessmentResult fraudResult1 = xmlMapper.mapManageOrderResult(manageOrderResponse1)
+        FraudAssessmentResult fraudResult2 = xmlMapper.mapManageOrderResult(manageOrderResponse2)
+        FraudAssessmentResult fraudResult3 = xmlMapper.mapManageOrderResult(manageOrderResponse3)
+        FraudAssessmentResult fraudResult4 = xmlMapper.mapManageOrderResult(manageOrderResponse4)
 
         then:
 
