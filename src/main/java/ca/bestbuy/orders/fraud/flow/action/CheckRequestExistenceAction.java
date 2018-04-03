@@ -30,9 +30,12 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
 @Component
 public class CheckRequestExistenceAction implements Action<FlowStates, FlowEvents> {
 
-	@Autowired	
-	FraudRequestRepository fraudRequestRepository;
+	private final FraudRequestRepository fraudRequestRepository;
 	
+	@Autowired
+	public CheckRequestExistenceAction(FraudRequestRepository fraudRequestRepository){
+		this.fraudRequestRepository = fraudRequestRepository;
+	}
 	/* (non-Javadoc)
 	 * @see org.springframework.statemachine.action.Action#execute(org.springframework.statemachine.StateContext)
 	 */

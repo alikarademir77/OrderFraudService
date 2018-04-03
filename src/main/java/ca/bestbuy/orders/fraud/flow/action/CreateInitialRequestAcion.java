@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
 import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
-import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
 import ca.bestbuy.orders.fraud.flow.FlowEvents;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
@@ -27,16 +26,23 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
 @Component
 public class CreateInitialRequestAcion extends ActionWithException<FlowStates, FlowEvents> {
 
-	@Value("${spring.datasource.username}")
-	private String userName;
+	private final String userName;
 	
-	@Autowired	
-	FraudRequestRepository fraudRequestRepository;
-	@Autowired
-	FraudStatusRepository statusRepository;
-	@Autowired
-	FraudRequestTypeRepository typeRepository;
+	private final FraudRequestRepository fraudRequestRepository;
+	private final FraudRequestTypeRepository typeRepository;
 	
+	@Autowired
+	public CreateInitialRequestAcion(
+			FraudRequestRepository fraudRequestRepository,
+			FraudRequestTypeRepository typeRepository,
+			@Value("${spring.datasource.username}") 
+			String userName
+			){
+		super();
+		this.fraudRequestRepository = fraudRequestRepository;
+		this.typeRepository = typeRepository;
+		this.userName = userName; 
+	}
 	/* (non-Javadoc)
 	 * @see ca.bestbuy.orders.fraud.flow.action.ActionWithException#doExecute(org.springframework.statemachine.StateContext)
 	 */

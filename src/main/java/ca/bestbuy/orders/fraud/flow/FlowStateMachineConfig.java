@@ -15,7 +15,6 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 
 import ca.bestbuy.orders.fraud.flow.action.CheckRequestExistenceAction;
 import ca.bestbuy.orders.fraud.flow.action.CreateInitialRequestAcion;
-import ca.bestbuy.orders.fraud.flow.action.InitializeContextAction;
 import ca.bestbuy.orders.fraud.flow.action.OutboundReplyAction;
 import ca.bestbuy.orders.fraud.flow.action.RequestOutdatedAcion;
 import ca.bestbuy.orders.fraud.flow.action.TASInvokeAction;
@@ -32,24 +31,32 @@ import ca.bestbuy.orders.fraud.flow.guard.RequestOutdatedGuard;
 public class FlowStateMachineConfig
 		extends EnumStateMachineConfigurerAdapter<FlowStates, FlowEvents> {
 
+	private final CheckRequestExistenceAction checkRequestExistenceAction;
+	private final TASInvokeAction tasInvokeAction;
+	private final RequestOutdatedAcion requestOutdatedAcion;
+	private final OutboundReplyAction outboundReplyAction;
+	private final CreateInitialRequestAcion createInitialRequestAcion;
+	private final RequestOutdatedGuard requestOutdatedGuard;
+	private final RequestFoundAsInitialGuard requestFoundAsInitialGuard;
+	private final RequestFoundAsReadyForReplyGuard requestFoundAsReadyForReplyGuard;
+	
 	@Autowired
-	InitializeContextAction initializeContextAction;
-	@Autowired	
-	CheckRequestExistenceAction checkRequestExistenceAction;
-	@Autowired	
-	TASInvokeAction tasInvokeAction;
-	@Autowired
-	RequestOutdatedAcion requestOutdatedAcion;
-	@Autowired	
-	OutboundReplyAction outboundReplyAction;
-	@Autowired
-	CreateInitialRequestAcion createInitialRequestAcion;
-	@Autowired
-	RequestOutdatedGuard requestOutdatedGuard;
-	@Autowired
-	RequestFoundAsInitialGuard requestFoundAsInitialGuard;
-	@Autowired
-	RequestFoundAsReadyForReplyGuard requestFoundAsReadyForReplyGuard;
+	public FlowStateMachineConfig(CheckRequestExistenceAction checkRequestExistenceAction,
+			TASInvokeAction tasInvokeAction, RequestOutdatedAcion requestOutdatedAcion,
+			OutboundReplyAction outboundReplyAction, CreateInitialRequestAcion createInitialRequestAcion,
+			RequestOutdatedGuard requestOutdatedGuard, RequestFoundAsInitialGuard requestFoundAsInitialGuard,
+			RequestFoundAsReadyForReplyGuard requestFoundAsReadyForReplyGuard) {
+		super();
+		this.checkRequestExistenceAction = checkRequestExistenceAction;
+		this.tasInvokeAction = tasInvokeAction;
+		this.requestOutdatedAcion = requestOutdatedAcion;
+		this.outboundReplyAction = outboundReplyAction;
+		this.createInitialRequestAcion = createInitialRequestAcion;
+		this.requestOutdatedGuard = requestOutdatedGuard;
+		this.requestFoundAsInitialGuard = requestFoundAsInitialGuard;
+		this.requestFoundAsReadyForReplyGuard = requestFoundAsReadyForReplyGuard;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.springframework.statemachine.config.AbstractStateMachineConfigurerAdapter#configure(org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer)
 	 */

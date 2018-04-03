@@ -15,15 +15,12 @@ import org.springframework.stereotype.Component;
 import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
 import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
-import ca.bestbuy.orders.fraud.dao.FraudRequestStatusHistoryRepository;
-import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
-import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
 import ca.bestbuy.orders.fraud.flow.FlowEvents;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
 import ca.bestbuy.orders.fraud.flow.FlowStates;
-import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
 import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
@@ -38,24 +35,24 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
 @Component 
 public class TASInvokeAction  extends ActionWithException<FlowStates, FlowEvents>  {
 
-	@Value("${spring.datasource.username}")
-	private String userName;
+	private final String userName;
+	
+	private final OrderDetailsClient orderDetailsClient;
+	private final FraudServiceTASClient  fraudServiceTASClient;
+	private final FraudRequestRepository fraudRequestRepository;
 	
 	@Autowired
-	OrderDetailsClient orderDetailsClient;
-	@Autowired
-	FraudServiceTASClient  fraudServiceTASClient;
-
-	@Autowired	
-	FraudRequestRepository fraudRequestRepository;
-	@Autowired	
-	FraudRequestStatusHistoryRepository StatusHistoryRepository;
-	
-	@Autowired
-	FraudStatusRepository statusRepository;
-	@Autowired
-	FraudRequestTypeRepository typeRepository;
-	
+	public TASInvokeAction(
+			OrderDetailsClient orderDetailsClient,
+			FraudServiceTASClient  fraudServiceTASClient,
+			FraudRequestRepository fraudRequestRepository,
+			@Value("${spring.datasource.username}")
+			String userName){
+		this.orderDetailsClient = orderDetailsClient;
+		this.fraudServiceTASClient = fraudServiceTASClient;
+		this.fraudRequestRepository = fraudRequestRepository;
+		this.userName = userName;
+	}
 	/* (non-Javadoc)
 	 * @see ca.bestbuy.orders.fraud.flow.action.ActionWithException#doExecute(org.springframework.statemachine.StateContext)
 	 */

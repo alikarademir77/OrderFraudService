@@ -27,11 +27,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OrderFraudServiceApplication {
 	
-	@Value("${messaging.errorRetryCount}")
-	private Long errorRetryCount; 
+	private final Long errorRetryCount; 
 
+	private final MessageConsumingService<MessagingEvent> consumingService;
+	
 	@Autowired
-	private MessageConsumingService<MessagingEvent> consumingService;
+	public OrderFraudServiceApplication(
+			@Value("${messaging.errorRetryCount}")
+			Long errorRetryCount,
+			MessageConsumingService<MessagingEvent> consumingService) {
+		super();
+		this.errorRetryCount = errorRetryCount;
+		this.consumingService = consumingService;
+	}
 	
 	public static void main(String[] args) {
 

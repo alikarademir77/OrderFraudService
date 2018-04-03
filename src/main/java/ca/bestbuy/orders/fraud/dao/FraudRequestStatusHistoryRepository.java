@@ -5,7 +5,10 @@ package ca.bestbuy.orders.fraud.dao;
 
 import java.math.BigDecimal;
 
+import javax.persistence.LockModeType;
+
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
@@ -24,6 +27,7 @@ public interface FraudRequestStatusHistoryRepository extends OrderFraudBaseRepos
 	 * @param entity
 	 * @return the saved entity
 	 */
+	@Lock(LockModeType.OPTIMISTIC)
 	<S extends FraudRequestStatusHistory> S save(S entity);	
 	
 	/**

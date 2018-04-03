@@ -33,10 +33,14 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class FraudInboundMessageConsumingService implements MessageConsumingService <MessagingEvent>{
 	
-	@Autowired
-	@Qualifier("FlowStateMachine")
- 	StateMachineFactory<FlowStates, FlowEvents> flowStateMachineFactory;
+	private final StateMachineFactory<FlowStates, FlowEvents> flowStateMachineFactory;
 	
+	@Autowired
+	public FraudInboundMessageConsumingService(
+			@Qualifier("FlowStateMachine")
+			StateMachineFactory<FlowStates, FlowEvents> flowStateMachineFactory){
+		this.flowStateMachineFactory = flowStateMachineFactory;
+	}
 	/* (non-Javadoc)
 	 * @see ca.bestbuy.orders.messaging.MessageConsumingService#consumeMessage(ca.bestbuy.orders.messaging.MessagingEvent)
 	 */
