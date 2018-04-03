@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,6 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
-import ca.bestbuy.orders.fraud.client.ResourceApiClientConfig;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
@@ -46,7 +46,8 @@ public class FraudRequestRepositoryTest {
 	@Autowired
 	FraudRequestRepository fraudRequestRepository;
 	
-	//@Test
+	@Test
+	@Ignore("not sure why this is disabled")
 	@Transactional
 	public void testInitialRequestCreation(){
 		
@@ -60,7 +61,8 @@ public class FraudRequestRepositoryTest {
 		assert(result.getFraudRequestStatusHistory().size()>0);
 	}
 	
-	//@Test
+	@Test
+	@Ignore("not sure why this is disabled")
 	@Transactional
 	public void testFraudRequestRetrieval(){
 		String orderNumber = "123456";
@@ -97,7 +99,8 @@ public class FraudRequestRepositoryTest {
 		}
 	}
 
-//	@Test
+	@Test
+	@Ignore("not sure why this is disabled")
 	public void testVersionUpdate() {
 
 		testCreateForUpdate();

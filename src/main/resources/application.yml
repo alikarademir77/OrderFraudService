@@ -14,6 +14,18 @@ spring:
 spring:
   profiles: dev
 
+# TODO in production disable the registration of the spring boot client
+# for config options, see https://codecentric.github.io/spring-boot-admin/1.5.7/
+  boot:
+    admin:
+      client:
+        enabled: true
+      url: http://localhost:8100
+      username: admin
+      password: admin
+      # automatically de-register this application when it shuts down
+      auto-deregistration: true
+
   rabbitmq:
     host: localhost
     port: 5672
