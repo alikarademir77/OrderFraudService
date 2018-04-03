@@ -8,24 +8,22 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.Date;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import ca.bestbuy.orders.fraud.client.FraudServiceTASClient;
-import ca.bestbuy.orders.fraud.client.FraudServiceTASClientConfig;
-import ca.bestbuy.orders.fraud.client.OrderDetailsClient;
-import ca.bestbuy.orders.fraud.client.OrderDetailsClientConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.MessageConsumingService;
 import ca.bestbuy.orders.messaging.MessagingEvent;
@@ -34,12 +32,9 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
  * @author akaradem
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = OrderFraudServiceApplication.class)
-@TestPropertySource(properties = {
-	    "messaging.errorRetryCount=3",
-	    "spring.datasource.username=order_fraud_test"
-	})
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = OrderFraudServiceApplication.class)
+@ActiveProfiles({"dev","unittest"})
 @DirtiesContext
 public class OrderFraudServiceMessageConsumptionTest {
 
@@ -49,18 +44,6 @@ public class OrderFraudServiceMessageConsumptionTest {
 	@MockBean
 	private MessageConsumingService<MessagingEvent> messageConsumingService;
 
-	@MockBean
-	private OrderDetailsClientConfig orderDetailsClientConfig;
-	
-	@MockBean
-	OrderDetailsClient orderDetailsClient;
-
-	@MockBean
-	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
-
-	@MockBean
-	private FraudServiceTASClient fraudServiceTASClient;
-	    
     @Test
     public void contextLoadsAndWiring() {
         assertNotNull(this.channels.fraudInbound());
@@ -70,13 +53,14 @@ public class OrderFraudServiceMessageConsumptionTest {
 	
 	@Test
     public void whenSendMessagingEventThenConsumingServiceShouldReceiveSameEvent() throws Exception {
-		Calendar currentTime = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		MessagingEvent event = new MessagingEvent(
-				EventTypes.FraudCheck,"FSOrder1234", null, "1", currentTime.getTime());
+				EventTypes.FraudCheck,"FSOrder1234", null, "1", new Date());
+		ObjectMapper mapper = new ObjectMapper();
+		String msg = mapper.writeValueAsString(event);
 		
+		Message<String> message = MessageBuilder.withPayload(msg).build();
 		this.channels.fraudInbound()
-          .send(MessageBuilder.withPayload(event)
-          .build());
+          .send(message);
 
 		ArgumentCaptor<MessagingEvent> messageArgumentCaptor =
 				(ArgumentCaptor<MessagingEvent>) ArgumentCaptor.forClass(MessagingEvent.class);
@@ -84,7 +68,7 @@ public class OrderFraudServiceMessageConsumptionTest {
 		verify(this.messageConsumingService, times(1)).consumeMessage(messageArgumentCaptor.capture());
 		
 		MessagingEvent capturedEvent = messageArgumentCaptor.getValue();
-		
-		assertTrue(event.equals(capturedEvent));
+		String capturedMsg =  mapper.writeValueAsString(capturedEvent);
+		assertTrue(msg.equals(capturedMsg));
     }
 }
