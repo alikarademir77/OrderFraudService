@@ -85,6 +85,7 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
 
         try {
             // Send request to TAS and receive response
+            @SuppressWarnings("unchecked")
             JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) webServiceTemplate.marshalSendAndReceive(tasBaseUrl, jaxbRequest,
                 new SoapActionCallback(fraudcheckSOAPActionCallback));
             log.info("Response received from TAS:" + convertToXMLString(jaxbResponse));
@@ -108,7 +109,7 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
     }
 
 
-    private String convertToXMLString(JAXBElement jaxbElement) {
+    private String convertToXMLString(JAXBElement<?> jaxbElement) {
 
         StringResult output = new StringResult();
         try {

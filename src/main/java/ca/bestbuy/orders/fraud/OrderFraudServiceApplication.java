@@ -34,7 +34,7 @@ public class OrderFraudServiceApplication {
 	private OrderFraudChannels channels;
 
 	@Autowired
-	private MessageConsumingService consumingService;
+	private MessageConsumingService<MessagingEvent> consumingService;
 
 	public static void main(String[] args) {
 
