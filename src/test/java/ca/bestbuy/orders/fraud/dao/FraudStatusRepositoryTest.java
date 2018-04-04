@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ca.bestbuy.orders.fraud;
+package ca.bestbuy.orders.fraud.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -18,9 +18,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
-import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
-import ca.bestbuy.orders.fraud.client.ResourceApiClientConfig;
+import ca.bestbuy.orders.fraud.OrderFraudServiceApplication;
+import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 
 /**
  * @author akaradem
@@ -30,29 +30,28 @@ import ca.bestbuy.orders.fraud.client.ResourceApiClientConfig;
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
 @ActiveProfiles({"dev","unittest"})
 @DirtiesContext
-public class FraudRequestTypeRepositoryTest {
+public class FraudStatusRepositoryTest {
 
 	@Autowired
-	FraudRequestTypeRepository typeRepository;
+	FraudStatusRepository fraudStatusRepository;
 	
 	@Test
 	@Transactional
 	public void testFindAll(){
-		Iterable<FraudRequestType> it = typeRepository.findAll();
-		List<FraudRequestType.RequestTypes> allTypesList  = Arrays.asList(FraudRequestType.RequestTypes.values());
+		Iterable<FraudStatus> it = fraudStatusRepository.findAll();
+		List<FraudStatusCodes> allStatusList  = Arrays.asList(FraudStatusCodes.values());
 
-		for(FraudRequestType type:it){
-			assertTrue(allTypesList.contains(type.getRequestTypeCode()));
+		for(FraudStatus status:it){
+			assertTrue(allStatusList.contains(status.getFraudStatusCode()));
 		}
 	}
 
 	@Test
 	@Transactional
 	public void testFindOne(){
-		FraudRequestType fraudRequestType = typeRepository.findOne(FraudRequestType.RequestTypes.ORDER_CANCEL);
+		FraudStatus fraudStatus = fraudStatusRepository.findOne(FraudStatusCodes.PENDING_REVIEW);
 		
-		assertEquals(FraudRequestType.RequestTypes.ORDER_CANCEL,fraudRequestType.getRequestTypeCode());
+		assertEquals(FraudStatusCodes.PENDING_REVIEW,fraudStatus.getFraudStatusCode());
 		
 	}
-	
 }

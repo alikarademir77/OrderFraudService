@@ -1147,6 +1147,10 @@
     "ShippingOrder": {
       "type": "object",
       "properties": {
+       "totalAuthorizedAmount": {
+          "type": "string",
+          "allowEmptyValue": false
+        },      
         "actualCarrier": {
           "allowEmptyValue": false,
           "$ref": "#/definitions/ActualCarrier"

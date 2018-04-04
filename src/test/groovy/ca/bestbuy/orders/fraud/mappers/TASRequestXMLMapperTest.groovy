@@ -12,6 +12,7 @@ import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionData
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionType
 import ca.bestbuy.orders.fraud.model.internal.Address
 import ca.bestbuy.orders.fraud.model.internal.Chargeback
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest
 import ca.bestbuy.orders.fraud.model.internal.Item
 import ca.bestbuy.orders.fraud.model.internal.Order
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails
@@ -95,10 +96,10 @@ class TASRequestXMLMapperTest extends Specification {
 
         order.setPaymentDetails(paymentDetails);
 
-
+		FraudAssessmentRequest fraudAssessmentRequestToMap = new FraudAssessmentRequest(1, order) 
         when:
 
-        TransactionData mappedTxnData = xmlMapper.mapTransactionData(order)
+        TransactionData mappedTxnData = xmlMapper.mapTransactionData(fraudAssessmentRequestToMap)
 
 
         List<ca.bestbuy.orders.fraud.model.internal.ShippingOrder> shippingOrdersToMap = order.getShippingOrders();
@@ -159,10 +160,12 @@ class TASRequestXMLMapperTest extends Specification {
 
         orderToMap.setPurchaseOrders(purchaseOrdersToMap)
         orderToMap.setShippingOrders(shippingOrdersToMap)
-
+		
+		FraudAssessmentRequest fraudAssessmentRequestToMap = new FraudAssessmentRequest(1, orderToMap)
+		
         when:
 
-        TransactionData mappedTransactionData = xmlMapper.mapTransactionData(orderToMap)
+        TransactionData mappedTransactionData = xmlMapper.mapTransactionData(fraudAssessmentRequestToMap)
         List<ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ShippingOrder> mappedShippingOrders = mappedTransactionData.getShippingOrders().getShippingOrder()
 
         then:
@@ -214,9 +217,12 @@ class TASRequestXMLMapperTest extends Specification {
         shippingOrdersToMap.add(createAShippingOrder("shippingOrder2", "fsoLine2"))
         shippingOrdersToMap.add(createAShippingOrder("shippingOrder3", "fsoLine3"))
         orderToMap.setShippingOrders(shippingOrdersToMap)
+		
+		FraudAssessmentRequest fraudAssessmentRequestToMap = new FraudAssessmentRequest(1, orderToMap)
+		
 
         when:
-        TransactionData mappedTransactionData = xmlMapper.mapTransactionData(orderToMap)
+        TransactionData mappedTransactionData = xmlMapper.mapTransactionData(fraudAssessmentRequestToMap)
         List<ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Item> mappedItems = mappedTransactionData.getItems().getItem()
 
         then:
@@ -242,10 +248,11 @@ class TASRequestXMLMapperTest extends Specification {
         given:
 
         Order order = new Order()
-
+		FraudAssessmentRequest fraudAssessmentRequestToMap = new FraudAssessmentRequest(1, order)
+		
         when:
 
-        TransactionData mappedTxnData = xmlMapper.mapTransactionData(order)
+        TransactionData mappedTxnData = xmlMapper.mapTransactionData(fraudAssessmentRequestToMap)
 
         then:
 
@@ -309,10 +316,13 @@ class TASRequestXMLMapperTest extends Specification {
 
 
         order.setPaymentDetails(paymentDetails);
+		
+		FraudAssessmentRequest fraudAssessmentRequestToMap = new FraudAssessmentRequest(1, order)
+		
 
         when:
 
-        TransactionData mappedTxnData = xmlMapper.mapTransactionData(order)
+        TransactionData mappedTxnData = xmlMapper.mapTransactionData(fraudAssessmentRequestToMap)
 
 
         List<ca.bestbuy.orders.fraud.model.internal.ShippingOrder> shippingOrdersToMap = order.getShippingOrders();
@@ -392,10 +402,13 @@ class TASRequestXMLMapperTest extends Specification {
 
 
         order.setPaymentDetails(paymentDetails);
+		
+		FraudAssessmentRequest fraudAssessmentRequestToMap = new FraudAssessmentRequest(1, order)
+		
 
         when:
 
-        TransactionData mappedTxnData = xmlMapper.mapTransactionData(order)
+        TransactionData mappedTxnData = xmlMapper.mapTransactionData(fraudAssessmentRequestToMap)
 
 
 

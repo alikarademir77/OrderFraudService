@@ -6,7 +6,7 @@ package ca.bestbuy.orders.fraud.dao;
 import org.springframework.stereotype.Repository;
 
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatus.FraudStatusCodes;
+import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 
 /**
  * @author akaradem

@@ -198,8 +198,10 @@
 					<s:enumeration value="NOTSET" />
 					<s:enumeration value="SUCCESS" />
 					<s:enumeration value="DECLINED" />
+					<s:enumeration value="SOFTDECLINE" />
 					<s:enumeration value="CALLBANK" />
 					<s:enumeration value="BANKDOWN" />
+					<s:enumeration value="SYSERROR" />
 					<s:enumeration value="MODEMPHONEISSUE" />
 					<s:enumeration value="FORMATERROR" />
 					<s:enumeration value="TRYLATER" />
@@ -289,7 +291,7 @@
 			<s:complexType name="TransactionData">
 				<s:sequence>
 					<s:element minOccurs="1" maxOccurs="1" name="requestVersion"
-							   type="s:int" />
+							   type="s:long" />
 					<s:element minOccurs="1" maxOccurs="1" name="transactionId"
 						type="s:string" />
 					<s:element minOccurs="1" maxOccurs="1" name="webOrderId"
@@ -649,7 +651,7 @@
 					<s:element minOccurs="0" maxOccurs="1" name="transaction"
 						type="tns:Transaction" />
 					<s:element minOccurs="1" maxOccurs="1" name="responseVersion"
-							   type="s:string" />
+							   type="s:long" />
 				</s:sequence>
 			</s:complexType>
 			<s:complexType name="Transaction">

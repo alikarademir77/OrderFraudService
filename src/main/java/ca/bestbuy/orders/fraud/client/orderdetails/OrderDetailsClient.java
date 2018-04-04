@@ -4,6 +4,6 @@ import ca.bestbuy.orders.fraud.model.internal.Order;
 
 public interface OrderDetailsClient {
 
-    Order getOrderDetails(String fsOrderId);
+    Order getOrderDetails(String orderNumber);
 
 }

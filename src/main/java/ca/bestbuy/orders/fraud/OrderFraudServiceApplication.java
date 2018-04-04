@@ -27,23 +27,32 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OrderFraudServiceApplication {
 	
-	@Value("${messaging.errorRetryCount}")
-	private Long errorRetryCount; 
+	private final Long errorRetryCount; 
 
+	private final MessageConsumingService<MessagingEvent> consumingService;
+	
 	@Autowired
-	private OrderFraudChannels channels;
-
-	@Autowired
-	private MessageConsumingService consumingService;
-
+	public OrderFraudServiceApplication(
+			@Value("${messaging.errorRetryCount}")
+			Long errorRetryCount,
+			MessageConsumingService<MessagingEvent> consumingService) {
+		super();
+		this.errorRetryCount = errorRetryCount;
+		this.consumingService = consumingService;
+	}
+	
 	public static void main(String[] args) {
 
 		SpringApplication.run(OrderFraudServiceApplication.class, args);
 
 	}
 	
+	/**
+	 * @param event
+	 * @param death
+	 */
 	@StreamListener(OrderFraudChannels.INPUT)
-	public void receiveEvent(MessagingEvent event, @Header(name = "x-death", required = false) Map<?,?> death) {
+	public void receiveEvent(MessagingEvent event, @Header(name = "x-death", required = false) Map<?,?> death) throws Exception{
 		try{
 			consumingService.consumeMessage(event);
 		}catch(Exception ex){
@@ -60,6 +69,9 @@ public class OrderFraudServiceApplication {
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	@Bean
     public FilterRegistrationBean loggingContextBean() {
         FilterRegistrationBean frb = new FilterRegistrationBean();

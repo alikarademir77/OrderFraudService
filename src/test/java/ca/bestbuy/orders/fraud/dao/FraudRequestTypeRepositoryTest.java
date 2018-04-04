@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ca.bestbuy.orders.fraud;
+package ca.bestbuy.orders.fraud.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -18,8 +18,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.OrderFraudServiceApplication;
+import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 
 /**
  * @author akaradem
@@ -29,28 +29,28 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
 @ActiveProfiles({"dev","unittest"})
 @DirtiesContext
-public class FraudStatusRepositoryTest {
+public class FraudRequestTypeRepositoryTest {
 
 	@Autowired
-	FraudStatusRepository fraudStatusRepository;
+	FraudRequestTypeRepository typeRepository;
 	
 	@Test
 	@Transactional
 	public void testFindAll(){
-		Iterable<FraudStatus> it = fraudStatusRepository.findAll();
-		List<FraudStatus.FraudStatusCodes> allStatusList  = Arrays.asList(FraudStatus.FraudStatusCodes.values());
+		Iterable<FraudRequestType> it = typeRepository.findAll();
+		List<FraudRequestType.RequestTypeCodes> allTypesList  = Arrays.asList(FraudRequestType.RequestTypeCodes.values());
 
-		for(FraudStatus status:it){
-			assertTrue(allStatusList.contains(status.getFraudStatusCode()));
+		for(FraudRequestType type:it){
+			assertTrue(allTypesList.contains(type.getRequestTypeCode()));
 		}
 	}
 
 	@Test
 	@Transactional
 	public void testFindOne(){
-		FraudStatus fraudStatus = fraudStatusRepository.findOne(FraudStatus.FraudStatusCodes.PENDING_REVIEW);
+		FraudRequestType fraudRequestType = typeRepository.findOne(FraudRequestType.RequestTypeCodes.ORDER_CANCEL);
 		
-		assertEquals(FraudStatus.FraudStatusCodes.PENDING_REVIEW,fraudStatus.getFraudStatusCode());
+		assertEquals(FraudRequestType.RequestTypeCodes.ORDER_CANCEL,fraudRequestType.getRequestTypeCode());
 		
 	}
 	

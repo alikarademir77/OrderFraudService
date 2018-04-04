@@ -1,11 +1,11 @@
 package ca.bestbuy.orders.fraud.client.tas;
 
-import ca.bestbuy.orders.fraud.model.internal.FraudResult;
-import ca.bestbuy.orders.fraud.model.internal.Order;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
 
 
 public interface FraudServiceTASClient {
 
-    FraudResult doFraudCheck(Order order);
+    FraudAssessmentResult doFraudCheck(FraudAssessmentRequest fraudAssessmentRequest);
 
 }

@@ -3,24 +3,23 @@
  */
 package ca.bestbuy.orders.fraud.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.access.StateMachineAccess;
+import org.springframework.statemachine.access.StateMachineFunction;
+import org.springframework.statemachine.config.StateMachineFactory;
+import org.springframework.statemachine.support.StateMachineInterceptor;
+import org.springframework.statemachine.support.StateMachineInterceptorAdapter;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
-import ca.bestbuy.orders.fraud.dao.FraudRequestStatusHistoryRepository;
-import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
-import ca.bestbuy.orders.fraud.dao.FraudStatusRepository;
-import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
-import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
-import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
-import ca.bestbuy.orders.fraud.model.jpa.FraudStatus;
+import ca.bestbuy.orders.fraud.flow.FlowEvents;
+import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig;
+import ca.bestbuy.orders.fraud.flow.FlowStates;
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.MessageConsumingService;
 import ca.bestbuy.orders.messaging.MessagingEvent;
@@ -30,95 +29,86 @@ import lombok.extern.slf4j.Slf4j;
  * @author akaradem
  *
  */
-@Service
 @Slf4j
+@Service
 public class FraudInboundMessageConsumingService implements MessageConsumingService <MessagingEvent>{
 	
-	@Autowired
-	FraudRequestRepository fraudRequestRepository;
+	private final StateMachineFactory<FlowStates, FlowEvents> flowStateMachineFactory;
 	
 	@Autowired
-	FraudRequestStatusHistoryRepository historyRepository;
-
-	
-	@Autowired
-	FraudStatusRepository statusRepository;
-
-	
-	@Autowired
-	FraudRequestTypeRepository typeRepository;
-	
+	public FraudInboundMessageConsumingService(
+			@Qualifier("FlowStateMachine")
+			StateMachineFactory<FlowStates, FlowEvents> flowStateMachineFactory){
+		this.flowStateMachineFactory = flowStateMachineFactory;
+	}
 	/* (non-Javadoc)
 	 * @see ca.bestbuy.orders.messaging.MessageConsumingService#consumeMessage(ca.bestbuy.orders.messaging.MessagingEvent)
 	 */
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED)
-	public void consumeMessage(MessagingEvent event) {
+	public void consumeMessage(MessagingEvent event) throws Exception {
+		validateEvent(event);
 		
-		//TODO Should replace below code with actual implementation 
-		//Below is a mock implementation just to test Oracle DB Access is successful
 		if(EventTypes.FraudCheck.equals(event.getType())){
-			long fsOrderId = Long.parseLong(event.getOrderNumber(), 10);
-			long requestVersion = Long.parseLong(event.getRequestVersion(), 10);
-			Iterable<FraudRequest> foundRequestIt = fraudRequestRepository
-					.findByOrderNumberAndRequestVersionGTE(new BigDecimal(fsOrderId),
-							new BigDecimal(requestVersion));
 			
-			if((foundRequestIt == null)||(foundRequestIt.iterator().hasNext()==false)){
-				createNewFraudRequest(event);
-			}else if(foundRequestIt != null) {
-				FraudRequest request = foundRequestIt.iterator().next();
-				request.setCreateUser("Updated");
-				fraudRequestRepository.save(request);
-				System.out.println(request.getCreateUser());
+			Message<FlowEvents> message = MessageBuilder
+					.withPayload(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
+					.setHeader(FlowStateMachineConfig.KEYS.MESSAGING_KEY, event)
+					.build();
+			
+			StateMachine<FlowStates, FlowEvents> flowStateMachine = flowStateMachineFactory.getStateMachine("FlowSM_"+Thread.currentThread().getId());
+
+			flowStateMachine.getStateMachineAccessor()
+					.doWithRegion(new StateMachineFunction<StateMachineAccess<FlowStates, FlowEvents>>() {
+						@Override
+						public void apply(StateMachineAccess<FlowStates, FlowEvents> function) {
+							function.addStateMachineInterceptor(errorHandler(event));
+						}
+					});
+
+			flowStateMachine.sendEvent(message);	
+			if(flowStateMachine.hasStateMachineError()){
+				throw (Exception) flowStateMachine.getExtendedState().getVariables().get("ERROR");
 			}
 		}
 	}
-
 	
-	//private
-	private void createNewFraudRequest(MessagingEvent event){
-
-		FraudRequestType fraudCheckType = typeRepository.findOne(FraudRequestType.RequestTypes.FRAUD_CHECK);
-		FraudStatus status = statusRepository.findOne(FraudStatus.FraudStatusCodes.INITIAL_REQUEST);
-
-		FraudRequest request = new FraudRequest();
-
-		try {
-			String userName = "order_fraud_test";
-			Date now = new Date();
-
-			request.setFraudRequestType(fraudCheckType)
-					.setFraudStatus(status)
-					.setEventDate(event.getMessageCreationDate())
-					.setOrderNumber(new BigDecimal(event.getOrderNumber()))
-					.setRequestVersion(Long.valueOf(event.getRequestVersion()))
-					.setCreateDate(now)
-					.setCreateUser(userName)
-					.setUpdateDate(now)
-					.setUpdateUser(userName);
-
-			FraudRequestStatusHistory history = new FraudRequestStatusHistory();
-			
-			history.setFraudRequest(request)
-					.setFraudStatus(status)
-					.setCreateDate(now)
-					.setCreateUser(userName)
-					.setUpdateDate(now)
-					.setUpdateUser(userName);
-
-			List<FraudRequestStatusHistory> historyList = new ArrayList<>();
-			historyList.add(history);
-			request.setFraudRequestStatusHistory(historyList);
-		} catch (Exception ex) {
-			log.error("Failed to parse MessageEvent: " + event, ex);
-			return;
+	private void validateEvent(MessagingEvent event) throws Exception {
+		if(event == null){
+			throw new IllegalArgumentException("Input messaging event can not be null!");
+		} 
+		
+		if(!StringUtils.isNumeric(event.getOrderNumber())){
+			throw new IllegalArgumentException("Input messaging event order number("+event.getOrderNumber()+") should be a valid order number.");			
 		}
-
-		try {
-			fraudRequestRepository.save(request);
-		} catch (Exception ex) {
-			log.error("Failed to save to DB MessageEvent: " + event, ex);
+		
+		try{
+			Long.parseLong(event.getRequestVersion());
+		}catch( NumberFormatException nfe){
+			throw new IllegalArgumentException("Input messaging event request version ("+event.getRequestVersion()+") should be a valid version number.");			
 		}
+		
+		if(event.getType() == null){
+			throw new IllegalArgumentException("Input messaging event type should be provided!");
+		}
+	}
+
+	private StateMachineInterceptor<FlowStates, FlowEvents> errorHandler(final MessagingEvent event) {
+		return new StateMachineInterceptorAdapter<FlowStates, FlowEvents>() {
+			@Override
+			public Exception stateMachineError(StateMachine<FlowStates, FlowEvents> stateMachine, Exception exception) {
+				StringBuilder builder = 
+						(new StringBuilder())
+							.append("Terminating flow SM transitions for input order(")
+							.append(event.getOrderNumber())
+							.append(") and request version(")
+							.append(event.getRequestVersion())
+							.append(") as exception happened..\n")
+							.append(ExceptionUtils.getStackTrace(exception));
+
+						log.error(builder.toString());
+						stateMachine.getExtendedState().getVariables().put("ERROR", exception);
+				return exception;
+			}
+		};
 	}
 }

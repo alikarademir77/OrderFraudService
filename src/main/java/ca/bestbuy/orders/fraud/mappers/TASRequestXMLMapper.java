@@ -32,6 +32,7 @@ import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ShippingOrder;
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionData;
 import ca.bestbuy.orders.fraud.model.internal.Address;
 import ca.bestbuy.orders.fraud.model.internal.Chargeback;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import ca.bestbuy.orders.fraud.model.internal.PaymentDetails;
 import ca.bestbuy.orders.fraud.model.internal.PurchaseOrder;
@@ -48,26 +49,26 @@ public abstract class TASRequestXMLMapper {
      */
     @Mappings({
 
-            @Mapping(target = "requestVersion", ignore = true), //todo: will be generated when fms flow is implemented. hardcoded now for testing purposes
-            @Mapping(target = "transactionId", source = "fsOrderID"),
-            @Mapping(target = "webOrderId", source = "webOrderRefID"),
+            @Mapping(target = "requestVersion", source = "requestVersion"), 
+            @Mapping(target = "transactionId", source = "order.fsOrderID"),
+            @Mapping(target = "webOrderId", source = "order.webOrderRefID"),
             @Mapping(target = "transactionType", constant = "ORDER"), //will always be ORDER for Fraud Checks
             @Mapping(target = "transactionDateTime", ignore = true), //handled by mapTransactionData_TransactionData custom mapping
-            @Mapping(target = "orderDateTime", source = "webOrderCreationDate"),
+            @Mapping(target = "orderDateTime", source = "order.webOrderCreationDate"),
             @Mapping(target = "transactionTotalAmount", ignore = true), //handled by mapTransactionData_TransactionTotalAmount custom mapping
-            @Mapping(target = "csrSalesRep", source = "csrSalesRepID"),
-            @Mapping(target = "enterpriseCutId", source = "enterpriseCustomerId"),
-            @Mapping(target = "salesChannel", source = "salesChannel"),
-            @Mapping(target = "ipAddress", source = "ipAddress"),
-            @Mapping(target = "orderMessage", source = "orderMessage"),
+            @Mapping(target = "csrSalesRep", source = "order.csrSalesRepID"),
+            @Mapping(target = "enterpriseCutId", source = "order.enterpriseCustomerId"),
+            @Mapping(target = "salesChannel", source = "order.salesChannel"),
+            @Mapping(target = "ipAddress", source = "order.ipAddress"),
+            @Mapping(target = "orderMessage", source = "order.orderMessage"),
             @Mapping(target = "billingDetails.currencyCode", constant = "CAD"),
             @Mapping(target = "paymentMethods", ignore = true), //handled by mapTransactionData_PaymentMethods() custom mapping
-            @Mapping(target = "member.memberId", source = "rewardZoneID"),
-            @Mapping(target = "items.item", source = "items"),
-            @Mapping(target = "shippingOrders.shippingOrder", source = "shippingOrders"),
+            @Mapping(target = "member.memberId", source = "order.rewardZoneID"),
+            @Mapping(target = "items.item", source = "order.items"),
+            @Mapping(target = "shippingOrders.shippingOrder", source = "order.shippingOrders"),
             @Mapping(target = "chargeBacks", ignore = true) //handled by mapTransactionData_Chargebacks() custom mapping
     })
-    public abstract TransactionData mapTransactionData(Order orderToMap);
+    public abstract TransactionData mapTransactionData(FraudAssessmentRequest fraudAssessmentRequestToMap);
 
 
     /**
@@ -100,8 +101,8 @@ public abstract class TASRequestXMLMapper {
      *
      */
     @AfterMapping
-    public void mapTransactionData_TransactionTotalAmount(Order orderToMap, @MappingTarget TransactionData mappedTransactionData){
-
+    public void mapTransactionData_TransactionTotalAmount(FraudAssessmentRequest fraudAssessmentRequestToMap, @MappingTarget TransactionData mappedTransactionData){
+    	Order orderToMap = fraudAssessmentRequestToMap.getOrder();
         if(orderToMap == null || mappedTransactionData == null || orderToMap.getShippingOrders() == null){
             if(mappedTransactionData != null) {
                 mappedTransactionData.setTransactionTotalAmount("0");
@@ -131,9 +132,9 @@ public abstract class TASRequestXMLMapper {
      */
 
     @AfterMapping
-    public void mapTransactionData_Item_ShippingOrderId(Order orderToMap, @MappingTarget TransactionData mappedTransactionData){
+    public void mapTransactionData_Item_ShippingOrderId(FraudAssessmentRequest fraudAssessmentRequestToMap, @MappingTarget TransactionData mappedTransactionData){
 
-
+    	Order orderToMap = fraudAssessmentRequestToMap.getOrder();
         if(orderToMap == null || mappedTransactionData == null || orderToMap.getShippingOrders() == null
                 || orderToMap.getShippingOrders().isEmpty()
                 || mappedTransactionData.getItems() == null
@@ -173,8 +174,9 @@ public abstract class TASRequestXMLMapper {
      * object.
      */
     @AfterMapping
-    public void mapTransactionData_ShippingOrder_PurchaseOrderInfo(Order orderToMap, @MappingTarget TransactionData mappedTransactionData) {
+    public void mapTransactionData_ShippingOrder_PurchaseOrderInfo(FraudAssessmentRequest fraudAssessmentRequestToMap, @MappingTarget TransactionData mappedTransactionData) {
 
+    	Order orderToMap = fraudAssessmentRequestToMap.getOrder();
         if(orderToMap == null || mappedTransactionData == null ||orderToMap.getPurchaseOrders() == null
                 || orderToMap.getPurchaseOrders().isEmpty() || mappedTransactionData.getShippingOrders() == null
                 || mappedTransactionData.getShippingOrders().getShippingOrder() == null
@@ -213,8 +215,8 @@ public abstract class TASRequestXMLMapper {
      *
      */
     @AfterMapping
-    public void mapTransactionData_PaymentMethods(Order orderToMap, @MappingTarget TransactionData mappedTransactionData) {
-
+    public void mapTransactionData_PaymentMethods(FraudAssessmentRequest fraudAssessmentRequestToMap, @MappingTarget TransactionData mappedTransactionData) {
+    	Order orderToMap = fraudAssessmentRequestToMap.getOrder();
         //payment method will only have the payment method type listed as its paymentMethodType.
         //i.e. if type os CREDITCARD, only creditcard should be mapped and the other payment types should be null
         if (orderToMap == null || mappedTransactionData == null || orderToMap.getPaymentDetails() == null) {
@@ -313,8 +315,9 @@ public abstract class TASRequestXMLMapper {
      */
 
     @AfterMapping
-    public void mapTransactionData_Chargebacks(Order orderToMap, @MappingTarget TransactionData mappedTransactionData){
+    public void mapTransactionData_Chargebacks(FraudAssessmentRequest fraudAssessmentRequestToMap, @MappingTarget TransactionData mappedTransactionData){
 
+    	Order orderToMap = fraudAssessmentRequestToMap.getOrder();
         if(orderToMap == null || mappedTransactionData == null){
             return;
         }

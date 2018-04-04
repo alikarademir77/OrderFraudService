@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 
+/**
+ * @author akaradem
+ *
+ */
 @Repository
 public interface FraudRequestRepository extends OrderFraudBaseRepository<FraudRequest, Long> {
 
@@ -40,7 +44,16 @@ public interface FraudRequestRepository extends OrderFraudBaseRepository<FraudRe
 	 * @return
 	 */
 	 Iterable<FraudRequest> findByOrderNumber(BigDecimal orderNumber);
-	
+
+	/**
+	 * Returns all instances of the FraudRequest with the given orderNumber and request version.
+	 * 
+	 * @param orderNumber
+	 * @param requestVersion
+	 * @return
+	 */
+	 Iterable<FraudRequest> findByOrderNumberAndRequestVersion(BigDecimal orderNumber, Long requestVersion);
+
 	/**
 	 * Returns all instances of FraudRequest with orderNumber equal to parameter orderNumber and requestVersion 
 	 * greater than or equal to given version number. The result is given in descending order of request version
@@ -52,6 +65,6 @@ public interface FraudRequestRepository extends OrderFraudBaseRepository<FraudRe
 	 */
 	 @Query("select fr from FraudRequest fr where fr.orderNumber= :orderNumber and fr.requestVersion >= :requestVersion order by fr.requestVersion desc")
 	Iterable<FraudRequest> findByOrderNumberAndRequestVersionGTE(@Param("orderNumber") BigDecimal orderNumber,
-			@Param("requestVersion") BigDecimal requestVersion);
+			@Param("requestVersion") Long requestVersion);
 
 }

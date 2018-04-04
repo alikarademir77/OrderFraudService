@@ -6,14 +6,14 @@ package ca.bestbuy.orders.fraud.dao;
 import org.springframework.stereotype.Repository;
 
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
-import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType.RequestTypes;
+import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType.RequestTypeCodes;
 
 /**
  * @author akaradem
  *
  */
 @Repository
-public interface FraudRequestTypeRepository extends OrderFraudBaseRepository<FraudRequestType, RequestTypes> {
+public interface FraudRequestTypeRepository extends OrderFraudBaseRepository<FraudRequestType, RequestTypeCodes> {
 
 	/**
 	 * Retrieves an entity by its id.
@@ -22,7 +22,7 @@ public interface FraudRequestTypeRepository extends OrderFraudBaseRepository<Fra
 	 * @return the entity with the given id or {@literal null} if none found
 	 * @throws IllegalArgumentException if {@code id} is {@literal null}
 	 */
-	FraudRequestType findOne(RequestTypes id);
+	FraudRequestType findOne(RequestTypeCodes id);
 	
 	/**
 	 * Returns all instances of the type.

@@ -44,9 +44,5 @@ public class FraudStatus extends OrderFraudBaseEntity {
 
 	public FraudStatus() {
 	}
-
-	public static enum FraudStatusCodes{
-		INITIAL_REQUEST, DECISION_MADE, PENDING_REVIEW, CANCELLED;
-	}
 	
 }

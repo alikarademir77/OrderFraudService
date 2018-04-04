@@ -17,9 +17,15 @@ public interface OrderFraudChannels {
 	String INPUT = "fraudInbound";
 	String OUTPUT = "fraudOutbound";
 	
+	/**
+	 * @return
+	 */
 	@Input(OrderFraudChannels.INPUT)
 	SubscribableChannel fraudInbound();
 
+	/**
+	 * @return
+	 */
 	@Output(OrderFraudChannels.OUTPUT)
 	MessageChannel fraudOutbound();
 	

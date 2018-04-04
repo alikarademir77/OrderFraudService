@@ -6,7 +6,7 @@ import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderRespon
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ResponseData
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.Transaction
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.TransactionResults
-import ca.bestbuy.orders.fraud.model.internal.FraudResult
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult
 import org.mapstruct.factory.Mappers
 import spock.lang.Shared
 import spock.lang.Specification
@@ -37,7 +37,7 @@ class TASResponseXMLMapperTest extends Specification{
         transactionResults.setRemarks("remarks");
 
         ResponseData responseData = new ResponseData()
-        responseData.setResponseVersion("1")
+        responseData.setResponseVersion(1)
 
         Transaction transaction = new Transaction();
         transaction.setReasonCode("reasonCode")
@@ -54,32 +54,51 @@ class TASResponseXMLMapperTest extends Specification{
 
         when:
 
-        FraudResult fraudResult = xmlMapper.mapManageOrderResult(manageOrderResponse)
+        FraudAssessmentResult fraudResult = xmlMapper.mapManageOrderResult(manageOrderResponse)
 
         then:
 
-        fraudResult.getActionCode() == manageOrderResponse.getActionCode().toString()
-        fraudResult.getErrorDescription() == manageOrderResponse.getErrorDescription()
-        fraudResult.getTransactionId() == transactionResults.getTransactionId()
-        fraudResult.getCrossReference() == transactionResults.getCrossReference()
-        fraudResult.getRulesTripped() == transactionResults.getRulesTripped()
-        fraudResult.getTotalScore() == transactionResults.getTotalScore()
+        fraudResult.getFraudResponseStatus().toString() == "ACCEPTED"
+        fraudResult.getOrderNumber() == transactionResults.getTransactionId()
+        fraudResult.getTotalFraudScore() == transactionResults.getTotalScore()
         fraudResult.getRecommendationCode() == transactionResults.getRecommendationCode()
-        fraudResult.getRemarks() == transactionResults.getRemarks()
-        fraudResult.getVersion() == transactionResults.getResponseData().getResponseVersion()
-        fraudResult.getReasonCode() == transactionResults.getResponseData().getTransaction().getReasonCode()
-        fraudResult.getReasonDescription() == transactionResults.getResponseData().getTransaction().getReasonDescription()
-        if(fraudResult.getTransactionDetails().size() == transactionDetails.getTransactionDetail().size()) {
-            for (int i = 0; i < fraudResult.getTransactionDetails().size(); i++){
-                String transactionDetailToMap = transactionDetails.getTransactionDetail().get(i)
-                fraudResult.getTransactionDetails().get(i).toString() == transactionDetailToMap
-            }
-        }else{
-            assert false
-        }
+        fraudResult.getRequestVersion() == transactionResults.getResponseData().getResponseVersion().toLong()
+
+    }
+
+
+    def "test FraudResponseStatus mapper"(){
+
+        given:
+        ManageOrderResponse manageOrderResponse1 = new ManageOrderResponse()
+        manageOrderResponse1.setActionCode(ActionCode.SUCCESS)
+
+        ManageOrderResponse manageOrderResponse2 = new ManageOrderResponse()
+        manageOrderResponse2.setActionCode(ActionCode.CALLBANK)
+
+        ManageOrderResponse manageOrderResponse3 = new ManageOrderResponse()
+        manageOrderResponse3.setActionCode(ActionCode.SOFTDECLINE)
+
+        ManageOrderResponse manageOrderResponse4 = new ManageOrderResponse()
+        manageOrderResponse4.setActionCode(ActionCode.DECLINED)
+
+
+        when:
+        FraudAssessmentResult fraudResult1 = xmlMapper.mapManageOrderResult(manageOrderResponse1)
+        FraudAssessmentResult fraudResult2 = xmlMapper.mapManageOrderResult(manageOrderResponse2)
+        FraudAssessmentResult fraudResult3 = xmlMapper.mapManageOrderResult(manageOrderResponse3)
+        FraudAssessmentResult fraudResult4 = xmlMapper.mapManageOrderResult(manageOrderResponse4)
+
+        then:
+
+        fraudResult1.getFraudResponseStatus().toString() == "ACCEPTED"
+        fraudResult2.getFraudResponseStatus().toString() == "PENDING_REVIEW"
+        fraudResult3.getFraudResponseStatus().toString() == "SOFT_DECLINE"
+        fraudResult4.getFraudResponseStatus().toString() == "HARD_DECLINE"
 
 
 
     }
+
 
 }

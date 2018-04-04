@@ -16,7 +16,8 @@ import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderAction
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderRequest;
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderResponse;
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ObjectFactory;
-import ca.bestbuy.orders.fraud.model.internal.FraudResult;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,12 +61,18 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
     }
 
     @Override
-    public FraudResult doFraudCheck(Order order) {
+    public FraudAssessmentResult doFraudCheck(FraudAssessmentRequest fraudAssessmentRequest) {
 
+        if (fraudAssessmentRequest == null) {
+            throw new IllegalArgumentException("FraudAssessmentRequest passed in to doFraudCheck() must not be null");
+        }
+
+        Order order = fraudAssessmentRequest.getOrder();
+        
         if (order == null) {
             throw new IllegalArgumentException("Order passed in to doFraudCheck() must not be null");
         }
-
+        
         if (tasBaseUrl == null || tasBaseUrl.isEmpty()) {
             throw new IllegalStateException("TasBaseUrl must not be null or empty. Please ensure this is set on the client object before invoking doFraudCheck()");
         }
@@ -75,24 +82,29 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
         }
 
         //Map the request
+
         ManageOrderRequest request = new ManageOrderRequest();
         request.setIxTranType(ManageOrderActionCode.FRAUDCHECK);
-        request.setTransactionData(tasRequestXMLMapper.mapTransactionData(order));
+        request.setTransactionData(tasRequestXMLMapper.mapTransactionData(fraudAssessmentRequest));
 
         ObjectFactory objectFactory = new ObjectFactory();
         JAXBElement<ManageOrderRequest> jaxbRequest = objectFactory.createManageOrderRequest(request);
-        log.info("Request sent to TAS:" + convertToXMLString(jaxbRequest));
+        String requestAsXMLString = convertToXMLString(jaxbRequest);
+        log.info("Request sent to TAS:" + requestAsXMLString);
 
         try {
             // Send request to TAS and receive response
             JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) webServiceTemplate.marshalSendAndReceive(tasBaseUrl, jaxbRequest,
                 new SoapActionCallback(fraudcheckSOAPActionCallback));
-            log.info("Response received from TAS:" + convertToXMLString(jaxbResponse));
+            String responseAsXMLString = convertToXMLString(jaxbResponse);
+            log.info("Response received from TAS:" + responseAsXMLString);
 
             // Map response to FraudResult object
             ManageOrderResponse response = jaxbResponse.getValue();
-            FraudResult fraudResult = tasResponseXMLMapper.mapManageOrderResult(response);
-            return fraudResult;
+            FraudAssessmentResult fraudAssessmentResult = tasResponseXMLMapper.mapManageOrderResult(response);
+            fraudAssessmentResult.setTasRequest(requestAsXMLString);
+            fraudAssessmentResult.setTasResponse(responseAsXMLString);
+            return fraudAssessmentResult;
 
         } catch (SoapFaultClientException sfce) {
             //todo: handle this during flow implementation
@@ -105,9 +117,7 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
         }
 
 
-    }
-
-
+    }    
     private String convertToXMLString(JAXBElement jaxbElement) {
 
         StringResult output = new StringResult();
