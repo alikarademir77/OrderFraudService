@@ -2,15 +2,14 @@ package ca.bestbuy.orders.fraud.client.tas
 
 import ca.bestbuy.orders.fraud.mappers.TASRequestXMLMapper
 import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest
+import ca.bestbuy.orders.fraud.model.internal.Order
 import org.springframework.oxm.Marshaller
 import org.springframework.oxm.Unmarshaller
 import org.springframework.ws.client.core.WebServiceTemplate
 import org.springframework.ws.transport.WebServiceMessageSender
 import spock.lang.Specification
-import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest
-import spock.lang.Ignore
 
-@Ignore
 class FraudServiceTasClientImplTest extends Specification {
 
 
@@ -83,7 +82,7 @@ class FraudServiceTasClientImplTest extends Specification {
 
         when:
 
-        client.doFraudCheck(new FraudAssessmentRequest())
+        client.doFraudCheck(new FraudAssessmentRequest(1, new Order()))
 
         then:
 
@@ -103,7 +102,7 @@ class FraudServiceTasClientImplTest extends Specification {
 
         when:
 
-        client.doFraudCheck(new FraudAssessmentRequest())
+        client.doFraudCheck(new FraudAssessmentRequest(1, new Order()))
 
         then:
 
@@ -123,7 +122,7 @@ class FraudServiceTasClientImplTest extends Specification {
 
         when:
 
-        client.doFraudCheck(new FraudAssessmentRequest())
+        client.doFraudCheck(new FraudAssessmentRequest(1, new Order()))
 
         then:
 
@@ -143,7 +142,7 @@ class FraudServiceTasClientImplTest extends Specification {
 
         when:
 
-        client.doFraudCheck(new FraudAssessmentRequest())
+        client.doFraudCheck(new FraudAssessmentRequest(1, new Order()))
 
         then:
 
