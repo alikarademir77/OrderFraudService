@@ -15,7 +15,6 @@ import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderActionCode;
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderRequest;
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderResponse;
-import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ObjectFactory;
 import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
 import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
@@ -94,6 +93,7 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
 
         try {
             // Send request to TAS and receive response
+            @SuppressWarnings("unchecked")
             JAXBElement<ManageOrderResponse> jaxbResponse = (JAXBElement<ManageOrderResponse>) webServiceTemplate.marshalSendAndReceive(tasBaseUrl, jaxbRequest,
                 new SoapActionCallback(fraudcheckSOAPActionCallback));
             String responseAsXMLString = convertToXMLString(jaxbResponse);
@@ -116,9 +116,8 @@ public class FraudServiceTASClientImpl implements FraudServiceTASClient {
             throw wse;
         }
 
-
     }    
-    private String convertToXMLString(JAXBElement jaxbElement) {
+    private String convertToXMLString(JAXBElement<?> jaxbElement) {
 
         StringResult output = new StringResult();
         try {

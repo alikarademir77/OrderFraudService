@@ -1,14 +1,10 @@
 package ca.bestbuy.orders.fraud.mappers;
 
-import static com.sun.org.apache.xml.internal.serialize.LineSeparator.Web;
-import static org.bouncycastle.asn1.x500.style.RFC4519Style.c;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import ca.bestbuy.orders.fraud.model.client.resourcesapi.ProductDetail;
 import ca.bestbuy.orders.fraud.model.client.resourcesapi.RequestHeaders;

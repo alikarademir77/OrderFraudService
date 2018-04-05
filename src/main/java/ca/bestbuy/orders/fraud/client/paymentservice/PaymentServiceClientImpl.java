@@ -76,6 +76,7 @@ public class PaymentServiceClientImpl implements PaymentServiceClient {
 
         try {
             // Send request to Payment Service and receive response
+            @SuppressWarnings("unchecked")
             JAXBElement<GetPayPalPaymentDetailsResponse> response = (JAXBElement<GetPayPalPaymentDetailsResponse>) webServiceTemplate.marshalSendAndReceive(paymentServiceBaseUrl, jaxbRequest, new SoapActionCallback(SOAP_ACTION_CALLBACK));
 
             if(response == null || response.getValue() == null || response.getValue().getStatus() == null) {

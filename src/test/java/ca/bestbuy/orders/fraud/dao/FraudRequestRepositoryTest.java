@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -24,6 +25,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.bestbuy.orders.fraud.OrderFraudServiceApplication;
+import ca.bestbuy.orders.fraud.client.orderdetails.OrderDetailsClient;
+import ca.bestbuy.orders.fraud.client.orderdetails.OrderDetailsClientConfig;
+import ca.bestbuy.orders.fraud.client.tas.FraudServiceTASClient;
+import ca.bestbuy.orders.fraud.client.tas.FraudServiceTASClientConfig;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
@@ -31,13 +36,24 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
 import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusEvents;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
 @ActiveProfiles({"dev","unittest"})
 @DirtiesContext
 public class FraudRequestRepositoryTest {
 
+	@MockBean
+	private OrderDetailsClientConfig orderDetailsClientConfig;
+	
+	@MockBean
+	OrderDetailsClient orderDetailsClient;
+
+	@MockBean
+	private FraudServiceTASClientConfig fraudServiceTASClientConfig;
+
+	@MockBean
+	private FraudServiceTASClient fraudServiceTASClient;
+	
 	@Autowired
 	FraudStatusRepository statusRepository;
 	
