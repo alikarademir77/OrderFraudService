@@ -16,22 +16,25 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<properties>
-		<groovy.version>2.4.13</groovy.version>
-		<hikariCP.version>2.7.8</hikariCP.version>
-		<jackson.version>2.9.5</jackson.version>
-		<jodatime.version>2.9.9</jodatime.version>
-		<logging-lib.version>1.0.1</logging-lib.version>
-		<lombok.version>1.16.20</lombok.version>
-		<mapstruct.version>1.2.0.Final</mapstruct.version>
-		<oracle.version>12.1.0.1</oracle.version>
-		<spock.version>1.1-groovy-2.4</spock.version>
-                <!-- override the curated version from spring boot -->
-                <spring-ws.version>3.0.1.RELEASE</spring-ws.version>
-		<spring-boot-admin-starter.version>1.5.7</spring-boot-admin-starter.version>
-		<springfox-swagger.version>2.8.0</springfox-swagger.version>
-		<spring-statemachine.version>2.0.0.RELEASE</spring-statemachine.version>
-	</properties>
+<properties>
+   <groovy.version>2.4.13</groovy.version>
+   <hikariCP.version>2.7.8</hikariCP.version>
+   <jackson.version>2.9.5</jackson.version>
+   <jodatime.version>2.9.9</jodatime.version>
+   <logging-lib.version>1.0.1</logging-lib.version>
+   <lombok.version>1.16.20</lombok.version>
+   <mapstruct.version>1.2.0.Final</mapstruct.version>
+   <oracle.version>12.1.0.1</oracle.version>
+   <spock.version>1.1-groovy-2.4</spock.version>
+   <!-- override the curated version from spring boot -->
+   <spring-ws.version>3.0.1.RELEASE</spring-ws.version>
+   <spring-boot-admin-starter.version>1.5.7</spring-boot-admin-starter.version>
+   <springfox-swagger.version>2.8.0</springfox-swagger.version>
+   <hikariCP.version>2.7.8</hikariCP.version>
+   <spring-statemachine.version>2.0.0.RELEASE</spring-statemachine.version>
+</properties>
+
+
 
 	<dependencies>
 
@@ -245,9 +248,7 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
-
 	<build>
 	<resources>
 		<resource>

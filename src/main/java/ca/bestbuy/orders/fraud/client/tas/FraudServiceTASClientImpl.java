@@ -15,6 +15,7 @@ import ca.bestbuy.orders.fraud.mappers.TASResponseXMLMapper;
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderActionCode;
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderRequest;
 import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ManageOrderResponse;
+import ca.bestbuy.orders.fraud.model.client.generated.tas.wsdl.ObjectFactory;
 import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
 import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult;
 import ca.bestbuy.orders.fraud.model.internal.Order;
