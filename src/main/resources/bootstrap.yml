@@ -13,3 +13,13 @@ spring:
 # TODO remove - this allows access to all spring boot actuator endpoints
 management.security.enabled: false
 
+---
+
+# We do not want to read properties from config server for unit tests
+
+spring:
+  profiles: unittest
+
+  cloud:
+    config:
+      enabled: false
