@@ -76,7 +76,9 @@ spring:
 
 messaging:
   errorRetryCount: 3
-
+  outbound:
+    # Timeout (in milliseconds) for a message to be sent to the outbound queue and to be accepted
+    timeout: 1
 
 logging:
   level:
