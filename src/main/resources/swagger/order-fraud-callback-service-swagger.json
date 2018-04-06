@@ -1,0 +1,100 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "REST API for retrive and update fraud request",
+    "version": "1",
+    "title": "Fraud  service REST API",
+    "contact": {
+      "name": "EComm Orders Team",
+      "url": "https://confluence.ca.bestbuy.com/display/OR/Orders",
+      "email": "eCommCAOrders@bestbuy.com"
+    }
+  },
+  "host": "localhost:8090",
+  "basePath": "/orderfraud",
+  "paths": {
+    "/fraudchecktransactions/{transactionId}/{versionId}": {
+      "put": {
+        "summary": "Post fraud result",
+        "description": "Update fraud result for pending review orders after user  performed the action at Accertify.",
+        "produces": [
+          "application/vnd.bestbuy.v1+json"
+        ],
+        "parameters": [
+          {
+            "name": "fraudResult",
+            "in": "body",
+            "description": "Result for pending review orders after user performed the action at Accertify",
+            "schema": {
+              "required": [
+                "fraudResultDetail",
+                "updateUser"
+              ],
+              "properties": {
+                "crossReference": {
+                  "type": "string"
+                },
+                "rulesExecuted": {
+                  "type": "string"
+                },
+                "totalScore": {
+                  "type": "integer"
+                },
+                "updateUser": {
+                  "type": "string"
+                },
+                "updateDateTime": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "fraudResultDetail": {
+                  "$ref": "#/definitions/fraudResultDetail"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully proccesed the request"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Order or version doesn't exists."
+          },
+          "500": {
+            "description": "An unexpected error occured."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "fraudResultDetail": {
+      "required": [
+        "actionCode"
+      ],
+      "properties": {
+        "actionCode": {
+          "type": "string",
+          "enum": [
+            "ACCEPT",
+            "HARD_DECLINE",
+            "SOFT_DECLINE"
+          ]
+        },
+        "recommendationCode": {
+          "type": "string"
+        },
+        "resolutionName": {
+          "type": "string"
+        },
+        "remarks": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
