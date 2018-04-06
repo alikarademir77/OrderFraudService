@@ -47,7 +47,7 @@ public final class MessagingEvent {
 			@JsonProperty("requestVersion")
 			final String requestVersion,
 			@JsonProperty("messageCreationDate")
-			@JsonFormat(pattern = "dd/mm/yyyy hh:mm:ss", timezone="UTC")
+			@JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss", timezone="UTC")
 			final Date messageCreationDate){
 		this.type = type;
 		this.orderNumber = orderNumber;

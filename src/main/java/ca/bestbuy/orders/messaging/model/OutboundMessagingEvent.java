@@ -18,7 +18,7 @@ public final class OutboundMessagingEvent {
 
     private final EventTypes type;
 
-    @JsonFormat(pattern = "dd/mm/yyyy hh:mm:ss", timezone="UTC")
+    @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss", timezone="UTC")
     private final Date messageCreationDate;
 
     private final FraudResult result;
