@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
-public class RequestOutdatedAcion implements Action<FlowStates, FlowEvents> {
+public class RequestOutdatedAction implements Action<FlowStates, FlowEvents> {
 
 	/* (non-Javadoc)
 	 * @see org.springframework.statemachine.action.Action#execute(org.springframework.statemachine.StateContext)

@@ -44,12 +44,12 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
 @ActiveProfiles({"dev","unittest"})
 @DirtiesContext
-public class RequestOutdatedAcionTest {
+public class RequestOutdatedActionTest {
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	StateContext<FlowStates, FlowEvents> context;
 	
 	@Mock
-	RequestOutdatedAcion requestOutdatedAcionMock;
+	RequestOutdatedAction requestOutdatedActionMock;
 	
 	@Test
 	public void testExecute(){
@@ -64,7 +64,7 @@ public class RequestOutdatedAcionTest {
 		foundRequest.setRequestVersion(foundRequestVersion);
 		when(context.getExtendedState().getVariables().get(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT)).thenReturn(Arrays.asList(new FraudRequest[]{foundRequest}));
 		
-		doCallRealMethod().when(requestOutdatedAcionMock).execute(any(StateContext.class));
+		doCallRealMethod().when(requestOutdatedActionMock).execute(any(StateContext.class));
 		doAnswer(new Answer<Void>() {
 
 			@Override
@@ -78,10 +78,10 @@ public class RequestOutdatedAcionTest {
                 return null;
             }
 			
-		}).when(requestOutdatedAcionMock).logMessage(orderNumber, String.valueOf(requestVersion), String.valueOf(foundRequestVersion));
+		}).when(requestOutdatedActionMock).logMessage(orderNumber, String.valueOf(requestVersion), String.valueOf(foundRequestVersion));
 
 		
-		requestOutdatedAcionMock.execute(context);
-		verify(requestOutdatedAcionMock, times(1)).logMessage(anyString(), anyString(), anyString());
+		requestOutdatedActionMock.execute(context);
+		verify(requestOutdatedActionMock, times(1)).logMessage(anyString(), anyString(), anyString());
 	}
 }

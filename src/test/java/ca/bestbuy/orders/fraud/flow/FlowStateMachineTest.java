@@ -36,7 +36,7 @@ import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
 import ca.bestbuy.orders.fraud.flow.action.CheckRequestExistenceAction;
 import ca.bestbuy.orders.fraud.flow.action.CreateInitialRequestAction;
 import ca.bestbuy.orders.fraud.flow.action.OutboundReplyAction;
-import ca.bestbuy.orders.fraud.flow.action.RequestOutdatedAcion;
+import ca.bestbuy.orders.fraud.flow.action.RequestOutdatedAction;
 import ca.bestbuy.orders.fraud.flow.action.TASInvokeAction;
 import ca.bestbuy.orders.fraud.flow.guard.RequestFoundAsInitialGuard;
 import ca.bestbuy.orders.fraud.flow.guard.RequestFoundAsReadyForReplyGuard;
@@ -59,8 +59,8 @@ public class FlowStateMachineTest {
 	@MockBean
 	CheckRequestExistenceAction checkRequestExistenceAction;
 	
-	@MockBean	
-	RequestOutdatedAcion requestOutdatedAcion;
+	@MockBean
+    RequestOutdatedAction requestOutdatedAction;
 
 	@MockBean
     CreateInitialRequestAction createInitialRequestAction;
@@ -140,7 +140,7 @@ public class FlowStateMachineTest {
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
 		verify(requestOutdatedGuardSpy, times(1)).evaluate(any(StateContext.class));
-		verify(requestOutdatedAcion, times(1)).execute(any(StateContext.class));
+		verify(requestOutdatedAction, times(1)).execute(any(StateContext.class));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -190,7 +190,7 @@ public class FlowStateMachineTest {
 		plan.test();		
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
-		verify(requestOutdatedAcion, times(0)).execute(any(StateContext.class));
+		verify(requestOutdatedAction, times(0)).execute(any(StateContext.class));
 		verify(createInitialRequestAction, times(1)).execute(any(StateContext.class));
 		verify(tasInvokeAction, times(1)).execute(any(StateContext.class));
 		verify(outboundReplyAction, times(1)).execute(any(StateContext.class));

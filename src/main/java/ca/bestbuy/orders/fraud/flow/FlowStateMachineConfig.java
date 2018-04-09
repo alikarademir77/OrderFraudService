@@ -16,7 +16,7 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import ca.bestbuy.orders.fraud.flow.action.CheckRequestExistenceAction;
 import ca.bestbuy.orders.fraud.flow.action.CreateInitialRequestAction;
 import ca.bestbuy.orders.fraud.flow.action.OutboundReplyAction;
-import ca.bestbuy.orders.fraud.flow.action.RequestOutdatedAcion;
+import ca.bestbuy.orders.fraud.flow.action.RequestOutdatedAction;
 import ca.bestbuy.orders.fraud.flow.action.TASInvokeAction;
 import ca.bestbuy.orders.fraud.flow.guard.RequestFoundAsInitialGuard;
 import ca.bestbuy.orders.fraud.flow.guard.RequestFoundAsReadyForReplyGuard;
@@ -33,7 +33,7 @@ public class FlowStateMachineConfig
 
 	private final CheckRequestExistenceAction checkRequestExistenceAction;
 	private final TASInvokeAction tasInvokeAction;
-	private final RequestOutdatedAcion requestOutdatedAcion;
+	private final RequestOutdatedAction requestOutdatedAction;
 	private final OutboundReplyAction outboundReplyAction;
 	private final CreateInitialRequestAction createInitialRequestAction;
 	private final RequestOutdatedGuard requestOutdatedGuard;
@@ -42,14 +42,14 @@ public class FlowStateMachineConfig
 	
 	@Autowired
 	public FlowStateMachineConfig(CheckRequestExistenceAction checkRequestExistenceAction,
-			TASInvokeAction tasInvokeAction, RequestOutdatedAcion requestOutdatedAcion,
+			TASInvokeAction tasInvokeAction, RequestOutdatedAction requestOutdatedAction,
 			OutboundReplyAction outboundReplyAction, CreateInitialRequestAction createInitialRequestAction,
 			RequestOutdatedGuard requestOutdatedGuard, RequestFoundAsInitialGuard requestFoundAsInitialGuard,
 			RequestFoundAsReadyForReplyGuard requestFoundAsReadyForReplyGuard) {
 		super();
 		this.checkRequestExistenceAction = checkRequestExistenceAction;
 		this.tasInvokeAction = tasInvokeAction;
-		this.requestOutdatedAcion = requestOutdatedAcion;
+		this.requestOutdatedAction = requestOutdatedAction;
 		this.outboundReplyAction = outboundReplyAction;
 		this.createInitialRequestAction = createInitialRequestAction;
 		this.requestOutdatedGuard = requestOutdatedGuard;
@@ -79,7 +79,7 @@ public class FlowStateMachineConfig
 				.initial(FlowStates.READY, null)
 				.choice(FlowStates.REQUEST_EXISTENCE_CHECK)
 				.stateEntry(FlowStates.REQUEST_NOTFOUND, createInitialRequestAction, null)
-				.stateEntry(FlowStates.REQUEST_OUTDATED, requestOutdatedAcion,null)
+				.stateEntry(FlowStates.REQUEST_OUTDATED, requestOutdatedAction,null)
 				.stateEntry(FlowStates.INITIAL_REQUEST, tasInvokeAction,null)
 				.stateEntry(FlowStates.READY_FOR_REPLY, outboundReplyAction,null)
 				.states(EnumSet.allOf(FlowStates.class));
