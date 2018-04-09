@@ -133,8 +133,8 @@ public class FlowStateMachineConfig
 	 *
 	 */
 	public interface KEYS {
-		public static final String MESSAGING_KEY = "MESSAGING_KEY"; 
-		public static final String MAX_VERSION_EXISTENCE_CHECK_RESULT = "MAX_VERSION_EXISTENCE_CHECK_RESULT"; 
+		String REQUEST = "REQUEST";
+		String MAX_VERSION_EXISTENCE_CHECK_RESULT = "MAX_VERSION_EXISTENCE_CHECK_RESULT";
 	}
 		
 }

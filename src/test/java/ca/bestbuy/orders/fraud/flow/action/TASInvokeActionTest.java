@@ -167,7 +167,7 @@ public class TASInvokeActionTest {
 	private void executeRecordPhase(String orderNumber, long requestVersion,
 			FraudResponseStatusCodes fraudResponseStatusCode) {
 		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
-		when(context.getMessageHeader(KEYS.MESSAGING_KEY)).thenReturn(event);
+		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 		
 		createInitialRequestAcion.execute(context);
 		

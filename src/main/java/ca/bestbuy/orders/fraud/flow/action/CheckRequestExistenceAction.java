@@ -41,7 +41,9 @@ public class CheckRequestExistenceAction implements Action<FlowStates, FlowEvent
 	 */
 	@Override
 	public void execute(StateContext<FlowStates, FlowEvents> context) {
-		MessagingEvent messagingEvent = (MessagingEvent) context.getMessageHeader(KEYS.MESSAGING_KEY);
+
+		// Get request from state machine's extended state
+		MessagingEvent messagingEvent = (MessagingEvent) context.getExtendedState().getVariables().get(KEYS.REQUEST);
 
 		BigDecimal orderNumber = new BigDecimal(Long.valueOf(messagingEvent.getOrderNumber(), 10));
 		Long  requestVersion = Long.valueOf(messagingEvent.getRequestVersion(), 10);

@@ -48,7 +48,7 @@ public class RequestOutdatedGuardTest {
 		long requestVersion = 1;
 		long foundRequestVersion = 2L;
 		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
-		when(context.getMessageHeader(KEYS.MESSAGING_KEY)).thenReturn(event);
+		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		FraudRequest foundRequest = new FraudRequest();
 		foundRequest.setOrderNumber(new BigDecimal(orderNumber));
@@ -65,7 +65,7 @@ public class RequestOutdatedGuardTest {
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
 		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
-		when(context.getMessageHeader(KEYS.MESSAGING_KEY)).thenReturn(event);
+		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		FraudRequest foundRequest = new FraudRequest();
 		foundRequest.setOrderNumber(new BigDecimal(orderNumber));
