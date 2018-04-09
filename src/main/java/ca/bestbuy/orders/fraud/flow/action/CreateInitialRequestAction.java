@@ -21,7 +21,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.messaging.MessagingEvent;
 
 @Component
-public class CreateInitialRequestAcion extends ActionWithException<FlowStates, FlowEvents> {
+public class CreateInitialRequestAction extends ActionWithException<FlowStates, FlowEvents> {
 
 	private final String userName;
 	
@@ -29,7 +29,7 @@ public class CreateInitialRequestAcion extends ActionWithException<FlowStates, F
 	private final FraudRequestTypeRepository typeRepository;
 	
 	@Autowired
-	public CreateInitialRequestAcion(
+	public CreateInitialRequestAction(
 			FraudRequestRepository fraudRequestRepository,
 			FraudRequestTypeRepository typeRepository,
 			@Value("${spring.datasource.username}") 

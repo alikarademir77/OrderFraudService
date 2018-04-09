@@ -42,7 +42,7 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
 @ActiveProfiles({"dev","unittest"})
 @DirtiesContext
-public class CreateInitialRequestAcionTest {
+public class CreateInitialRequestActionTest {
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	StateContext<FlowStates, FlowEvents> context;
 
@@ -50,7 +50,7 @@ public class CreateInitialRequestAcionTest {
 	FraudRequestRepository fraudRequestRepository;
 	
 	@Autowired
-	CreateInitialRequestAcion action;
+	CreateInitialRequestAction action;
 	
 	@Test
 	@Transactional

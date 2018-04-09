@@ -53,7 +53,7 @@ public class CheckRequestExistenceActionTest {
 	CheckRequestExistenceAction checkRequestExistenceAction;
 	
 	@Autowired
-	CreateInitialRequestAcion createInitialRequestAcion;
+    CreateInitialRequestAction createInitialRequestAction;
 	
 	@Test
 	public void testExecuteForRequestNotFound(){

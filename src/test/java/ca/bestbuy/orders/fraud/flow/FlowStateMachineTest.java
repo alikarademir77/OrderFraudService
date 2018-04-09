@@ -34,7 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ca.bestbuy.orders.fraud.OrderFraudServiceApplication;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
 import ca.bestbuy.orders.fraud.flow.action.CheckRequestExistenceAction;
-import ca.bestbuy.orders.fraud.flow.action.CreateInitialRequestAcion;
+import ca.bestbuy.orders.fraud.flow.action.CreateInitialRequestAction;
 import ca.bestbuy.orders.fraud.flow.action.OutboundReplyAction;
 import ca.bestbuy.orders.fraud.flow.action.RequestOutdatedAcion;
 import ca.bestbuy.orders.fraud.flow.action.TASInvokeAction;
@@ -62,8 +62,8 @@ public class FlowStateMachineTest {
 	@MockBean	
 	RequestOutdatedAcion requestOutdatedAcion;
 
-	@MockBean	
-	CreateInitialRequestAcion createInitialRequestAcion;
+	@MockBean
+    CreateInitialRequestAction createInitialRequestAction;
 
 	@MockBean	
 	TASInvokeAction tasInvokeAction;
@@ -191,7 +191,7 @@ public class FlowStateMachineTest {
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
 		verify(requestOutdatedAcion, times(0)).execute(any(StateContext.class));
-		verify(createInitialRequestAcion, times(1)).execute(any(StateContext.class));
+		verify(createInitialRequestAction, times(1)).execute(any(StateContext.class));
 		verify(tasInvokeAction, times(1)).execute(any(StateContext.class));
 		verify(outboundReplyAction, times(1)).execute(any(StateContext.class));
 		
@@ -246,7 +246,7 @@ public class FlowStateMachineTest {
 		plan.test();		
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
-		verify(createInitialRequestAcion, times(0)).execute(any(StateContext.class));
+		verify(createInitialRequestAction, times(0)).execute(any(StateContext.class));
 		verify(requestFoundAsInitialGuardSpy, times(1)).evaluate(any(StateContext.class));
 		verify(tasInvokeAction, times(1)).execute(any(StateContext.class));
 		verify(outboundReplyAction, times(1)).execute(any(StateContext.class));
@@ -301,7 +301,7 @@ public class FlowStateMachineTest {
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
 		verify(requestFoundAsReadyForReplyGuardSpy, times(1)).evaluate(any(StateContext.class));
-		verify(createInitialRequestAcion, times(0)).execute(any(StateContext.class));
+		verify(createInitialRequestAction, times(0)).execute(any(StateContext.class));
 		verify(tasInvokeAction, times(0)).execute(any(StateContext.class));
 		verify(outboundReplyAction, times(1)).execute(any(StateContext.class));
 	}
@@ -355,7 +355,7 @@ public class FlowStateMachineTest {
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
 		verify(requestFoundAsReadyForReplyGuardSpy, times(1)).evaluate(any(StateContext.class));
-		verify(createInitialRequestAcion, times(0)).execute(any(StateContext.class));
+		verify(createInitialRequestAction, times(0)).execute(any(StateContext.class));
 		verify(tasInvokeAction, times(0)).execute(any(StateContext.class));
 		verify(outboundReplyAction, times(1)).execute(any(StateContext.class));
 		

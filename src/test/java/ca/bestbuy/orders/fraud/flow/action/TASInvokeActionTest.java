@@ -65,7 +65,7 @@ public class TASInvokeActionTest {
 	FraudServiceTASClient  fraudServiceTASClientMock;
 	
 	@Autowired
-	CreateInitialRequestAcion createInitialRequestAcion;
+	CreateInitialRequestAction createInitialRequestAction;
 	
 	@Autowired
 	TASInvokeAction tasInvokeAction;
@@ -169,7 +169,7 @@ public class TASInvokeActionTest {
 		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 		
-		createInitialRequestAcion.execute(context);
+		createInitialRequestAction.execute(context);
 		
 		when(orderDetailsClientMock.getOrderDetails(orderNumber)).thenReturn(new Order());		
 		when(fraudServiceTASClientMock.doFraudCheck(any(FraudAssessmentRequest.class))).thenReturn(
