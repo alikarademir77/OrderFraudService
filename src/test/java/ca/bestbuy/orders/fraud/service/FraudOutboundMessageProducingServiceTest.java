@@ -43,7 +43,7 @@ public class FraudOutboundMessageProducingServiceTest {
         BlockingQueue<Message<?>> messages = collector.forChannel(channels.fraudOutbound());
 
         // Create message
-        OutboundMessagingEvent.FraudResult fraudResult = new FraudResult("SUCCESS", 1L,"5000", "1234");
+        OutboundMessagingEvent.FraudResult fraudResult = new FraudResult("SUCCESS", 1L,"5000", "1234", "9080", "user", new Date());
         OutboundMessagingEvent message = new OutboundMessagingEvent(EventTypes.FraudCheck, new Date(), fraudResult);
 
         // Send message
@@ -51,9 +51,10 @@ public class FraudOutboundMessageProducingServiceTest {
 
         Matcher<String> matcher1 = Matchers.containsString("{\"type\":\"FraudCheck\"");
         Matcher<String> matcher2 = Matchers.containsString("\"messageCreationDate\":\"");
-        Matcher<String> matcher3 = Matchers.containsString("\"result\":{\"status\":\"SUCCESS\",\"requestVersion\":1,"
-            + "\"totalFraudScore\":\"5000\",\"orderNumber\":\"1234\"}}");
+        Matcher<String> matcher3 = Matchers.containsString("\"result\":{\"status\":\"SUCCESS\",\"orderNumber\":\"1234\",\"requestVersion\":1,"
+            + "\"totalFraudScore\":\"5000\",\"recommendationCode\":\"9080\",\"accertifyUser\":\"user\",");
+        Matcher<String> matcher4 = Matchers.containsString("\"accertifyUserCreationTime\":\"");
 
-        Assert.assertThat(messages, MessageQueueMatcher.receivesPayloadThat(Matchers.allOf(matcher1, matcher2, matcher3)));
+        Assert.assertThat(messages, MessageQueueMatcher.receivesPayloadThat(Matchers.allOf(matcher1, matcher2, matcher3, matcher4)));
     }
 }

@@ -18,7 +18,7 @@ public final class OutboundMessagingEvent {
 
     private final EventTypes type;
 
-    @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss", timezone="UTC")
+    @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss", timezone = "UTC")
     private final Date messageCreationDate;
 
     private final FraudResult result;
@@ -38,20 +38,30 @@ public final class OutboundMessagingEvent {
 
         private final String status;
 
+        private final String orderNumber;
+
         private final long requestVersion;
 
         private final String totalFraudScore;
 
-        private final String orderNumber;
+        private final String recommendationCode;
+
+        private final String accertifyUser;
+
+        @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss", timezone = "UTC")
+        private final Date accertifyUserCreationTime;
 
         @JsonCreator
-        public FraudResult(String status, long requestVersion, String totalFraudScore, String orderNumber) {
+        public FraudResult(String status, long requestVersion, String totalFraudScore, String orderNumber, String recommendationCode, String accertifyUser, Date
+            accertifyUserCreationTime) {
             this.status = status;
             this.requestVersion = requestVersion;
             this.totalFraudScore = totalFraudScore;
             this.orderNumber = orderNumber;
+            this.recommendationCode = recommendationCode;
+            this.accertifyUser = accertifyUser;
+            this.accertifyUserCreationTime = accertifyUserCreationTime;
         }
-
     }
 
 }
