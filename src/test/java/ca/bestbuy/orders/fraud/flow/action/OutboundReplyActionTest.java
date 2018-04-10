@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ca.bestbuy.orders.fraud.flow.action;
 
 import static org.mockito.Matchers.any;
@@ -55,8 +52,6 @@ public class OutboundReplyActionTest {
         when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(createRequestMessage("1234", "1", EventTypes.FraudCheck));
 
         when(repository.findByFraudRequestOrderNumberAndFraudRequestRequestVersion(any(), anyLong(), any())).thenReturn(createFraudRequestStatusHistories(3));
-
-        OutboundMessagingEvent outboundMessagingEvent = OutboundMessagingEvent.Builder.create(EventTypes.FraudCheck, "1234", "1", FraudResponseStatusCodes.ACCEPTED.name()).accertifyUser("user").recommendationCode("9080").totalFraudScore("1000").build();
 
         action.doExecute(context);
 
