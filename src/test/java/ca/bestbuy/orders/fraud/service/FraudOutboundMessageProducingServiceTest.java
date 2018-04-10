@@ -19,7 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ca.bestbuy.orders.fraud.OrderFraudChannels;
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
-import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent.FraudResult;
 
 
 @RunWith(SpringRunner.class)
@@ -38,23 +37,41 @@ public class FraudOutboundMessageProducingServiceTest {
     private FraudOutboundMessageProducingService service;
 
     @Test
-    public void testProducer() throws Exception {
+    public void testProducer_AllFieldsPopulatedInMessage() throws Exception {
 
         BlockingQueue<Message<?>> messages = collector.forChannel(channels.fraudOutbound());
 
         // Create message
-        OutboundMessagingEvent.FraudResult fraudResult = new FraudResult("SUCCESS", 1L,"5000", "1234", "9080", "user", new Date());
-        OutboundMessagingEvent message = new OutboundMessagingEvent(EventTypes.FraudCheck, new Date(), fraudResult);
+        OutboundMessagingEvent message = OutboundMessagingEvent.Builder.create(EventTypes.FraudCheck, "1234", "1", "SUCCESS").totalFraudScore("5000").recommendationCode("9080").accertifyUser("user").accertifyUserCreationDate(new Date()).build();
 
         // Send message
         service.sendOutboundMessage(message);
 
-        Matcher<String> matcher1 = Matchers.containsString("{\"type\":\"FraudCheck\"");
-        Matcher<String> matcher2 = Matchers.containsString("\"messageCreationDate\":\"");
-        Matcher<String> matcher3 = Matchers.containsString("\"result\":{\"status\":\"SUCCESS\",\"orderNumber\":\"1234\",\"requestVersion\":1,"
-            + "\"totalFraudScore\":\"5000\",\"recommendationCode\":\"9080\",\"accertifyUser\":\"user\",");
-        Matcher<String> matcher4 = Matchers.containsString("\"accertifyUserCreationTime\":\"");
+        Matcher<String> matcher1 = Matchers.containsString("{\"type\":\"FraudCheck\",\"orderNumber\":\"1234\",\"messageCreationDate\":\"");
+        Matcher<String> matcher2 = Matchers.containsString("\"result\":{\"status\":\"SUCCESS\",\"requestVersion\":\"1\","
+            + "\"totalFraudScore\":\"5000\",\"recommendationCode\":\"9080\",\"accertifyUser\":\"user\",\"accertifyUserCreationDate\":\"");
 
-        Assert.assertThat(messages, MessageQueueMatcher.receivesPayloadThat(Matchers.allOf(matcher1, matcher2, matcher3, matcher4)));
+        Assert.assertThat(messages, MessageQueueMatcher.receivesPayloadThat(Matchers.allOf(matcher1, matcher2)));
     }
+
+
+
+    @Test
+    public void testProducer_OnlyRequiredFieldsPopulatedInMessage() throws Exception {
+
+        BlockingQueue<Message<?>> messages = collector.forChannel(channels.fraudOutbound());
+
+        // Create message
+        OutboundMessagingEvent message = OutboundMessagingEvent.Builder.create(EventTypes.FraudCheck, "1234", "1", "SUCCESS").build();
+
+        // Send message
+        service.sendOutboundMessage(message);
+
+        Matcher<String> matcher1 = Matchers.containsString("{\"type\":\"FraudCheck\",\"orderNumber\":\"1234\",\"messageCreationDate\":\"");
+        Matcher<String> matcher2 = Matchers.containsString("\"result\":{\"status\":\"SUCCESS\",\"requestVersion\":\"1\"}}");
+
+        Assert.assertThat(messages, MessageQueueMatcher.receivesPayloadThat(Matchers.allOf(matcher1, matcher2)));
+    }
+
+
 }

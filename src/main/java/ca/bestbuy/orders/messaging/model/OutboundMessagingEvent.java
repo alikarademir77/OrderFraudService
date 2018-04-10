@@ -2,8 +2,9 @@ package ca.bestbuy.orders.messaging.model;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import ca.bestbuy.orders.messaging.EventTypes;
 import lombok.EqualsAndHashCode;
@@ -16,52 +17,135 @@ import lombok.ToString;
 @ToString
 public final class OutboundMessagingEvent {
 
-    private final EventTypes type;
+    private EventTypes type;
+
+    private String orderNumber;
 
     @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss", timezone = "UTC")
-    private final Date messageCreationDate;
+    private Date messageCreationDate;
 
-    private final FraudResult result;
+    private FraudResult result;
 
 
-    @JsonCreator
-    public OutboundMessagingEvent(final EventTypes type, final Date messageCreationDate, final FraudResult result) {
-        this.type = type;
-        this.messageCreationDate = messageCreationDate;
-        this.result = result;
+    private OutboundMessagingEvent(Builder builder) {
+
+        this.type = builder.eventType;
+        this.orderNumber = builder.orderNumber;
+        this.messageCreationDate = builder.messageCreationDate;
+
+        this.result = new FraudResult();
+        this.result.status = builder.resultStatus;
+        this.result.requestVersion = builder.requestVersion;
+        this.result.totalFraudScore = builder.totalFraudScore;
+        this.result.recommendationCode = builder.recommendationCode;
+        this.result.accertifyUser = builder.accertifyUser;
+        this.result.accertifyUserCreationDate = builder.accertifyUserCreationDate;
+
     }
 
 
     @Getter
     @ToString
-    public static class FraudResult {
+    @JsonInclude(Include.NON_NULL)
+    private class FraudResult {
 
-        private final String status;
+        private String status;
 
-        private final String orderNumber;
+        private String requestVersion;
 
-        private final long requestVersion;
+        private String totalFraudScore;
 
-        private final String totalFraudScore;
+        private String recommendationCode;
 
-        private final String recommendationCode;
-
-        private final String accertifyUser;
+        private String accertifyUser;
 
         @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss", timezone = "UTC")
-        private final Date accertifyUserCreationTime;
+        private Date accertifyUserCreationDate;
 
-        @JsonCreator
-        public FraudResult(String status, long requestVersion, String totalFraudScore, String orderNumber, String recommendationCode, String accertifyUser, Date
-            accertifyUserCreationTime) {
-            this.status = status;
-            this.requestVersion = requestVersion;
-            this.totalFraudScore = totalFraudScore;
-            this.orderNumber = orderNumber;
-            this.recommendationCode = recommendationCode;
-            this.accertifyUser = accertifyUser;
-            this.accertifyUserCreationTime = accertifyUserCreationTime;
+        private FraudResult() {
         }
     }
+
+
+    public static class Builder {
+
+        private EventTypes eventType;
+
+        private String orderNumber;
+
+        private Date messageCreationDate;
+
+        private String resultStatus;
+
+        private String requestVersion;
+
+        private String totalFraudScore;
+
+        private String recommendationCode;
+
+        private String accertifyUser;
+
+        private Date accertifyUserCreationDate;
+
+
+        public static Builder create(EventTypes eventType, String orderNumber, String requestVersion, String resultStatus) {
+
+            if (eventType == null) {
+                throw new IllegalArgumentException("Input parameter 'eventType' must not be null");
+            }
+
+            if (orderNumber == null || orderNumber.isEmpty()) {
+                throw new IllegalArgumentException("Input parameter 'orderNumber' must not be null or empty");
+            }
+
+            if (requestVersion == null || requestVersion.isEmpty()) {
+                throw new IllegalArgumentException("Input parameter 'requestVersion' must not be null or empty");
+            }
+
+            if (resultStatus == null || resultStatus.isEmpty()) {
+                throw new IllegalArgumentException("Input parameter 'resultStatus' must not be null or empty");
+            }
+
+            Builder builder = new Builder();
+            builder.eventType = eventType;
+            builder.orderNumber = orderNumber;
+            builder.messageCreationDate = new Date();
+            builder.requestVersion = requestVersion;
+            builder.resultStatus = resultStatus;
+            return builder;
+        }
+
+
+        private Builder() {
+        }
+
+
+        public Builder totalFraudScore(String totalFraudScore) {
+            this.totalFraudScore = totalFraudScore;
+            return this;
+        }
+
+        public Builder recommendationCode(String recommendationCode) {
+            this.recommendationCode = recommendationCode;
+            return this;
+        }
+
+        public Builder accertifyUser(String accertifyUser) {
+            this.accertifyUser = accertifyUser;
+            return this;
+        }
+
+        public Builder accertifyUserCreationDate(Date accertifyUserCreationDate) {
+            this.accertifyUserCreationDate = accertifyUserCreationDate;
+            return this;
+        }
+
+
+        public OutboundMessagingEvent build() {
+            return new OutboundMessagingEvent(this);
+        }
+
+    }
+
 
 }
