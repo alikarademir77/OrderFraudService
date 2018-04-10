@@ -11,7 +11,7 @@ import ca.bestbuy.orders.fraud.OrderFraudChannels;
 import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
 
 @Service
-public class FraudOutboundMessageProducingService {
+public class OutboundQueueProducerService {
 
     private OrderFraudChannels channels;
 
@@ -23,7 +23,7 @@ public class FraudOutboundMessageProducingService {
     }
 
     @Autowired
-    public FraudOutboundMessageProducingService(OrderFraudChannels channels) {
+    public OutboundQueueProducerService(OrderFraudChannels channels) {
         Assert.notNull(channels, "Input channels cannot be null");
         this.channels = channels;
     }

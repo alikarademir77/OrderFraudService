@@ -24,7 +24,7 @@ import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles({"dev", "unittest"})
-public class FraudOutboundMessageProducingServiceTest {
+public class OutboundMessageProducerServiceTest {
 
 
     @Autowired
@@ -34,7 +34,7 @@ public class FraudOutboundMessageProducingServiceTest {
     private MessageCollector collector;
 
     @Autowired
-    private FraudOutboundMessageProducingService service;
+    private OutboundQueueProducerService service;
 
     @Test
     public void testProducer_AllFieldsPopulatedInMessage() throws Exception {

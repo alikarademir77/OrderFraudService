@@ -25,7 +25,7 @@ import ca.bestbuy.orders.fraud.flow.FlowStates;
 import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult.FraudResponseStatusCodes;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
-import ca.bestbuy.orders.fraud.service.FraudOutboundMessageProducingService;
+import ca.bestbuy.orders.fraud.service.OutboundQueueProducerService;
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.MessagingEvent;
 import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
@@ -41,7 +41,7 @@ public class OutboundReplyActionTest {
     FraudRequestStatusHistoryRepository repository;
 
     @Mock
-    FraudOutboundMessageProducingService service;
+    OutboundQueueProducerService service;
 
 
     @Test

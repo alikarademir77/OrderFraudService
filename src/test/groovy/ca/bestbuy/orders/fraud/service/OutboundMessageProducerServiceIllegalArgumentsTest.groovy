@@ -3,14 +3,14 @@ package ca.bestbuy.orders.fraud.service
 import ca.bestbuy.orders.fraud.OrderFraudChannels
 import spock.lang.Specification
 
-class FraudOutboundMessageProducingServiceIllegalArgumentsTest extends Specification {
+class OutboundMessageProducerServiceIllegalArgumentsTest extends Specification {
 
 
     def "Test exception is thrown when passing null argument to constructor"() {
 
         when:
 
-        new FraudOutboundMessageProducingService(null)
+        new OutboundQueueProducerService(null)
 
         then:
 
@@ -23,7 +23,7 @@ class FraudOutboundMessageProducingServiceIllegalArgumentsTest extends Specifica
 
         given:
 
-        FraudOutboundMessageProducingService service = new FraudOutboundMessageProducingService(Stub(OrderFraudChannels.class))
+        OutboundQueueProducerService service = new OutboundQueueProducerService(Stub(OrderFraudChannels.class))
 
         when:
 

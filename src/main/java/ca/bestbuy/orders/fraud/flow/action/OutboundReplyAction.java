@@ -17,7 +17,7 @@ import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
 import ca.bestbuy.orders.fraud.flow.FlowStates;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
-import ca.bestbuy.orders.fraud.service.FraudOutboundMessageProducingService;
+import ca.bestbuy.orders.fraud.service.OutboundQueueProducerService;
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.MessagingEvent;
 import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
@@ -25,14 +25,14 @@ import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
 @Component
 public class OutboundReplyAction extends ActionWithException<FlowStates, FlowEvents> {
 
-    private final FraudOutboundMessageProducingService outboundMessageService;
+    private final OutboundQueueProducerService outboundMessageService;
     private final FraudRequestStatusHistoryRepository fraudRequestStatusHistoryRepository;
 
 
     @Autowired
-    public OutboundReplyAction(FraudOutboundMessageProducingService outboundMessageService, FraudRequestStatusHistoryRepository fraudRequestStatusHistoryRepository) {
+    public OutboundReplyAction(OutboundQueueProducerService outboundMessageService, FraudRequestStatusHistoryRepository fraudRequestStatusHistoryRepository) {
 
-        Assert.notNull(outboundMessageService, "FraudOutboundMessageProducingService must not be null");
+        Assert.notNull(outboundMessageService, "OutboundMessageProducerService must not be null");
         Assert.notNull(fraudRequestStatusHistoryRepository, "FraudRequestStatusHistoryRepository must not be null");
 
         this.outboundMessageService = outboundMessageService;
