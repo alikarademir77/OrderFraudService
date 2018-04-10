@@ -47,7 +47,7 @@ public final class OutboundMessagingEvent {
     @Getter
     @ToString
     @JsonInclude(Include.NON_NULL)
-    private class FraudResult {
+    public class FraudResult {
 
         private String status;
 
