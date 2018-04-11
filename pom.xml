@@ -34,8 +34,6 @@
    <spring-statemachine.version>2.0.0.RELEASE</spring-statemachine.version>
 </properties>
 
-
-
 	<dependencies>
 
 		<!--Joda Time -->
@@ -247,7 +245,10 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
+			<!--Use runtime if you want to use H2 DB for local development-->
+			<!--<scope>runtime</scope>-->
 		</dependency>
+
 	</dependencies>
 	<build>
 	<resources>
