@@ -23,7 +23,7 @@ import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles({"dev", "unittest"})
+@ActiveProfiles({"unittest"})
 public class OutboundMessageProducerServiceTest {
 
 

@@ -52,7 +52,7 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
-@ActiveProfiles({"dev","unittest"})
+@ActiveProfiles({"unittest"})
 @DirtiesContext
 public class FlowStateMachineTest {
 

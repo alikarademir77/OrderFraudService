@@ -33,7 +33,7 @@ import ca.bestbuy.orders.fraud.model.jpa.statemachine.FraudStatusEvents;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
-@ActiveProfiles({"dev","unittest"})
+@ActiveProfiles({"unittest"})
 @DirtiesContext
 public class FraudRequestRepositoryTest {
 

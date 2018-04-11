@@ -28,7 +28,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudStatusCodes;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
-@ActiveProfiles({"dev","unittest"})
+@ActiveProfiles({"unittest"})
 @DirtiesContext
 public class FraudStatusRepositoryTest {
 
