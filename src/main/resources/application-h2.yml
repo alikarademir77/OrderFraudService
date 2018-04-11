@@ -5,7 +5,8 @@ spring:
     username: test
     password:
     driverClassName: org.h2.Driver
-    schema: classpath:relationaldb/h2-ddl.sql
+    schema: classpath:relationaldb/h2/h2-ddl.sql
+    data: classpath:relationaldb/h2/h2-data.sql
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
