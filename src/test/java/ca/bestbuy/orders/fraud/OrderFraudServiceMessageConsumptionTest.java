@@ -54,7 +54,7 @@ public class OrderFraudServiceMessageConsumptionTest {
 	@Test
     public void whenSendMessagingEventThenConsumingServiceShouldReceiveSameEvent() throws Exception {
 		MessagingEvent event = new MessagingEvent(
-				EventTypes.FraudCheck,"FSOrder1234", null, "1", new Date());
+				EventTypes.FraudCheck,"FSOrder1234", "1", new Date());
 		ObjectMapper mapper = new ObjectMapper();
 		String msg = mapper.writeValueAsString(event);
 		

@@ -59,7 +59,7 @@ public class CheckRequestExistenceActionTest {
 	public void testExecuteForRequestNotFound(){
 		String orderNumber = "123456";
 		long requestVersion = 1;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 		
 		List<FraudRequest> foundList = Arrays.asList(new FraudRequest[]{null});
@@ -80,7 +80,7 @@ public class CheckRequestExistenceActionTest {
 		String orderNumber = "123456";
 		long requestVersion = 1l;
 		long foundRequestVersion= 2l;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 		
@@ -104,7 +104,7 @@ public class CheckRequestExistenceActionTest {
 	public void testExecuteForSameRequestVersionFound(){
 		String orderNumber = "123456";
 		long requestVersion = 1l;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 		
 		List<FraudRequest> foundList = Arrays.asList(new FraudRequest[]{(

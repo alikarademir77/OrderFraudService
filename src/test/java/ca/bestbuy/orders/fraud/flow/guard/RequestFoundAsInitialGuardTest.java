@@ -47,7 +47,7 @@ public class RequestFoundAsInitialGuardTest {
 		String orderNumber = "123456";
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		FraudRequest foundRequest = new FraudRequest();
@@ -64,7 +64,7 @@ public class RequestFoundAsInitialGuardTest {
 		String orderNumber = "123456";
 		long requestVersion = 1L;
 		long foundRequestVersion = 1L;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		FraudRequest foundRequest = new FraudRequest();
@@ -82,7 +82,7 @@ public class RequestFoundAsInitialGuardTest {
 		String orderNumber = "123456";
 		long requestVersion = 1;
 		long foundRequestVersion = 2L;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		FraudRequest foundRequest = new FraudRequest();

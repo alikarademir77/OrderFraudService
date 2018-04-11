@@ -69,7 +69,7 @@ public class OutboundReplyActionTest {
 
 
     private MessagingEvent createRequestMessage(String orderNumber, String requestVersion, EventTypes eventType) {
-        MessagingEvent messagingEvent = new MessagingEvent(eventType, orderNumber, null, requestVersion, new Date());
+        MessagingEvent messagingEvent = new MessagingEvent(eventType, orderNumber, requestVersion, new Date());
         return messagingEvent;
     }
 

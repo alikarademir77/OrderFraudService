@@ -100,7 +100,7 @@ public class FlowStateMachineTest {
 		long requestVersion = 1;
 		long foundRequestVersion = 2L;
 		
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		doAnswer(new Answer<Void>() {
 
             @Override
@@ -150,7 +150,7 @@ public class FlowStateMachineTest {
 		String orderNumber = "123456";
 		long requestVersion = 1;
 		
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		doAnswer(new Answer<Void>() {
 
             @Override
@@ -205,7 +205,7 @@ public class FlowStateMachineTest {
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
 		
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		doAnswer(new Answer<Void>() {
 
             @Override
@@ -260,7 +260,7 @@ public class FlowStateMachineTest {
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
 		
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		doAnswer(new Answer<Void>() {
 
             @Override
@@ -314,7 +314,7 @@ public class FlowStateMachineTest {
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
 		
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		doAnswer(new Answer<Void>() {
 
             @Override

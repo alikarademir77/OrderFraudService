@@ -47,7 +47,7 @@ public class RequestFoundAsReadyForReplyGuardTest {
 		String orderNumber = "123456";
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		FraudRequest foundRequest = new FraudRequest();
@@ -65,7 +65,7 @@ public class RequestFoundAsReadyForReplyGuardTest {
 		String orderNumber = "123456";
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		FraudRequest foundRequest = new FraudRequest();
@@ -83,7 +83,7 @@ public class RequestFoundAsReadyForReplyGuardTest {
 		String orderNumber = "123456";
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		FraudRequest foundRequest = new FraudRequest();
@@ -100,7 +100,7 @@ public class RequestFoundAsReadyForReplyGuardTest {
 		String orderNumber = "123456";
 		long requestVersion = 1;
 		long foundRequestVersion = 2L;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		FraudRequest foundRequest = new FraudRequest();
@@ -116,7 +116,7 @@ public class RequestFoundAsReadyForReplyGuardTest {
 	public void testEvaluateForRequestNotFound(){
 		String orderNumber = "123456";
 		long requestVersion = 1;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		when(context.getExtendedState().getVariables().get(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT)).thenReturn(Arrays.asList(new FraudRequest[]{null}));
