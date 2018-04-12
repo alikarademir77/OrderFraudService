@@ -279,7 +279,7 @@
 							<library>resttemplate</library>
 							<generateApis>false</generateApis>
 							<generateSupportingFiles>false</generateSupportingFiles>
-							<generateModelDocumentation>true</generateModelDocumentation>
+							<generateModelDocumentation>false</generateModelDocumentation>
 							<modelPackage>ca.bestbuy.orders.fraud.model.client.generated.orderdetails.swagger</modelPackage>
 							<output>.</output>
 						</configuration>
@@ -299,7 +299,7 @@
 							<library>resttemplate</library>
 							<generateApis>false</generateApis>
 							<generateSupportingFiles>false</generateSupportingFiles>
-							<generateModelDocumentation>true</generateModelDocumentation>
+							<generateModelDocumentation>false</generateModelDocumentation>
 							<modelPackage>ca.bestbuy.orders.fraud.callback.model.swagger.api</modelPackage>
 							<output>.</output>
 						</configuration>
