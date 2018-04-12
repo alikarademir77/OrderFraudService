@@ -76,6 +76,7 @@ spring:
 messaging:
   errorRetryCount: 3
   outbound:
+    retry-attempts: 3 # Default: 0
     timeout: 10000 # (ms)
 
 logging:
