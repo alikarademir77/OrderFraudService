@@ -56,9 +56,6 @@ public class OutboundReplyAction extends ActionWithException<FlowStates, FlowEve
 
         // Send outbound message
         outboundMessageService.sendOutboundMessage(outboundMessage);
-
-        // TODO: Exception handling for service call to send message to queue
-
     }
 
 
