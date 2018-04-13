@@ -96,4 +96,43 @@ class OutboundMessagingEventTest extends Specification {
     }
 
 
+    def "Test object was created successfully using builder"() {
+
+        given:
+
+        EventTypes expectedEventType = EventTypes.FraudCheck
+        String expectedOrderNumber = "1234"
+        String expectedRequestVersion = "1"
+        String expectedResultStatus = "ACCEPTED"
+        String expectedTotalFraudScore = "1000"
+        String expectedRecommendationCode = "1:Accept"
+        String expectedAccertifyUser = "User"
+        Date expectedAccertifyUserCreationDate = new Date()
+
+
+        OutboundMessagingEvent.Builder builder = OutboundMessagingEvent.Builder.create(expectedEventType, expectedOrderNumber, expectedRequestVersion, expectedResultStatus)
+
+        builder.totalFraudScore(expectedTotalFraudScore)
+        builder.recommendationCode(expectedRecommendationCode)
+        builder.accertifyUser(expectedAccertifyUser)
+        builder.accertifyUserCreationDate(expectedAccertifyUserCreationDate)
+
+        when:
+
+        OutboundMessagingEvent messagingEvent = builder.build()
+
+        then:
+
+        messagingEvent.getType() == expectedEventType
+        messagingEvent.getOrderNumber() == expectedOrderNumber
+        messagingEvent.getMessageCreationDate() != null
+        messagingEvent.getResult() != null
+        messagingEvent.getResult().getStatus() == expectedResultStatus
+        messagingEvent.getResult().getTotalFraudScore() == expectedTotalFraudScore
+        messagingEvent.getResult().getRequestVersion() == expectedRequestVersion
+        messagingEvent.getResult().getRecommendationCode() == expectedRecommendationCode
+        messagingEvent.getResult().getAccertifyUser() == expectedAccertifyUser
+        messagingEvent.getResult().getAccertifyUserCreationDate() == expectedAccertifyUserCreationDate
+    }
+
 }
