@@ -20,6 +20,9 @@ spring:
     admin:
       client:
         enabled: true
+        health-url: http://localhost:${server.port}/${server.contextPath}/health
+        management-url: http://localhost:${server.port}/${server.contextPath}
+        service-url: http://localhost:${server.port}/${server.contextPath}/swagger-ui.html
       url: http://localhost:8100
       username: admin
       password: admin
@@ -29,8 +32,8 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username: guest
-    password: guest
+    username: orders
+    password: orders
     virtual-host: orders
   cloud:
     stream:
