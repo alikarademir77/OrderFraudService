@@ -25,14 +25,12 @@ import lombok.experimental.Accessors;
 public final class MessagingEvent {
 	private final EventTypes type;
 	private final String orderNumber;
-	private final String purchaseOrderNumber;
 	private final String requestVersion;
 	private final Date messageCreationDate;
 	
 	/**
 	 * @param type
 	 * @param orderNumber
-	 * @param purchaseOrderNumber
 	 * @param requestVersion
 	 * @param messageCreationDate
 	 */
@@ -42,16 +40,13 @@ public final class MessagingEvent {
 			final EventTypes type,
 			@JsonProperty("orderNumber")
 			final String orderNumber,
-			@JsonProperty("purchaseOrderNumber")
-			final String purchaseOrderNumber,
 			@JsonProperty("requestVersion")
 			final String requestVersion,
 			@JsonProperty("messageCreationDate")
-			@JsonFormat(pattern = "dd/mm/yyyy hh:mm:ss", timezone="UTC")
+			@JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss", timezone="UTC")
 			final Date messageCreationDate){
 		this.type = type;
 		this.orderNumber = orderNumber;
-		this.purchaseOrderNumber = purchaseOrderNumber;
 		this.requestVersion = requestVersion;
 		this.messageCreationDate = messageCreationDate;
 	}

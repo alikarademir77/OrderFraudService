@@ -4,7 +4,7 @@
 package ca.bestbuy.orders.fraud.flow.action;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -40,7 +40,7 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
-@ActiveProfiles({"dev","unittest"})
+@ActiveProfiles({"unittest"})
 @DirtiesContext
 public class CheckRequestExistenceActionTest {
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
@@ -53,14 +53,14 @@ public class CheckRequestExistenceActionTest {
 	CheckRequestExistenceAction checkRequestExistenceAction;
 	
 	@Autowired
-	CreateInitialRequestAcion createInitialRequestAcion;
+    CreateInitialRequestAction createInitialRequestAction;
 	
 	@Test
 	public void testExecuteForRequestNotFound(){
 		String orderNumber = "123456";
 		long requestVersion = 1;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
-		when(context.getMessageHeader(KEYS.MESSAGING_KEY)).thenReturn(event);
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
+		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 		
 		List<FraudRequest> foundList = Arrays.asList(new FraudRequest[]{null});
 		when(fraudRequestRepository.findByOrderNumberAndRequestVersionGTE(new BigDecimal(orderNumber), requestVersion)).thenReturn(foundList);
@@ -68,7 +68,7 @@ public class CheckRequestExistenceActionTest {
 		ArgumentCaptor<List> requestListArgumentCaptor =
 				(ArgumentCaptor<List>) ArgumentCaptor.forClass(List.class);
 
-		when(context.getExtendedState().getVariables().put(anyString(), requestListArgumentCaptor.capture())).thenReturn(null);
+		when(context.getExtendedState().getVariables().put(eq(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT), requestListArgumentCaptor.capture())).thenReturn(null);
 		checkRequestExistenceAction.execute(context);
 		
 		List<FraudRequest> capturedList = requestListArgumentCaptor.getValue();
@@ -80,8 +80,9 @@ public class CheckRequestExistenceActionTest {
 		String orderNumber = "123456";
 		long requestVersion = 1l;
 		long foundRequestVersion= 2l;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
-		when(context.getMessageHeader(KEYS.MESSAGING_KEY)).thenReturn(event);
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
+
+		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 		
 		List<FraudRequest> foundList = Arrays.asList(new FraudRequest[]{(
 				new FraudRequest()
@@ -92,7 +93,7 @@ public class CheckRequestExistenceActionTest {
 		ArgumentCaptor<List> requestListArgumentCaptor =
 				(ArgumentCaptor<List>) ArgumentCaptor.forClass(List.class);
 
-		when(context.getExtendedState().getVariables().put(anyString(), requestListArgumentCaptor.capture())).thenReturn(null);
+		when(context.getExtendedState().getVariables().put(eq(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT), requestListArgumentCaptor.capture())).thenReturn(null);
 		checkRequestExistenceAction.execute(context);
 		
 		List<FraudRequest> capturedList = requestListArgumentCaptor.getValue();
@@ -103,8 +104,8 @@ public class CheckRequestExistenceActionTest {
 	public void testExecuteForSameRequestVersionFound(){
 		String orderNumber = "123456";
 		long requestVersion = 1l;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
-		when(context.getMessageHeader(KEYS.MESSAGING_KEY)).thenReturn(event);
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
+		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 		
 		List<FraudRequest> foundList = Arrays.asList(new FraudRequest[]{(
 				new FraudRequest()
@@ -115,7 +116,7 @@ public class CheckRequestExistenceActionTest {
 		ArgumentCaptor<List> requestListArgumentCaptor =
 				(ArgumentCaptor<List>) ArgumentCaptor.forClass(List.class);
 
-		when(context.getExtendedState().getVariables().put(anyString(), requestListArgumentCaptor.capture())).thenReturn(null);
+		when(context.getExtendedState().getVariables().put(eq(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT), requestListArgumentCaptor.capture())).thenReturn(null);
 		checkRequestExistenceAction.execute(context);
 		
 		List<FraudRequest> capturedList = requestListArgumentCaptor.getValue();

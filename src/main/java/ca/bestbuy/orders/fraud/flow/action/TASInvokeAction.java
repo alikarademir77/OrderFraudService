@@ -7,8 +7,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateContext;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +14,6 @@ import ca.bestbuy.orders.fraud.client.orderdetails.OrderDetailsClient;
 import ca.bestbuy.orders.fraud.client.tas.FraudServiceTASClient;
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
 import ca.bestbuy.orders.fraud.flow.FlowEvents;
-import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
 import ca.bestbuy.orders.fraud.flow.FlowStates;
 import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentRequest;
@@ -58,7 +55,10 @@ public class TASInvokeAction  extends ActionWithException<FlowStates, FlowEvents
 	 */
 	@Override
 	protected void doExecute(StateContext<FlowStates, FlowEvents> context) throws Exception {
-		MessagingEvent messagingEvent = (MessagingEvent) context.getMessageHeader(KEYS.MESSAGING_KEY);
+
+		// Get request from state machine's extended state
+		MessagingEvent messagingEvent = (MessagingEvent) context.getExtendedState().getVariables().get(KEYS.REQUEST);
+
 		String orderNumber = messagingEvent.getOrderNumber();
 		String requestVersion = messagingEvent.getRequestVersion();
 
@@ -120,12 +120,7 @@ public class TASInvokeAction  extends ActionWithException<FlowStates, FlowEvents
 	 * @param messagingEvent
 	 */
 	private void sendFraudCheckEvent(StateContext<FlowStates, FlowEvents> context, MessagingEvent messagingEvent) {
-		Message<FlowEvents> message = MessageBuilder
-				.withPayload(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
-				.setHeader(FlowStateMachineConfig.KEYS.MESSAGING_KEY, messagingEvent)
-				.build();
-		
-		context.getStateMachine().sendEvent(message);
+		context.getStateMachine().sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT);
 	}
 
 	/**

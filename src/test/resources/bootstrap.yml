@@ -1,0 +1,7 @@
+### UNIT TESTS ###
+### Note: This overrides the bootstrap.yml in the src/main/resources
+
+spring:
+  cloud:
+    config:
+      enabled: false

@@ -42,29 +42,29 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
-@ActiveProfiles({"dev","unittest"})
+@ActiveProfiles({"unittest"})
 @DirtiesContext
-public class RequestOutdatedAcionTest {
+public class RequestOutdatedActionTest {
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	StateContext<FlowStates, FlowEvents> context;
 	
 	@Mock
-	RequestOutdatedAcion requestOutdatedAcionMock;
+	RequestOutdatedAction requestOutdatedActionMock;
 	
 	@Test
 	public void testExecute(){
 		String orderNumber = "123456";
 		long requestVersion = 1;
 		long foundRequestVersion = 2l;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
-		when(context.getMessageHeader(KEYS.MESSAGING_KEY)).thenReturn(event);
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
+		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 
 		FraudRequest foundRequest = new FraudRequest();
 		foundRequest.setOrderNumber(new BigDecimal(orderNumber));
 		foundRequest.setRequestVersion(foundRequestVersion);
 		when(context.getExtendedState().getVariables().get(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT)).thenReturn(Arrays.asList(new FraudRequest[]{foundRequest}));
 		
-		doCallRealMethod().when(requestOutdatedAcionMock).execute(any(StateContext.class));
+		doCallRealMethod().when(requestOutdatedActionMock).execute(any(StateContext.class));
 		doAnswer(new Answer<Void>() {
 
 			@Override
@@ -78,10 +78,10 @@ public class RequestOutdatedAcionTest {
                 return null;
             }
 			
-		}).when(requestOutdatedAcionMock).logMessage(orderNumber, String.valueOf(requestVersion), String.valueOf(foundRequestVersion));
+		}).when(requestOutdatedActionMock).logMessage(orderNumber, String.valueOf(requestVersion), String.valueOf(foundRequestVersion));
 
 		
-		requestOutdatedAcionMock.execute(context);
-		verify(requestOutdatedAcionMock, times(1)).logMessage(anyString(), anyString(), anyString());
+		requestOutdatedActionMock.execute(context);
+		verify(requestOutdatedActionMock, times(1)).logMessage(anyString(), anyString(), anyString());
 	}
 }

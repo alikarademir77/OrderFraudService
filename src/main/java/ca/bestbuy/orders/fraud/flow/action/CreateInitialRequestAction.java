@@ -7,15 +7,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateContext;
 import org.springframework.stereotype.Component;
 
 import ca.bestbuy.orders.fraud.dao.FraudRequestRepository;
 import ca.bestbuy.orders.fraud.dao.FraudRequestTypeRepository;
 import ca.bestbuy.orders.fraud.flow.FlowEvents;
-import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
 import ca.bestbuy.orders.fraud.flow.FlowStates;
 import ca.bestbuy.orders.fraud.model.jpa.FraudRequest;
@@ -24,7 +21,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 import ca.bestbuy.orders.messaging.MessagingEvent;
 
 @Component
-public class CreateInitialRequestAcion extends ActionWithException<FlowStates, FlowEvents> {
+public class CreateInitialRequestAction extends ActionWithException<FlowStates, FlowEvents> {
 
 	private final String userName;
 	
@@ -32,7 +29,7 @@ public class CreateInitialRequestAcion extends ActionWithException<FlowStates, F
 	private final FraudRequestTypeRepository typeRepository;
 	
 	@Autowired
-	public CreateInitialRequestAcion(
+	public CreateInitialRequestAction(
 			FraudRequestRepository fraudRequestRepository,
 			FraudRequestTypeRepository typeRepository,
 			@Value("${spring.datasource.username}") 
@@ -48,15 +45,13 @@ public class CreateInitialRequestAcion extends ActionWithException<FlowStates, F
 	 */
 	@Override
 	protected void doExecute(StateContext<FlowStates, FlowEvents> context) throws Exception {
-		MessagingEvent messagingEvent = (MessagingEvent) context.getMessageHeader(KEYS.MESSAGING_KEY);
+
+		MessagingEvent messagingEvent = (MessagingEvent) context.getExtendedState().getVariables().get(KEYS.REQUEST);
+
 		createNewFraudRequest(messagingEvent);
-		
-		Message<FlowEvents> message = MessageBuilder
-				.withPayload(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
-				.setHeader(FlowStateMachineConfig.KEYS.MESSAGING_KEY, messagingEvent)
-				.build();
-		
-		context.getStateMachine().sendEvent(message);
+
+		context.getStateMachine().sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT);
+
 	}
 
 	/* (non-Javadoc)

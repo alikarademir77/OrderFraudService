@@ -2,14 +2,37 @@ spring:
   application:
     name: order-fraud-service
 
+---
+### DEVELOPMENT ###
+
+spring:
+  profiles: dev
+  cloud:
+    config:
+      enabled: false
+
+management.security.enabled: false
+
+---
+### CI ###
+
+spring:
+  profiles: ci
   cloud:
     config:
       enabled: true
-      # Openshift Config server url
       uri: http://config-service-ecomm-orders-team.dev-ocp.ca.bestbuy.com
-      # Git branch to use for the backing config server configurations git repository
       label: master
 
-# TODO remove - this allows access to all spring boot actuator endpoints
 management.security.enabled: false
 
+---
+### PRODUCTION ###
+
+spring:
+  profiles: production
+  cloud:
+    config:
+      enabled: false # TODO - Change once we have production details
+      uri: ~ # TODO - Change once we have production details
+      label: master

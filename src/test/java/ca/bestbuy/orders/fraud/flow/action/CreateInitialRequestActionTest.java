@@ -40,9 +40,9 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
-@ActiveProfiles({"dev","unittest"})
+@ActiveProfiles({"unittest"})
 @DirtiesContext
-public class CreateInitialRequestAcionTest {
+public class CreateInitialRequestActionTest {
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	StateContext<FlowStates, FlowEvents> context;
 
@@ -50,15 +50,15 @@ public class CreateInitialRequestAcionTest {
 	FraudRequestRepository fraudRequestRepository;
 	
 	@Autowired
-	CreateInitialRequestAcion action;
+	CreateInitialRequestAction action;
 	
 	@Test
 	@Transactional
 	public void testExecuteForNewRecordCreated(){
 		String orderNumber = "123456";
 		long requestVersion = 1;
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
-		when(context.getMessageHeader(KEYS.MESSAGING_KEY)).thenReturn(event);
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
+		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 		
 		action.execute(context);
 		

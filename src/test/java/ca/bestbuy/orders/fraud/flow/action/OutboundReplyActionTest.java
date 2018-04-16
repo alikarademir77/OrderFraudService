@@ -1,26 +1,107 @@
-/**
- * 
- */
 package ca.bestbuy.orders.fraud.flow.action;
 
-import org.junit.Ignore;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
+import org.mockito.Answers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.springframework.statemachine.StateContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ca.bestbuy.orders.fraud.OrderFraudServiceApplication;
+import ca.bestbuy.orders.fraud.dao.FraudRequestStatusHistoryRepository;
+import ca.bestbuy.orders.fraud.flow.FlowEvents;
+import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
+import ca.bestbuy.orders.fraud.flow.FlowStates;
+import ca.bestbuy.orders.fraud.model.internal.FraudAssessmentResult.FraudResponseStatusCodes;
+import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistory;
+import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
+import ca.bestbuy.orders.fraud.service.OutboundQueueProducerService;
+import ca.bestbuy.orders.messaging.EventTypes;
+import ca.bestbuy.orders.messaging.MessagingEvent;
+import ca.bestbuy.orders.messaging.model.FraudResult;
+import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
 
-/**
- * @author akaradem
- *
- */
+
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = OrderFraudServiceApplication.class)
-@ActiveProfiles({"dev","unittest"})
-@DirtiesContext
-@Ignore//Implement once the action is implemented
 public class OutboundReplyActionTest {
+
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    StateContext<FlowStates, FlowEvents> context;
+
+    @Mock
+    FraudRequestStatusHistoryRepository repository;
+
+    @Mock
+    OutboundQueueProducerService service;
+
+
+    @Test
+    public void testDoExecute() throws Exception {
+
+        OutboundReplyAction action = new OutboundReplyAction(service, repository);
+
+        when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(createRequestMessage("1234", "1", EventTypes.FraudCheck));
+
+        when(repository.findByFraudRequestOrderNumberAndFraudRequestRequestVersion(any(), anyLong(), any())).thenReturn(createFraudRequestStatusHistories(3));
+
+        action.doExecute(context);
+
+        ArgumentCaptor<OutboundMessagingEvent> argumentCaptor = ArgumentCaptor.forClass(OutboundMessagingEvent.class);
+        verify(service).sendOutboundMessage(argumentCaptor.capture());
+
+        Assert.assertEquals(argumentCaptor.getValue().getType(), EventTypes.FraudCheck);
+        Assert.assertEquals(argumentCaptor.getValue().getOrderNumber(), "1234");
+        Assert.assertEquals(((FraudResult)argumentCaptor.getValue().getResult()).getStatus(), FraudResponseStatusCodes.ACCEPTED.name());
+        Assert.assertEquals(((FraudResult)argumentCaptor.getValue().getResult()).getAccertifyUser(), "user");
+        Assert.assertEquals(((FraudResult)argumentCaptor.getValue().getResult()).getTotalFraudScore(), "1000");
+        Assert.assertEquals(((FraudResult)argumentCaptor.getValue().getResult()).getRecommendationCode(), "9080");
+        Assert.assertEquals(argumentCaptor.getValue().getRequestVersion(), "1");
+    }
+
+
+    private MessagingEvent createRequestMessage(String orderNumber, String requestVersion, EventTypes eventType) {
+        MessagingEvent messagingEvent = new MessagingEvent(eventType, requestVersion, orderNumber, new Date());
+        return messagingEvent;
+    }
+
+
+    private List<FraudRequestStatusHistory> createFraudRequestStatusHistories(int numberOfItems) {
+        List<FraudRequestStatusHistory> list = new ArrayList<>();
+
+        for(long i = 1; i <= numberOfItems; i++) {
+            list.add(createFraudRequestStatusHistory(i));
+        }
+
+        return list;
+    }
+
+
+    private FraudRequestStatusHistory createFraudRequestStatusHistory(Long id) {
+
+        FraudRequestStatusHistory statusHistory = new FraudRequestStatusHistory();
+        statusHistory.setFraudRequestStatusHistoryId(id);
+
+        FraudRequestStatusHistoryDetail details = new FraudRequestStatusHistoryDetail();
+        details.setAccertifyUser("user");
+        details.setTotalFraudScore("1000");
+        details.setRecommendationCode("9080");
+        details.setFraudResponseStatusCode(FraudResponseStatusCodes.ACCEPTED);
+
+        statusHistory.setFraudRequestStatusHistoryDetail(details);
+
+        return statusHistory;
+    }
+
+
 
 }

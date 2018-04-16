@@ -159,4 +159,6 @@ Servers/
 
 # OSX files
 .DS_Store
-src/main/java/ca/bestbuy/orders/fraud/model/client/accertify/wsdl/
+
+### Application ###
+src/main/java/ca/bestbuy/orders/fraud/model/client/generated

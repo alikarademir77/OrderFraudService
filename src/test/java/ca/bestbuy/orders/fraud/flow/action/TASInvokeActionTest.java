@@ -52,7 +52,7 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
-@ActiveProfiles({"dev","unittest"})
+@ActiveProfiles({"unittest"})
 @DirtiesContext
 public class TASInvokeActionTest {
 
@@ -65,7 +65,7 @@ public class TASInvokeActionTest {
 	FraudServiceTASClient  fraudServiceTASClientMock;
 	
 	@Autowired
-	CreateInitialRequestAcion createInitialRequestAcion;
+	CreateInitialRequestAction createInitialRequestAction;
 	
 	@Autowired
 	TASInvokeAction tasInvokeAction;
@@ -166,10 +166,10 @@ public class TASInvokeActionTest {
 	 */
 	private void executeRecordPhase(String orderNumber, long requestVersion,
 			FraudResponseStatusCodes fraudResponseStatusCode) {
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
-		when(context.getMessageHeader(KEYS.MESSAGING_KEY)).thenReturn(event);
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
+		when(context.getExtendedState().getVariables().get(KEYS.REQUEST)).thenReturn(event);
 		
-		createInitialRequestAcion.execute(context);
+		createInitialRequestAction.execute(context);
 		
 		when(orderDetailsClientMock.getOrderDetails(orderNumber)).thenReturn(new Order());		
 		when(fraudServiceTASClientMock.doFraudCheck(any(FraudAssessmentRequest.class))).thenReturn(

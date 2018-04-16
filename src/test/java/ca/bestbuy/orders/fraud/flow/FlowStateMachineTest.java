@@ -22,8 +22,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
@@ -36,9 +34,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ca.bestbuy.orders.fraud.OrderFraudServiceApplication;
 import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
 import ca.bestbuy.orders.fraud.flow.action.CheckRequestExistenceAction;
-import ca.bestbuy.orders.fraud.flow.action.CreateInitialRequestAcion;
+import ca.bestbuy.orders.fraud.flow.action.CreateInitialRequestAction;
 import ca.bestbuy.orders.fraud.flow.action.OutboundReplyAction;
-import ca.bestbuy.orders.fraud.flow.action.RequestOutdatedAcion;
+import ca.bestbuy.orders.fraud.flow.action.RequestOutdatedAction;
 import ca.bestbuy.orders.fraud.flow.action.TASInvokeAction;
 import ca.bestbuy.orders.fraud.flow.guard.RequestFoundAsInitialGuard;
 import ca.bestbuy.orders.fraud.flow.guard.RequestFoundAsReadyForReplyGuard;
@@ -54,18 +52,18 @@ import ca.bestbuy.orders.messaging.MessagingEvent;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderFraudServiceApplication.class)
-@ActiveProfiles({"dev","unittest"})
+@ActiveProfiles({"unittest"})
 @DirtiesContext
 public class FlowStateMachineTest {
 
 	@MockBean
 	CheckRequestExistenceAction checkRequestExistenceAction;
 	
-	@MockBean	
-	RequestOutdatedAcion requestOutdatedAcion;
+	@MockBean
+    RequestOutdatedAction requestOutdatedAction;
 
-	@MockBean	
-	CreateInitialRequestAcion createInitialRequestAcion;
+	@MockBean
+    CreateInitialRequestAction createInitialRequestAction;
 
 	@MockBean	
 	TASInvokeAction tasInvokeAction;
@@ -102,7 +100,7 @@ public class FlowStateMachineTest {
 		long requestVersion = 1;
 		long foundRequestVersion = 2L;
 		
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		doAnswer(new Answer<Void>() {
 
             @Override
@@ -114,18 +112,15 @@ public class FlowStateMachineTest {
                 	FraudRequest request = new FraudRequest();
                 	request.setOrderNumber(new BigDecimal(orderNumber));
                 	request.setRequestVersion(foundRequestVersion);
-                	
+
+                	stateContext.getExtendedState().getVariables().put(KEYS.REQUEST, event);
+
                 	stateContext.getExtendedState().getVariables().put(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT, Arrays.asList(new FraudRequest[]{request}));
                 }
                 return null;
             }
         }).when(checkRequestExistenceAction).execute(any(StateContext.class));
-		
-		Message<FlowEvents> message = MessageBuilder
-				.withPayload(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
-				.setHeader(FlowStateMachineConfig.KEYS.MESSAGING_KEY, event)
-				.build();
-		
+
 		StateMachineTestPlan<FlowStates, FlowEvents> plan =
 				StateMachineTestPlanBuilder.<FlowStates, FlowEvents>builder()
 				.defaultAwaitTime(2)
@@ -134,7 +129,7 @@ public class FlowStateMachineTest {
 					.expectStates(FlowStates.READY)
 					.and()
 				.step()
-					.sendEvent(message)
+					.sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
 					.expectTransition(2)
 					.expectStateEntered(2)
 					.expectStates(FlowStates.READY)
@@ -145,7 +140,7 @@ public class FlowStateMachineTest {
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
 		verify(requestOutdatedGuardSpy, times(1)).evaluate(any(StateContext.class));
-		verify(requestOutdatedAcion, times(1)).execute(any(StateContext.class));
+		verify(requestOutdatedAction, times(1)).execute(any(StateContext.class));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -155,7 +150,7 @@ public class FlowStateMachineTest {
 		String orderNumber = "123456";
 		long requestVersion = 1;
 		
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		doAnswer(new Answer<Void>() {
 
             @Override
@@ -171,11 +166,6 @@ public class FlowStateMachineTest {
             }
         }).when(checkRequestExistenceAction).execute(any(StateContext.class));
 		
-		Message<FlowEvents> message = MessageBuilder
-				.withPayload(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
-				.setHeader(FlowStateMachineConfig.KEYS.MESSAGING_KEY, event)
-				.build();
-		
 		StateMachineTestPlan<FlowStates, FlowEvents> plan =
 				StateMachineTestPlanBuilder.<FlowStates, FlowEvents>builder()
 				.defaultAwaitTime(2)
@@ -184,15 +174,15 @@ public class FlowStateMachineTest {
 					.expectStates(FlowStates.READY)
 					.and()
 				.step()
-					.sendEvent(message)
+					.sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
 					.expectStates(FlowStates.REQUEST_NOTFOUND)
 					.and()
 				.step()
-					.sendEvent(message)
+					.sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
 					.expectStates(FlowStates.INITIAL_REQUEST)
 					.and()
 				.step()
-					.sendEvent(message)
+					.sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
 					.expectStates(FlowStates.READY)
 					.and()
 				.build();
@@ -200,8 +190,8 @@ public class FlowStateMachineTest {
 		plan.test();		
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
-		verify(requestOutdatedAcion, times(0)).execute(any(StateContext.class));
-		verify(createInitialRequestAcion, times(1)).execute(any(StateContext.class));
+		verify(requestOutdatedAction, times(0)).execute(any(StateContext.class));
+		verify(createInitialRequestAction, times(1)).execute(any(StateContext.class));
 		verify(tasInvokeAction, times(1)).execute(any(StateContext.class));
 		verify(outboundReplyAction, times(1)).execute(any(StateContext.class));
 		
@@ -215,7 +205,7 @@ public class FlowStateMachineTest {
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
 		
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		doAnswer(new Answer<Void>() {
 
             @Override
@@ -227,17 +217,14 @@ public class FlowStateMachineTest {
                 	FraudRequest request = new FraudRequest();
                 	request.setOrderNumber(new BigDecimal(orderNumber));
                 	request.setRequestVersion(foundRequestVersion);
-                	
+
+					stateContext.getExtendedState().getVariables().put(KEYS.REQUEST, event);
+
                 	stateContext.getExtendedState().getVariables().put(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT, Arrays.asList(new FraudRequest[]{request}));
                 }
                 return null;
             }
         }).when(checkRequestExistenceAction).execute(any(StateContext.class));
-		
-		Message<FlowEvents> message = MessageBuilder
-				.withPayload(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
-				.setHeader(FlowStateMachineConfig.KEYS.MESSAGING_KEY, event)
-				.build();
 		
 		StateMachineTestPlan<FlowStates, FlowEvents> plan =
 				StateMachineTestPlanBuilder.<FlowStates, FlowEvents>builder()
@@ -247,11 +234,11 @@ public class FlowStateMachineTest {
 					.expectStates(FlowStates.READY)
 					.and()
 				.step()
-					.sendEvent(message)
+					.sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
 					.expectStates(FlowStates.INITIAL_REQUEST)
 					.and()
 				.step()
-					.sendEvent(message)
+					.sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
 					.expectStates(FlowStates.READY)
 					.and()
 				.build();
@@ -259,7 +246,7 @@ public class FlowStateMachineTest {
 		plan.test();		
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
-		verify(createInitialRequestAcion, times(0)).execute(any(StateContext.class));
+		verify(createInitialRequestAction, times(0)).execute(any(StateContext.class));
 		verify(requestFoundAsInitialGuardSpy, times(1)).evaluate(any(StateContext.class));
 		verify(tasInvokeAction, times(1)).execute(any(StateContext.class));
 		verify(outboundReplyAction, times(1)).execute(any(StateContext.class));
@@ -273,7 +260,7 @@ public class FlowStateMachineTest {
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
 		
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		doAnswer(new Answer<Void>() {
 
             @Override
@@ -286,17 +273,14 @@ public class FlowStateMachineTest {
                 	request.setOrderNumber(new BigDecimal(orderNumber));
                 	request.setRequestVersion(foundRequestVersion);
                 	request.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.PENDING_REVIEW_RECEIVED);
-                	
+
+                	stateContext.getExtendedState().getVariables().put(KEYS.REQUEST, event);
+
                 	stateContext.getExtendedState().getVariables().put(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT, Arrays.asList(new FraudRequest[]{request}));
                 }
                 return null;
             }
         }).when(checkRequestExistenceAction).execute(any(StateContext.class));
-		
-		Message<FlowEvents> message = MessageBuilder
-				.withPayload(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
-				.setHeader(FlowStateMachineConfig.KEYS.MESSAGING_KEY, event)
-				.build();
 		
 		StateMachineTestPlan<FlowStates, FlowEvents> plan =
 				StateMachineTestPlanBuilder.<FlowStates, FlowEvents>builder()
@@ -306,7 +290,7 @@ public class FlowStateMachineTest {
 					.expectStates(FlowStates.READY)
 					.and()
 				.step()
-					.sendEvent(message)
+					.sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
 					.expectTransition(2)
 					.expectStateEntered(2)
 					.expectStates(FlowStates.READY)
@@ -317,7 +301,7 @@ public class FlowStateMachineTest {
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
 		verify(requestFoundAsReadyForReplyGuardSpy, times(1)).evaluate(any(StateContext.class));
-		verify(createInitialRequestAcion, times(0)).execute(any(StateContext.class));
+		verify(createInitialRequestAction, times(0)).execute(any(StateContext.class));
 		verify(tasInvokeAction, times(0)).execute(any(StateContext.class));
 		verify(outboundReplyAction, times(1)).execute(any(StateContext.class));
 	}
@@ -330,7 +314,7 @@ public class FlowStateMachineTest {
 		long requestVersion = 1;
 		long foundRequestVersion = 1L;
 		
-		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, null, String.valueOf(requestVersion), new Date());
+		MessagingEvent event = new MessagingEvent(EventTypes.FraudCheck, orderNumber, String.valueOf(requestVersion), new Date());
 		doAnswer(new Answer<Void>() {
 
             @Override
@@ -343,17 +327,14 @@ public class FlowStateMachineTest {
                 	request.setOrderNumber(new BigDecimal(orderNumber));
                 	request.setRequestVersion(foundRequestVersion);
                 	request.getFraudStatusStateMachine().sendEvent(FraudStatusEvents.FINAL_DECISION_RECEIVED);
-                	
+
+					stateContext.getExtendedState().getVariables().put(KEYS.REQUEST, event);
+
                 	stateContext.getExtendedState().getVariables().put(KEYS.MAX_VERSION_EXISTENCE_CHECK_RESULT, Arrays.asList(new FraudRequest[]{request}));
                 }
                 return null;
             }
         }).when(checkRequestExistenceAction).execute(any(StateContext.class));
-		
-		Message<FlowEvents> message = MessageBuilder
-				.withPayload(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
-				.setHeader(FlowStateMachineConfig.KEYS.MESSAGING_KEY, event)
-				.build();
 		
 		StateMachineTestPlan<FlowStates, FlowEvents> plan =
 				StateMachineTestPlanBuilder.<FlowStates, FlowEvents>builder()
@@ -363,7 +344,7 @@ public class FlowStateMachineTest {
 					.expectStates(FlowStates.READY)
 					.and()
 				.step()
-					.sendEvent(message)
+					.sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
 					.expectTransition(2)
 					.expectStateEntered(2)
 					.expectStates(FlowStates.READY)
@@ -374,7 +355,7 @@ public class FlowStateMachineTest {
 		
 		verify(checkRequestExistenceAction, times(1)).execute(any(StateContext.class));
 		verify(requestFoundAsReadyForReplyGuardSpy, times(1)).evaluate(any(StateContext.class));
-		verify(createInitialRequestAcion, times(0)).execute(any(StateContext.class));
+		verify(createInitialRequestAction, times(0)).execute(any(StateContext.class));
 		verify(tasInvokeAction, times(0)).execute(any(StateContext.class));
 		verify(outboundReplyAction, times(1)).execute(any(StateContext.class));
 		

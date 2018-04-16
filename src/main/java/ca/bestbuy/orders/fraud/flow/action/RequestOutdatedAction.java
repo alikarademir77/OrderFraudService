@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
-public class RequestOutdatedAcion implements Action<FlowStates, FlowEvents> {
+public class RequestOutdatedAction implements Action<FlowStates, FlowEvents> {
 
 	/* (non-Javadoc)
 	 * @see org.springframework.statemachine.action.Action#execute(org.springframework.statemachine.StateContext)
@@ -30,7 +30,9 @@ public class RequestOutdatedAcion implements Action<FlowStates, FlowEvents> {
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void execute(StateContext<FlowStates, FlowEvents> context) {
-		MessagingEvent messagingEvent = (MessagingEvent) context.getMessageHeader(KEYS.MESSAGING_KEY);
+
+		// Get request from state machine's extended state
+		MessagingEvent messagingEvent = (MessagingEvent) context.getExtendedState().getVariables().get(KEYS.REQUEST);
 
 		String orderNumber = messagingEvent.getOrderNumber();
 		String requestVersion = messagingEvent.getRequestVersion();

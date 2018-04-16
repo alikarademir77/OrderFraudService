@@ -7,18 +7,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.access.StateMachineAccess;
-import org.springframework.statemachine.access.StateMachineFunction;
 import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.support.StateMachineInterceptor;
 import org.springframework.statemachine.support.StateMachineInterceptorAdapter;
 import org.springframework.stereotype.Service;
 
 import ca.bestbuy.orders.fraud.flow.FlowEvents;
-import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig;
+import ca.bestbuy.orders.fraud.flow.FlowStateMachineConfig.KEYS;
 import ca.bestbuy.orders.fraud.flow.FlowStates;
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.MessageConsumingService;
@@ -49,23 +45,19 @@ public class FraudInboundMessageConsumingService implements MessageConsumingServ
 		validateEvent(event);
 		
 		if(EventTypes.FraudCheck.equals(event.getType())){
-			
-			Message<FlowEvents> message = MessageBuilder
-					.withPayload(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT)
-					.setHeader(FlowStateMachineConfig.KEYS.MESSAGING_KEY, event)
-					.build();
-			
+
+			// Create state machine
 			StateMachine<FlowStates, FlowEvents> flowStateMachine = flowStateMachineFactory.getStateMachine("FlowSM_"+Thread.currentThread().getId());
 
-			flowStateMachine.getStateMachineAccessor()
-					.doWithRegion(new StateMachineFunction<StateMachineAccess<FlowStates, FlowEvents>>() {
-						@Override
-						public void apply(StateMachineAccess<FlowStates, FlowEvents> function) {
-							function.addStateMachineInterceptor(errorHandler(event));
-						}
-					});
+			// Make request available in state machine's extended state
+			flowStateMachine.getExtendedState().getVariables().put(KEYS.REQUEST, event);
 
-			flowStateMachine.sendEvent(message);	
+			flowStateMachine.getStateMachineAccessor()
+					.doWithRegion(function -> function.addStateMachineInterceptor(errorHandler(event)));
+
+			// Send RECEIVED FRAUD CHECK MESSAGING event
+			flowStateMachine.sendEvent(FlowEvents.RECEIVED_FRAUD_CHECK_MESSAGING_EVENT);
+
 			if(flowStateMachine.hasStateMachineError()){
 				throw (Exception) flowStateMachine.getExtendedState().getVariables().get("ERROR");
 			}
