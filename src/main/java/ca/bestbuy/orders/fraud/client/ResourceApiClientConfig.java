@@ -74,9 +74,5 @@ public class ResourceApiClientConfig implements WebClientConfig {
         return getTlsEnabled();
     }
 
-    @Bean
-    protected RestTemplate restTemplate() {
-        return WebClientUtility.createRestTemplate(this);
-    }
 
 }

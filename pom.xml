@@ -265,6 +265,7 @@
 				<version>2.2.3</version>
 				<executions>
 					<execution>
+						<id>generate-order-details-client</id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>generate</goal>
@@ -278,11 +279,32 @@
 							<library>resttemplate</library>
 							<generateApis>false</generateApis>
 							<generateSupportingFiles>false</generateSupportingFiles>
-							<generateModelDocumentation>true</generateModelDocumentation>
+							<generateModelDocumentation>false</generateModelDocumentation>
 							<modelPackage>ca.bestbuy.orders.fraud.model.client.generated.orderdetails.swagger</modelPackage>
 							<output>.</output>
 						</configuration>
 					</execution>
+					<execution>
+						<id>generate-fraud-callback</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<configOptions>
+								<sourceFolder>src/main/java</sourceFolder>
+							</configOptions>
+							<inputSpec>src/main/resources/swagger/order-fraud-callback-service-swagger.json</inputSpec>
+							<language>java</language>
+							<library>resttemplate</library>
+							<generateApis>false</generateApis>
+							<generateSupportingFiles>false</generateSupportingFiles>
+							<generateModelDocumentation>false</generateModelDocumentation>
+							<modelPackage>ca.bestbuy.orders.fraud.callback.model.swagger.api</modelPackage>
+							<output>.</output>
+						</configuration>
+					</execution>
+
 				</executions>
 			</plugin>
 
