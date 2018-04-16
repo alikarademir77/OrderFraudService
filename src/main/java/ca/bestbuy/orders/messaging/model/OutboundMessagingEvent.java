@@ -19,9 +19,11 @@ public final class OutboundMessagingEvent {
 
     private EventTypes type;
 
+    private String requestVersion;
+
     private String orderNumber;
 
-    @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss", timezone = "UTC")
+    @JsonFormat(timezone = "UTC")
     private Date messageCreationDate;
 
     private FraudResult result;
@@ -30,12 +32,12 @@ public final class OutboundMessagingEvent {
     private OutboundMessagingEvent(Builder builder) {
 
         this.type = builder.eventType;
+        this.requestVersion = builder.requestVersion;
         this.orderNumber = builder.orderNumber;
         this.messageCreationDate = builder.messageCreationDate;
 
         this.result = new FraudResult();
         this.result.status = builder.resultStatus;
-        this.result.requestVersion = builder.requestVersion;
         this.result.totalFraudScore = builder.totalFraudScore;
         this.result.recommendationCode = builder.recommendationCode;
         this.result.accertifyUser = builder.accertifyUser;
@@ -50,8 +52,6 @@ public final class OutboundMessagingEvent {
     public class FraudResult {
 
         private String status;
-
-        private String requestVersion;
 
         private String totalFraudScore;
 

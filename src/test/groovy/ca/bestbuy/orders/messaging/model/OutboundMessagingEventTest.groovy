@@ -124,12 +124,12 @@ class OutboundMessagingEventTest extends Specification {
         then:
 
         messagingEvent.getType() == expectedEventType
+        messagingEvent.getRequestVersion() == expectedRequestVersion
         messagingEvent.getOrderNumber() == expectedOrderNumber
         messagingEvent.getMessageCreationDate() != null
         messagingEvent.getResult() != null
         messagingEvent.getResult().getStatus() == expectedResultStatus
         messagingEvent.getResult().getTotalFraudScore() == expectedTotalFraudScore
-        messagingEvent.getResult().getRequestVersion() == expectedRequestVersion
         messagingEvent.getResult().getRecommendationCode() == expectedRecommendationCode
         messagingEvent.getResult().getAccertifyUser() == expectedAccertifyUser
         messagingEvent.getResult().getAccertifyUserCreationDate() == expectedAccertifyUserCreationDate

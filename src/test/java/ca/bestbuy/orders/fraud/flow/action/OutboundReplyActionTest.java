@@ -64,7 +64,7 @@ public class OutboundReplyActionTest {
         Assert.assertEquals(argumentCaptor.getValue().getResult().getAccertifyUser(), "user");
         Assert.assertEquals(argumentCaptor.getValue().getResult().getTotalFraudScore(), "1000");
         Assert.assertEquals(argumentCaptor.getValue().getResult().getRecommendationCode(), "9080");
-        Assert.assertEquals(argumentCaptor.getValue().getResult().getRequestVersion(), "1");
+        Assert.assertEquals(argumentCaptor.getValue().getRequestVersion(), "1");
     }
 
 

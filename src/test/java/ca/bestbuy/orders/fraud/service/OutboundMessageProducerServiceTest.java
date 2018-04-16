@@ -47,8 +47,8 @@ public class OutboundMessageProducerServiceTest {
         // Send message
         service.sendOutboundMessage(message);
 
-        Matcher<String> matcher1 = Matchers.containsString("{\"type\":\"FraudCheck\",\"orderNumber\":\"1234\",\"messageCreationDate\":\"");
-        Matcher<String> matcher2 = Matchers.containsString("\"result\":{\"status\":\"SUCCESS\",\"requestVersion\":\"1\","
+        Matcher<String> matcher1 = Matchers.containsString("{\"type\":\"FraudCheck\",\"requestVersion\":\"1\",\"orderNumber\":\"1234\",\"messageCreationDate\":\"");
+        Matcher<String> matcher2 = Matchers.containsString("\"result\":{\"status\":\"SUCCESS\","
             + "\"totalFraudScore\":\"5000\",\"recommendationCode\":\"9080\",\"accertifyUser\":\"user\",\"accertifyUserCreationDate\":\"");
 
         Assert.assertThat(messages, MessageQueueMatcher.receivesPayloadThat(Matchers.allOf(matcher1, matcher2)));
@@ -67,8 +67,8 @@ public class OutboundMessageProducerServiceTest {
         // Send message
         service.sendOutboundMessage(message);
 
-        Matcher<String> matcher1 = Matchers.containsString("{\"type\":\"FraudCheck\",\"orderNumber\":\"1234\",\"messageCreationDate\":\"");
-        Matcher<String> matcher2 = Matchers.containsString("\"result\":{\"status\":\"SUCCESS\",\"requestVersion\":\"1\"}}");
+        Matcher<String> matcher1 = Matchers.containsString("{\"type\":\"FraudCheck\",\"requestVersion\":\"1\",\"orderNumber\":\"1234\",\"messageCreationDate\":\"");
+        Matcher<String> matcher2 = Matchers.containsString("\"result\":{\"status\":\"SUCCESS\"}}");
 
         Assert.assertThat(messages, MessageQueueMatcher.receivesPayloadThat(Matchers.allOf(matcher1, matcher2)));
     }
