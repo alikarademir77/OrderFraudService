@@ -161,5 +161,4 @@ Servers/
 .DS_Store
 
 ### Application ###
-src/main/java/ca/bestbuy/orders/fraud/model/client/generated/
-docs/
+src/main/java/ca/bestbuy/orders/fraud/model/client/generated

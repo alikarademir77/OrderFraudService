@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import ca.bestbuy.orders.fraud.OrderFraudChannels;
 import ca.bestbuy.orders.messaging.EventTypes;
+import ca.bestbuy.orders.messaging.model.FraudResult;
 import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
 
 
@@ -42,7 +43,14 @@ public class OutboundMessageProducerServiceTest {
         BlockingQueue<Message<?>> messages = collector.forChannel(channels.fraudOutbound());
 
         // Create message
-        OutboundMessagingEvent message = OutboundMessagingEvent.Builder.create(EventTypes.FraudCheck, "1234", "1", "SUCCESS").totalFraudScore("5000").recommendationCode("9080").accertifyUser("user").accertifyUserCreationDate(new Date()).build();
+        FraudResult result = FraudResult.Builder.create("SUCCESS")
+            .totalFraudScore("5000")
+            .recommendationCode("9080")
+            .accertifyUser("user")
+            .accertifyUserCreationDate(new Date())
+            .build();
+
+        OutboundMessagingEvent message = new OutboundMessagingEvent(EventTypes.FraudCheck, "1", "1234", result);
 
         // Send message
         service.sendOutboundMessage(message);
@@ -62,7 +70,10 @@ public class OutboundMessageProducerServiceTest {
         BlockingQueue<Message<?>> messages = collector.forChannel(channels.fraudOutbound());
 
         // Create message
-        OutboundMessagingEvent message = OutboundMessagingEvent.Builder.create(EventTypes.FraudCheck, "1234", "1", "SUCCESS").build();
+        FraudResult result = FraudResult.Builder.create("SUCCESS")
+            .build();
+
+        OutboundMessagingEvent message = new OutboundMessagingEvent(EventTypes.FraudCheck, "1", "1234", result);
 
         // Send message
         service.sendOutboundMessage(message);

@@ -28,6 +28,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
 import ca.bestbuy.orders.fraud.service.OutboundQueueProducerService;
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.MessagingEvent;
+import ca.bestbuy.orders.messaging.model.FraudResult;
 import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
 
 
@@ -60,16 +61,16 @@ public class OutboundReplyActionTest {
 
         Assert.assertEquals(argumentCaptor.getValue().getType(), EventTypes.FraudCheck);
         Assert.assertEquals(argumentCaptor.getValue().getOrderNumber(), "1234");
-        Assert.assertEquals(argumentCaptor.getValue().getResult().getStatus(), FraudResponseStatusCodes.ACCEPTED.name());
-        Assert.assertEquals(argumentCaptor.getValue().getResult().getAccertifyUser(), "user");
-        Assert.assertEquals(argumentCaptor.getValue().getResult().getTotalFraudScore(), "1000");
-        Assert.assertEquals(argumentCaptor.getValue().getResult().getRecommendationCode(), "9080");
+        Assert.assertEquals(((FraudResult)argumentCaptor.getValue().getResult()).getStatus(), FraudResponseStatusCodes.ACCEPTED.name());
+        Assert.assertEquals(((FraudResult)argumentCaptor.getValue().getResult()).getAccertifyUser(), "user");
+        Assert.assertEquals(((FraudResult)argumentCaptor.getValue().getResult()).getTotalFraudScore(), "1000");
+        Assert.assertEquals(((FraudResult)argumentCaptor.getValue().getResult()).getRecommendationCode(), "9080");
         Assert.assertEquals(argumentCaptor.getValue().getRequestVersion(), "1");
     }
 
 
     private MessagingEvent createRequestMessage(String orderNumber, String requestVersion, EventTypes eventType) {
-        MessagingEvent messagingEvent = new MessagingEvent(eventType, orderNumber, requestVersion, new Date());
+        MessagingEvent messagingEvent = new MessagingEvent(eventType, requestVersion, orderNumber, new Date());
         return messagingEvent;
     }
 

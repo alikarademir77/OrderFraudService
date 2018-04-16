@@ -20,6 +20,7 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequestStatusHistoryDetail;
 import ca.bestbuy.orders.fraud.service.OutboundQueueProducerService;
 import ca.bestbuy.orders.messaging.EventTypes;
 import ca.bestbuy.orders.messaging.MessagingEvent;
+import ca.bestbuy.orders.messaging.model.FraudResult;
 import ca.bestbuy.orders.messaging.model.OutboundMessagingEvent;
 
 @Component
@@ -99,9 +100,14 @@ public class OutboundReplyAction extends ActionWithException<FlowStates, FlowEve
         FraudRequestStatusHistoryDetail details = fraudRequestStatusHistory.getFraudRequestStatusHistoryDetail();
 
         // Create outbound message
-        OutboundMessagingEvent outboundMessage = OutboundMessagingEvent.Builder.create(eventType, orderNumber, requestVersion,
-            details.getFraudResponseStatusCode().name()).totalFraudScore(details.getTotalFraudScore()).recommendationCode(details.getRecommendationCode()).accertifyUser(
-            details.getAccertifyUser()).accertifyUserCreationDate(details.getAccertifyUserActionTime()).build();
+        FraudResult result = FraudResult.Builder.create(details.getFraudResponseStatusCode().name())
+            .totalFraudScore(details.getTotalFraudScore())
+            .recommendationCode(details.getRecommendationCode())
+            .accertifyUser(details.getAccertifyUser())
+            .accertifyUserCreationDate(details.getAccertifyUserActionTime())
+            .build();
+
+        OutboundMessagingEvent outboundMessage = new OutboundMessagingEvent(eventType, orderNumber, requestVersion, result);
 
         return outboundMessage;
     }
