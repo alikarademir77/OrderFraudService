@@ -32,7 +32,7 @@ public class ResourceApiClientImpl {
             throw new IllegalStateException("The URL or endpoint for resource Service is null or empty. Please double check the following properties in the configuration - 'client.resource-api.connection.url' and 'client.resource-api.endpoint'");
         }
 
-       RestTemplate restTemplate = WebClientUtility.createRestTemplate(config);
+       RestTemplate restTemplate = getRestTemplate(config);
 
         String url = new StringBuilder()
             .append(resourceServiceUrl)
@@ -46,5 +46,11 @@ public class ResourceApiClientImpl {
         }
 
         return responseStr;
+    }
+
+    public RestTemplate getRestTemplate(ResourceApiClientConfig config){
+
+       return WebClientUtility.createRestTemplate(config);
+
     }
 }
