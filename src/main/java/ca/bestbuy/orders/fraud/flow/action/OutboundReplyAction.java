@@ -107,7 +107,7 @@ public class OutboundReplyAction extends ActionWithException<FlowStates, FlowEve
             .accertifyUserCreationDate(details.getAccertifyUserActionTime())
             .build();
 
-        OutboundMessagingEvent outboundMessage = new OutboundMessagingEvent(eventType, orderNumber, requestVersion, result);
+        OutboundMessagingEvent outboundMessage = new OutboundMessagingEvent(eventType, requestVersion, orderNumber, result);
 
         return outboundMessage;
     }
