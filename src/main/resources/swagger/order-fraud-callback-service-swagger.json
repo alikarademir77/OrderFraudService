@@ -80,7 +80,7 @@
         "actionCode": {
           "type": "string",
           "enum": [
-            "ACCEPT",
+            "ACCEPTED",
             "HARD_DECLINE",
             "SOFT_DECLINE"
           ]

@@ -80,7 +80,7 @@ public class OrderFraudController {
             exceptionMessage = "The request body is null or empty";
         } else if (StringUtils.isBlank(fraudResult.getUpdateUser())){
             exceptionMessage = "User name in request is null or empty";
-        } else if (fraudResult.getFraudResultDetail() == null){
+        } else if (fraudResult.getFraudResultDetail() == null) {
             exceptionMessage = "Result detail in fruad call is null";
         } else if (!decisionMadeResponseStatusCodes().contains(fraudResult.getFraudResultDetail().getActionCode().getValue())) {
             exceptionMessage = "Action code in fraud call back result is having invalid action code ";
@@ -93,11 +93,11 @@ public class OrderFraudController {
 
     }
 
-    private List<FraudAssessmentResult.FraudResponseStatusCodes> decisionMadeResponseStatusCodes(){
-        return Arrays.asList(new FraudAssessmentResult.FraudResponseStatusCodes[]{
-                FraudAssessmentResult.FraudResponseStatusCodes.ACCEPTED,
-                FraudAssessmentResult.FraudResponseStatusCodes.HARD_DECLINE,
-                FraudAssessmentResult.FraudResponseStatusCodes.SOFT_DECLINE
-        });
+    private List<String> decisionMadeResponseStatusCodes(){
+        return Arrays.asList(
+                FraudAssessmentResult.FraudResponseStatusCodes.ACCEPTED.toString(),
+                FraudAssessmentResult.FraudResponseStatusCodes.HARD_DECLINE.toString(),
+                FraudAssessmentResult.FraudResponseStatusCodes.SOFT_DECLINE.toString()
+        );
     }
 }

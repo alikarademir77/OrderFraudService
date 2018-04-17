@@ -1,6 +1,7 @@
 package ca.bestbuy.orders.fraud.client
 
 import ca.bestbuy.orders.fraud.model.client.resourcesapi.ResourceApiRequest
+import ca.bestbuy.orders.fraud.utility.WebClientUtility
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
@@ -20,17 +21,19 @@ class ResourceApiClientImplTest extends Specification {
 
     def "test happy path to make API call and return response json " () {
         given:
-
         ResourceApiRequest resourceApiRequest = new ResourceApiRequest()
-
-
         RestTemplate restTemplate = new RestTemplate()
         config.serviceUrl >> "/resource/api"
         config.endpoint >> "/endpoint"
         config.sslEnabled() >> false
 
-        ResourceApiClientImpl resourceApiClient = new ResourceApiClientImpl(config)
+        ResourceApiClientImpl resourceApiClient = new ResourceApiClientImpl(config) {
+            @Override
+            RestTemplate getRestTemplate(ResourceApiClientConfig config) {
+                return restTemplate
 
+            }
+        }
         String response = new File("src/test/resources/resourceapi/resource-api-response-with-one-notfound.json").text
 
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
@@ -58,14 +61,16 @@ class ResourceApiClientImplTest extends Specification {
         given:
 
         ResourceApiRequest resourceApiRequest = new ResourceApiRequest()
-        ResourceApiClientImpl resourceApiClient = new ResourceApiClientImpl()
-
         RestTemplate restTemplate = new RestTemplate()
         config.serviceUrl >> "/resource/api"
         config.endpoint >> "/endpoint"
-        config.restTemplate() >> restTemplate
-        resourceApiClient.config = config
+        ResourceApiClientImpl resourceApiClient = new ResourceApiClientImpl(config) {
+            @Override
+            RestTemplate getRestTemplate(ResourceApiClientConfig config) {
+                return restTemplate
 
+            }
+        }
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
         server.expect(ExpectedCount.once(),
                 MockRestRequestMatchers.requestTo("/resource/api/endpoint"))
