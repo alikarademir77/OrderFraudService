@@ -1,3 +1,5 @@
+# NOTE: For test configuration, use the application.yml in src/test/resources
+
 server:
   port: 8090
   contextPath: /orderfraud
@@ -8,7 +10,10 @@ server:
 spring:
   profiles: dev
 
-  # For config options, see https://codecentric.github.io/spring-boot-admin/1.5.7/
+# -------------------------------------------------------------------------------------------------------------
+# Spring Boot Admin Configurations
+# Note: For config options, see https://codecentric.github.io/spring-boot-admin/1.5.7/
+# -------------------------------------------------------------------------------------------------------------
   boot:
     admin:
       client:
@@ -20,6 +25,28 @@ spring:
       username: admin
       password: admin
       auto-deregistration: true # Automatically de-register this application when it shuts down
+# -------------------------------------------------------------------------------------------------------------
+# Database Configurations
+# Note: If you want to use H2, you can use the h2 profile along with dev
+# -------------------------------------------------------------------------------------------------------------
+  datasource:
+    url: jdbc:oracle:thin:@//ecommtcls01-scan.ca.bestbuy.com:50000/dbs_cwbci05 # JDBC URL of the database
+    platform: oracle # Platform to use in the DDL or DML scripts
+    username: order_fraud_user # Login username of the database
+    password: order_fraud_user99 # Login password of the database
+    driver-class-name: oracle.jdbc.OracleDriver # Fully qualified name of the JDBC driver
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+        use_sql_comments: true
+        format_sql: true
+# -------------------------------------------------------------------------------------------------------------
+# RabbitMQ Configurations
+# -------------------------------------------------------------------------------------------------------------
   rabbitmq:
     host: localhost
     port: 5672
@@ -49,44 +76,35 @@ spring:
               dlqDeadLetterExchange: # Using default exchange so dlqDeadLetterExchange is assigned to empty string
       default:
         contentType: application/json
-
-# Database settings
-# Note: If you want to use H2, you can use the h2 profile along with dev
-  datasource:
-    url: jdbc:oracle:thin:@//ecommtcls01-scan.ca.bestbuy.com:50000/dbs_cwbci05 # JDBC URL of the database
-    platform: oracle # Platform to use in the DDL or DML scripts
-    username: order_fraud_user # Login username of the database
-    password: order_fraud_user99 # Login password of the database
-    driver-class-name: oracle.jdbc.OracleDriver # Fully qualified name of the JDBC driver.
-  jpa:
-    database-platform: org.hibernate.dialect.Oracle10gDialect
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        show_sql: true
-        use_sql_comments: true
-        format_sql: true
-
 messaging:
   errorRetryCount: 3
   outbound:
     retry-attempts: 3 # Number of attempts to retry if unable to place message on outbound queue | Default: 0
     timeout: 10000 # (ms)
-
-# Logging configurations
-logging:
-  level:
-    ca.bestbuy: DEBUG
-    # ROOT: WARN means that any logging context not matching a context described above will be filtered to level WARN
-    ROOT: INFO
-
-# Configuration for any services that Order Fraud Service will need to call
+# -------------------------------------------------------------------------------------------------------------
+# Client Configurations
+# Note: These are clients for services that Order Fraud Service will need to call
+# -------------------------------------------------------------------------------------------------------------
 client:
   order-details:
     connection:
       url: dummyUrl # Base URL
       getOrderDetailsEndpoint: dummy
+      timeout:
+        connection: ~ # (ms)
+        request: ~ # (ms)
+      ssl:
+        enabled: false
+        verify-hostname: ~ # Default: true
+        keystore: ~ # Prefix with file: or classpath:
+        keystore-password: ~
+        key-alias: ~ # (Optional)
+        key-password: ~ # (Optional)
+        truststore: ~ # Prefix with file: or classpath:
+        truststore-password: ~
+  payment-service:
+    connection:
+      url: dummyUrl # Base URL
       timeout:
         connection: ~ # (ms)
         request: ~ # (ms)
@@ -128,18 +146,11 @@ client:
         key-password: ~ # (Optional)
         truststore: ~ # Prefix with file: or classpath:
         truststore-password: ~
-  payment-service:
-    connection:
-      url: dummyUrl # Base URL
-      timeout:
-        connection: ~ # (ms)
-        request: ~ # (ms)
-      ssl:
-        enabled: false
-        verify-hostname: ~ # Default: true
-        keystore: ~ # Prefix with file: or classpath:
-        keystore-password: ~
-        key-alias: ~ # (Optional)
-        key-password: ~ # (Optional)
-        truststore: ~ # Prefix with file: or classpath:
-        truststore-password: ~
+# -------------------------------------------------------------------------------------------------------------
+# Logging Configurations
+# -------------------------------------------------------------------------------------------------------------
+logging:
+  level:
+    ca.bestbuy: DEBUG
+    # ROOT: WARN means that any logging context not matching a context described above will be filtered to level WARN
+    ROOT: INFO

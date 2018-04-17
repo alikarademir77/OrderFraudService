@@ -11,40 +11,10 @@ server:
 
 spring:
   profiles: unittest
-
-  # Rabbit MQ Settings
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    virtual-host: orders
-  cloud:
-    stream:
-      bindings:
-        fraudInbound:
-          destination: fraudInbound
-          group: fraudInboundConsumersGroup
-          consumer:
-            concurrency: 20
-            maxAttempts: 1
-        fraudOutbound:
-          destination: fraudOutbound
-          producer:
-            requiredGroups: fraudOutboundConsumersGroup
-      rabbit:
-        bindings:
-          fraudInbound:
-            consumer:
-              autoBindDlq: true
-              dlqTtl: 10000
-              republishToDlq: true
-              # Using default exchange so dlqDeadLetterExchange is assigned to empty string
-              dlqDeadLetterExchange:
-      default:
-        contentType: application/json
-
-  # Database settings
+# -------------------------------------------------------------------------------------------------------------
+# Database Configurations
+# Note: If you want to use H2, you can use the h2 profile along with dev
+# -------------------------------------------------------------------------------------------------------------
   datasource:
     url: jdbc:h2:mem:order-fraud;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     platform: h2
@@ -69,54 +39,52 @@ spring:
       settings:
         trace: false
         web-allow-others: true
-
+# -------------------------------------------------------------------------------------------------------------
+# RabbitMQ Configurations
+# -------------------------------------------------------------------------------------------------------------
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest # Login user to authenticate to the RabbitMQ broker
+    password: guest # Login password to authenticate to the RabbitMQ broker
+    virtual-host: orders # Virtual host to use when connecting to the RabbitMQ broker
+  cloud:
+    stream:
+      bindings:
+        fraudInbound:
+          destination: fraudInbound # Inbound exchange
+          group: fraudInboundConsumersGroup
+          consumer:
+            concurrency: 1 # The concurrency of the inbound consumer
+            maxAttempts: 1 # The number of attempts of re-processing an inbound message
+        fraudOutbound:
+          destination: fraudOutbound # Outbound exchange
+          producer:
+            requiredGroups: fraudOutboundConsumersGroup
+      rabbit:
+        bindings:
+          fraudInbound:
+            consumer:
+              autoBindDlq: true
+              dlqTtl: 10000
+              republishToDlq: true
+              dlqDeadLetterExchange: # Using default exchange so dlqDeadLetterExchange is assigned to empty string
+      default:
+        contentType: application/json
 messaging:
   errorRetryCount: 3
   outbound:
-    retry-attempts: 3 # Default: 0
+    retry-attempts: 3 # Number of attempts to retry if unable to place message on outbound queue | Default: 0
     timeout: 10000 # (ms)
-
-logging:
-  level:
-    ca.bestbuy: DEBUG
-    # ROOT: WARN means that any logging context not matching a context described above will be filtered to level WARN
-    ROOT: INFO
-
-# Configuration for any services that Order Fraud Service will need to call
+# -------------------------------------------------------------------------------------------------------------
+# Client Configurations
+# Note: These are clients for services that Order Fraud Service will need to call
+# -------------------------------------------------------------------------------------------------------------
 client:
   order-details:
     connection:
-      url: dummyUrl
+      url: dummyUrl # Base URL
       getOrderDetailsEndpoint: dummy
-      timeout:
-        connection: ~ # (ms)
-        request: ~ # (ms)
-      ssl:
-        enabled: false
-        verify-hostname: ~ # Default: true
-        keystore: ~ # Prefix with file: or classpath:
-        keystore-password: ~
-        key-alias: ~ # (Optional)
-        key-password: ~ # (Optional)
-        truststore: ~ # Prefix with file: or classpath:
-        truststore-password: ~
-  resource-api:
-    connection:
-      url: dummyUrl
-      endpoint: /aggregator
-      timeout:
-        connection: ~ # (ms)
-        request: ~ # (ms)
-      ssl:
-        enabled: false
-        keystore: ~ # Prefix with file: or classpath:
-        keystore-password: mccp123
-        truststore: ~ # Prefix with file: or classpath:
-        truststore-password: changeit
-  tas:
-    connection:
-      url: dummyUrl
-      fraudcheck-soap-action-callback: fraudMockService
       timeout:
         connection: ~ # (ms)
         request: ~ # (ms)
@@ -131,7 +99,7 @@ client:
         truststore-password: ~
   payment-service:
     connection:
-      url: dummyUrl
+      url: dummyUrl # Base URL
       timeout:
         connection: ~ # (ms)
         request: ~ # (ms)
@@ -144,3 +112,40 @@ client:
         key-password: ~ # (Optional)
         truststore: ~ # Prefix with file: or classpath:
         truststore-password: ~
+  resource-api:
+    connection:
+      url: dummyUrl # Base URL
+      endpoint: /aggregator
+      timeout:
+        connection: ~ # (ms)
+        request: ~ # (ms)
+      ssl:
+        enabled: false
+        keystore: ~ # Prefix with file: or classpath:
+        keystore-password: mccp123
+        truststore: ~ # Prefix with file: or classpath:
+        truststore-password: changeit
+  tas:
+    connection:
+      url: dummyUrl # Base URL
+      fraudcheck-soap-action-callback: fraudMockService
+      timeout:
+        connection: ~ # (ms)
+        request: ~ # (ms)
+      ssl:
+        enabled: false
+        verify-hostname: ~ # Default: true
+        keystore: ~ # Prefix with file: or classpath:
+        keystore-password: ~
+        key-alias: ~ # (Optional)
+        key-password: ~ # (Optional)
+        truststore: ~ # Prefix with file: or classpath:
+        truststore-password: ~
+# -------------------------------------------------------------------------------------------------------------
+# Logging Configurations
+# -------------------------------------------------------------------------------------------------------------
+logging:
+  level:
+    ca.bestbuy: DEBUG
+    # ROOT: WARN means that any logging context not matching a context described above will be filtered to level WARN
+    ROOT: INFO
