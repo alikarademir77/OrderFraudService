@@ -25,25 +25,24 @@ spring:
       url: http://localhost:8100
       username: admin
       password: admin
-      # Automatically de-register this application when it shuts down
-      auto-deregistration: true
+      auto-deregistration: true # Automatically de-register this application when it shuts down
   rabbitmq:
     host: localhost
     port: 5672
-    username: orders
-    password: orders
-    virtual-host: orders
+    username: orders # Login user to authenticate to the RabbitMQ broker
+    password: orders # Login password to authenticate against the RabbitMQ broker
+    virtual-host: orders # Virtual host to use when connecting to the RabbitMQ broker
   cloud:
     stream:
       bindings:
         fraudInbound:
-          destination: fraudInbound
+          destination: fraudInbound # Inbound exchange
           group: fraudInboundConsumersGroup
           consumer:
-            concurrency: 20
-            maxAttempts: 1
+            concurrency: 20 # The concurrency of the inbound consumer
+            maxAttempts: 1 # The number of attempts of re-processing an inbound message
         fraudOutbound:
-          destination: fraudOutbound
+          destination: fraudOutbound # Outbound exchange
           producer:
             requiredGroups: fraudOutboundConsumersGroup
       rabbit:
@@ -53,19 +52,18 @@ spring:
               autoBindDlq: true
               dlqTtl: 10000
               republishToDlq: true
-              # Using default exchange so dlqDeadLetterExchange is assigned to empty string
-              dlqDeadLetterExchange:
+              dlqDeadLetterExchange: # Using default exchange so dlqDeadLetterExchange is assigned to empty string
       default:
         contentType: application/json
 
 # Database settings
 # Note: If you want to use H2, you can use the h2 profile along with dev
   datasource:
-    url: jdbc:oracle:thin:@//ecommtcls01-scan.ca.bestbuy.com:50000/dbs_cwbci05
-    platform: oracle
-    username: order_fraud_user
-    password: order_fraud_user99
-    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@//ecommtcls01-scan.ca.bestbuy.com:50000/dbs_cwbci05 # JDBC URL of the database
+    platform: oracle # Platform to use in the DDL or DML scripts
+    username: order_fraud_user # Login username of the database
+    password: order_fraud_user99 # Login password of the database
+    driver-class-name: oracle.jdbc.OracleDriver # Fully qualified name of the JDBC driver.
   jpa:
     database-platform: org.hibernate.dialect.Oracle10gDialect
     hibernate:
@@ -79,9 +77,10 @@ spring:
 messaging:
   errorRetryCount: 3
   outbound:
-    retry-attempts: 3 # Default: 0
+    retry-attempts: 3 # Number of attempts to retry if unable to place message on outbound queue | Default: 0
     timeout: 10000 # (ms)
 
+# Logging configurations
 logging:
   level:
     ca.bestbuy: DEBUG
@@ -92,7 +91,7 @@ logging:
 client:
   order-details:
     connection:
-      url: dummyUrl
+      url: dummyUrl # Base URL
       getOrderDetailsEndpoint: dummy
       timeout:
         connection: ~ # (ms)
@@ -108,7 +107,7 @@ client:
         truststore-password: ~
   resource-api:
     connection:
-      url: https://di-bbyca-resourceservice-corp.ca.bestbuy.com
+      url: https://di-bbyca-resourceservice-corp.ca.bestbuy.com # Base URL
       endpoint: /aggregator
       timeout:
         connection: ~ # (ms)
@@ -121,7 +120,7 @@ client:
         truststore-password: changeit
   tas:
     connection:
-      url: dummyUrl
+      url: dummyUrl # Base URL
       fraudcheck-soap-action-callback: fraudMockService
       timeout:
         connection: ~ # (ms)
@@ -137,7 +136,7 @@ client:
         truststore-password: ~
   payment-service:
     connection:
-      url: dummyUrl
+      url: dummyUrl # Base URL
       timeout:
         connection: ~ # (ms)
         request: ~ # (ms)
