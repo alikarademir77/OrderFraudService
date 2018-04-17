@@ -13,8 +13,6 @@ import org.springframework.web.client.RestTemplate
 import spock.lang.Ignore
 import spock.lang.Specification
 
-// TODO - Fix this test
-@Ignore
 class ResourceApiClientImplTest extends Specification {
 
     def config = Mock(ResourceApiClientConfig)
