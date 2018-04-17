@@ -1,9 +1,3 @@
-#
-# Configurations for application
-# For an explanation on the different configurations, see the following link on Confluence:
-# - https://confluence.ca.bestbuy.com/pages/viewpage.action?pageId=30666366
-#
-
 server:
   port: 8090
   contextPath: /orderfraud
