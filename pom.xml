@@ -47,12 +47,6 @@
 			<groupId>ca.bestbuy.foundation</groupId>
 			<artifactId>logging-lib</artifactId>
 			<version>${logging-lib.version}</version>
-<!-- 			<exclusions> -->
-<!-- 				<exclusion> -->
-<!-- 					<groupId>com.fasterxml.jackson.core</groupId> -->
-<!-- 					<artifactId>jackson-core</artifactId> -->
-<!-- 				</exclusion> -->
-<!-- 			</exclusions> -->
 		</dependency>
 
 		<dependency>
@@ -254,8 +248,6 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
-			<!--Use runtime if you want to use H2 DB for local development-->
-			<!--<scope>runtime</scope>-->
 		</dependency>
 
 	</dependencies>
