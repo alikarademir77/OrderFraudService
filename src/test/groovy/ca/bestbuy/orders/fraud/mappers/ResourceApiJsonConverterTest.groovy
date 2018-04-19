@@ -1,10 +1,10 @@
-package ca.bestbuy.orders.fraud.service.resourceapi
+package ca.bestbuy.orders.fraud.mappers
 
-import ca.bestbuy.orders.fraud.mappers.ResourceApiJsonConverter
+import com.fasterxml.jackson.databind.ObjectMapper
+
 import ca.bestbuy.orders.fraud.model.client.resourcesapi.ProductDetail
 import ca.bestbuy.orders.fraud.model.client.resourcesapi.ResourceApiItem
 import ca.bestbuy.orders.fraud.model.client.resourcesapi.ResourceApiRequest
-import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
 class ResourceApiJsonConverterTest extends Specification{
