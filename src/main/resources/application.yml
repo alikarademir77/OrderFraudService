@@ -17,7 +17,7 @@ spring:
   boot:
     admin:
       client:
-        enabled: true
+        enabled: false
         health-url: http://localhost:${server.port}/${server.contextPath}/health
         management-url: http://localhost:${server.port}/${server.contextPath}
         service-url: http://localhost:${server.port}/${server.contextPath}/swagger-ui.html
@@ -48,7 +48,9 @@ spring:
 # RabbitMQ Configurations
 # -------------------------------------------------------------------------------------------------------------
   rabbitmq:
-    host: localhost
+    #host: localhost
+    #host: dtl24vmqcix51.ca.bestbuy.com
+    host: 192.168.99.100
     port: 5672
     username: orders # Login user to authenticate to the RabbitMQ broker
     password: orders # Login password to authenticate against the RabbitMQ broker

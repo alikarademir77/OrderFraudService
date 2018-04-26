@@ -15,30 +15,66 @@ spring:
 # Database Configurations
 # Note: If you want to use H2, you can use the h2 profile along with dev
 # -------------------------------------------------------------------------------------------------------------
+#  datasource:
+#    #url: jdbc:h2:mem:order-fraud;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    url: jdbc:h2:tcp://http://192.168.99.100:1521/~/order-fraud
+#    platform: h2
+#    username: h2
+#    password:
+#    driverClassName: org.h2.Driver
+#    schema: classpath:relationaldb/h2-ddl.sql
+#    data: classpath:relationaldb/data.sql
+#  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    hibernate:
+#      ddl-auto: none
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        use_sql_comments: true
+#        format_sql: true
+#  h2:
+#    console:
+#      enabled: true
+#      path: /console
+#      settings:
+#        trace: false
+#        web-allow-others: true
+
   datasource:
-    url: jdbc:h2:mem:order-fraud;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    platform: h2
-    username: test
-    password:
-    driverClassName: org.h2.Driver
-    schema: classpath:relationaldb/h2-ddl.sql
-    data: classpath:relationaldb/data.sql
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://192.168.99.100:3306/?useSSL=false
+    platform: mysql
+    username: root
+    password: p@ssword
+    driver-class-name: com.mysql.jdbc.Driver
+    schema: classpath:relationaldb/mysql.sql
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       ddl-auto: none
     properties:
       hibernate:
+        connection:
+          provider_class: org.hibernate.hikaricp.internal.HikariCPConnectionProvider
+        dialect: org.hibernate.dialect.MySQL5Dialect
         show_sql: true
         use_sql_comments: true
         format_sql: true
-  h2:
-    console:
-      enabled: true
-      path: /console
-      settings:
-        trace: false
-        web-allow-others: true
+        hikari:
+          minimumIdle: 1
+          maximumPoolSize: 2
+          idleTimeout: 5000
+          dataSource:
+            serverName: 192.168.99.100
+            portNumber: 3306
+            databaseName: ORDER_FRAUD
+            user: root
+            password: p@ssword
+          dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+
+
 # -------------------------------------------------------------------------------------------------------------
 # RabbitMQ Configurations
 # -------------------------------------------------------------------------------------------------------------

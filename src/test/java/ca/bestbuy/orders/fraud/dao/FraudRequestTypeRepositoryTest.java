@@ -9,6 +9,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ import ca.bestbuy.orders.fraud.model.jpa.FraudRequestType;
 @DirtiesContext
 public class FraudRequestTypeRepositoryTest {
 
+	@Autowired
+	DataSource dataSource;
+	
 	@Autowired
 	FraudRequestTypeRepository typeRepository;
 	
