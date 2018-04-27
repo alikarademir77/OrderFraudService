@@ -1,54 +1,90 @@
-#### TESTS ####
-
-# NOTE: This overrides the application.yml in the src/main/resources
+# NOTE: For test configuration, use the application.yml in src/test/resources
 
 server:
   port: 8090
   contextPath: /orderfraud
-
 ---
-### UNIT TEST ###
-
 spring:
-  profiles: unittest
+  profiles: uat
+
+#MYSQL:
+#  HOSTNAME: ${MYSQL.HOSTNAME}
+#  PASSWORD: ${MYSQL.PASSWORD} #ROOT USER PASSWORD
+#
+#RABBITMQ:
+#  HOSTNAME: ${RABBITMQ.HOSTNAME}
+#  
+#ORDERDETAILS:
+#  URL: ${ORDERDETAILS.HOSTNAME}
+#  ENDPOINT: ${ORDERDETAILS.ENDPOINT}  
+# 
+#PAYMENTSERVICE:
+#  URL: ${PAYMENTSERVICE.URL} 
+#
+#RESOURCEAPI:
+#  URL: ${RESOURCEAPI.URL}
+# 
+#TAS:
+#  URL: ${TAS.URL}  
+# -------------------------------------------------------------------------------------------------------------
+# Spring Boot Admin Configurations
+# Note: For config options, see https://codecentric.github.io/spring-boot-admin/1.5.7/
+# -------------------------------------------------------------------------------------------------------------
+  boot:
+    admin:
+      client:
+        enabled: false
+        health-url: http://localhost:${server.port}/${server.contextPath}/health
+        management-url: http://localhost:${server.port}/${server.contextPath}
+        service-url: http://localhost:${server.port}/${server.contextPath}/swagger-ui.html
+      url: http://localhost:8100
+      username: admin
+      password: admin
+      auto-deregistration: true # Automatically de-register this application when it shuts down
 # -------------------------------------------------------------------------------------------------------------
 # Database Configurations
-# Note: If you want to use H2, you can use the h2 profile along with dev
 # -------------------------------------------------------------------------------------------------------------
   datasource:
-    #url: jdbc:h2:mem:order-fraud;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    url: jdbc:h2:tcp://http://192.168.99.100:1521/~/order-fraud
-    platform: h2
-    username: h2
-    password:
-    driverClassName: org.h2.Driver
-    schema: classpath:relationaldb/h2-ddl.sql
-    data: classpath:relationaldb/data.sql
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://${mysql.hostname}:3306/?useSSL=false
+    platform: mysql
+    username: root
+    password: ${mysql.password}
+    driver-class-name: com.mysql.jdbc.Driver
+    schema: classpath:relationaldb/mysql.sql
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       ddl-auto: none
     properties:
       hibernate:
+        connection:
+          provider_class: org.hibernate.hikaricp.internal.HikariCPConnectionProvider
+        dialect: org.hibernate.dialect.MySQL5Dialect
         show_sql: true
         use_sql_comments: true
         format_sql: true
-  h2:
-    console:
-      enabled: true
-      path: /console
-      settings:
-        trace: false
-        web-allow-others: true
+        hikari:
+          minimumIdle: 1
+          maximumPoolSize: 2
+          idleTimeout: 5000
+          dataSource:
+            serverName: ${mysql.hostname}
+            portNumber: 3306
+            databaseName: ORDER_FRAUD
+            user: root
+            password: ${mysql.password}
+          dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
 
 # -------------------------------------------------------------------------------------------------------------
 # RabbitMQ Configurations
 # -------------------------------------------------------------------------------------------------------------
   rabbitmq:
-    host: localhost
+    host: ${rabbitmq.hostname}
     port: 5672
-    username: guest # Login user to authenticate to the RabbitMQ broker
-    password: guest # Login password to authenticate to the RabbitMQ broker
+    username: orders # Login user to authenticate to the RabbitMQ broker
+    password: orders # Login password to authenticate to the RabbitMQ broker
     virtual-host: orders # Virtual host to use when connecting to the RabbitMQ broker
   cloud:
     stream:
@@ -85,8 +121,8 @@ messaging:
 client:
   order-details:
     connection:
-      url: dummyUrl # Base URL
-      getOrderDetailsEndpoint: dummy
+      url: ${orderdetails.url} # Base URL
+      getOrderDetailsEndpoint: ${orderdetails.endpoint} 
       timeout:
         connection: ~ # (ms)
         request: ~ # (ms)
@@ -101,7 +137,7 @@ client:
         truststore-password: ~
   payment-service:
     connection:
-      url: dummyUrl # Base URL
+      url: ${paymentservice.url} # Base URL
       timeout:
         connection: ~ # (ms)
         request: ~ # (ms)
@@ -116,7 +152,7 @@ client:
         truststore-password: ~
   resource-api:
     connection:
-      url: dummyUrl # Base URL
+      url: ${resourceapi.url} # Base URL
       endpoint: /aggregator
       timeout:
         connection: ~ # (ms)
@@ -129,7 +165,7 @@ client:
         truststore-password: changeit
   tas:
     connection:
-      url: dummyUrl # Base URL
+      url: ${tas.url} # Base URL
       fraudcheck-soap-action-callback: fraudMockService
       timeout:
         connection: ~ # (ms)

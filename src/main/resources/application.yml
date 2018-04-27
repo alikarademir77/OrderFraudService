@@ -9,7 +9,7 @@ server:
 
 spring:
   profiles: dev
-
+  
 # -------------------------------------------------------------------------------------------------------------
 # Spring Boot Admin Configurations
 # Note: For config options, see https://codecentric.github.io/spring-boot-admin/1.5.7/
@@ -48,9 +48,7 @@ spring:
 # RabbitMQ Configurations
 # -------------------------------------------------------------------------------------------------------------
   rabbitmq:
-    #host: localhost
-    #host: dtl24vmqcix51.ca.bestbuy.com
-    host: 192.168.99.100
+    host: localhost
     port: 5672
     username: orders # Login user to authenticate to the RabbitMQ broker
     password: orders # Login password to authenticate against the RabbitMQ broker

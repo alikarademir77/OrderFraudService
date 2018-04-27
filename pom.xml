@@ -30,6 +30,7 @@
    <spring-boot-admin-starter.version>1.5.7</spring-boot-admin-starter.version>
    <springfox-swagger.version>2.8.0</springfox-swagger.version>
    <spring-statemachine.version>2.0.0.RELEASE</spring-statemachine.version>
+   <hibernate-hikaricp.version>4.3.8.Final</hibernate-hikaricp.version>
 </properties>
 
 	<dependencies>
@@ -174,7 +175,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-hikaricp</artifactId>
-			<version>4.3.8.Final</version>
+			<version>${hibernate-hikaricp.version}</version>
 		</dependency>
 
 		<!-- HikariCP for DB Connection Pooling-->
@@ -259,7 +260,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.24</version>
-			<scope>test</scope>
         </dependency>
 	</dependencies>
 	<build>

@@ -14,13 +14,24 @@ spring:
 management.security.enabled: false
 
 ---
+### UAT ###
+
+spring:
+  profiles: uat
+  cloud:
+    config:
+      enabled: false
+
+management.security.enabled: false
+
+---
 ### CI ###
 
 spring:
   profiles: ci
   cloud:
     config:
-      enabled: false
+      enabled: true
       uri: http://config-service-ecomm-orders-team.dev-ocp.ca.bestbuy.com
       label: master
 
