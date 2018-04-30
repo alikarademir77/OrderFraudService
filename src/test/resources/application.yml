@@ -17,7 +17,7 @@ spring:
 # -------------------------------------------------------------------------------------------------------------
   datasource:
     #url: jdbc:h2:mem:order-fraud;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    url: jdbc:h2:tcp://http://192.168.99.100:1521/~/order-fraud
+    url: jdbc:h2:tcp://http://localhost:1521/~/order-fraud
     platform: h2
     username: h2
     password:
